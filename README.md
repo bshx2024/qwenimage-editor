@@ -1,79 +1,153 @@
-# StickerShow
-Sticker.Show 代码，仅限哥飞的朋友们社群成员使用
+# Qwen Image Editor — Free Online AI Image Editor
 
-## 如果作为正式项目，记得要下载代码到本地，重新提交，不要使用 fork 过去的项目
+<p align="center">
+  <img src="public/appicon.svg" width="100" height="100" alt="Qwen Image Editor Logo" />
+</p>
 
-### 1. 右上角 Fork 本项目到你自己的 github 仓库
+<p align="center">
+  <b>Next-generation online AI image editing and visual synthesis powered by Alibaba's Qwen vision foundation models.</b>
+</p>
 
-### 2. Clone你自己的仓库代码到本地
+<p align="center">
+  <a href="https://qwenimage-editor.com">Website</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#quickstart">Quickstart</a> •
+  <a href="#seo--page-matrix">SEO Matrix</a> •
+  <a href="#deployment">Deployment</a>
+</p>
+
+---
+
+## 🌟 Overview
+
+**Qwen Image Editor** (`qwenimage-editor.com`) is a full-stack, production-ready web application built on **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**. It enables creators, designers, and marketers to transform photos, execute localized inpainting, generate photorealistic art, and render crisp bilingual typography in their browser.
+
+- **Frontend & UI**: Next.js 14 App Router, Tailwind CSS, Headless UI, Heroicons
+- **AI Inference**: Replicate API (`qwen/qwen-image-edit` & `qwen/qwen-image`)
+- **Storage**: Cloudflare R2 (S3-compatible object storage) with CDN image compression
+- **Database**: PostgreSQL with connection pooling
+- **Authentication**: NextAuth with Google OAuth
+- **Payments**: Stripe Subscriptions with webhook idempotency and duplicate subscription prevention
+- **SEO Engine**: Dynamic sitemap, OpenGraph (1200x630), JSON-LD schemas (`SoftwareApplication`, `Article`, `FAQPage`)
+
+---
+
+## ✨ Key Features
+
+1. **Interactive In-Browser Image Editor**:
+   - Drag-and-drop or click to upload source photos.
+   - Conversational text-guided inpainting and localized editing without manual layer masking.
+   - Before / After side-by-side comparison slider and high-resolution export.
+2. **Text-to-Image Generation (`/generator`)**:
+   - Multi-aspect ratio selection (`1:1`, `16:9`, `9:16`).
+   - Deep prompt adherence and industry-leading bilingual typography rendering.
+3. **Comprehensive Benchmark Matrix**:
+   - `/vs-midjourney`: Qwen Image 2.1 vs Midjourney V6
+   - `/vs-nano-banana`: Qwen Image 2.1 vs Nano Banana
+   - `/vs-flux`: Qwen Image 2.1 vs Flux.1 (Dev/Schnell)
+4. **Hardened Payment & Account Security**:
+   - Duplicate subscription prevention and active plan verification.
+   - Idempotent Stripe webhook handling via database event logs.
+   - Graceful fallback for offline databases during static site builds.
+
+---
+
+## 🚀 Quickstart
+
+### 1. Clone & Install Dependencies
 
 ```bash
-git clone (your git url)
+git clone https://github.com/bshx2024/qwenimage-editor.git
+cd qwenimage-editor
+
+# Install dependencies (Node v20+ recommended)
+npm install
 ```
 
-### 3. 安装依赖
+### 2. Configure Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in your service credentials:
 
 ```bash
-cd StickerShow && yarn
-#or
-cd StickerShow && npm install
-#or
-cd StickerShow && pnpm install
+cp .env.example .env.local
 ```
 
-### 4. 复制 .env.example 重命名为 .env.local
+Key environment configurations:
 
-修改.env.local其中的配置为你项目的配置，生产环境配置在 .env.production
+```env
+# Website URL
+NEXT_PUBLIC_SITE_URL=http://localhost
+NEXT_PUBLIC_WEBSITE_NAME="Qwen Image Editor"
 
-### 5. 额外的配置
+# PostgreSQL Database
+POSTGRES_URL="postgres://user:password@localhost:5432/qwen_editor"
 
-1) 谷歌登录认证配置 👉 [Google-Auth-Help](https://github.com/SoraWebui/SoraWebui/blob/login/help/Google-Auth.md)
-2) 数据库配置 👉 Any PostgreSQL
-3) 目录 /sql 下有需要的数据表，创建数据库并执行这些SQL创建数据表
-4) R2的配置，为了存储生成的图片，需要去 Cloudflare 后台创建 bucket 后进行配置。项目用到了图像转换功能，通过URL来压缩图片，这个需要在 Cloudflare 的 「图像」->「转换」这里面针对具体的域名开启
-5) Stripe 价格配置在 src/configs/stripeConfig.ts ，里面具体的的配置项需要你从 stripe 后台获取。
-6) 对接 stripe 支付参考的是该项目👉 https://github.com/vercel/nextjs-subscription-payments
-上边这个支付项目能单独运行，但它用的 supabase，当前项目是已经改成了支持任何 PostgreSQL 数据库的代码
+# Replicate API (https://replicate.com/account/api-tokens)
+REPLICATE_API_TOKEN="r8_xxxxxxxxxxxxxxxxxxxxxxxx"
+# Webhook URL for async prediction results (use ngrok for local dev)
+REPLICATE_WEBHOOK="https://your-ngrok-domain.ngrok-free.app"
 
-### 6. 运行
+# Cloudflare R2 Storage
+STORAGE_DOMAIN="your-domain.r2.cloudflarestorage.com"
+R2_BUCKET="qwen-images"
+R2_ACCOUNT_ID="your_account_id"
+R2_ACCESS_KEY_ID="your_access_key"
+R2_SECRET_ACCESS_KEY="your_secret_key"
+
+# Stripe Payments (Test mode supported)
+NEXT_PUBLIC_CHECK_AVAILABLE_TIME=1
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_xxx"
+STRIPE_SECRET_KEY="sk_test_xxx"
+STRIPE_WEBHOOK_SECRET="whsec_xxx"
+```
+
+### 3. Initialize Database Tables
+
+Execute the SQL scripts located in [`sql/tables/`](./sql/tables/):
+- `1_user_info.sql`
+- `2_user_available.sql`
+- `3_stripe_customers.sql`
+- `4_stripe_subscriptions.sql`
+- `5_works.sql`
+- `6_key_value.sql`
+- `7_search_log.sql`
+- `8_sensitive_words.sql`
+- `9_add_image_edit_fields.sql`
+
+### 4. Run Development Server
 
 ```bash
-yarn dev
-#or
 npm run dev
-#or
-pnpm dev
 ```
 
-### 7. 在浏览器打开 [http://localhost](http://localhost)
+Open [http://localhost](http://localhost) in your browser.
 
+---
 
-## 注意！！！
-### 1. 贴纸生成结果是通过接收 replicate 的回调，于是本地调试的时候，需要将 REPLICATE_WEBHOOK 这个配置成公网URL，可以配置 [ngrok](https://ngrok.com/) 来接收结果，本地就能处理生成的图片了
+## 📦 Production Build
 
-类似配置成：https://0123-153-121-77-112.ngrok-free.app，这个是需要你本地运行 ngrok 与 其云端服务对上后生成的，直接用这个是不会通的哈
+```bash
+npm run build
+npm run start
+```
 
-线上时，REPLICATE_WEBHOOK 这个配置为你的线上域名就可以
+---
 
-### 2. 项目用到 vercel 的定时任务来将贴纸文本翻译为其他语言，线上版本时会生效，配置在 vercel.json 这个文件，设置的一分钟运行一次，免费账户有限制(应该是只能一天调用一次)，查看 vercel 的文档 https://vercel.com/docs/cron-jobs
+## 🗺️ Page Matrix & SEO Structure
 
-当然，你可以删除 vercel.json 这个文件，那样就不会触发定时任务了。你可以采用别的方式来调用接口触发定时任务，比如你自己的服务器运行一个脚本定时调用接口来翻译
+- `/` — Homepage & Interactive Image Editor
+- `/generator` — AI Text-to-Image Generator
+- `/vs-midjourney` — Qwen Image 2.1 vs Midjourney Comparison
+- `/vs-nano-banana` — Qwen Image 2.1 vs Nano Banana Comparison
+- `/vs-flux` — Qwen Image 2.1 vs Flux Comparison
+- `/pricing` — Subscription Plans & Credits
+- `/my` — User Visual Gallery & History
+- `/privacy-policy` — Privacy Policy
+- `/terms-of-service` — Terms of Service
+- `/sitemap.xml` — Complete Search Engine Sitemap
 
-### 3. stripe 不激活的账号就是测试模式，就可以本地调通支付流程；对接支付参考的是这个项目👉 https://github.com/vercel/nextjs-subscription-payments
+---
 
-### 4. 最重要的是熟悉代码且会改代码，本项目对接 stripe 支付只是简易版本对接，各种边界条件没有考虑到。
+## 📄 License
 
-比如本项目是支付后就无限制使用，没有对某个价格订阅的次数做限制，比如用户重复订阅的判断等等，这些需要你自己去完善。
-
-每个人想给订阅增加的限制，无法做到通用配置，需要你自己去研究代码该怎么添加。
-
-目前配置的是1个月付，1个年付，多个价格也可以，只是界面样式你得自己调整一下。
-
-### 5. 本项目现有代码是能够跑通全流程的，只需将所有配置都做好。
-配置项有点多，需要细心点去进行相关配置，不要遗漏。
-
-如果上线的话，还需要配置stripe的webhook等配置。
-
-
-## 有任何疑问联系 Wechat: GeFei55
-
+MIT License. Built for creators and developers worldwide.
