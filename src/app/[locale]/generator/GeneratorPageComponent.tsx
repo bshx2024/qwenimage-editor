@@ -122,24 +122,36 @@ export default function GeneratorPageComponent({
 
   const faqItems = [
     {
-      q: 'How does Qwen Image Generator convert text to images?',
-      a: 'Qwen Image Generator utilizes an advanced 7B visual diffusion transformer trained on diverse multimodal datasets. It parses detailed descriptive prompts, interprets spatial semantics, and progressively refines pixels into photorealistic scenes or artistic illustrations.',
+      q: 'Can Qwen AI generate images?',
+      a: 'Yes, absolutely! While many users know Qwen as a conversational language model, the Alibaba vision team developed the dedicated Qwen-Image foundation family (including Qwen Image 2.1 & 2.0). It is a powerful 7B visual diffusion transformer purpose-built for photorealistic text-to-image generation, bilingual typography, and artistic rendering directly from natural language prompts.',
     },
     {
-      q: 'Can I generate commercial assets with Qwen Image online?',
-      a: 'Yes. Images generated using Qwen Image Generator on our platform can be used for commercial websites, marketing advertisements, product illustrations, and social media without royalties.',
+      q: 'Is the Qwen image generator free to use online?',
+      a: 'Yes, Qwen Image Generator is free to use on our web platform! Anyone can start creating images immediately with daily complimentary credits—no credit cards or paid subscriptions required.',
     },
     {
-      q: 'How does Qwen Image handle bilingual and text prompts?',
-      a: 'One of the unique standout strengths of the Qwen Image foundation architecture is native bilingual understanding (English and Chinese) and extraordinary text-spelling capabilities directly on posters, book covers, and signs.',
+      q: 'Do I need to download Qwen model weights, GGUF files, or install ComfyUI?',
+      a: 'No local setup, GGUF downloads, or Python scripts are required! Running the Qwen Image model locally typically requires downloading 20GB+ of checkpoint weights and demands 16GB–24GB of dedicated VRAM. Our cloud generator executes everything on high-throughput GPUs in the cloud, allowing instant creation in any browser on PC, Mac, or mobile devices.',
     },
     {
-      q: 'Is there a limit on resolution or generation speed?',
-      a: 'Free users can generate images up to 1024x1024 resolution. Pro plans unlock ultra-high definition 4K scaling, lossless PNG downloads, and high-priority dedicated GPU dispatching.',
+      q: 'Which model checkpoint is deployed (Qwen Image 2.1 vs 2.0)?',
+      a: 'We deploy the flagship Qwen-Image-2.1 architecture, which features superior prompt adherence, balanced spatial composition, and refined English and Chinese typography rendering compared to legacy versions.',
     },
     {
-      q: 'Can I edit the generated image after creating it?',
-      a: 'Absolutely! You can send any generation directly into our Qwen Image Editor with one click to perform inpainting, swap backgrounds, or adjust specific objects using text instructions.',
+      q: 'How does Qwen Image render clean typography and signage without spelling errors?',
+      a: 'Qwen Image uses a deep multimodal language model backbone rather than a traditional small CLIP encoder. This allows it to interpret exact letters inside quotation marks, positioning clean, readable text on posters, packaging, t-shirts, and neon signs without typical AI gibberish.',
+    },
+    {
+      q: 'What are the content safety and NSFW moderation policies?',
+      a: 'Our generator enforces responsible AI safety guardrails against malicious, illegal, and explicit material while granting broad creative freedom for photorealistic portraiture, design mockups, concept art, and digital illustrations.',
+    },
+    {
+      q: 'Can I edit or inpaint my generated creations?',
+      a: 'Yes! With our integrated workflow, simply click "Edit this in Qwen Image Editor" below your result to seamlessly inpaint regions, swap backgrounds, or adjust character clothing using natural language instructions.',
+    },
+    {
+      q: 'Can I use images generated with Qwen for commercial merchandise and client work?',
+      a: 'Yes. All visual art and assets generated through your account belong to you and can be utilized for commercial websites, marketing campaigns, client commissions, and merchandise without royalty fees.',
     },
   ];
 
@@ -179,7 +191,7 @@ export default function GeneratorPageComponent({
         locale={locale}
         page="generator"
         title="Qwen Image Generator — Free Online AI Image Generator"
-        description="Generate photorealistic images and high-fidelity visuals with Qwen Image Generator online. Free AI text-to-image with superior rendering and prompt adherence."
+        description="Generate photorealistic images and high-fidelity visuals with Qwen Image Generator. Free online AI text-to-image with superior rendering and prompt adherence."
         image="/images/model_compare_demo.jpg"
         schemaData={schemaData}
       />
@@ -308,7 +320,10 @@ export default function GeneratorPageComponent({
                       <div className="w-full flex flex-col items-center">
                         <img
                           src={resultImage}
-                          alt="Qwen Image Generator Result"
+                          alt="Qwen Image Generator Visual Output"
+                          width={768}
+                          height={440}
+                          loading="lazy"
                           className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
                         />
                         <div className="mt-4 w-full flex items-center justify-between pt-3 border-t border-slate-800/80">
@@ -520,6 +535,126 @@ export default function GeneratorPageComponent({
                 >
                   Online Photo Editor →
                 </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Prompt Engineering & Style Recipes */}
+        <section className="py-16 border-t border-slate-900 bg-slate-950/40">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+                Prompt Engineering Guide
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
+                Creative Prompt Recipes for Text-to-Image Generation
+              </h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
+                Unlock the full expressive power of the underlying vision model. Discover proven formulas across photorealistic portraiture, brand design, and fantasy worldbuilding.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
+                  Photorealism
+                </span>
+                <h3 className="text-base font-bold text-white">Cinematic Portraits</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Combine focal length qualifiers with organic lighting cues to capture photorealistic depth of field, authentic micro-textures, and emotional character intensity.
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-indigo-300">
+                  &quot;Editorial fashion portrait, candid expression, 85mm f/1.4 lens, natural golden hour rim light, 8k raw photo.&quot;
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">
+                  Commercial
+                </span>
+                <h3 className="text-base font-bold text-white">Typography & Mockups</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Explicitly specify legible text labels inside quotes. The multimodal encoder positions the typographic elements with correct font spacing and material reflections.
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-purple-300">
+                  &quot;Craft beer aluminum can design on frosted counter, clear bold typography reading &apos;ARCTIC ALE&apos;, condensation drops.&quot;
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">
+                  Concept Art
+                </span>
+                <h3 className="text-base font-bold text-white">Sci-Fi Worldbuilding</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Layer atmospheric descriptors such as volumetric fog, architectural scale, and vibrant color gradients to evoke striking futuristic landscapes.
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-pink-300">
+                  &quot;Vast subterranean cyberpunk metropolis, towering neon holograms, aerial sky-trains, wet asphalt reflections, wide panoramic angle.&quot;
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">
+                  Illustration
+                </span>
+                <h3 className="text-base font-bold text-white">3D Isometric Scenes</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Generate playful, highly detailed diorama renders suitable for game design assets, app landing illustrations, and merchandise graphics.
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-cyan-300">
+                  &quot;Cute miniature isometric coffee shop diorama, pastel clay style, warm ambient interior lighting, octane render, clean white backdrop.&quot;
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Technical Architecture & Deep Learning Foundations */}
+        <section className="py-16 border-t border-slate-900">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                Core Technology
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
+                Architecture of the 7B Vision-Language Foundation Model
+              </h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
+                Learn why Qwen Image delivers unprecedented spatial alignment, precise character morphology, and multilingual literacy compared to legacy diffusion architectures.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 inline-block"></span>
+                  Native Multimodal Tokenizer
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Instead of relying on a tiny frozen text encoder like CLIP, the foundation system utilizes a 7B scale language model capable of parsing long-form descriptions, complex spatial prepositions, and fine-grained visual hierarchies without token truncation.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span>
+                  Diffusion Transformer Backbone (DiT)
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Replaces traditional UNet bottlenecks with scalable self-attention transformers. Every image patch directly attends to conditional prompt tokens across all generative time-steps, ensuring sharp geometry and harmonious balance across varying aspect ratios.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-pink-400 inline-block"></span>
+                  Bilingual Character Literacy
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Extensively pre-trained on millions of real-world text-heavy designs, book covers, and packaging mockups. The network synthesizes legible English and Chinese typography with proper glyph topology, font weight consistency, and surface perspective.
+                </p>
               </div>
             </div>
           </div>
