@@ -29,16 +29,17 @@ export const getArrayUrlResult = (origin) => {
 }
 
 export const getTotalLinkHref = (locale = 'en', page = '') => {
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '')) || 'http://localhost';
   if (page == '') {
     if (locale == 'en') {
-      return process.env.NEXT_PUBLIC_SITE_URL + '/';
+      return siteUrl + '/';
     }
-    return process.env.NEXT_PUBLIC_SITE_URL + `/${locale}/`;
+    return siteUrl + `/${locale}/`;
   }
   if (locale == 'en') {
-    return process.env.NEXT_PUBLIC_SITE_URL + `/${page}`;
+    return siteUrl + `/${page}`;
   }
-  return process.env.NEXT_PUBLIC_SITE_URL + `/${locale}/${page}`;
+  return siteUrl + `/${locale}/${page}`;
 }
 
 export const getShareToPinterest = (locale = 'en', page = '', sticker:string) => {

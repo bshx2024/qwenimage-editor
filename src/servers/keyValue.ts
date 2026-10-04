@@ -18,13 +18,16 @@ export const countSticker = async (key, addCount) => {
 }
 
 export const getCountSticker = async () => {
-  const db = getDb();
-
-  const results = await db.query('select * from key_value where key=$1 limit 1', ['countSticker']);
-  const rows = results.rows;
-  if (rows.length > 0) {
-    const origin = rows[0];
-    return origin.value;
+  try {
+    const db = getDb();
+    const results = await db.query('select * from key_value where key=$1 limit 1', ['countSticker']);
+    const rows = results.rows;
+    if (rows.length > 0) {
+      const origin = rows[0];
+      return origin.value;
+    }
+  } catch (e) {
+    console.warn("DB getCountSticker error, falling back:", (e as any)?.message);
   }
-  return '';
+  return '2500';
 }

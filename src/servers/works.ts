@@ -4,21 +4,25 @@ import {getArrayUrlResult} from "~/configs/buildLink";
 const db = getDb();
 
 export const getWorkDetailByUid = async (locale:string, uid:string) => {
-  // 先查指定语言的是否有，没有则返回原始数据
-  const resultsCurrent = await db.query('select * from works where uid=$1 and current_language=$2 and is_delete=$3 order by updated_at desc', [uid, locale, false]);
-  const currentRows = resultsCurrent.rows;
-  if (currentRows.length > 0) {
-    const currentRow = currentRows[0];
-    currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-    return currentRow;
-  }
+  try {
+    // 先查指定语言的是否有，没有则返回原始数据
+    const resultsCurrent = await db.query('select * from works where uid=$1 and current_language=$2 and is_delete=$3 order by updated_at desc', [uid, locale, false]);
+    const currentRows = resultsCurrent.rows;
+    if (currentRows.length > 0) {
+      const currentRow = currentRows[0];
+      currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+      return currentRow;
+    }
 
-  const results = await db.query('select * from works where uid=$1 and is_origin=$2 and is_delete=$3', [uid, true, false]);
-  const works = results.rows;
-  if (works.length > 0) {
-    const currentRow = works[0];
-    currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-    return currentRow;
+    const results = await db.query('select * from works where uid=$1 and is_origin=$2 and is_delete=$3', [uid, true, false]);
+    const works = results.rows;
+    if (works.length > 0) {
+      const currentRow = works[0];
+      currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+      return currentRow;
+    }
+  } catch (err: any) {
+    console.warn("DB getWorkDetailByUid error:", err?.message);
   }
   return {
     status: 404
@@ -26,34 +30,38 @@ export const getWorkDetailByUid = async (locale:string, uid:string) => {
 }
 
 export const getSimilarList = async (revised_text, uid, locale) => {
-  const worksList = await searchDatabase(revised_text, locale);
-  let searchTerms = revised_text.split(" ");
-  if (worksList.length > 0) {
-    const resultInfoList = [];
-    for (let i = 0; i < worksList.length; i++) {
-      const currentRow = worksList[i];
-      if (currentRow.uid == uid) {
-        continue;
-      }
-      const currentText = currentRow.input_text?.split(' ');
-      let checkExist = false;
-      for (let j = 0; j < currentText.length; j++) {
-        for (let k = 0; k < searchTerms.length; k++) {
-          if (currentText[j]?.toLowerCase() == searchTerms[k]?.toLowerCase()) {
-            checkExist = true;
-            break;
+  try {
+    const worksList = await searchDatabase(revised_text, locale);
+    let searchTerms = revised_text.split(" ");
+    if (worksList.length > 0) {
+      const resultInfoList = [];
+      for (let i = 0; i < worksList.length; i++) {
+        const currentRow = worksList[i];
+        if (currentRow.uid == uid) {
+          continue;
+        }
+        const currentText = currentRow.input_text?.split(' ');
+        let checkExist = false;
+        for (let j = 0; j < currentText.length; j++) {
+          for (let k = 0; k < searchTerms.length; k++) {
+            if (currentText[j]?.toLowerCase() == searchTerms[k]?.toLowerCase()) {
+              checkExist = true;
+              break;
+            }
           }
         }
+        if (resultInfoList.length > 11) {
+          break;
+        }
+        if (checkExist) {
+          currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+          resultInfoList.push(currentRow);
+        }
       }
-      if (resultInfoList.length > 11) {
-        break;
-      }
-      if (checkExist) {
-        currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-        resultInfoList.push(currentRow);
-      }
+      return resultInfoList;
     }
-    return resultInfoList;
+  } catch (err: any) {
+    console.warn("DB getSimilarList error:", err?.message);
   }
   return [];
 }
@@ -73,95 +81,106 @@ async function searchDatabase(inputString, locale) {
   // 准备参数数组，为每个term包装成带有通配符的字符串
   let queryParams = searchTerms.map(term => `%${term}%`);
 
-  // console.log("query-=>", query);
-  // console.log("queryParams-=>", queryParams);
-
   try {
-    // 执行查询
     const { rows } = await db.query(query, queryParams);
-    // console.log(rows);
     return rows;
-  } catch (error) {
-    console.error('Error executing query', error.stack);
-    throw error;
+  } catch (error: any) {
+    console.warn('Error executing query', error?.message);
+    return [];
   }
 }
 
 export const getWorkListByUserId = async (user_id: string, current_page:string) => {
-  const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE);
-  const skipSize = pageSize * (Number(current_page) - 1);
+  try {
+    const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE) || 24;
+    const skipSize = pageSize * (Number(current_page) - 1);
 
-  const results = await db.query('select * from works where user_id=$1 and is_origin=$2 and is_delete=$3 order by updated_at desc limit $4 offset $5', [user_id, true, false, pageSize, skipSize]);
-  const works = results.rows;
+    const results = await db.query('select * from works where user_id=$1 and is_origin=$2 and is_delete=$3 order by updated_at desc limit $4 offset $5', [user_id, true, false, pageSize, skipSize]);
+    const works = results.rows;
 
-  const resultInfoList = [];
-  if (works.length > 0) {
-    for (let i = 0; i < works.length; i++) {
-      const currentRow = works[i];
-      currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-      resultInfoList.push(currentRow)
+    const resultInfoList = [];
+    if (works.length > 0) {
+      for (let i = 0; i < works.length; i++) {
+        const currentRow = works[i];
+        currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+        resultInfoList.push(currentRow)
+      }
+      return resultInfoList;
     }
-    return resultInfoList;
+  } catch (err: any) {
+    console.warn("DB getWorkListByUserId error:", err?.message);
   }
-
   return [];
 }
 
 export const getPublicResultList = async (locale, current_page) => {
-  const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE);
-  const skipSize = pageSize * (Number(current_page) - 1);
+  try {
+    const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE) || 24;
+    const skipSize = pageSize * (Number(current_page) - 1);
 
-  const results = await db.query('select * from works where is_public=$1 and current_language=$2 and output_url != $3 and is_delete=$4 order by updated_at desc limit $5 offset $6', [true, locale, '', false, pageSize, skipSize]);
-  const works = results.rows;
+    const results = await db.query('select * from works where is_public=$1 and current_language=$2 and output_url != $3 and is_delete=$4 order by updated_at desc limit $5 offset $6', [true, locale, '', false, pageSize, skipSize]);
+    const works = results.rows;
 
-  const resultInfoList = [];
-  if (works.length > 0) {
-    for (let i = 0; i < works.length; i++) {
-      const currentRow = works[i];
-      currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-      resultInfoList.push(currentRow)
+    const resultInfoList = [];
+    if (works.length > 0) {
+      for (let i = 0; i < works.length; i++) {
+        const currentRow = works[i];
+        currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+        resultInfoList.push(currentRow)
+      }
+      return resultInfoList;
     }
-    return resultInfoList;
+  } catch (err: any) {
+    console.warn("DB getPublicResultList error:", err?.message);
   }
-
   return [];
 }
 
 export const getLatestPublicResultList = async (locale, current_page) => {
-  // 首页数据
-  const pageSize = 8;
-  const skipSize = pageSize * (Number(current_page) - 1);
+  try {
+    // 首页数据
+    const pageSize = 8;
+    const skipSize = pageSize * (Number(current_page) - 1);
 
-  const results = await db.query('select * from works where is_public=$1 and current_language=$2 and output_url != $3 and is_delete=$4 order by updated_at desc limit $5 offset $6', [true, locale, '', false, pageSize, skipSize]);
-  const works = results.rows;
+    const results = await db.query('select * from works where is_public=$1 and current_language=$2 and output_url != $3 and is_delete=$4 order by updated_at desc limit $5 offset $6', [true, locale, '', false, pageSize, skipSize]);
+    const works = results.rows;
 
-  const resultInfoList = [];
-  if (works.length > 0) {
-    for (let i = 0; i < works.length; i++) {
-      const currentRow = works[i];
-      currentRow.output_url = getArrayUrlResult(currentRow.output_url);
-      resultInfoList.push(currentRow)
+    const resultInfoList = [];
+    if (works.length > 0) {
+      for (let i = 0; i < works.length; i++) {
+        const currentRow = works[i];
+        currentRow.output_url = getArrayUrlResult(currentRow.output_url);
+        resultInfoList.push(currentRow)
+      }
+      return resultInfoList;
     }
-    return resultInfoList;
+  } catch (err: any) {
+    console.warn("DB getLatestPublicResultList error:", err?.message);
   }
-
   return [];
 }
 
 export const getPagination = async (locale:string, page: number) => {
+  try {
+    const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE) || 24;
+    const results = await db.query('select count(1) from works where is_public=$1 and current_language=$2 and is_delete=$3', [true, locale, false]);
+    const countTotal = results.rows;
 
-  const pageSize = Number(process.env.NEXT_PUBLIC_PAGES_SIZE);
-  const results = await db.query('select count(1) from works where is_public=$1 and current_language=$2 and is_delete=$3', [true, locale, false]);
-  const countTotal = results.rows;
+    const total = countTotal[0]?.count || 0;
+    const totalPage = Math.ceil(total / pageSize) || 1;
 
-  const total = countTotal[0].count;
-  const totalPage = Math.ceil(total / pageSize)
-
-  const result = {
-    totalPage: totalPage,
-    pagination: createPagination(totalPage, Number(page), 6),
+    const result = {
+      totalPage: totalPage,
+      pagination: createPagination(totalPage, Number(page), 6),
+    }
+    return result
+  } catch (err: any) {
+    console.warn("DB getPagination error:", err?.message);
+    return {
+      totalPage: 1,
+      pagination: [1]
+    }
   }
-  return result
 }
 
 function createPagination(totalPages, currentPage, maxPagesToShow) {
