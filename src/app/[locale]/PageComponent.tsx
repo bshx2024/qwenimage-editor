@@ -2,33 +2,36 @@
 import HeadInfo from "~/components/HeadInfo";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
-import {useCommonContext} from "~/context/common-context";
-import {useEffect, useRef, useState} from "react";
-import {useInterval} from "ahooks";
+import { useCommonContext } from "~/context/common-context";
+import { useEffect, useRef, useState } from "react";
+import { useInterval } from "ahooks";
 import PricingModal from "~/components/PricingModal";
 import Link from "next/link";
-import {Switch} from "@headlessui/react";
-import Markdown from "react-markdown";
-import {getCompressionImageLink, getLinkHref, getShareToPinterest} from "~/configs/buildLink";
-import {useRouter} from "next/navigation";
-import {getResultStrAddSticker} from "~/configs/buildStr";
-import TopBlurred from "~/components/TopBlurred";
-import {pinterestSvg} from '~/components/svg'
+import { Switch } from "@headlessui/react";
+import { getLinkHref } from "~/configs/buildLink";
+import {
+  SparklesIcon,
+  ArrowUpTrayIcon,
+  PhotoIcon,
+  ArrowPathIcon,
+  ArrowDownTrayIcon,
+  CheckCircleIcon,
+  EyeIcon,
+  AdjustmentsHorizontalIcon,
+  ChevronDownIcon,
+  ArrowsRightLeftIcon,
+  BoltIcon,
+  ShieldCheckIcon,
+  CpuChipIcon,
+} from "@heroicons/react/24/outline";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
-const PageComponent = ({
-                         locale,
-                         indexText,
-                         questionText,
-                         resultInfoListInit,
-                         searchParams,
-                       }) => {
-  const router = useRouter();
-  const [pagePath] = useState("");
-
+export default function PageComponent({
+  locale = 'en',
+  indexText,
+  questionText,
+  resultInfoListInit = [],
+  searchParams,
+}: any) {
   const {
     setShowLoadingModal,
     setShowLoginModal,
@@ -36,362 +39,745 @@ const PageComponent = ({
     setShowGeneratingModal,
     commonText,
     userData,
-    pricingText,
-    menuText
   } = useCommonContext();
-  const [resultInfoList, setResultInfoList] = useState(resultInfoListInit);
-  const [countRefresh, setCountRefresh] = useState(0);
 
-  const useCustomEffect = (effect, deps) => {
-    const isInitialMount = useRef(true);
-    useEffect(() => {
-      if (process.env.NODE_ENV === 'production' || isInitialMount.current) {
-        isInitialMount.current = false;
-        return effect();
-      }
-    }, deps);
-  };
+  const [textStr, setTextStr] = useState('');
+  const [sourceImage, setSourceImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
+  const [isUploading, setIsUploading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+  const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
+  const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('split');
+  const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
+  const [uid, setUid] = useState('');
+  const [intervalResultInfo, setIntervalResultInfo] = useState<number | undefined>(undefined);
+  const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true });
 
-  useCustomEffect(() => {
-    getLocalStorage()
-    if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0' && process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != '0') {
-      setIntervalAvailableTimes(1000);
-    }
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
     setShowLoadingModal(false);
-    // setIntervalLatest(10000);
-    return () => {
-    }
-  }, []);
-
-  const getLocalStorage = () => {
-    const textStr = localStorage.getItem('textStr');
-    if (textStr) {
-      setTextStr(textStr);
-      localStorage.removeItem('textStr');
-      return;
-    }
     if (searchParams?.prompt) {
       setTextStr(searchParams.prompt);
     }
-  }
+  }, [searchParams]);
 
-  const [textStr, setTextStr] = useState('');
+  // Handle local file upload
+  const handleFileUpload = async (file: File) => {
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        setSourceImage(data.url);
+        setActiveTab('edit');
+      }
+    } catch (e) {
+      console.error('Upload failed:', e);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (!textStr) {
-      return;
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileUpload(e.dataTransfer.files[0]);
     }
-    if (!userData && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
+  };
+
+  const handleSampleSelect = (url: string) => {
+    setSourceImage(url);
+    setActiveTab('edit');
+  };
+
+  // Submit generate / edit task
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!textStr && activeTab === 'generate') return;
+    if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0' && !userData) {
       setShowLoginModal(true);
-      localStorage.setItem('textStr', textStr);
       return;
     }
+
+    setIsProcessing(true);
     setShowGeneratingModal(true);
-    const requestData = {
-      textStr: textStr,
-      user_id: userData?.user_id,
-      is_public: isPublic
-    }
-    const responseData = await fetch(`/api/generate/handle`, {
-      method: 'POST',
-      body: JSON.stringify(requestData)
-    });
-    const result = await responseData.json();
-    if (result.status == 601 && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
-      setShowLoginModal(true);
-      localStorage.setItem('textStr', textStr);
-      return;
-    }
-    if (result.status == 602 && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
-      setShowPricingModal(true);
-      localStorage.setItem('textStr', textStr);
-      return;
-    }
-    const currentUid = result.uid;
-    setUid(currentUid);
-    if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
-      setIntervalAvailableTimes(1000);
-    }
-    setIntervalResultInfo(6000);
-  }
 
-  const [availableTimes, setAvailableTimes] = useState({
-    available_times: 0,
-    subscribeStatus: '0'
-  });
-  const [resultInfo, setResultInfo] = useState({
-    uid: '',
-    status: 0,
-    input_text: '',
-    output_url: [],
-    revised_text: '',
-    origin_language: '',
-    current_language: ''
-  });
-  const [intervalAvailableTimes, setIntervalAvailableTimes] = useState(undefined);
-  const [uid, setUid] = useState('');
-  const [intervalResultInfo, setIntervalResultInfo] = useState(undefined);
+    try {
+      const payload: any = {
+        textStr,
+        user_id: userData?.user_id || 'guest',
+        is_public: isPublic,
+      };
 
-  const getResultInfo = async () => {
-    if (!userData?.user_id && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
-      return
-    }
-    const userId = userData?.user_id;
-    const response = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userId}`);
-    const resultInfo = await response.json();
-    if (resultInfo.status == 1) {
-      setResultInfo(resultInfo);
-      router.push(getLinkHref(locale, `sticker/${resultInfo.uid}`));
+      if (activeTab === 'edit' && sourceImage) {
+        payload.imageUrl = sourceImage;
+        payload.taskType = 'image_edit';
+      } else {
+        payload.taskType = 'text2image';
+      }
+
+      const res = await fetch('/api/generate/handle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json();
+
+      if (result.status === 601) {
+        setShowLoginModal(true);
+        setIsProcessing(false);
+        setShowGeneratingModal(false);
+        return;
+      }
+      if (result.status === 602) {
+        setShowPricingModal(true);
+        setIsProcessing(false);
+        setShowGeneratingModal(false);
+        return;
+      }
+
+      if (result.uid) {
+        setUid(result.uid);
+        setIntervalResultInfo(3000);
+      }
+    } catch (err) {
+      console.error('Generate failed:', err);
+      setIsProcessing(false);
       setShowGeneratingModal(false);
-      setIntervalResultInfo(undefined);
-      setIntervalAvailableTimes(1000);
     }
-  }
+  };
+
+  // Poll for prediction result
+  const pollResult = async () => {
+    if (!uid) return;
+    try {
+      const response = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || ''}`);
+      const info = await response.json();
+      if (info.status === 1) {
+        setShowGeneratingModal(false);
+        setIsProcessing(false);
+        setIntervalResultInfo(undefined);
+        if (info.output_url && info.output_url.length > 0) {
+          const out = Array.isArray(info.output_url) ? info.output_url[0] : info.output_url;
+          setCurrentResultImage(out);
+        }
+      }
+    } catch (e) {
+      // Continue polling
+    }
+  };
+
   useInterval(() => {
-    getResultInfo();
+    pollResult();
   }, intervalResultInfo);
 
-  const getAvailableTimes = async () => {
-    if (!userData) {
-      return;
-    }
-    const userId = userData.user_id;
-    if (userId) {
-      const response = await fetch(`/api/user/getAvailableTimes?userId=${userId}`);
-      const availableTimes = await response.json();
-      setAvailableTimes(availableTimes);
-      if (availableTimes.available_times >= 0) {
-        setIntervalAvailableTimes(undefined);
-      }
-    }
-  }
-  useInterval(() => {
-    getAvailableTimes();
-  }, intervalAvailableTimes);
+  // Quick preset tags
+  const promptPresets = [
+    'Change background to cyberpunk neon city',
+    'Add golden hour sunset lighting and warmth',
+    'Remove background and isolate main subject',
+    'Change jacket to black leather jacket',
+    'Transform into studio product photography',
+    'Add realistic glasses and smile',
+  ];
 
-  const downloadResult = (url) => {
-    window.location.href = url;
-  }
+  // FAQ Items
+  const faqList = [
+    {
+      q: 'What is Qwen Image Editor?',
+      a: 'Qwen Image Editor is a next-generation AI image editor powered by the Qwen vision foundation model. It enables precision text-guided image editing, inpainting, style modification, and high-fidelity text-to-image synthesis directly in your browser.',
+    },
+    {
+      q: 'How does Qwen Image Edit differ from other AI image generators?',
+      a: 'Unlike traditional blind text-to-image models that hallucinate entirely new images, Qwen Image Editor accepts both your source image and text instruction. It accurately interprets changes (such as "change jacket to blue" or "replace sky with aurora") while preserving face structure, lighting, and composition.',
+    },
+    {
+      q: 'Can Qwen Image render accurate text and typography inside images?',
+      a: 'Yes! Text rendering is one of the strongest breakthroughs of the Qwen Image foundation architecture. It can render clean English and bilingual typography on signs, posters, book covers, and packaging without garbled characters.',
+    },
+    {
+      q: 'Is Qwen Image Editor free to use online?',
+      a: 'Yes, we provide complimentary daily free credits so anyone can experience AI photo editing and generation without entering credit card information.',
+    },
+    {
+      q: 'Do I own the commercial rights to images generated and edited here?',
+      a: 'Yes, images created and edited using Qwen Image Editor belong to you and can be used for commercial projects, social media, merchandise, and website visuals.',
+    },
+    {
+      q: 'What resolutions and export formats are supported?',
+      a: 'You can export in lossless PNG or optimized WebP at standard 1024x1024 up to Ultra-HD 4K resolution with pro plans.',
+    },
+  ];
 
-  const [isPublic, setIsPublic] = useState(true);
-
-
-  const checkSubscribe = () => {
-    if (availableTimes.subscribeStatus == 'active') {
-      setIsPublic(!isPublic);
-    } else {
-      setShowPricingModal(true);
-    }
-  }
-
-  const [intervalLatest, setIntervalLatest] = useState(undefined);
-  const getLatestList = async () => {
-    if (countRefresh >= 9) {
-      setIntervalLatest(undefined);
-      return;
-    }
-    const requestData = {
-      locale: locale
-    }
-    const response = await fetch(`/api/works/getLatestPublicResultList`, {
-      method: 'POST',
-      body: JSON.stringify(requestData)
-    });
-    const result = await response.json();
-    setCountRefresh(countRefresh + 1);
-    setResultInfoList(result);
-  }
-  useInterval(() => {
-    getLatestList();
-  }, intervalLatest);
-
-  const hasAnyKey = (obj) => {
-    return Object.keys(obj).length > 0;
-  }
+  // Structured Data Schema
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Qwen Image Editor',
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Any',
+        offers: {
+          '@type': 'Offer',
+          price: '0.00',
+          priceCurrency: 'USD',
+        },
+        description:
+          'Free online AI image editor for text-guided photo modification, inpainting, character consistency, and high-fidelity generation.',
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqList.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
+      },
+    ],
+  };
 
   return (
-    <>
-      {
-        hasAnyKey(searchParams) ?
-          <meta name="robots" content="noindex"/>
-          :
-          null
-      }
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
       <HeadInfo
         locale={locale}
-        page={pagePath}
-        title={indexText.title}
-        description={indexText.description}
+        page=""
+        title="Qwen Image Editor — Free Online AI Image Editor"
+        description="Edit and transform images with Qwen Image Editor. AI-driven inpainting, prompt edits, character consistency, and high-fidelity generation in your browser."
+        image="/images/og-image.jpg"
+        schemaData={schemaData}
       />
-      <Header
-        locale={locale}
-        page={pagePath}
-      />
-      <PricingModal
-        locale={locale}
-        page={pagePath}
-      />
-      <div className="mt-4 my-auto">
-        <TopBlurred/>
-        <div className="block overflow-hidden text-white">
-          <div className="mx-auto w-full px-5 mb-5">
-            <div
-              className="mx-auto flex max-w-4xl flex-col items-center text-center py-10">
-              <h2 className="mb-4 text-4xl font-bold md:text-6xl">{indexText.h1Text}</h2>
-              <div className="mb-5 max-w-[628px] lg:mb-8">
-                <h1 className="text-[#7c8aaa] text-xl">{indexText.descriptionBelowH1Text}</h1>
+
+      <Header locale={locale} page="" />
+      <PricingModal locale={locale} page="" />
+
+      <main className="flex-1 w-full">
+        {/* Hero & Interactive Editor Section */}
+        <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-600/10 blur-[130px] pointer-events-none rounded-full" />
+
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Header Titles */}
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300 backdrop-blur-md">
+                <SparklesIcon className="w-4 h-4 text-indigo-400 animate-pulse" />
+                <span>Next-Gen Vision Foundation AI</span>
               </div>
+              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Free Online Qwen Image Editor
+              </h1>
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                Transform, edit, and reimagine any photo using natural language instructions. Powered by Alibaba&apos;s state-of-the-art Qwen vision model.
+              </p>
             </div>
 
-            <div className={"max-w-7xl px-9 mx-auto"}>
-              <div
-                className={"mx-auto rounded-tl-[30px] rounded-tr-[30px] border-[12px] border-[#ffffff1f] object-fill"}>
-                <form onSubmit={handleSubmit} className="relative shadow-lg">
-                  <div
-                    className="overflow-hidden rounded-tl-[20px] rounded-tr-[20px]">
-                    <textarea
-                      rows={5}
-                      name="description"
-                      id="description"
-                      className="custom-textarea block w-full resize-none text-gray-900 placeholder:text-gray-400 text-lg p-4 pl-4"
-                      placeholder={commonText.placeholderText}
-                      value={textStr}
-                      onChange={(e) => {
-                        setTextStr(e.target.value);
-                      }}
-                      maxLength={400}
-                    />
-                  </div>
-                  {
-                    userData?.user_id ?
-                      <div
-                        className="flex flex-col justify-start items-center md:flex-row md:justify-center md:items-center bg-white text-black md:pb-2">
-                        {
-                          process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != '0' && availableTimes.subscribeStatus == '' ?
-                            <>
-                              <p>{commonText.timesLeft} <span
-                                className={"text-red-400"}>{availableTimes.available_times}</span> {commonText.timesRight}
-                                <span className={"font-bold hidden md:inline-flex"}>&nbsp;|&nbsp;</span>
-                              </p>
-                            </>
-                            :
-                            process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != '0' && availableTimes.subscribeStatus == 'active' ?
-                              <>
-                                <span className={"text-red-400"}>{pricingText.subscriptionIntro0}</span>
-                                <span className={"font-bold hidden md:inline-flex"}>&nbsp;|&nbsp;</span>
-                              </>
-                              :
-                              null
-                        }
-                        {
-                          process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != '0' ?
-                            <div className={"inline-flex mb-2 md:mb-0"}>
-                              <span className={"text-black mr-1"}>{commonText.displayPublic}</span>
-                              <Switch
-                                checked={isPublic}
-                                onChange={checkSubscribe}
-                                className={classNames(
-                                  isPublic ? 'bg-[#f05011]' : 'bg-gray-200',
-                                  'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out'
-                                )}
-                              >
-                                <span className="sr-only">Use setting</span>
-                                <span
-                                  aria-hidden="true"
-                                  className={classNames(
-                                    isPublic ? 'translate-x-5' : 'translate-x-0',
-                                    'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                                  )}
-                                />
-                              </Switch>
-                            </div>
-                            :null
-                        }
+            {/* Main Interactive Editor Card */}
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-7 shadow-2xl shadow-indigo-950/40">
+              {/* Tab Switcher: Image Edit vs Text to Image */}
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6 flex-wrap gap-3">
+                <div className="flex items-center gap-2 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('edit')}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                      activeTab === 'edit'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <PhotoIcon className="w-4 h-4" />
+                    Edit Photo (Img2Img)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('generate')}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                      activeTab === 'generate'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <SparklesIcon className="w-4 h-4" />
+                    Text to Image
+                  </button>
+                </div>
 
-                      </div>
-                      :
-                      null
-                  }
-                  <div className="inset-x-px bottom-1 bg-white">
-                    <div
-                      className="flex justify-center items-center space-x-3 border-t border-gray-200 px-2 py-2">
-                      <div className="pt-2 w-1/4">
-                        <button
-                          type="submit"
-                          className="w-full inline-flex justify-center items-center rounded-md bg-[#ffa11b] px-3 py-2 text-xs md:text-lg font-semibold text-white shadow-sm hover:bg-[#f05011]"
-                        >
-                          {commonText.buttonText}
-                        </button>
+                {/* Preset sample loader */}
+                {activeTab === 'edit' && (
+                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <span className="hidden sm:inline">Try sample:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleSampleSelect('/images/qwen_editor_demo.jpg')}
+                      className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+                    >
+                      Cafe Portrait
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSampleSelect('/images/model_compare_demo.jpg')}
+                      className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+                    >
+                      Poster Text
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Editor Grid: Left Controls, Right Preview */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Left Column: Upload & Prompt Controls */}
+                <div className="lg:col-span-6 space-y-6">
+                  {/* Upload Box (Only for Edit tab) */}
+                  {activeTab === 'edit' && (
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                        1. Source Image to Edit
+                      </label>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            handleFileUpload(e.target.files[0]);
+                          }
+                        }}
+                      />
+                      <div
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current?.click()}
+                        className="border-2 border-dashed border-slate-700 hover:border-indigo-500/70 rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all bg-slate-950/40 hover:bg-slate-950/60 group"
+                      >
+                        {sourceImage ? (
+                          <div className="relative group/preview inline-block">
+                            <img
+                              src={sourceImage}
+                              alt="Source to edit"
+                              className="max-h-56 mx-auto rounded-xl object-contain shadow-md"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/preview:opacity-100 rounded-xl flex items-center justify-center text-xs font-medium text-white transition-opacity">
+                              Click or Drop new image to replace
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="py-6 space-y-2">
+                            <ArrowUpTrayIcon className="w-8 h-8 text-indigo-400 mx-auto group-hover:-translate-y-1 transition-transform" />
+                            <p className="text-sm font-semibold text-slate-200">
+                              {isUploading ? 'Uploading to cloud...' : 'Click or drag & drop image here'}
+                            </p>
+                            <p className="text-xs text-slate-500">Supports PNG, JPG, WebP up to 10MB</p>
+                          </div>
+                        )}
                       </div>
                     </div>
+                  )}
+
+                  {/* Prompt Text Input */}
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="promptInput" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                        {activeTab === 'edit' ? '2. Edit Instruction' : '1. Image Generation Prompt'}
+                      </label>
+                      <div className="relative rounded-2xl border border-slate-700 bg-slate-950 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all p-3">
+                        <textarea
+                          id="promptInput"
+                          rows={3}
+                          value={textStr}
+                          onChange={(e) => setTextStr(e.target.value)}
+                          placeholder={
+                            activeTab === 'edit'
+                              ? "Describe what to edit, add, or replace (e.g., 'Change background to neon Tokyo, add cyberpunk iridescent jacket')..."
+                              : "Describe the image to generate in detail..."
+                          }
+                          className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none"
+                        />
+                        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 text-xs text-slate-400">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] text-slate-500">Model: Qwen Image 2.1</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setTextStr('')}
+                            className="text-slate-500 hover:text-slate-300"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Preset Prompts */}
+                    <div>
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">
+                        Quick Ideas:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {promptPresets.map((preset, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setTextStr(preset)}
+                            className="rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-[11px] text-slate-300 hover:border-indigo-500/50 hover:text-white transition-colors"
+                          >
+                            + {preset}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Generation Settings */}
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={isPublic}
+                          onChange={setIsPublic}
+                          className={`${
+                            isPublic ? 'bg-indigo-600' : 'bg-slate-800'
+                          } relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`${
+                              isPublic ? 'translate-x-4' : 'translate-x-0'
+                            } pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                          />
+                        </Switch>
+                        <span className="text-xs text-slate-400">Share to Community Gallery</span>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isProcessing || (!textStr && activeTab === 'generate')}
+                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:opacity-95 disabled:opacity-50 transition-all cursor-pointer"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <ArrowPathIcon className="w-4 h-4 animate-spin" />
+                            <span>Processing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <SparklesIcon className="w-4 h-4" />
+                            <span>{activeTab === 'edit' ? 'Apply Edit' : 'Generate'}</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Right Column: Live Result & Comparison Preview */}
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                      Live Output & Preview
+                    </label>
+                    {activeTab === 'edit' && sourceImage && currentResultImage && (
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+                        <button
+                          type="button"
+                          onClick={() => setComparisonMode('split')}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${
+                            comparisonMode === 'split' ? 'bg-slate-800 text-white' : 'text-slate-400'
+                          }`}
+                        >
+                          Side-by-Side
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setComparisonMode('result')}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${
+                            comparisonMode === 'result' ? 'bg-slate-800 text-white' : 'text-slate-400'
+                          }`}
+                        >
+                          Result Only
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </form>
+
+                  {/* Preview Canvas */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 min-h-[380px] flex flex-col justify-center items-center relative overflow-hidden group">
+                    {currentResultImage ? (
+                      <div className="w-full flex flex-col items-center">
+                        {comparisonMode === 'split' && activeTab === 'edit' ? (
+                          <div className="w-full">
+                            <img
+                              src={currentResultImage}
+                              alt="Qwen Image Editor Output"
+                              className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
+                            />
+                            <div className="mt-3 flex items-center justify-between text-xs text-slate-400 px-2">
+                              <span>Left: Original photo</span>
+                              <span className="text-indigo-400 font-medium">Right: Qwen AI Edited result</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-full">
+                            <img
+                              src={currentResultImage}
+                              alt="Generated Visual Output"
+                              className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
+                            />
+                          </div>
+                        )}
+
+                        {/* Action Bar */}
+                        <div className="mt-5 w-full flex items-center justify-between pt-3 border-t border-slate-800/80">
+                          <div className="text-xs text-slate-400">
+                            Status: <span className="text-emerald-400 font-medium">Ready</span>
+                          </div>
+                          <a
+                            href={currentResultImage}
+                            download="qwen-image-editor-result.png"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 px-3.5 py-1.5 text-xs font-semibold text-slate-100 transition-colors"
+                          >
+                            <ArrowDownTrayIcon className="w-4 h-4" />
+                            Download High-Res
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 space-y-3">
+                        <PhotoIcon className="w-12 h-12 text-slate-700 mx-auto" />
+                        <p className="text-sm text-slate-400">Your edited creation will appear here</p>
+                        <p className="text-xs text-slate-600">Upload a photo and hit &quot;Apply Edit&quot; to begin</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </section>
 
-          <div className={"w-[90%] mx-auto mb-10 mt-8"}>
-            <div className={"flex justify-center items-start"}>
-              <h2 className="text-white text-3xl">{menuText.header2}</h2>
+        {/* Quick Tools & Page Matrix Entrypoints (SEO Internal Links) */}
+        <section className="py-12 border-t border-slate-900 bg-slate-950/60">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h2 className="text-2xl font-bold text-white tracking-tight">Explore Qwen Image Tools</h2>
+              <p className="text-sm text-slate-400 mt-2">
+                Discover specialized generators, guides, and comprehensive model benchmarks.
+              </p>
             </div>
-            <div
-              role="list"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-              {resultInfoList.map((file, index) => (
-                <div key={file.input_text + index} className={"mt-6"}>
-                  <div
-                    className="rounded-xl flex justify-center items-start checkerboard relative">
-                    <Link
-                      href={getLinkHref(locale, `sticker/${file.uid}`)}
-                      onClick={() => setShowLoadingModal(true)}
-                      className={"cursor-pointer"}
-                    >
-                      <img
-                        src={getCompressionImageLink(file.output_url[1])}
-                        alt={file.input_text}
-                        width={400}
-                        height={400}
-                        className={"rounded-lg"}
-                      />
-                    </Link>
-                    <Link
-                      href={`https://pinterest.com/pin/create/button/?url=${getShareToPinterest(locale, 'sticker/' + file.uid, file.input_text)}`}
-                      target={"_blank"}
-                      className={"absolute top-1 left-1"}>
-                      {pinterestSvg}
-                    </Link>
-                  </div>
-                  <div className={"flex justify-center items-center"}>
-                  <p
-                      className="pointer-events-none mt-2 block text-sm font-medium text-white w-[90%] line-clamp-2">{getResultStrAddSticker(file.input_text, commonText.keyword)}</p>
-                  </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Link
+                href={getLinkHref(locale, 'generator')}
+                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <SparklesIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+                  Qwen Image Generator
+                </h3>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Generate photorealistic visuals, digital illustrations, and scenes from scratch with AI.
+                </p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-indigo-400">
+                  Try Generator →
+                </span>
+              </Link>
+
+              <Link
+                href={getLinkHref(locale, 'prompt')}
+                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <BoltIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-purple-400 transition-colors">
+                  Prompt Guide & Library
+                </h3>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Browse over 30 proven prompt formulas, typography recipes, and character consistency tips.
+                </p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-purple-400">
+                  Read Formulas →
+                </span>
+              </Link>
+
+              <Link
+                href={getLinkHref(locale, 'vs-midjourney')}
+                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <ArrowsRightLeftIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-pink-400 transition-colors">
+                  vs Midjourney Comparison
+                </h3>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Detailed benchmark comparing prompt understanding, typography spelling, and inpainting.
+                </p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-pink-400">
+                  Compare Models →
+                </span>
+              </Link>
+
+              <Link
+                href={getLinkHref(locale, 'vs-flux')}
+                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <CpuChipIcon className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
+                  vs Flux Benchmark
+                </h3>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  In-depth analysis of image detail, VRAM requirements, and instruction adherence.
+                </p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-cyan-400">
+                  Read Analysis →
+                </span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Use Section (3 Steps) */}
+        <section className="py-16 lg:py-24 border-t border-slate-900">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2 className="text-3xl font-extrabold text-white tracking-tight">How to Use Qwen Image Editor</h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3">
+                Edit and transform any visual in 3 intuitive steps without complex Photoshop layers.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 relative">
+                <div className="text-3xl font-black text-indigo-500/30 mb-2">01</div>
+                <h3 className="text-lg font-bold text-white mb-2">Upload or Select Image</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Drag and drop your photo, artwork, or product shot into the editor. You can also pick from ready-made presets to experiment instantly.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 relative">
+                <div className="text-3xl font-black text-purple-500/30 mb-2">02</div>
+                <h3 className="text-lg font-bold text-white mb-2">Enter Natural Language Edit Prompt</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Describe what you want to change in simple English or Chinese: replace backgrounds, alter apparel, tweak lighting, or inpaint specific elements.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 relative">
+                <div className="text-3xl font-black text-pink-500/30 mb-2">03</div>
+                <h3 className="text-lg font-bold text-white mb-2">Preview, Compare & Download HD</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Inspect the Before-and-After results with the side-by-side viewer. Refine prompts with 1-click iterations and download high-resolution PNGs.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-16 lg:py-24 border-t border-slate-900 bg-slate-950/40">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2 className="text-3xl font-extrabold text-white tracking-tight">Key Features & Capabilities</h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3">
+                Why creators, designers, and marketers choose Qwen Image Editor.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
+                <AdjustmentsHorizontalIcon className="w-8 h-8 text-indigo-400" />
+                <h3 className="text-base font-bold text-white">Instruction Inpainting</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Describe localized changes naturally. The AI intelligently segments regions and seamlessly matches lighting and textures.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
+                <SparklesIcon className="w-8 h-8 text-purple-400" />
+                <h3 className="text-base font-bold text-white">Crisp Text Rendering</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Accurately render English and Chinese typography on posters, banners, and product mockups without gibberish.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
+                <ShieldCheckIcon className="w-8 h-8 text-pink-400" />
+                <h3 className="text-base font-bold text-white">Character Consistency</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Preserve facial identity, core characteristics, and poses across complex sequential modifications and background swaps.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
+                <BoltIcon className="w-8 h-8 text-cyan-400" />
+                <h3 className="text-base font-bold text-white">Cloud GPU Speed</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Powered by high-throughput GPU clusters, delivering sub-second previewing and fast turnaround on complex transformations.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-16 lg:py-24 border-t border-slate-900">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-extrabold text-white tracking-tight">Frequently Asked Questions</h2>
+              <p className="text-sm text-slate-400 mt-2">
+                Everything you need to know about Qwen Image Editor.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {faqList.map((faq, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden transition-colors"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setFaqOpen((prev) => ({ ...prev, [idx]: !prev[idx] }))}
+                    className="w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-semibold text-slate-100 hover:text-indigo-400 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    <ChevronDownIcon
+                      className={`w-5 h-5 text-slate-400 transition-transform ${
+                        faqOpen[idx] ? 'rotate-180 text-indigo-400' : ''
+                      }`}
+                    />
+                  </button>
+                  {faqOpen[idx] && (
+                    <div className="px-5 pb-5 text-xs sm:text-sm text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                      {faq.a}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
-          <div key={"more"} className={"px-4"}>
-            <Link
-              href={getLinkHref(locale, 'stickers')}
-              onClick={() => setShowLoadingModal(true)}
-              className={"flex justify-center items-center text-xl text-red-400 hover:text-blue-600"}>
-              {commonText.exploreMore} {'>>'}
-            </Link>
-          </div>
-          <div className="prose w-full max-w-2xl mx-auto mt-8 text-gray-300 div-markdown-color">
-            <Markdown>
-              {questionText.detailText}
-            </Markdown>
-          </div>
+        </section>
+      </main>
 
-        </div>
-      </div>
-      <Footer
-        locale={locale}
-        page={pagePath}
-      />
-    </>
-  )
+      <Footer locale={locale} page="" />
+    </div>
+  );
 }
-
-export default PageComponent

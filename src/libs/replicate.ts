@@ -1,25 +1,49 @@
-import {translateContent} from "~/servers/translate";
+import { translateContent } from "~/servers/translate";
 
-
-export const getInput = async (textStr, checkSubscribeStatus) => {
-  // 翻译成英语后返回
-  const revised_text = await translateContent(textStr, 'en');
-
-  let width = 512;
-  let height = 512;
-  let upscale = false;
-  if (checkSubscribeStatus) {
-    width = 1024;
-    height = 1024
+export const getQwenEditInput = async (imageUrl: string, textStr: string, checkSubscribeStatus: boolean = false) => {
+  // Translate to English if needed
+  let revised_text = textStr;
+  try {
+    revised_text = await translateContent(textStr, "en");
+  } catch (e) {
+    revised_text = textStr;
   }
 
   return {
-    steps: 20,
-    width: width,
-    height: height,
+    image: imageUrl,
     prompt: revised_text,
-    upscale: upscale,
-    upscale_steps: 2,
-    negative_prompt: "NSFW. No nudity or explicit content.No violence or gore.No sexual themes.Suitable for all ages.No illegal activities or substances.General audience appropriate.No offensive material.No hate speech or discrimination.Nothing disturbing or shocking.Respectful, non-exploitative content."
+    go_fast: true,
+    output_format: "webp",
+    output_quality: checkSubscribeStatus ? 95 : 85,
+  };
+};
+
+export const getQwenGeneratorInput = async (
+  textStr: string,
+  checkSubscribeStatus: boolean = false,
+  options?: { width?: number; height?: number }
+) => {
+  let revised_text = textStr;
+  try {
+    revised_text = await translateContent(textStr, "en");
+  } catch (e) {
+    revised_text = textStr;
   }
-}
+
+  const width = options?.width || (checkSubscribeStatus ? 1024 : 768);
+  const height = options?.height || (checkSubscribeStatus ? 1024 : 768);
+
+  return {
+    prompt: revised_text,
+    width,
+    height,
+    output_format: "webp",
+    output_quality: checkSubscribeStatus ? 95 : 85,
+    negative_prompt:
+      "NSFW, nudity, low quality, bad anatomy, deformed limbs, blurry, distorted text, violence",
+  };
+};
+
+export const getInput = async (textStr: string, checkSubscribeStatus: boolean = false) => {
+  return getQwenGeneratorInput(textStr, checkSubscribeStatus);
+};

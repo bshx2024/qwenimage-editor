@@ -4,9 +4,12 @@ import Pricing from "~/components/PricingComponent";
 import {useCommonContext} from "~/context/common-context";
 
 export default function PricingModal({
-                                       locale,
-                                       page
-                                     }) {
+  locale = 'en',
+  page = ''
+}: {
+  locale?: string;
+  page?: string;
+}) {
 
   const [redirectUrl] = useState(`${locale}/${page}`);
 

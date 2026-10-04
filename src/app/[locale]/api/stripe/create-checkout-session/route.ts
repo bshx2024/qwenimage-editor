@@ -22,6 +22,21 @@ export async function POST(req: Request) {
       const userInfo = userInfoRow[0];
       const userEmail = userInfo.email;
 
+      // Check if user already has an active subscription to prevent duplicate billing
+      const activeSubRes = await db.query(
+        "select * from stripe_subscriptions where user_id = $1 and status in ('active', 'trialing') limit 1",
+        [user_id]
+      );
+      if (activeSubRes.rows.length > 0) {
+        return new Response(
+          JSON.stringify({
+            message: "User already has an active subscription. Please manage via customer portal.",
+            alreadySubscribed: true,
+          }),
+          { status: 400 }
+        );
+      }
+
       // 3. Retrieve or create the customer in Stripe
       const customer = await createOrRetrieveCustomer({
         user_id: user_id,

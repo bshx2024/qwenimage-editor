@@ -1,8 +1,6 @@
 User-Agent: *
-Allow: *
-Disallow: /api
+Allow: /
 Disallow: /api/
-Disallow: /api*
-Disallow: /*/api
 Disallow: /*/api/
-Disallow: /*/api*
+
+Sitemap: https://qwenimage-editor.com/sitemap.xml
