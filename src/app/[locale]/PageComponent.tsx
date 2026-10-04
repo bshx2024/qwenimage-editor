@@ -188,31 +188,47 @@ export default function PageComponent({
     'Add realistic glasses and smile',
   ];
 
-  // FAQ Items
+  // FAQ Items - Comprehensive coverage for search intent and long-tail queries
   const faqList = [
     {
-      q: 'What is Qwen Image Editor?',
-      a: 'Qwen Image Editor is a next-generation AI image editor powered by the Qwen vision foundation model. It enables precision text-guided image editing, inpainting, style modification, and high-fidelity text-to-image synthesis directly in your browser.',
+      q: 'What is Qwen Image Edit and how does Qwen Image Editor work?',
+      a: 'Qwen Image Editor is a free online AI image editing platform built on the state-of-the-art Qwen vision-language foundation models (Qwen-Image-Edit series). Unlike traditional image generators that regenerate pictures from scratch, Qwen Image Editor accepts both your original input photo and natural language editing prompts. The model identifies semantic regions, executes localized modifications (inpainting, background swaps, object replacement), and preserves the original composition, textures, and subject identity.',
     },
     {
-      q: 'How does Qwen Image Edit differ from other AI image generators?',
-      a: 'Unlike traditional blind text-to-image models that hallucinate entirely new images, Qwen Image Editor accepts both your source image and text instruction. It accurately interprets changes (such as "change jacket to blue" or "replace sky with aurora") while preserving face structure, lighting, and composition.',
+      q: 'Which model checkpoints are supported (Qwen Image Edit 2511 vs 2512 vs 2509)?',
+      a: 'Our cloud platform runs the latest production-grade checkpoints from Alibaba Cloud and HuggingFace, including Qwen-Image-Edit 2511 and 2512. Checkpoint 2511 offers superior instruction adherence and high-precision inpainting, while 2512 introduces improved multi-angle camera control and refined prompt semantic parsing. Checkpoint 2509 is also utilized for high-throughput, latency-optimized workflows.',
     },
     {
-      q: 'Can Qwen Image render accurate text and typography inside images?',
-      a: 'Yes! Text rendering is one of the strongest breakthroughs of the Qwen Image foundation architecture. It can render clean English and bilingual typography on signs, posters, book covers, and packaging without garbled characters.',
+      q: 'Can I use Qwen Image Editor online for free without ComfyUI or a high-end GPU?',
+      a: 'Yes, completely free! Running Qwen-Image-Edit locally via ComfyUI, GGUF weights, or Diffusers requires at least 16GB–24GB of dedicated VRAM (e.g., NVIDIA RTX 3090 or 4090) and complex node setups. Qwen Image Editor handles all heavyweight neural inference on high-speed cloud clusters, allowing you to edit photos directly in Chrome, Safari, or on mobile devices with zero installation.',
     },
     {
-      q: 'Is Qwen Image Editor free to use online?',
-      a: 'Yes, we provide complimentary daily free credits so anyone can experience AI photo editing and generation without entering credit card information.',
+      q: 'How does Qwen Image Edit solve the face distortion issue ("cant get the faces correct")?',
+      a: 'A common complaint with legacy AI inpainting models is facial identity drifting or unnatural distortions during photo modification. Qwen Image Edit solves this by coupling deep visual tokens with high-resolution cross-attention mechanisms. It locks the subject facial geometry, gaze direction, and key landmarks while altering only the requested elements (such as hairstyles, glasses, clothing, or lighting).',
+    },
+    {
+      q: 'Is Qwen Image Edit censored, and what are the content policies?',
+      a: 'Qwen Image Edit incorporates safety filters designed to block harmful, hateful, and illegal material while providing maximum creative freedom for portrait editing, design mockups, art direction, and digital marketing. Safe artistic expressions, photorealistic portraits, and creative styling are fully supported.',
+    },
+    {
+      q: 'How does Qwen Image Editor compare to Midjourney, Flux, and SDXL?',
+      a: 'While Midjourney and Flux are exceptional text-to-image generators, modifying existing photos often requires clumsy external controlnets or creates unintended alterations across the whole canvas. Qwen Image Editor is purpose-engineered for conversational image manipulation: you can pinpoint exact adjustments with simple prompts without degrading unchanged areas.',
+    },
+    {
+      q: 'Can Qwen Image render clean English and bilingual text inside images?',
+      a: 'Yes! Accurate text rendering is a hallmark strength of the Qwen visual model. You can instruct the editor to render legible street signage, book titles, coffee cup branding, or neon lettering in both English and Chinese without illegible glyphs or spelling mistakes.',
+    },
+    {
+      q: 'Does Qwen Image Editor support LoRA styles and custom prompts?',
+      a: 'Yes. You can combine descriptive natural language prompts with popular style descriptors, camera angles, color palettes, and LoRA-inspired aesthetic modifiers. The editor interprets subtle prompt qualifiers like "photorealistic 8k studio lighting", "cyberpunk neon glow", or "vintage analog film grain" with remarkable fidelity.',
     },
     {
       q: 'Do I own the commercial rights to images generated and edited here?',
-      a: 'Yes, images created and edited using Qwen Image Editor belong to you and can be used for commercial projects, social media, merchandise, and website visuals.',
+      a: 'Yes. All visual assets, modified photos, and generated illustrations produced through your account are yours to use for commercial campaigns, social media, ecommerce listings, merchandise, and client projects.',
     },
     {
-      q: 'What resolutions and export formats are supported?',
-      a: 'You can export in lossless PNG or optimized WebP at standard 1024x1024 up to Ultra-HD 4K resolution with pro plans.',
+      q: 'What resolutions and export formats are supported for download?',
+      a: 'Users can preview in real-time and export full-resolution images in lossless PNG or optimized WebP format up to 4K Ultra-HD resolution with sharp edge fidelity and zero color compression.',
     },
   ];
 
@@ -366,7 +382,10 @@ export default function PageComponent({
                           <div className="relative group/preview inline-block">
                             <img
                               src={sourceImage}
-                              alt="Source to edit"
+                              alt="Source photo to edit with Qwen Image Editor"
+                              width={500}
+                              height={224}
+                              loading="lazy"
                               className="max-h-56 mx-auto rounded-xl object-contain shadow-md"
                             />
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/preview:opacity-100 rounded-xl flex items-center justify-center text-xs font-medium text-white transition-opacity">
@@ -518,7 +537,10 @@ export default function PageComponent({
                           <div className="w-full">
                             <img
                               src={currentResultImage}
-                              alt="Qwen Image Editor Output"
+                              alt="Qwen Image Editor Output Result"
+                              width={768}
+                              height={440}
+                              loading="lazy"
                               className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
                             />
                             <div className="mt-3 flex items-center justify-between text-xs text-slate-400 px-2">
@@ -530,7 +552,10 @@ export default function PageComponent({
                           <div className="w-full">
                             <img
                               src={currentResultImage}
-                              alt="Generated Visual Output"
+                              alt="Generated Visual Output from Qwen Image Edit"
+                              width={768}
+                              height={440}
+                              loading="lazy"
                               className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
                             />
                           </div>
@@ -695,9 +720,9 @@ export default function PageComponent({
         <section className="py-16 lg:py-24 border-t border-slate-900 bg-slate-950/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">Key Features & Capabilities</h2>
+              <h2 className="text-3xl font-extrabold text-white tracking-tight">Key Features of Qwen Image Editing</h2>
               <p className="text-sm sm:text-base text-slate-400 mt-3">
-                Why creators, designers, and marketers choose Qwen Image Editor.
+                Why creators, visual artists, and marketers choose Qwen Image Editor for next-generation visual manipulation.
               </p>
             </div>
 
@@ -706,31 +731,287 @@ export default function PageComponent({
                 <AdjustmentsHorizontalIcon className="w-8 h-8 text-indigo-400" />
                 <h3 className="text-base font-bold text-white">Instruction Inpainting</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Describe localized changes naturally. The AI intelligently segments regions and seamlessly matches lighting and textures.
+                  Describe localized modifications with plain text prompts. The model automatically segments edit masks and harmonizes lighting, shadows, and edge grain.
                 </p>
               </div>
 
               <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
                 <SparklesIcon className="w-8 h-8 text-purple-400" />
-                <h3 className="text-base font-bold text-white">Crisp Text Rendering</h3>
+                <h3 className="text-base font-bold text-white">Crisp Text & Typography</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Accurately render English and Chinese typography on posters, banners, and product mockups without gibberish.
+                  Render photorealistic English and Chinese typography on street banners, apparel, packaging, and digital advertisements without garbled characters.
                 </p>
               </div>
 
               <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
                 <ShieldCheckIcon className="w-8 h-8 text-pink-400" />
-                <h3 className="text-base font-bold text-white">Character Consistency</h3>
+                <h3 className="text-base font-bold text-white">Character & Face Consistency</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Preserve facial identity, core characteristics, and poses across complex sequential modifications and background swaps.
+                  Locks facial geometry, gaze vectors, and core character identity across sequential background changes, wardrobe replacements, and style shifts.
                 </p>
               </div>
 
               <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-6 space-y-3">
                 <BoltIcon className="w-8 h-8 text-cyan-400" />
-                <h3 className="text-base font-bold text-white">Cloud GPU Speed</h3>
+                <h3 className="text-base font-bold text-white">Cloud GPU Acceleration</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Powered by high-throughput GPU clusters, delivering sub-second previewing and fast turnaround on complex transformations.
+                  Powered by high-throughput enterprise GPU clusters with FlashAttention, delivering fast rendering turnaround without consuming local computer memory.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Checkpoints & Architecture Section (2511 vs 2512 vs 2509) */}
+        <section className="py-16 lg:py-24 border-t border-slate-900">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-14">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                Model Evolution & Architecture
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
+                Supported Qwen-Image-Edit Checkpoints
+              </h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
+                The Qwen-Image foundation family bridges visual multimodal understanding and generative diffusion. Our online editor integrates the official open-source weights optimized for high-fidelity execution.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                      Checkpoint 2511
+                    </span>
+                    <span className="text-[11px] text-slate-400">High Adherence SOTA</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2511</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                    The acclaimed flagship revision for instruction-guided inpainting. Checkpoint 2511 excels at fine-grained edits, complex subject preservation, and photo-level material realism with minimal hallucination.
+                  </p>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
+                      <span>Best for multi-object replacement & background swaps</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
+                      <span>Sub-pixel edge blending and natural shadow cast</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
+                      <span>Exceptional portrait feature retention</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-b from-purple-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      Checkpoint 2512
+                    </span>
+                    <span className="text-[11px] text-slate-400">Semantic & Spatial Control</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2512</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                    Engineered for nuanced prompt comprehension, spatial camera transformations, and multi-turn modifications. Checkpoint 2512 accurately interprets conversational constraints and stylistic nuances.
+                  </p>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
+                      <span>Camera perspective & angle adjustment</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
+                      <span>Advanced aesthetic color grading & mood shifts</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
+                      <span>Enhanced bilingual typography & packaging design</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-b from-cyan-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      Checkpoint 2509
+                    </span>
+                    <span className="text-[11px] text-slate-400">Fast Inpainting</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2509</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                    The baseline architecture renowned for lightweight inference and rapid previewing. Provides dependable object removal, background clearing, and quick conceptual prototyping.
+                  </p>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Fast turnaround for rapid iterations</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Efficient object erasure & clean inpainting</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Stable baseline for standard resolution outputs</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Online Web Editor vs ComfyUI Workflow Comparison */}
+        <section className="py-16 lg:py-24 border-t border-slate-900 bg-slate-950/50">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-14">
+              <span className="text-xs font-bold uppercase tracking-wider text-pink-400 bg-pink-500/10 px-3 py-1 rounded-full border border-pink-500/20">
+                Workflow Comparison
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
+                Qwen Image Editor Online vs Local ComfyUI Workflow
+              </h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
+                Many creators search for Qwen Image Edit ComfyUI workflows, GGUF quants, or HuggingFace nodes. Here is why using our cloud web editor saves hours of troubleshooting and expensive hardware costs.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* Local ComfyUI Card */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-sm">
+                    DIY
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-200">Local ComfyUI / GGUF Workflow</h3>
+                    <p className="text-xs text-slate-500">Self-hosted local installation</p>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 text-xs sm:text-sm text-slate-400">
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-400 font-bold">✕</span>
+                    <span><strong>Massive Hardware Requirement:</strong> Needs high-end GPUs with 16GB–24GB VRAM (e.g. RTX 4090) to prevent CUDA Out Of Memory (OOM) crashes.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-400 font-bold">✕</span>
+                    <span><strong>Complex Setup:</strong> Requires Python virtual environments, PyTorch matching, custom nodes, git submodules, and constant dependency updates.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-400 font-bold">✕</span>
+                    <span><strong>No Mobile Access:</strong> Tied strictly to your local desktop machine; impossible to use on iPads, phones, or thin laptops.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-400 font-bold">✕</span>
+                    <span><strong>Large Download Footprint:</strong> 20GB+ checkpoint files consume huge storage and bandwidth.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Online Web Editor Card */}
+              <div className="rounded-2xl border border-indigo-500/50 bg-gradient-to-b from-indigo-950/20 to-slate-900/70 p-8 shadow-xl shadow-indigo-500/10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">
+                    WEB
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Qwen Image Editor (Online Cloud)</h3>
+                    <p className="text-xs text-indigo-300">Instant in-browser experience</p>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 text-xs sm:text-sm text-slate-300">
+                  <li className="flex items-start gap-3">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span><strong>Zero Hardware Barrier:</strong> Runs seamlessly on any computer, Chromebook, iPad, or smartphone without local GPU consumption.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span><strong>Instant Start with 0 Setup:</strong> No drivers, no nodes, no terminal scripts. Upload photo, type prompt, and get results in seconds.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span><strong>Always Latest Checkpoints:</strong> Automatically updated with Qwen-Image-Edit 2511, 2512, and continuous fine-tuning improvements.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span><strong>Integrated Comparison & Storage:</strong> Built-in Side-by-Side before/after comparison tool, community showcase, and HD cloud history.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Solving Common Pain Points Section (Face Consistency & Inpainting) */}
+        <section className="py-16 lg:py-24 border-t border-slate-900">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-14">
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+                Creative Solutions & Recipes
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
+                Mastering AI Photo Editing & Character Consistency
+              </h2>
+              <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
+                Overcoming common challenges in text-driven image modification with proven prompt structures and intelligent inpainting.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 inline-block"></span>
+                  Fixing Face Drift & Inconsistency
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  A frequent issue with image generators is facial distortion during edits (&quot;can&apos;t get faces correct&quot;). In Qwen Image Editor, avoid broad re-generation prompts. Instead, specify targeted alterations like:
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-indigo-300">
+                  &quot;Keep face identity, facial features and gaze untouched; replace jacket with dark bomber jacket.&quot;
+                </div>
+                <p className="text-xs text-slate-500">
+                  The model cross-references original face landmarks and preserves personal identity.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span>
+                  Atmospheric Relighting & Shadows
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  When changing daylight photos into sunset or neon cyberpunk scenes, legacy editors leave harsh edge artifacts. Qwen-Image-Edit calculates global illumination and accurately projects colored ambient bounce:
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-purple-300">
+                  &quot;Change background to night neon Tokyo, cast subtle purple and blue rim light onto the subject&apos;s shoulders.&quot;
+                </div>
+                <p className="text-xs text-slate-500">
+                  Seamlessly integrates subject and background into a unified photographic composition.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-pink-400 inline-block"></span>
+                  Flawless Graphic Text & Signage
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Need to replace text on packaging, posters, or t-shirts? Use explicit quotation marks to instruct the Qwen vision decoder to render exact typography:
+                </p>
+                <div className="rounded-xl bg-slate-950 p-3 border border-slate-800 text-[11px] font-mono text-pink-300">
+                  &quot;Inpaint the coffee cup label to read &apos;QWEN BREW&apos; in clean minimalist serif font.&quot;
+                </div>
+                <p className="text-xs text-slate-500">
+                  Generates sharp lettering without typical diffusion blur, gibberish, or missing vowels.
                 </p>
               </div>
             </div>

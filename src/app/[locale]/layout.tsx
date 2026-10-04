@@ -38,6 +38,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/appicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
         <script src="https://accounts.google.com/gsi/client" async defer></script>
       </head>
       <body suppressHydrationWarning={true} className={clsx(inter.className, 'flex flex-col background-div')}>

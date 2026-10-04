@@ -5,9 +5,11 @@ const TopBlurred = () => {
     <div className="absolute bottom-auto left-0 right-0 top-0 -z-10">
       <img
         src="/top_blurred.png"
-        alt={process.env.NEXT_PUBLIC_WEBSITE_NAME}
+        alt={process.env.NEXT_PUBLIC_WEBSITE_NAME || 'Qwen Image Editor'}
+        width={1920}
+        height={400}
         className="relative bottom-auto mx-auto top-0 -z-10"
-        style={{width: '100%'}}
+        style={{ width: '100%', height: 'auto' }}
       />
     </div>
   )

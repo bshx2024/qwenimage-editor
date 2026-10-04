@@ -31,6 +31,11 @@ const HeadInfo = ({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="robots" content="index, follow" />
 
+      {/* Favicon & Icons */}
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="icon" href="/appicon.svg" type="image/svg+xml" />
+      <link rel="apple-touch-icon" href="/favicon.ico" />
+
       {/* Canonical Link */}
       <link rel="canonical" href={canonicalUrl} />
 

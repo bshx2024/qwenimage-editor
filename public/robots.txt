@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /*/api/
 
-Sitemap: https://qwenimage-editor.com/sitemap.xml
+Sitemap: https://www.qwenimage-editor.com/sitemap.xml

@@ -5,10 +5,10 @@
     "languageInChineseSimple": "English"
   },
   "IndexPageText": {
-    "title": "Qwen Image Editor — Free Online AI Image Editor",
-    "description": "Edit and transform images with Qwen Image Editor. AI-driven inpainting, prompt edits, character consistency, and high-fidelity generation in your browser.",
-    "h1Text": "Free Online Qwen Image Editor",
-    "descriptionBelowH1Text": "Powerful AI image editing and transformation powered by state-of-the-art vision foundation models."
+    "title": "Qwen Image Editor — Free Online Qwen Image Edit & AI Photo Editing",
+    "description": "Experience Qwen Image Edit online for free. Powered by Qwen-Image-Edit 2511 & 2512 models. Fast prompt-based inpainting, character consistency, and photo editing without ComfyUI.",
+    "h1Text": "Free Online Qwen Image Editor & AI Photo Edit",
+    "descriptionBelowH1Text": "Transform, inpaint, and edit photos directly in your browser with Qwen Image Edit 2511 & 2512. No ComfyUI, no local setup, and zero GPU requirements."
   },
   "CommonText": {
     "loadingText": "Processing image...",

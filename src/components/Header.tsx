@@ -197,7 +197,7 @@ export default function Header({
         <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-slate-950 px-6 py-6 sm:max-w-sm border-l border-slate-800">
           <div className="flex items-center justify-between">
             <Link href={getLinkHref(locale, '')} className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-              <img className="h-8 w-8 rounded-lg" src="/appicon.svg" alt="Qwen Image Editor" />
+              <img className="h-8 w-8 rounded-lg" src="/appicon.svg" width={32} height={32} alt="Qwen Image Editor" />
               <span className="font-bold text-lg text-white">Qwen Image Editor</span>
             </Link>
             <button
