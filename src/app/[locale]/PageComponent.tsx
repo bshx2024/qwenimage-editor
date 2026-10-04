@@ -268,8 +268,8 @@ export default function PageComponent({
       <HeadInfo
         locale={locale}
         page=""
-        title={indexText?.title || "Qwen Image Editor — Free Online Qwen Image Edit & AI Photo Editing"}
-        description={indexText?.description || "Experience Qwen Image Edit online for free. Powered by Qwen-Image-Edit 2511 & 2512 models. Fast prompt-based inpainting, character consistency, and photo editing without ComfyUI."}
+        title={indexText?.title || "Qwen Image Editor — Free Online AI Photo & Image Edit"}
+        description={indexText?.description || "Use Qwen Image Editor online for free. Powered by Qwen-Image-Edit 2511 & 2512 models for AI inpainting, character consistency, and photo edits without ComfyUI."}
         image="/images/og-image.jpg"
         schemaData={schemaData}
       />
@@ -720,7 +720,7 @@ export default function PageComponent({
         <section className="py-16 lg:py-24 border-t border-slate-900 bg-slate-950/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">Key Features of Qwen Image Editing</h2>
+              <h2 className="text-3xl font-extrabold text-white tracking-tight">Key Features of Qwen Image Editor</h2>
               <p className="text-sm sm:text-base text-slate-400 mt-3">
                 Why creators, visual artists, and marketers choose this platform for next-generation visual manipulation.
               </p>
