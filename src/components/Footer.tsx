@@ -301,8 +301,8 @@ export default function Footer({
               Flexible Credits & Pricing Plans
             </Link>
             <span className="text-slate-700">•</span>
-            <Link href={getLinkHref(locale, 'aup')} className="hover:text-indigo-400 transition-colors">
-              Commercial AI Licensing & AUP
+            <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="hover:text-indigo-400 transition-colors">
+              Strata Qwen 3.8 Local Inference Guide
             </Link>
           </div>
         </div>

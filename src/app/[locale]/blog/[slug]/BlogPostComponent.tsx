@@ -285,7 +285,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               What is Strata Qwen and Why is It Trending?
             </h2>
             <p>
-              The open-source AI community recently experienced a major shift following Alibaba&apos;s release of <strong>Qwen 3.8 Flash Next</strong> (frequently searched as <em>Qwen 3.8 Next</em> and <em>Qwen Flash Next</em>). This foundation model features 125B total parameters in a Mixture-of-Experts (MoE) configuration, sparsely activating approximately 6B parameters per token across 262k to 512k context windows.
+              The open-source AI community recently experienced a major shift following Alibaba&apos;s release of <strong>Qwen 3.8 Flash Next</strong> (frequently searched as <em>Qwen 3.8 Next</em> and <em>Qwen Flash Next</em>). This foundation model features 125B total parameters in a Mixture-of-Experts (MoE) configuration, sparsely activating approximately 6B parameters per token across 262k to 512k context windows, following the footsteps of Alibaba&apos;s multimodal visual family such as <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:text-indigo-300 underline font-medium">Qwen Image 2.1</Link>.
             </p>
             <p>
               While Qwen 3.8 achieves state-of-the-art coding and reasoning scores on benchmarks like SWE-bench Pro, local execution on 125B architectures previously required enterprise dual-A100 or H100 clusters costing upwards of $20,000.

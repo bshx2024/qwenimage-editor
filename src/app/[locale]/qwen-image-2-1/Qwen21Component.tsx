@@ -658,7 +658,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                 <ul className="text-xs text-slate-400 space-y-2.5 leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="w-4 h-4 text-amber-500 font-bold mt-0.5 shrink-0">!</span>
-                    <span><strong>Hardware Cost:</strong> Demands minimum NVIDIA RTX 3090/4090 (24GB VRAM) for native FP16 execution.</span>
+                    <span><strong>Hardware Cost:</strong> Demands minimum NVIDIA RTX 3090/4090 (24GB VRAM) for native FP16 execution (learn how tiered memory handles 125B LLMs in our <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="text-indigo-400 hover:text-indigo-300 underline font-medium">Strata Qwen local benchmark</Link>).</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-4 h-4 text-amber-500 font-bold mt-0.5 shrink-0">!</span>
