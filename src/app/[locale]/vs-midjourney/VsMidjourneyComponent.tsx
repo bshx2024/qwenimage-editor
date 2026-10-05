@@ -44,7 +44,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
     typographyAdherence: 'Exceptional (Exact spelling & letter spacing)',
     stylizationIndex: 'Photorealistic & balanced without heavy painterly tint',
     inpaintingFlexibility: 'Native instruction-based maskless editing supported',
-    verdict: 'In this Qwen Image 2.1 vs Midjourney evaluation, Qwen reliably reproduces specified text and lighting constraints, while Midjourney prioritizes dramatic aesthetic stylization.',
+    verdict: 'In this model comparison, Qwen reliably reproduces specified text and lighting constraints, while Midjourney prioritizes dramatic aesthetic stylization.',
   });
 
   const scenarios = [
@@ -109,7 +109,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
         typographyAdherence: customPrompt.includes('"') ? 'High (Strict typographic containment)' : 'Standard High Fidelity',
         stylizationIndex: 'Balanced photorealism (Neutral camera lighting)',
         inpaintingFlexibility: 'Direct instruction editing supported on output',
-        verdict: `Analyzed prompt "${customPrompt.slice(0, 45)}...": In this Qwen Image 2.1 vs Midjourney test, Qwen demonstrates high structural fidelity with predictable spatial adherence. Midjourney offers dramatic aesthetic contrast with higher variance on specific prompt constraints.`,
+        verdict: `Analyzed prompt "${customPrompt.slice(0, 45)}...": In this model test, Qwen demonstrates high structural fidelity with predictable spatial adherence. Midjourney offers dramatic aesthetic contrast with higher variance on specific prompt constraints.`,
       });
     }, 400);
   };
@@ -117,7 +117,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
   const faqList = [
     {
       q: 'What is the main difference in Qwen Image 2.1 vs Midjourney?',
-      a: 'The foundational difference in this Qwen Image 2.1 vs Midjourney comparison lies in model architecture and purpose. Qwen is built upon the Qwen2 multimodal vision-language architecture, excelling at legible typography, strict prompt adherence, conversational inpainting, and automated workflows via open APIs. Midjourney is a closed, proprietary text-to-image generator celebrated for atmospheric fantasy styling, but lacks public developer APIs and localized text editing.',
+      a: 'The foundational difference lies in model architecture and purpose. Qwen is built upon the Qwen2 multimodal vision-language architecture, excelling at legible typography, strict prompt adherence, conversational inpainting, and automated workflows via open APIs. Midjourney is a closed, proprietary text-to-image generator celebrated for atmospheric fantasy styling, but lacks public developer APIs and localized text editing.',
     },
     {
       q: 'Is Qwen2 a multimodal model? How does its architecture work?',
@@ -261,7 +261,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 <span>On-Page Prompt & Capability Studio</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Interactive Qwen Image 2.1 vs Midjourney Benchmark Studio
+                Interactive Model Capability & Benchmark Studio
               </h2>
               <p className="text-xs sm:text-sm text-slate-400">
                 Test prompts in real time. Evaluate prompt adherence, typography rendering, and architectural capabilities directly on this page.
@@ -450,7 +450,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4 sm:p-6 shadow-2xl">
               <img
                 src="/images/model_compare_demo.jpg"
-                alt="Qwen Image 2.1 vs Midjourney Typography Benchmark"
+                alt="Side-by-Side Typography and Text Rendering Benchmark"
                 width={1024}
                 height={512}
                 loading="lazy"
@@ -491,7 +491,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 2. Img2Prompt & Reverse Image Understanding
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                A common requirement among digital artists and agency teams analyzing <strong>Qwen Image 2.1 vs Midjourney</strong> is <strong>img2prompt</strong>: deciphering existing visual assets to create coherent variations or extract reusable aesthetic styles. Midjourney provides a basic <code>/describe</code> command that generates four generic prompts. However, these suggestions often hallucinate artists&apos; names and miss minute structural details.
+                A common requirement among digital artists and agency teams is <strong>img2prompt</strong>: deciphering existing visual assets to create coherent variations or extract reusable aesthetic styles. Midjourney provides a basic <code>/describe</code> command that generates four generic prompts. However, these suggestions often hallucinate artists&apos; names and miss minute structural details.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 Because the system is natively integrated with Qwen2 vision-language reasoning, it performs deep visual attribute decomposition. It identifies focal depth, camera lens specifications, ambient lighting angles, color temperatures, and typography hierarchy, allowing creators to reverse-engineer prompts and synthesize pristine visuals with the <Link href={getLinkHref(locale, 'generator')} className="text-indigo-400 hover:underline font-medium">Qwen Image Generator</Link>.
@@ -503,7 +503,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 3. Text-Guided Inpainting & Iterative Post-Production
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                In professional workflows, generating an initial composition is only 20% of the effort; the remaining 80% involves targeted refinements. In the <strong>Qwen Image 2.1 vs Midjourney</strong> workflow analysis, Midjourney forces users to paint manual masks using its Discord or web &ldquo;Vary Region&rdquo; interface. Because it lacks a conversational memory, modifying one element frequently degrades adjacent facial features or alters the overall illumination.
+                In professional creative workflows, generating an initial composition is only 20% of the effort; the remaining 80% involves targeted refinements. Midjourney forces users to paint manual masks using its Discord or web &ldquo;Vary Region&rdquo; interface. Because it lacks a conversational memory, modifying one element frequently degrades adjacent facial features or alters the overall illumination.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 With <Link href={getLinkHref(locale, '')} className="text-indigo-400 hover:underline font-medium">Qwen Image Editor</Link>, localized alterations are handled via conversational instructions. You can instruct the engine: &ldquo;Keep the character pose unchanged, but replace the winter coat with a black leather jacket and add a rainy reflection on the street.&rdquo; The model isolates semantic regions natively, maintaining structural coherence across iterations.
@@ -515,7 +515,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 4. Production Costs, Openness & Automated Pipeline Integration
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                From a budget and enterprise scalability standpoint, this <strong>Qwen Image 2.1 vs Midjourney</strong> assessment highlights significant operational hurdles in Midjourney. Its pricing starts at $10/month and scales up to $60/month per user, without any programmatic API access for enterprise software integration.
+                From a budget and enterprise scalability standpoint, Midjourney presents significant operational hurdles. Its pricing starts at $10/month and scales up to $60/month per user, without any programmatic API access for enterprise software integration.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 Conversely, the open weights are accessible under permissive community terms. Startups and enterprise developers can run private instances locally on NVIDIA GPUs (via ComfyUI or HuggingFace Diffusers) or integrate cost-effective REST APIs hosted on serverless infrastructure. For everyday creators, our platform provides immediate free online access with our <Link href={getLinkHref(locale, '')} className="text-indigo-400 hover:underline font-medium">online AI photo editor</Link> without Discord subscription barriers.
@@ -532,7 +532,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 Decision Guide: Which Generative Engine Fits Your Needs?
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 mt-2">
-                Selecting in the Qwen Image 2.1 vs Midjourney decision depends on your specific creative or commercial objectives.
+                Selecting in this generative model decision depends on your specific creative or commercial objectives.
               </p>
             </div>
 
