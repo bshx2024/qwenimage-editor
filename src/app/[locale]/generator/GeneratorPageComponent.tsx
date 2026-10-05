@@ -172,6 +172,23 @@ export default function GeneratorPageComponent({
           'Free online Qwen Image Generator to generate high-fidelity AI images, digital art, and marketing visuals from natural language prompts.',
       },
       {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Qwen Image Generator',
+            item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com'}/generator`,
+          },
+        ],
+      },
+      {
         '@type': 'FAQPage',
         mainEntity: faqItems.map((item) => ({
           '@type': 'Question',
@@ -204,6 +221,23 @@ export default function GeneratorPageComponent({
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-purple-600/20 via-indigo-600/20 to-pink-600/10 blur-[130px] pointer-events-none rounded-full" />
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Breadcrumb Navigation */}
+            <nav aria-label="Breadcrumb" className="flex justify-center mb-6">
+              <ol className="inline-flex items-center space-x-1 sm:space-x-2 text-xs text-slate-400">
+                <li className="inline-flex items-center">
+                  <Link href={getLinkHref(locale, '')} className="text-slate-400 hover:text-indigo-400 transition-colors">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <span className="mx-1.5 text-slate-600">/</span>
+                    <span className="text-slate-200 font-semibold">Qwen Image Generator</span>
+                  </div>
+                </li>
+              </ol>
+            </nav>
+
             {/* Page Header */}
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300 backdrop-blur-md">
@@ -457,7 +491,7 @@ export default function GeneratorPageComponent({
                 <strong>Qwen Image Generator</strong> is a breakthrough generative AI foundation platform engineered by Alibaba&apos;s Qwen research team. Representing an evolutionary leap beyond legacy diffusion frameworks, it unifies state-of-the-art multimodal language understanding with a high-capacity 7B visual diffusion backbone.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
-                Unlike earlier generative models that struggle with complex syntactic relationships or scramble letters into unreadable pseudo-text, Qwen Image understands deep semantic cues. It effortlessly synthesizes photorealistic lighting, cinematic depth-of-field, authentic material textures, and crystal-clear legible text banners across English and Chinese characters.
+                Unlike earlier generative models that struggle with complex syntactic relationships or scramble letters into unreadable pseudo-text, Qwen Image understands deep semantic cues. It effortlessly synthesizes photorealistic lighting, cinematic depth-of-field, authentic material textures, and crystal-clear legible text banners across English and Chinese characters. If you already have a photo and wish to perform localized inpainting or character editing, visit our <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-medium underline hover:text-indigo-300">Free Online Qwen Image Editor</Link>.
               </p>
             </article>
 
@@ -499,7 +533,7 @@ export default function GeneratorPageComponent({
                     <span>Seamless Editor Integration</span>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    One-click handoff to Qwen Image Editor allows you to refine, tweak, and inpaint outputs without switching tools.
+                    One-click handoff to our <Link href={getLinkHref(locale, '')} className="text-cyan-400 font-medium underline hover:text-cyan-300">Qwen Image Editor</Link> allows you to refine, tweak, and inpaint outputs without switching tools.
                   </p>
                 </div>
               </div>
