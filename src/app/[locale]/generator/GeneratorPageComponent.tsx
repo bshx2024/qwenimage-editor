@@ -703,16 +703,22 @@ export default function GeneratorPageComponent({
             </div>
 
             {/* Pro-Tips Banner */}
-            <div className="mt-10 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-950/40 via-purple-950/30 to-slate-900/60 p-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-                    Pro Creator Tip: Optimal Prompt Formula
-                  </span>
-                  <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
-                    For optimal high-definition realism, structure your prompt sequentially: <strong>[Subject & Action]</strong> + <strong>[Environment & Spatial Backdrop]</strong> + <strong>[Lighting & Mood]</strong> + <strong>[Camera Lens & Material Texture]</strong>. This systematic approach maximizes the diffusion model&apos;s semantic reasoning power.
-                  </p>
-                </div>
+            <div className="mt-10 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-950/40 via-purple-950/30 to-slate-900/60 p-6 space-y-4">
+              <div className="space-y-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                  Pro Creator Tip 1: Optimal 4-Part Prompt Formula
+                </span>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  For optimal high-definition realism, structure your prompt sequentially: <strong>[Subject & Action]</strong> + <strong>[Environment & Spatial Backdrop]</strong> + <strong>[Lighting & Mood]</strong> + <strong>[Camera Lens & Material Texture]</strong>. This systematic structure prevents concept bleeding and maximizes the diffusion model&apos;s semantic reasoning power.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-800/80 space-y-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
+                  Pro Creator Tip 2: Composition & Aspect Ratios
+                </span>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Choose your aspect ratio purposefully: use <strong>16:9 widescreen</strong> for cinematic landscapes, YouTube thumbnails, and desktop banners; <strong>9:16 vertical</strong> for TikTok, Instagram Reels, and mobile wallpapers; and <strong>1:1 square</strong> for profile avatars and product icons. After generating your visual, a single click transfers it directly into our integrated editor for localized inpainting.
+                </p>
               </div>
             </div>
           </div>
