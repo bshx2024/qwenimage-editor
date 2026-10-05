@@ -47,7 +47,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
     vramNano: '3.2GB VRAM (Quantized)',
     fidelityScoreQwen: 98,
     fidelityScoreNano: 71,
-    verdict: 'In this Qwen Image 2.1 vs Nano Banana benchmark, Qwen delivers crisp lettering, reflections, and accurate colors, while Nano Banana prioritizes sub-second on-device speed with reduced micro-detail.',
+    verdict: 'In this technical benchmark, Qwen delivers crisp lettering, reflections, and accurate colors, while Nano Banana prioritizes sub-second on-device speed with reduced micro-detail.',
   });
 
   const scenarios = [
@@ -144,7 +144,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
       a: 'For real-time on-device applications, interactive gaming avatars, or offline mobile filters where sub-second latency is critical, Nano Banana provides compelling utility. For any web-based platform or enterprise backend where visual fidelity is paramount, Qwen is the superior solution.',
     },
     {
-      q: 'Which model should I choose in the Qwen Image 2.1 vs Nano Banana evaluation?',
+      q: 'Which model should I choose in this generative AI evaluation?',
       a: 'Choose Qwen if you prioritize publication-grade image clarity, accurate typography, conversational inpainting, and cloud scalability. Choose Nano Banana if you are developing experimental edge hardware prototypes, mobile utilities, or need offline generation on low-spec devices.',
     },
   ];
@@ -483,7 +483,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
                 1. Architecture & Parameter Footprint: 7B Multimodal vs Edge Pruning
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                Understanding the architectural divergence in this <strong>Qwen Image 2.1 vs Nano Banana</strong> comparison is fundamental for engineering teams. Qwen is built upon Alibaba&apos;s unified 7-billion parameter vision-language transformer. By sharing representations between visual tokens and textual semantics, the model preserves complex compositional logic, spatial prepositions, and fine-grained anatomical consistency.
+                Understanding the architectural divergence in this edge vs foundation model comparison is fundamental for engineering teams. Qwen is built upon Alibaba&apos;s unified 7-billion parameter vision-language transformer. By sharing representations between visual tokens and textual semantics, the model preserves complex compositional logic, spatial prepositions, and fine-grained anatomical consistency.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 Nano Banana, on the other hand, embraces extreme architectural pruning, distilling the diffusion backbone into roughly 1.2 billion parameters. This lightweight blueprint enables instant startup and minimal memory footprint, but sacrifices the parameter depth required for nuanced linguistic comprehension and complex lighting interactions.
@@ -495,7 +495,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
                 2. Inference Latency & Hardware Costs: Cloud GPUs vs On-Device NPU
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                Latency and deployment expense represent decisive criteria when analyzing <strong>Qwen Image 2.1 vs Nano Banana</strong>. Nano Banana excels when deployed on constrained edge devices—such as mobile smartphones, offline IoT terminals, or Apple Silicon NPUs—generating 512x512 drafts in under 700 milliseconds with minimal battery drain.
+                Latency and deployment expense represent decisive criteria when analyzing on-device edge generation against cloud GPU pipelines. Nano Banana excels when deployed on constrained edge devices—such as mobile smartphones, offline IoT terminals, or Apple Silicon NPUs—generating 512x512 drafts in under 700 milliseconds with minimal battery drain.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 In contrast, Qwen is engineered for high-throughput cloud environments and workstation GPUs (such as RTX 4090 or A100). Utilizing FP8 quantization, it achieves 2-second inference at pristine 1024x1024 resolution. For digital creators without high-end GPUs, the web-based <Link href={getLinkHref(locale, '')} className="text-purple-400 hover:underline font-medium">Qwen Image Editor</Link> provides free instant access without local hardware barriers.
