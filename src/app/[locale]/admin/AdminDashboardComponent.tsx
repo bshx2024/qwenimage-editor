@@ -1291,7 +1291,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
                   <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-950/20 text-xs text-indigo-200 leading-relaxed">
                     <strong className="text-indigo-300 block mb-1">Admin Security Tip:</strong>
-                    You can change your master administrator password anytime by updating <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_PASSWORD</code> in your <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">.env.local</code> file and restarting your Node.js instance. To add multiple Google admin accounts, specify them comma-separated in <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_EMAILS="email1@gmail.com,email2@gmail.com"</code>.
+                    You can change your master administrator password anytime by updating <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_PASSWORD</code> in your <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">.env.local</code> file and restarting your Node.js instance. To add multiple Google admin accounts, specify them comma-separated in <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_EMAILS=&quot;email1@gmail.com,email2@gmail.com&quot;</code>.
                   </div>
                 </div>
               </div>
