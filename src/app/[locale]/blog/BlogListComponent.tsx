@@ -111,7 +111,18 @@ export default function BlogListComponent({ locale = 'en' }: { locale?: string }
                   </div>
 
                   <div className="pt-6 border-t border-slate-800/60 mt-6 flex items-center justify-between">
-                    <span className="text-xs text-slate-400 font-medium">{post.author}</span>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={post.author.avatar}
+                        alt={post.author.name}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-full border border-indigo-500/30"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span className="text-xs text-slate-300 font-medium">{post.author.name}</span>
+                    </div>
                     <Link
                       href={getLinkHref(locale, `blog/${post.slug}`)}
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors"

@@ -52,9 +52,16 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
         "datePublished": post.date,
         "dateModified": post.date,
         "author": {
-          "@type": "Organization",
-          "name": "Qwen Engineering Team",
-          "url": "https://www.qwenimage-editor.com",
+          "@type": "Person",
+          "name": post.author.name,
+          "jobTitle": post.author.role,
+          "image": `https://www.qwenimage-editor.com${post.author.avatar}`,
+          "description": post.author.bio,
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Qwen Image Editor",
+            "url": "https://www.qwenimage-editor.com"
+          }
         },
         "publisher": {
           "@type": "Organization",
@@ -156,8 +163,27 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               {post.description}
             </p>
 
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 border-t border-slate-800/60">
-              <span>Author: <strong className="text-slate-200">{post.author}</strong></span>
+            <div className="pt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/60">
+              <div className="flex items-center gap-2.5">
+                <img
+                  src={post.author.avatar}
+                  alt={post.author.name}
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-full border border-indigo-500/40 shadow-sm"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div>
+                  <div className="flex items-center gap-1.5 font-medium text-slate-200">
+                    <span>{post.author.name}</span>
+                    <span className="inline-flex items-center px-1.5 py-0.2 text-[10px] rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                      Verified
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-400">{post.author.role}</div>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {post.keywords.map((kw, i) => (
                   <span key={i} className="text-[11px] text-slate-500 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
@@ -421,6 +447,33 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                 >
                   <span>AI Background Remover &rarr;</span>
                 </Link>
+              </div>
+            </div>
+
+            {/* E-E-A-T Author Bio Card (Clean AST without h1-h4 tags) */}
+            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+              <img
+                src={post.author.avatar}
+                alt={post.author.name}
+                width={64}
+                height={64}
+                className="w-16 h-16 rounded-full border-2 border-indigo-500/40 shadow-md shrink-0"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="space-y-1.5 text-center sm:text-left">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <span className="font-bold text-white text-base">{post.author.name}</span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30">
+                    {post.author.role}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  {post.author.bio}
+                </p>
+                <div className="pt-1 text-[11px] text-slate-500">
+                  Published by <strong className="text-slate-400">Qwen Image Editor Engineering &amp; Research</strong> · Verified Author Profile
+                </div>
               </div>
             </div>
 

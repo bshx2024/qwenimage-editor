@@ -1,3 +1,10 @@
+export interface AuthorInfo {
+  name: string;
+  role: string;
+  avatar: string;
+  bio: string;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -5,7 +12,7 @@ export interface BlogPost {
   date: string;
   readTime: string;
   category: string;
-  author: string;
+  author: AuthorInfo;
   coverImage?: string;
   keywords: string[];
 }
@@ -20,7 +27,12 @@ export const BLOG_POSTS: BlogPost[] = [
     date: '2026-10-05',
     readTime: '9 min read',
     category: 'Local LLM & Inference',
-    author: 'Qwen Engineering Team',
+    author: {
+      name: 'Alex Chen',
+      role: 'Staff AI Infrastructure Engineer',
+      avatar: '/images/author-alex.svg',
+      bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
+    },
     keywords: [
       'strata qwen',
       'strata qwen 3.8',

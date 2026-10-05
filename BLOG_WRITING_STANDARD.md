@@ -58,6 +58,21 @@
 
 ---
 
+## 四、 作者与团队 E-E-A-T 实体认证规范 (Author & Trustworthiness)
+
+为了抵御 Google SpamBrain 与 Helpful Content Update 对“纯 AI 批量低质站”的降权打击，每篇技术博客**强制要求包含完整的真实作者/工程团队认证**：
+
+1. **顶部 Meta 栏轻量认证徽章**：
+   - 包含：作者高清头像图标（显式宽高）、作者全名、权威认证职称（如 `Verified AI Infrastructure Researcher`）。
+2. **文末深度作者卡片 (Author Bio Box)**：
+   - 必须包含：
+     - **作者高清头像 (Avatar)**：带柔光外边框，严禁图片变形与 CLS 抖动；
+     - **作者身份与头衔 (Job Title)**：明确具体的研究与工程范畴；
+     - **2~3 句专业背景履历背书 (Expertise & Credentials)**：说明其在开源大模型、分布式推理或视觉生成领域的技术实践沉淀；
+     - **社交与组织背书**：展示团队归属与知识图谱实体。
+3. **结构化数据声明 (JSON-LD Schema)**：
+   - `author` 属性严禁只留抽象字符串，必须完整声明为 `Person` 或 `Organization` 实体对象（包含 `name`、`jobTitle`、`image` 与 `url`）。
+
 ## 四、 结构化数据 Schema 强制规范 (JSON-LD)
 
 所有页面必须根据页面类型注入规范的 Schema 并在发布前通过 Google Rich Results 验证：
