@@ -4,6 +4,7 @@ import LoadingDots from "./LoadingDots";
 import { priceList, PriceItem } from "~/configs/stripeConfig";
 import { getStripe } from '~/libs/stripeClient';
 import { CheckIcon, SparklesIcon, BoltIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export default function Pricing({
   redirectUrl,
@@ -198,19 +199,32 @@ export default function Pricing({
         </div>
 
         {/* Security & Money Back Trust Badges */}
-        <div className="mt-14 max-w-3xl mx-auto text-center space-y-3 text-xs text-slate-400 border-t border-slate-800/80 pt-8">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400">
+        <div className="mt-14 max-w-3xl mx-auto text-center space-y-3.5 text-xs text-slate-400 border-t border-slate-800/80 pt-8">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-slate-300">
             <span className="flex items-center gap-1.5">
               <ShieldCheckIcon className="w-4 h-4 text-emerald-400" />
               <span>SSL 256-Bit Encrypted Payments</span>
             </span>
             <span className="flex items-center gap-1.5">
+              <span className="text-amber-400 font-semibold">🛡️ 7-Day Money-Back Guarantee</span>
+            </span>
+            <span className="flex items-center gap-1.5">
               <span>💳 Supported Cards: Visa, MasterCard, Apple Pay, Google Pay, PayPal</span>
             </span>
           </div>
-          <p className="text-[11px] text-slate-500">
-            Merchant of Record handles all transactions securely. Subscription plans can be cancelled anytime with a single click.
+          <p className="text-[11px] text-slate-400 leading-relaxed">
+            All payments and subscriptions are handled securely by our Merchant of Record, <strong className="text-slate-200">Waffo Pancake</strong> (Waffo.com Limited), under strict PCI-DSS Level 1 compliance. Subscriptions can be cancelled anytime with a single click in account settings.
           </p>
+          <div className="text-[11px] text-slate-500 flex items-center justify-center gap-4 pt-1">
+            <span>By proceeding to checkout, you agree to our</span>
+            <Link href="/terms-of-service" className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">
+              Terms of Service
+            </Link>
+            <span>&amp;</span>
+            <Link href="/privacy-policy" className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </section>
