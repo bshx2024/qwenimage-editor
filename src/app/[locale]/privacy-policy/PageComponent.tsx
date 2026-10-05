@@ -31,6 +31,40 @@ const PageComponent = ({
     }
   }, []);
 
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: privacyPolicyText?.title || 'Privacy Policy - Qwen Image Editor',
+        description: privacyPolicyText?.description || 'Privacy policy describing data processing and image privacy for Qwen Image Editor.',
+        url: 'https://qwenimage-editor.com/privacy-policy',
+        publisher: {
+          '@type': 'Organization',
+          name: 'Qwen Image Editor',
+          url: 'https://qwenimage-editor.com',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://qwenimage-editor.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Privacy Policy',
+            item: 'https://qwenimage-editor.com/privacy-policy',
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <HeadInfo
@@ -38,6 +72,7 @@ const PageComponent = ({
         page={pagePath}
         title={privacyPolicyText.title}
         description={privacyPolicyText.description}
+        schemaData={schemaData}
       />
       <Header
         locale={locale}

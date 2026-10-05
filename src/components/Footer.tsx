@@ -113,6 +113,33 @@ export default function Footer({
               </li>
               <li>
                 <Link
+                  href={getLinkHref(locale, 'qwen-image-2-1')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('qwen-image-2-1')}
+                >
+                  Qwen Image 2.1 Studio
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={getLinkHref(locale, 'background-remover')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('background-remover')}
+                >
+                  AI Background Remover
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={getLinkHref(locale, 'product-photo-editor')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('product-photo-editor')}
+                >
+                  Product Photo Staging
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLinkHref(locale, 'prompt')}
                   className="text-xs hover:text-indigo-400 transition-colors"
                   onClick={() => checkPageAndLoading('prompt')}
@@ -236,6 +263,38 @@ export default function Footer({
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Contextual Internal Linking Hub (Entity Graph Interlinking) */}
+        <div className="mt-12 pt-8 border-t border-slate-900 text-xs space-y-4">
+          <div className="text-slate-300 font-semibold tracking-wider uppercase text-[11px]">
+            AI Image Editing & Generative Knowledge Graph
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-slate-400">
+            <Link href={getLinkHref(locale, '')} className="hover:text-indigo-400 transition-colors">
+              Online AI Inpainting Studio
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'generator')} className="hover:text-indigo-400 transition-colors">
+              High-Fidelity Text to Image Generator
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'vs-midjourney')} className="hover:text-indigo-400 transition-colors">
+              Qwen 2.1 vs Midjourney v6 Comparison
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'vs-flux')} className="hover:text-indigo-400 transition-colors">
+              Qwen 2.1 vs Flux.1 DiT Benchmark
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'pricing')} className="hover:text-indigo-400 transition-colors">
+              Flexible Credits & Pricing Plans
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'aup')} className="hover:text-indigo-400 transition-colors">
+              Commercial AI Licensing & AUP
+            </Link>
           </div>
         </div>
       </div>

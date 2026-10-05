@@ -1,0 +1,31 @@
+# Qwen Image Editor (https://qwenimage-editor.com)
+> Online AI image editing and generation platform powered by Qwen foundation vision models (Qwen-Image-Edit 2511 / 2512 / Wanx 2.1).
+
+## Overview
+Qwen Image Editor is a specialized web-based AI photo editor designed for natural language inpainting, conversational image manipulation, bilingual typography rendering, and high-fidelity text-to-image synthesis. It allows users to edit images directly in modern web browsers without installing ComfyUI or owning high-end 24GB VRAM GPUs.
+
+## Key Capabilities
+- Natural Language Inpainting: Localized object replacement, background swap, and clothing modifications guided by plain text instructions.
+- Facial & Character Consistency: Deep cross-attention preserves facial landmark geometry, gaze direction, and skin tones while modifying surrounding elements.
+- Bilingual Typography: Precise spelling and glyph rendering for English text, brand signage, and Chinese characters.
+- Cloud Inference: High-speed serverless inference with 2.5s - 4.5s average turnaround on 1024x1024 pixel assets.
+- Commercial Licensing: Users own 100% commercial usage rights for all generated and modified visual assets.
+
+## Model Family & Provenance
+- Foundation Architecture: Multimodal Vision-Language Transformer developed by Alibaba Cloud Tongyi Lab.
+- Supported Checkpoints: Qwen-Image-Edit 2511 (high instruction adherence), Qwen-Image-Edit 2512 (enhanced multi-angle perspective and camera lighting), Wanx 2.1.
+- Open Source Weights & Heritage: https://github.com/QwenLM/Qwen-Image
+
+## Core Web Pages & Endpoints
+- Homepage & Interactive Canvas: https://qwenimage-editor.com
+- Benchmark vs Midjourney: https://qwenimage-editor.com/vs-midjourney
+- Benchmark vs Flux: https://qwenimage-editor.com/vs-flux
+- Pricing & Subscription Plans: https://qwenimage-editor.com/pricing
+- Terms of Service: https://qwenimage-editor.com/terms-of-service
+- Privacy Policy: https://qwenimage-editor.com/privacy-policy
+
+## Pricing Structure
+- Free Tier: Daily complimentary trial credits for online inpainting and generation.
+- Starter Pack: $4.99 one-time payment for 100 non-expiring credits.
+- Pro Monthly: $19.90/month for 500 monthly credits with commercial license and GPU priority queue.
+- Pro Yearly: $118.80/year ($9.90/month) for 6,000 credits with VIP priority queue and support.

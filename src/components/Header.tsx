@@ -103,6 +103,13 @@ export default function Header({
           >
             AI Generator
           </Link>
+          <Link
+            href={getLinkHref(locale, 'qwen-image-2-1')}
+            onClick={() => checkPageAndLoading('qwen-image-2-1')}
+            className={`text-sm font-medium transition-colors ${page === 'qwen-image-2-1' ? 'text-indigo-400 font-semibold' : 'text-slate-200 hover:text-white'}`}
+          >
+            Qwen 2.1
+          </Link>
 
           {/* Comparisons Dropdown */}
           <Menu as="div" className="relative inline-block text-left">

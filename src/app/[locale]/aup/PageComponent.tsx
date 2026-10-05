@@ -36,6 +36,40 @@ const PageComponent = ({
     setShowLoadingModal(false);
   }, []);
 
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: aupText?.title || 'Acceptable Use Policy (AUP) - Qwen Image Editor',
+        description: aupText?.description || 'Acceptable use guidelines, safety policies, and commercial licensing standards for Qwen Image Editor.',
+        url: 'https://qwenimage-editor.com/aup',
+        publisher: {
+          '@type': 'Organization',
+          name: 'Qwen Image Editor',
+          url: 'https://qwenimage-editor.com',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://qwenimage-editor.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Acceptable Use Policy',
+            item: 'https://qwenimage-editor.com/aup',
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <HeadInfo
@@ -43,6 +77,7 @@ const PageComponent = ({
         page={pagePath}
         title={aupText.title}
         description={aupText.description}
+        schemaData={schemaData}
       />
       <Header
         locale={locale}

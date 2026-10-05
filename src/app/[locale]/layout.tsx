@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
@@ -41,9 +42,12 @@ export default async function LocaleLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/appicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/favicon.ico" />
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
       </head>
       <body suppressHydrationWarning={true} className={clsx(inter.className, 'flex flex-col background-div')}>
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="lazyOnload"
+        />
         <NextAuthProvider>
           <CommonProvider
             commonText={commonText}

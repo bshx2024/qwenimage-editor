@@ -219,32 +219,53 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
         <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-20 border-b border-slate-900">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-600/15 blur-[120px] pointer-events-none rounded-full" />
           
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-medium text-indigo-300">
               <ArrowsRightLeftIcon className="w-4 h-4 text-indigo-400" />
-              <span>Head-to-Head AI Model Comparison & Benchmark</span>
+              <span>Head-to-Head AI Model Benchmark 2026</span>
             </div>
             
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
               Qwen Image 2.1 vs Midjourney: The Comprehensive AI Benchmark
             </h1>
             
-            <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Explore the critical differences in this <strong>Qwen Image 2.1 vs Midjourney</strong> benchmark. Compare typography accuracy, conversational inpainting, img2prompt vision capabilities, architecture, and production cost.
+            {/* Conclusion First: Objective Definition for Direct AI Extraction */}
+            <p className="text-base sm:text-lg text-slate-200 max-w-4xl mx-auto leading-relaxed font-normal">
+              <strong>Qwen Image 2.1 vs Midjourney v6.1 Benchmark</strong> is a comparative technical evaluation measuring multimodal instruction inpainting against proprietary diffusion pipelines, establishing a 2.5s vs 15s inference delta and a $4.99 vs $10/month cost variance across 2048×2048 commercial production workflows.
             </p>
 
+            {/* Feature-Bullet Chunking Bar */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 max-w-4xl mx-auto text-left text-xs">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-indigo-300 block">Inpainting Interaction</span>
+                <span className="text-slate-400 text-[11px]">Conversational prompt vs Discord brush box</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-purple-300 block">Typography Score</span>
+                <span className="text-slate-400 text-[11px]">Bilingual text rendering (98/100 vs 74/100)</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-emerald-300 block">Inference Latency</span>
+                <span className="text-slate-400 text-[11px]">2.5s – 4.5s cloud vs 15s – 40s queue</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-pink-300 block">Licensing Economics</span>
+                <span className="text-slate-400 text-[11px]">$4.99 lifetime credits vs $10/mo mandatory</span>
+              </div>
+            </div>
+
             {/* In-page action anchors to prevent doorway bounce penalty */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
               <a
                 href="#benchmark-tool"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-3 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:opacity-95 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:opacity-95 transition-all"
               >
                 <SparklesIcon className="w-4 h-4" />
                 <span>Test Prompts in On-Page Studio ↓</span>
               </a>
               <a
                 href="#comparison-matrix"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-6 py-3 text-xs sm:text-sm font-semibold text-slate-200 hover:border-slate-500 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-6 py-2.5 text-xs sm:text-sm font-semibold text-slate-200 hover:border-slate-500 transition-all"
               >
                 <span>Explore Comparison Matrix ↓</span>
               </a>

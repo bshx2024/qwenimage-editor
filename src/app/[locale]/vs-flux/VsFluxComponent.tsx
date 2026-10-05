@@ -249,9 +249,30 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
               Qwen Image 2.1 vs Flux: The Comprehensive AI Model Benchmark
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              An authoritative technical analysis of two premier open-weights generative systems. We test Diffusion Transformer (DiT) architecture, bilingual typography rendering, hardware VRAM economics, and zero-shot image editing workflows.
+            {/* Conclusion First: Objective Definition for Direct AI Extraction */}
+            <p className="text-base sm:text-lg text-slate-200 max-w-4xl mx-auto leading-relaxed font-normal">
+              <strong>Qwen Image 2.1 vs Flux.1 Benchmark</strong> is a hardware and generative benchmark analyzing unified Multimodal Transformer versus 12B Flow-Matching DiT architectures, demonstrating a 10GB vs 24GB VRAM operating delta and a 2.5s vs 8.4s generation latency difference.
             </p>
+
+            {/* Feature-Bullet Chunking Bar */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 max-w-4xl mx-auto text-left text-xs">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-cyan-300 block">Hardware Footprint</span>
+                <span className="text-slate-400 text-[11px]">10GB–12GB VRAM vs 16GB–24GB dedicated GPU</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-emerald-300 block">Inference Speed</span>
+                <span className="text-slate-400 text-[11px]">2.5s cloud vs 8.4s (28-step diffusion process)</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-purple-300 block">Typography Score</span>
+                <span className="text-slate-400 text-[11px]">Bilingual Chinese & English (99/100 vs 93/100)</span>
+              </div>
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                <span className="font-semibold text-indigo-300 block">Commercial License</span>
+                <span className="text-slate-400 text-[11px]">Open monetization vs Flux.1 Dev non-commercial</span>
+              </div>
+            </div>
 
             {/* On-Page Navigation CTAs (Eliminates Pure Jump Penalty) */}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-3">

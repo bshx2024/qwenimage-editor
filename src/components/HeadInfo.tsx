@@ -21,8 +21,18 @@ const HeadInfo = ({
     (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '')) ||
     'http://localhost';
 
-  const canonicalUrl = page ? `${siteUrl}/${page}` : `${siteUrl}/`;
-  const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image.startsWith('/') ? '' : '/'}${image}`;
+  // Normalize siteUrl and paths
+  const cleanSiteUrl = siteUrl.replace(/\/+$/, '');
+  const cleanPage = page ? page.replace(/^\/+/, '').replace(/\/+$/, '') : '';
+
+  // Calculate accurate canonical URL preserving 'as-needed' locale routing
+  const canonicalUrl = cleanPage
+    ? (locale === 'en' ? `${cleanSiteUrl}/${cleanPage}` : `${cleanSiteUrl}/${locale}/${cleanPage}`)
+    : (locale === 'en' ? `${cleanSiteUrl}/` : `${cleanSiteUrl}/${locale}/`);
+
+  const imageUrl = image.startsWith('http')
+    ? image
+    : `${cleanSiteUrl}${image.startsWith('/') ? '' : '/'}${image}`;
 
   return (
     <>
@@ -59,7 +69,10 @@ const HeadInfo = ({
       {/* Alternate Language Links */}
       {languages.map((item) => {
         const hrefLang = item.lang === 'en' ? 'x-default' : item.code;
-        const href = page ? `${siteUrl}/${page}` : `${siteUrl}/`;
+        const localizedPath = cleanPage
+          ? (item.lang === 'en' ? cleanPage : `${item.lang}/${cleanPage}`)
+          : (item.lang === 'en' ? '' : `${item.lang}/`);
+        const href = `${cleanSiteUrl}/${localizedPath}`;
         return <link key={`${hrefLang}-${href}`} rel="alternate" hrefLang={hrefLang} href={href} />;
       })}
 

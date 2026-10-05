@@ -31,6 +31,40 @@ const PageComponent = ({
     }
   }, []);
 
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: termsOfServiceText?.title || 'Terms of Service - Qwen Image Editor',
+        description: termsOfServiceText?.description || 'Terms of service, acceptable use guidelines, and licensing terms for Qwen Image Editor.',
+        url: 'https://qwenimage-editor.com/terms-of-service',
+        publisher: {
+          '@type': 'Organization',
+          name: 'Qwen Image Editor',
+          url: 'https://qwenimage-editor.com',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://qwenimage-editor.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Terms of Service',
+            item: 'https://qwenimage-editor.com/terms-of-service',
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <HeadInfo
@@ -38,6 +72,7 @@ const PageComponent = ({
         page={pagePath}
         title={termsOfServiceText.title}
         description={termsOfServiceText.description}
+        schemaData={schemaData}
       />
       <Header
         locale={locale}

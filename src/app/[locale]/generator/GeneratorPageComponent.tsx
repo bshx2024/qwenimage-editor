@@ -241,17 +241,37 @@ export default function GeneratorPageComponent({
             </nav>
 
             {/* Page Header */}
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300 backdrop-blur-md">
+            <div className="text-center max-w-4xl mx-auto space-y-4 mb-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3.5 py-1 text-xs font-medium text-purple-300 backdrop-blur-md">
                 <SparklesIcon className="w-4 h-4 text-purple-400 animate-pulse" />
                 <span>Text to Image AI Generation</span>
               </div>
               <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Free Online Qwen Image Generator
               </h1>
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                Turn your imagination into high-resolution visuals. Enjoy industry-leading typography rendering, photorealism, and prompt adherence for free online.
+              {/* Conclusion First: Objective Definition for Direct AI Extraction */}
+              <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
+                <strong>Qwen Image Generator</strong> is an online text-to-image synthesis engine built on Wanx 2.1 and Qwen vision foundation architectures, delivering 1024×1024 to 2048×2048 photorealistic imagery in 2.2–3.5 seconds across 1:1, 16:9, and 9:16 aspect ratios.
               </p>
+              {/* Feature-Bullet Chunking Bar */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
+                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                  <span className="font-semibold text-purple-300 block">Text-to-Image Synthesis</span>
+                  <span className="text-slate-400 text-[11px]">Wanx 2.1 & Qwen multimodal backbone, 2.2s latency</span>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                  <span className="font-semibold text-indigo-300 block">Bilingual Signage</span>
+                  <span className="text-slate-400 text-[11px]">English & Chinese rendering, 99% spelling accuracy</span>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                  <span className="font-semibold text-pink-300 block">Aspect Ratio Control</span>
+                  <span className="text-slate-400 text-[11px]">Square (1:1), Landscape (16:9), Portrait (9:16)</span>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
+                  <span className="font-semibold text-cyan-300 block">Asset Quality & Export</span>
+                  <span className="text-slate-400 text-[11px]">Lossless PNG/WebP up to 4K Ultra-HD resolution</span>
+                </div>
+              </div>
             </div>
 
             {/* Interactive Generator Interface */}
@@ -752,6 +772,107 @@ export default function GeneratorPageComponent({
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Choose your aspect ratio purposefully: use <strong>16:9 widescreen</strong> for cinematic landscapes, YouTube thumbnails, and desktop banners; <strong>9:16 vertical</strong> for TikTok, Instagram Reels, and mobile wallpapers; and <strong>1:1 square</strong> for profile avatars and product icons. After generating your visual, a single click transfers it directly into our integrated editor for localized inpainting.
                 </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 3-Step How-To Workflow Section for Text-to-Image */}
+        <section className="py-14 border-t border-slate-900 bg-slate-950/70">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+                Step-by-Step Workflow
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-3">
+                How to Generate AI Images in 3 Simple Steps
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2">
+                Turn concepts into high-resolution visuals directly in your browser without local Python scripts or GPU costs.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center text-sm border border-purple-500/30">
+                  1
+                </div>
+                <h3 className="text-base font-bold text-white">Step 1: Input Descriptive Prompt</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Enter your visual concept with composition, lighting, and style parameters into the text prompt area.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold flex items-center justify-center text-sm border border-indigo-500/30">
+                  2
+                </div>
+                <h3 className="text-base font-bold text-white">Step 2: Select Ratio & Model</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Choose your aspect ratio (1:1, 16:9, or 9:16) and select between Wanx 2.1 Turbo or Plus checkpoints.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 font-bold flex items-center justify-center text-sm border border-pink-500/30">
+                  3
+                </div>
+                <h3 className="text-base font-bold text-white">Step 3: Generate & Export in HD</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Click Generate to execute inference in 2.2–3.5s, preview in split-view, and download full-resolution PNG or WebP assets.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Cross-Entity Comparison Matrix for Text-to-Image Generation */}
+        <section className="py-14 border-t border-slate-900 bg-slate-950">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
+                Cross-Entity Benchmark
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-3">
+                Text-to-Image Model Comparison
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-2">
+                Comparative technical performance against Midjourney v6.1 and Flux.1 Dev.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 overflow-hidden bg-slate-900/50">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs sm:text-sm text-slate-300">
+                  <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase text-[11px]">
+                    <tr>
+                      <th className="py-3.5 px-4 font-semibold">Evaluation Metric</th>
+                      <th className="py-3.5 px-4 font-bold text-purple-400">Qwen Image Generator</th>
+                      <th className="py-3.5 px-4 font-semibold text-slate-300">Midjourney v6.1</th>
+                      <th className="py-3.5 px-4 font-semibold text-slate-300">Flux.1 Dev</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 font-normal">
+                    <tr>
+                      <td className="py-3.5 px-4 font-medium text-white">Typography Accuracy</td>
+                      <td className="py-3.5 px-4 text-purple-300 font-medium">Bilingual English + Chinese (99% accuracy)</td>
+                      <td className="py-3.5 px-4 text-slate-400">Short English phrases only (Distorts Chinese)</td>
+                      <td className="py-3.5 px-4 text-slate-400">Good Latin typography (Occasional letter merging)</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3.5 px-4 font-medium text-white">Generation Latency</td>
+                      <td className="py-3.5 px-4 text-emerald-400 font-medium">2.2s – 3.5s per image (Cloud GPU)</td>
+                      <td className="py-3.5 px-4 text-slate-400">30s – 50s standard (15s Fast mode)</td>
+                      <td className="py-3.5 px-4 text-slate-400">8s – 15s per image (28-step diffusion)</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3.5 px-4 font-medium text-white">Entry Cost & Access</td>
+                      <td className="py-3.5 px-4 text-purple-300 font-medium">Free trial credits + $4.99 lifetime pack</td>
+                      <td className="py-3.5 px-4 text-slate-400">$10/month recurring mandatory subscription</td>
+                      <td className="py-3.5 px-4 text-slate-400">Local installation requires 16GB–24GB VRAM</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

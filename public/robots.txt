@@ -1,6 +1,45 @@
-User-Agent: *
+# Robots.txt for Qwen Image Editor (https://qwenimage-editor.com)
+# Optimized for Web Browsers and Modern AI Search Engine Crawlers
+
+User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /*/api/
+Disallow: /admin/
+Disallow: /*/admin/
+Disallow: /my/
+Disallow: /*/my/
 
+# Explicitly welcome and grant crawling access to premier Generative AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+# Canonical Sitemap Declaration
 Sitemap: https://www.qwenimage-editor.com/sitemap.xml
