@@ -152,7 +152,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
         '@type': 'Article',
         headline: 'Qwen Image 2.1 vs Midjourney — Full Comparison & Differences',
         description:
-          'Detailed comparison of Qwen Image 2.1 vs Midjourney. Compare typography rendering, multimodal architecture, inpainting, speed, and pricing.',
+          'Compare Qwen Image 2.1 vs Midjourney. Explore key differences in typography, inpainting, and cost. Test live prompts online to choose the best model.',
         image: '/images/model_compare_demo.jpg',
         author: {
           '@type': 'Organization',
@@ -196,7 +196,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
         locale={locale}
         page="vs-midjourney"
         title="Qwen Image 2.1 vs Midjourney — Full Comparison & Differences"
-        description="Detailed comparison of Qwen Image 2.1 vs Midjourney. Compare typography rendering, multimodal architecture, inpainting, speed, and pricing."
+        description="Compare Qwen Image 2.1 vs Midjourney. Explore key differences in typography, inpainting, and cost. Test live prompts online to choose the best model."
         image="/images/model_compare_demo.jpg"
         schemaData={schemaData}
       />
