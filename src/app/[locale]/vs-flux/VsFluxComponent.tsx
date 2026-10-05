@@ -126,20 +126,24 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
 
   const faqItems = [
     {
-      q: 'What is the core architectural difference in Qwen Image 2.1 vs Flux?',
-      a: 'The architectural contrast centers on multimodal representation versus pure diffusion capacity. Flux utilizes a 12-billion parameter Flow Matching Diffusion Transformer (DiT) paired with T5-XXL text encoders for deep textural aesthetics. In contrast, Qwen combines Alibaba’s vision-language understanding with generative transformers, enabling both synthesis and direct natural language image modification within one consolidated framework.',
+      q: 'What are the differences between Flux and Qwen Image Edit for photo modification?',
+      a: 'The key distinction lies in native multimodal architecture versus auxiliary pipelines. Qwen Image Edit natively supports conversational, instruction-guided inpainting—allowing creators to add, remove, or restyle elements using natural language without drawing brush masks. On Flux (including Flux.1 Fill and Klein variants), localized editing requires dedicated secondary checkpoints, separate inpainting pipelines, or intricate ComfyUI masking nodes.',
+    },
+    {
+      q: 'What is the consensus on Reddit regarding Qwen vs Flux benchmarks?',
+      a: 'In community benchmarks across Reddit (r/StableDiffusion and r/LocalLLaMA), creators emphasize that Flux.1 Dev holds an edge in microscopic photographic skin textures and raw diffusion aesthetics, whereas Qwen is widely acclaimed as the superior model for reliable bilingual typography (English and Chinese), complex multi-clause spatial prompts, and conversational image editing with significantly lower VRAM requirements.',
+    },
+    {
+      q: 'Is Qwen Image censored, and what are its safety guardrails compared to Flux?',
+      a: 'Both foundation models implement safety alignment at the pretraining and inference stages. Flux applies strict content filters on its commercial API platforms, though open-weights community releases allow custom uncensored inference workflows. Similarly, Qwen includes standard safety guardrails against harmful content, while its open weights provide developers full architectural transparency and commercial deployment freedom under community terms.',
+    },
+    {
+      q: 'How does Flux.1 Dev compare to Qwen Image in ComfyUI and SwarmUI workflows?',
+      a: 'In local interfaces like ComfyUI and SwarmUI, Flux.1 Dev requires 16GB to 24GB of dedicated VRAM, frequently necessitating heavy GGUF offloading on consumer GPUs. Qwen deploys smoothly on 10GB to 12GB GPUs using FP8 or INT4 quantizations, offering faster generation cycles (~2.5s vs ~8s) and streamlined single-node workflows without requiring auxiliary text encoder nodes.',
     },
     {
       q: 'Which model renders written text and typography more accurately?',
       a: 'While Flux.1 excels at short English typography on billboards and street signs, Qwen delivers unmatched bilingual accuracy across both Latin alphabets and complex Chinese ideograms. Qwen consistently avoids letter merging, glyph corruption, and hallucinated spelling mistakes, making it the preferred choice for commercial posters, logos, and UI mockups.',
-    },
-    {
-      q: 'How do local VRAM and hardware requirements compare between the two models?',
-      a: 'Flux.1 Dev requires at least 16GB to 24GB of dedicated VRAM to run unquantized without CPU memory offloading penalties. Qwen can be deployed smoothly on 10GB to 12GB GPUs using FP8 or INT4 community quantizations (including GGUF formats), dramatically lowering enterprise cloud hosting costs and local creator hardware thresholds.',
-    },
-    {
-      q: 'Can Flux perform conversational inpainting and image editing like Qwen?',
-      a: 'No. Base Flux.1 models are strictly text-to-image engines. To edit existing images with Flux, users must download secondary pipelines like Flux.1 Fill, write custom Python scripts, or wire complex ComfyUI workflows. Qwen natively supports conversational image-to-image editing, letting you upload a picture and modify specific elements via plain text prompts.',
     },
     {
       q: 'Which engine produces higher generation speed and batch throughput?',
@@ -150,12 +154,8 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
       a: 'Flux is divided into Flux.1 Schnell (Apache 2.0 license) and Flux.1 Dev (strictly non-commercial, requiring expensive commercial licensing for enterprise SaaS). Qwen provides open community weights that permit commercial monetization, giving developers greater freedom to build commercial applications without punitive licensing fees.',
     },
     {
-      q: 'Which model handles complex multi-subject prompts and spatial prepositions better?',
-      a: 'Qwen benefits from its extensive vision-language pretraining, giving it superior understanding of spatial relationships such as "on top of", "flanked by", and "in the foreground". Flux.1 relies on T5-XXL embeddings which are strong for descriptive adjectives but occasionally misplace compositional elements in crowded scenes.',
-    },
-    {
-      q: 'When should a developer choose Flux instead of Qwen?',
-      a: 'Choose Flux.1 if your primary goal is generating raw photographic portraits with hyper-realistic human skin pores, micro-lighting nuances, or fine cinematic grain, and you possess high-end 24GB+ GPU hardware. Choose Qwen if you require fast generation speeds, bilingual graphic design, commercial inpainting, and budget-friendly server infrastructure.',
+      q: 'How does Flux 2 compare to next-generation multimodal open models?',
+      a: 'As next-generation visual models like Flux 2 emerge, the frontier has shifted from pure aesthetic text-to-image synthesis toward unified multimodal intelligence. While future DiT models aim to optimize rendering efficiency, models like Qwen lead in integrating native conversational editing, fine-grained cross-lingual typography, and cost-effective enterprise scaling.',
     },
   ];
 
