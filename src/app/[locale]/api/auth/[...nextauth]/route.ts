@@ -5,6 +5,13 @@ import { OAuth2Client } from 'google-auth-library';
 import {checkAndSaveUser, getUserByEmail} from "~/servers/user";
 import {headers} from "next/headers";
 
+if (process.env.NEXTAUTH_URL) {
+  let cleanUrl = process.env.NEXTAUTH_URL.trim();
+  cleanUrl = cleanUrl.replace(/^(https?:\/\/)+/i, 'https://');
+  cleanUrl = cleanUrl.replace(/\/api\/auth.*$/i, '').replace(/\/callback.*$/i, '').replace(/\/+$/, '');
+  process.env.NEXTAUTH_URL = cleanUrl;
+}
+
 const googleAuthClient = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)
 const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers

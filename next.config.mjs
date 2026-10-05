@@ -2,10 +2,15 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 // Ensure critical URLs are never empty strings during static pre-rendering
 if (!process.env.NEXT_PUBLIC_SITE_URL || !process.env.NEXT_PUBLIC_SITE_URL.trim()) {
-  process.env.NEXT_PUBLIC_SITE_URL = 'https://qwenimage-editor.com';
+  process.env.NEXT_PUBLIC_SITE_URL = 'https://www.qwenimage-editor.com';
 }
 if (!process.env.NEXTAUTH_URL || !process.env.NEXTAUTH_URL.trim()) {
-  process.env.NEXTAUTH_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://qwenimage-editor.com';
+  process.env.NEXTAUTH_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com';
+} else {
+  let cleanUrl = process.env.NEXTAUTH_URL.trim();
+  cleanUrl = cleanUrl.replace(/^(https?:\/\/)+/i, 'https://');
+  cleanUrl = cleanUrl.replace(/\/api\/auth.*$/i, '').replace(/\/callback.*$/i, '').replace(/\/+$/, '');
+  process.env.NEXTAUTH_URL = cleanUrl;
 }
 if (!process.env.NEXTAUTH_SECRET) {
   process.env.NEXTAUTH_SECRET = 'qwenimage-editor-default-production-secret-key-2026';
