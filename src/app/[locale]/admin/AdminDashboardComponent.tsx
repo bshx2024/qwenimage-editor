@@ -75,9 +75,11 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [worksLoading, setWorksLoading] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // Subscriptions Data
+  // Subscriptions & Payment Orders Data
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const [subsLoading, setSubsLoading] = useState<boolean>(false);
+  const [paymentOrders, setPaymentOrders] = useState<any[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
 
   // Sensitive Words Data
   const [sensitiveWords, setSensitiveWords] = useState<any[]>([]);
@@ -338,9 +340,26 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     }
   };
 
+  // Orders Fetcher (Waffo & Stripe)
+  const fetchOrders = async () => {
+    setOrdersLoading(true);
+    try {
+      const res = await fetch(`/api/admin/orders`);
+      const data = await res.json();
+      if (data.success) {
+        setPaymentOrders(data.orders || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
   // Subscriptions Fetcher
   const fetchSubscriptions = async () => {
     setSubsLoading(true);
+    fetchOrders();
     try {
       const res = await fetch(`/api/admin/subscriptions`);
       const data = await res.json();
@@ -1116,72 +1135,146 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* TAB 4: SUBSCRIPTIONS */}
+            {/* TAB 4: SUBSCRIPTIONS & WAFFO ORDERS */}
             {/* ---------------------------------------------------- */}
             {activeTab === 'subscriptions' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-white tracking-tight">Stripe Subscriptions</h2>
-                  <button
-                    onClick={fetchSubscriptions}
-                    className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400"
-                  >
-                    <ArrowPathIcon className="w-3.5 h-3.5" />
-                    <span>Refresh</span>
-                  </button>
-                </div>
+              <div className="space-y-8">
+                {/* Section 1: Waffo Pancake Payment Orders */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span>Payment Orders</span>
+                        <span className="rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 text-[11px] font-semibold text-cyan-300">
+                          Waffo Pancake & Stripe
+                        </span>
+                      </h2>
+                      <p className="text-xs text-slate-400 mt-0.5">Real-time payment transactions and credit fulfillments</p>
+                    </div>
+                    <button
+                      onClick={fetchSubscriptions}
+                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400"
+                    >
+                      <ArrowPathIcon className="w-3.5 h-3.5" />
+                      <span>Refresh</span>
+                    </button>
+                  </div>
 
-                <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
-                  <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
-                    <thead className="bg-slate-900 text-slate-300 font-semibold">
-                      <tr>
-                        <th className="px-5 py-3.5">Customer Email</th>
-                        <th className="px-5 py-3.5">Subscription ID</th>
-                        <th className="px-5 py-3.5">Status</th>
-                        <th className="px-5 py-3.5">Created Date</th>
-                        <th className="px-5 py-3.5">Current Period Ends</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/60 text-slate-300">
-                      {subscriptions.length > 0 ? (
-                        subscriptions.map((sub) => (
-                          <tr key={sub.subscription_id} className="hover:bg-slate-900/60 transition-colors">
-                            <td className="px-5 py-3 font-semibold text-white">
-                              {sub.user_email || sub.user_name || sub.user_id || 'Unknown'}
-                            </td>
-                            <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
-                              {sub.subscription_id}
-                            </td>
-                            <td className="px-5 py-3">
-                              <span
-                                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                                  sub.status === 'active'
-                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                                    : 'bg-slate-800 text-slate-400 border border-slate-700'
-                                }`}
-                              >
-                                {sub.status}
-                              </span>
-                            </td>
-                            <td className="px-5 py-3 text-slate-400 text-[11px]">
-                              {sub.created ? new Date(sub.created).toLocaleDateString() : '--'}
-                            </td>
-                            <td className="px-5 py-3 text-slate-400 text-[11px]">
-                              {sub.current_period_end
-                                ? new Date(sub.current_period_end).toLocaleDateString()
-                                : '--'}
+                  <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
+                    <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
+                      <thead className="bg-slate-900 text-slate-300 font-semibold">
+                        <tr>
+                          <th className="px-5 py-3.5">Order ID</th>
+                          <th className="px-5 py-3.5">Gateway</th>
+                          <th className="px-5 py-3.5">Customer Email</th>
+                          <th className="px-5 py-3.5">Plan / Product</th>
+                          <th className="px-5 py-3.5">Amount</th>
+                          <th className="px-5 py-3.5">Credits Added</th>
+                          <th className="px-5 py-3.5">Status</th>
+                          <th className="px-5 py-3.5">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                        {paymentOrders.length > 0 ? (
+                          paymentOrders.map((ord) => (
+                            <tr key={ord.id || ord.order_id} className="hover:bg-slate-900/60 transition-colors">
+                              <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+                                {ord.order_id}
+                              </td>
+                              <td className="px-5 py-3">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">
+                                  {ord.provider || 'waffo'}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 font-semibold text-white">
+                                {ord.user_email || ord.user_name || ord.user_id || 'Unknown'}
+                              </td>
+                              <td className="px-5 py-3 text-slate-300">
+                                {ord.plan_id || 'pro-monthly'}
+                              </td>
+                              <td className="px-5 py-3 font-semibold text-emerald-400">
+                                ${ord.amount ? Number(ord.amount).toFixed(2) : '0.00'} {ord.currency || 'USD'}
+                              </td>
+                              <td className="px-5 py-3 font-bold text-cyan-300">
+                                +{ord.credits_added || 0}
+                              </td>
+                              <td className="px-5 py-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                  {ord.status || 'completed'}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                {ord.created_at ? new Date(ord.created_at).toLocaleDateString() : '--'}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={8} className="px-5 py-8 text-center text-slate-500">
+                              {ordersLoading ? 'Loading orders...' : 'No Waffo/Stripe payment orders recorded yet.'}
                             </td>
                           </tr>
-                        ))
-                      ) : (
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Section 2: Active Subscriptions */}
+                <div className="space-y-4">
+                  <h3 className="text-base font-bold text-slate-200 tracking-tight">Recurring Subscriptions</h3>
+                  <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
+                    <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
+                      <thead className="bg-slate-900 text-slate-300 font-semibold">
                         <tr>
-                          <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
-                            {subsLoading ? 'Loading subscriptions...' : 'No subscriptions recorded yet.'}
-                          </td>
+                          <th className="px-5 py-3.5">Customer Email</th>
+                          <th className="px-5 py-3.5">Subscription ID</th>
+                          <th className="px-5 py-3.5">Status</th>
+                          <th className="px-5 py-3.5">Created Date</th>
+                          <th className="px-5 py-3.5">Current Period Ends</th>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                        {subscriptions.length > 0 ? (
+                          subscriptions.map((sub) => (
+                            <tr key={sub.subscription_id} className="hover:bg-slate-900/60 transition-colors">
+                              <td className="px-5 py-3 font-semibold text-white">
+                                {sub.user_email || sub.user_name || sub.user_id || 'Unknown'}
+                              </td>
+                              <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+                                {sub.subscription_id}
+                              </td>
+                              <td className="px-5 py-3">
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                    sub.status === 'active'
+                                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                                  }`}
+                                >
+                                  {sub.status}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                {sub.created ? new Date(sub.created).toLocaleDateString() : '--'}
+                              </td>
+                              <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                {sub.current_period_end
+                                  ? new Date(sub.current_period_end).toLocaleDateString()
+                                  : '--'}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
+                              {subsLoading ? 'Loading subscriptions...' : 'No subscriptions recorded yet.'}
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
@@ -1276,7 +1369,14 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                     </div>
 
                     <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-950">
-                      <span className="text-slate-400 block mb-1">Stripe Billing Enforcement:</span>
+                      <span className="text-slate-400 block mb-1">Active Payment Gateway:</span>
+                      <strong className="text-cyan-300">
+                        {process.env.NEXT_PUBLIC_PAYMENT_GATEWAY === 'stripe' ? 'Stripe Gateway' : 'Waffo Pancake (Default MoR)'}
+                      </strong>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-950">
+                      <span className="text-slate-400 block mb-1">Billing Enforcement:</span>
                       <strong className="text-cyan-300">
                         {process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME === '1' ? 'Enabled (1)' : 'Disabled / Free Tier Mode (0)'}
                       </strong>

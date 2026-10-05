@@ -16,18 +16,44 @@ export default function Pricing({
   } = useCommonContext();
 
   const handleCheckout = async (price) => {
-    setPriceIdLoading(price.id);
+    setPriceIdLoading(price.id || 'loading');
     if (!userData || !userData.user_id) {
       setShowLoginModal(true);
-      return
+      return;
     }
     const user_id = userData.user_id;
+    const user_email = userData.email || '';
     try {
+      const paymentProvider = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || 'waffo';
+
+      if (paymentProvider === 'waffo') {
+        const planId = (price?.unit_amount && price.unit_amount > 5000) ? 'pro-yearly' : 'pro-monthly';
+        const response = await fetch('/api/waffo/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            planId,
+            userId: user_id,
+            userEmail: user_email,
+            redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + '/pricing?payment_success=true&provider=waffo'
+          })
+        });
+        const res = await response.json();
+        if (res.checkoutUrl) {
+          window.location.href = res.checkoutUrl;
+          return;
+        } else if (res.error) {
+          alert('Waffo Checkout Notice: ' + res.error);
+          return;
+        }
+      }
+
+      // Default Stripe flow
       const data = {
         price,
         redirectUrl,
         user_id
-      }
+      };
       const url = `/api/stripe/create-checkout-session`;
       const response = await fetch(url, {
         method: 'POST',
