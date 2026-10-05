@@ -187,7 +187,7 @@ export default function Header({
             <SparklesIcon className="w-3.5 h-3.5" />
             Launch Editor
           </Link>
-          <LoginButton />
+          <LoginButton locale={locale} />
         </div>
       </nav>
 
@@ -270,7 +270,7 @@ export default function Header({
                 )}
               </div>
               <div className="py-6">
-                <LoginButton />
+                <LoginButton locale={locale} />
               </div>
             </div>
           </div>

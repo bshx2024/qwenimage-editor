@@ -1,5 +1,5 @@
 'use client';
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useState, useEffect} from "react";
 import {useSession} from "next-auth/react";
 import {useInterval} from "ahooks";
 
@@ -14,14 +14,31 @@ export const CommonProvider = ({
                                }) => {
 
   const {data: session, status} = useSession();
-  const [userData, setUserData] = useState({});
-  const [intervalUserData, setIntervalUserData] = useState(1000);
+  const [userData, setUserData] = useState<any>({});
+  const [intervalUserData, setIntervalUserData] = useState<number | undefined>(1000);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [showGeneratingModal, setShowGeneratingModal] = useState(false);
   const [showPricingModal, setShowPricingModal] = useState(false);
 
+  // Immediate reactive sync with NextAuth session
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      const u = {
+        // @ts-ignore
+        user_id: session.user.user_id || '',
+        name: session.user.name || '',
+        email: session.user.email || '',
+        image: session.user.image || '',
+      };
+      setUserData(u);
+      setShowLoginModal(false);
+      setIntervalUserData(undefined);
+    } else if (status === 'unauthenticated') {
+      setUserData({});
+    }
+  }, [session, status]);
 
   useInterval(() => {
     init();

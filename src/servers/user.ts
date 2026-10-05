@@ -72,7 +72,7 @@ export const getUserById = async (user_id) => {
   }
 }
 
-export const getUserByEmail = async (email) => {
+export const getUserByEmail = async (email: string) => {
   try {
     const db = getDb();
     const results = await db.query('select * from user_info where email=$1', [email]);
@@ -86,22 +86,27 @@ export const getUserByEmail = async (email) => {
         image: user.image,
         status: 1
       }
+    } else {
+      // User authenticated via OAuth but row not yet created: auto-insert
+      const fallbackName = email ? email.split('@')[0] : 'User';
+      const created = await checkAndSaveUser(fallbackName, email, '', '');
+      return {
+        user_id: created?.user_id || ('usr-' + (email ? Buffer.from(email).toString('hex').slice(0, 12) : 'guest')),
+        name: created?.name || fallbackName,
+        email: email,
+        image: created?.image || '',
+        status: 1
+      };
     }
   } catch (err: any) {
     console.warn("DB getUserByEmail warning:", err?.message);
     return {
       user_id: 'usr-' + (email ? Buffer.from(email).toString('hex').slice(0, 12) : 'default'),
-      name: '',
+      name: email ? email.split('@')[0] : '',
       email: email,
       image: '',
       status: 1
     }
   }
-  return {
-    user_id: '',
-    name: '',
-    email: email,
-    image: '',
-    status: 0
-  }
 }
+

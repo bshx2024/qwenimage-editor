@@ -14,13 +14,14 @@ export default function LogoutModal({
   const {showLogoutModal, setShowLogoutModal} = useCommonContext();
 
   const confirmButton = () => {
+    setShowLogoutModal(false);
     sessionStorage.removeItem("user_id");
-    signOut({callbackUrl: redirectPath}).then(r => console.log(r))
+    signOut({callbackUrl: redirectPath || '/'}).then(r => console.log(r))
   }
 
   return (
     <Transition.Root show={showLogoutModal} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setShowLogoutModal} onClick={() => setShowLogoutModal(true)}>
+      <Dialog as="div" className="relative z-50" initialFocus={cancelButtonRef} onClose={setShowLogoutModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

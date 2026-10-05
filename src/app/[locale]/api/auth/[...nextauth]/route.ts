@@ -75,11 +75,21 @@ const authOptions: NextAuthOptions = {
       return baseUrl
     },
     async session({session}) {
-      if (session) {
-        const email = session?.user?.email;
+      if (session?.user) {
+        const email = session.user.email;
         if (email) {
-          session.user = await getUserByEmail(email);
-          return session;
+          try {
+            const dbUser = await getUserByEmail(email);
+            (session as any).user = {
+              ...session.user,
+              ...dbUser,
+              user_id: dbUser?.user_id || ('usr-' + Buffer.from(email).toString('hex').slice(0, 12)),
+              image: dbUser?.image || session.user.image || '',
+              name: dbUser?.name || session.user.name || email.split('@')[0],
+            };
+          } catch (e) {
+            console.error("Session callback error:", e);
+          }
         }
       }
       return session;
