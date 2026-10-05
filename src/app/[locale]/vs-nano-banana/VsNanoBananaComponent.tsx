@@ -129,11 +129,15 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
     },
     {
       q: 'What are the hardware and VRAM requirements for running both models locally?',
-      a: 'Nano Banana can run locally on budget consumer hardware or mobile NPUs requiring only 2GB to 4GB of VRAM. Qwen typically requires 8GB to 16GB of VRAM (with quantized FP8 or INT4 versions running smoothly on modern NVIDIA GPUs). Alternatively, creators can use Qwen completely free online without downloading model weights.',
+      a: 'Nano Banana runs locally on budget mobile hardware requiring only 2GB to 4GB of VRAM. For Qwen, community-quantized weights (including GGUF, FP8, and INT4 formats) enable smooth local deployment on consumer GPUs with 8GB to 12GB of VRAM. Alternatively, creators can use Qwen AI online without any local GPU burden.',
     },
     {
       q: 'How does prompt understanding and spatial awareness compare?',
       a: 'Qwen benefits directly from Alibaba’s extensive vision-language training, allowing it to parse complex instructions involving spatial prepositions (e.g., "place the red vase behind the wooden lamp and to the left of the books"). Nano Banana uses a lightweight CLIP encoder that tends to blend unrelated prompt keywords together.',
+    },
+    {
+      q: 'Is there a better model than Nano Banana for high-resolution design?',
+      a: 'Yes. While Nano Banana 2 and its predecessor prioritize sub-second edge latency, Qwen is far superior for high-resolution graphics, legible poster typography, and precise localized inpainting. For professional design assets, foundation models provide exponentially better composition fidelity.',
     },
     {
       q: 'Does Nano Banana support image-to-image editing or localized inpainting?',
