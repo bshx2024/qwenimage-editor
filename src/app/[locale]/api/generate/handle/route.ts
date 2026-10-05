@@ -18,6 +18,16 @@ export async function POST(req: Request) {
     let is_public = Boolean(json.is_public);
     const imageUrl = json.imageUrl || ""; // Input image for editing
     const taskType = json.taskType || (imageUrl ? "image_edit" : "text2image");
+    const requestedModel = String(json.model || "");
+
+    // Differentiated Credit Deduction:
+    // Standard models (wanx2.1-t2i-turbo, wanx2.1-imageedit, wanx2.1-i2i-turbo): 1 Credit
+    // Pro / Flagship models (qwen-image-2.1-pro, qwen-image-3.0-pro, wanx2.1-t2i-plus, wanx2.1-i2i-plus): 2 Credits
+    const isProModel =
+      requestedModel.includes("pro") ||
+      requestedModel.includes("plus") ||
+      requestedModel.includes("3.0");
+    const creditCost = isProModel ? 2 : 1;
 
     if (!user_id && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
       return Response.json({ msg: "Login to continue.", status: 601 });
@@ -39,7 +49,7 @@ export async function POST(req: Request) {
     }
 
     if (!checkSubscribeStatus) {
-      const check = await checkUserTimes(user_id);
+      const check = await checkUserTimes(user_id, creditCost);
       if (!check && process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
         return Response.json({ msg: "Pricing to continue.", status: 602 });
       }
@@ -61,7 +71,6 @@ export async function POST(req: Request) {
     const aiSettings = await getAISettings();
     const activeProvider = aiSettings.provider;
     let revisedText = textStr;
-    const requestedModel = json.model;
 
     if (activeProvider === 'bailian' && aiSettings.bailianApiKey) {
       // 1. Dispatch to Alibaba Cloud Bailian (DashScope)
@@ -163,7 +172,7 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0" &&
       !checkSubscribeStatus
     ) {
-      await countDownUserTimes(user_id);
+      await countDownUserTimes(user_id, creditCost);
     }
 
     return Response.json({ uid });
