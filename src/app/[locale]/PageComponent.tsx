@@ -47,6 +47,7 @@ export default function PageComponent({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
+  const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-i2i-turbo');
   const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('split');
   const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
   const [uid, setUid] = useState('');
@@ -54,6 +55,17 @@ export default function PageComponent({
   const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (activeTab === 'edit') {
+      if (selectedModel === 'wanx2.1-t2i-turbo') setSelectedModel('wanx2.1-i2i-turbo');
+      else if (selectedModel === 'wanx2.1-t2i-plus') setSelectedModel('wanx2.1-i2i-plus');
+    } else {
+      if (selectedModel === 'wanx2.1-i2i-turbo') setSelectedModel('wanx2.1-t2i-turbo');
+      else if (selectedModel === 'wanx2.1-i2i-plus') setSelectedModel('wanx2.1-t2i-plus');
+      else if (selectedModel === 'qwen-image-edit') setSelectedModel('wanx2.1-t2i-turbo');
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     setShowLoadingModal(false);
@@ -114,6 +126,7 @@ export default function PageComponent({
         textStr,
         user_id: userData?.user_id || 'guest',
         is_public: isPublic,
+        model: selectedModel,
       };
 
       if (activeTab === 'edit' && sourceImage) {
@@ -426,7 +439,38 @@ export default function PageComponent({
                         />
                         <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 text-xs text-slate-400">
                           <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-slate-500">Model: Qwen Image 2.1</span>
+                            <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 rounded-lg px-2.5 py-1 text-slate-300 transition-colors">
+                              <CpuChipIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                              <span className="text-[11px] text-slate-400 font-medium shrink-0">Model:</span>
+                              <select
+                                value={selectedModel}
+                                onChange={(e) => setSelectedModel(e.target.value)}
+                                className="bg-transparent text-[11px] font-semibold text-cyan-300 focus:outline-none cursor-pointer pr-1"
+                              >
+                                {activeTab === 'edit' ? (
+                                  <>
+                                    <option value="wanx2.1-i2i-turbo" className="bg-slate-900 text-slate-200">
+                                      Qwen / Wanx 2.1 Turbo (Fast ⚡)
+                                    </option>
+                                    <option value="wanx2.1-i2i-plus" className="bg-slate-900 text-slate-200">
+                                      Wanx 2.1 Plus (Ultra-HD 🌟)
+                                    </option>
+                                    <option value="qwen-image-edit" className="bg-slate-900 text-slate-200">
+                                      Qwen Image Inpaint &amp; Edit 🎨
+                                    </option>
+                                  </>
+                                ) : (
+                                  <>
+                                    <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
+                                      Qwen / Wanx 2.1 Turbo (Fast ⚡)
+                                    </option>
+                                    <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
+                                      Wanx 2.1 Plus (Ultra-HD 🌟)
+                                    </option>
+                                  </>
+                                )}
+                              </select>
+                            </div>
                           </div>
                           <button
                             type="button"

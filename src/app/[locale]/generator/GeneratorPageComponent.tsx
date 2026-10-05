@@ -36,6 +36,7 @@ export default function GeneratorPageComponent({
 
   const [prompt, setPrompt] = useState(searchParams?.prompt || '');
   const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16'>('1:1');
+  const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-t2i-turbo');
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>('/images/model_compare_demo.jpg');
   const [uid, setUid] = useState('');
@@ -71,6 +72,7 @@ export default function GeneratorPageComponent({
           user_id: userData?.user_id || 'guest',
           is_public: true,
           aspectRatio,
+          model: selectedModel,
         }),
       });
       const data = await res.json();
@@ -271,6 +273,31 @@ export default function GeneratorPageComponent({
                           placeholder="Describe the image you want to create (e.g., 'A vintage cyberpunk poster advertising Neo-Tokyo Ramen Bar, neon reflections, 8k cinematic lighting')..."
                           className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none"
                         />
+                        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 mt-2 text-xs text-slate-400">
+                          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 hover:border-purple-500/50 rounded-lg px-2.5 py-1 text-slate-300 transition-colors">
+                            <CpuChipIcon className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                            <span className="text-[11px] text-slate-400 font-medium shrink-0">Model:</span>
+                            <select
+                              value={selectedModel}
+                              onChange={(e) => setSelectedModel(e.target.value)}
+                              className="bg-transparent text-[11px] font-semibold text-purple-300 focus:outline-none cursor-pointer pr-1"
+                            >
+                              <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
+                                Qwen / Wanx 2.1 Turbo (Fast ⚡)
+                              </option>
+                              <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
+                                Wanx 2.1 Plus (Ultra-HD 🌟)
+                              </option>
+                            </select>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setPrompt('')}
+                            className="text-slate-500 hover:text-slate-300 text-[11px]"
+                          >
+                            Clear
+                          </button>
+                        </div>
                       </div>
                     </div>
 

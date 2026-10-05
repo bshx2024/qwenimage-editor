@@ -95,8 +95,17 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   // If input image is provided (Image Edit)
   if (taskType === 'image_edit' && imageUrl) {
     endpoint = `${cleanBase}/api/v1/services/aigc/image2image/image-synthesis`;
+    let editModel = 'wanx2.1-i2i-turbo';
+    if (model?.includes('plus')) {
+      editModel = 'wanx2.1-i2i-plus';
+    } else if (model === 'qwen-image-edit') {
+      editModel = 'qwen-image-edit';
+    } else if (model?.includes('i2i')) {
+      editModel = model;
+    }
+
     payload = {
-      model: model.includes('i2i') ? model : 'wanx2.1-i2i-turbo',
+      model: editModel,
       input: {
         prompt: prompt,
         image_url: imageUrl

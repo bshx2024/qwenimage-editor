@@ -61,6 +61,7 @@ export async function POST(req: Request) {
     const aiSettings = await getAISettings();
     const activeProvider = aiSettings.provider;
     let revisedText = textStr;
+    const requestedModel = json.model;
 
     if (activeProvider === 'bailian' && aiSettings.bailianApiKey) {
       // 1. Dispatch to Alibaba Cloud Bailian (DashScope)
@@ -69,7 +70,7 @@ export async function POST(req: Request) {
         prompt: textStr,
         imageUrl: imageUrl || undefined,
         taskType: imageUrl ? "image_edit" : "text2image",
-        model: aiSettings.bailianModel || "wanx2.1-t2i-turbo",
+        model: requestedModel || aiSettings.bailianModel || "wanx2.1-t2i-turbo",
         apiKey: aiSettings.bailianApiKey,
         baseUrl: aiSettings.bailianBaseUrl
       });
