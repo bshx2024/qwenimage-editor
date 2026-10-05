@@ -31,6 +31,7 @@ export default function LoginButton({
     userData,
     setShowLoginModal,
     setShowLogoutModal,
+    setShowPricingModal,
     authText
   } = useCommonContext();
 
@@ -131,21 +132,35 @@ export default function LoginButton({
               </div>
 
               {/* Upgrade / Top up Button */}
-              <Link
-                href={getLinkHref(locale, 'pricing')}
-                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition-all"
-              >
-                <SparklesIcon className="w-3.5 h-3.5" />
-                <span>Get Credits / Upgrade Plan</span>
-              </Link>
+              <Menu.Item>
+                {({ close }) => (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      close();
+                      if (typeof window !== 'undefined' && window.location.pathname.includes('/pricing')) {
+                        const pricingEl = document.getElementById('pricing-plans') || document.querySelector('section');
+                        pricingEl?.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        setShowPricingModal(true);
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition-all cursor-pointer"
+                  >
+                    <SparklesIcon className="w-3.5 h-3.5" />
+                    <span>Get Credits / Upgrade Plan</span>
+                  </button>
+                )}
+              </Menu.Item>
             </div>
 
             {/* Quick Links */}
             <div className="p-1.5 space-y-0.5">
               <Menu.Item>
-                {({ active }) => (
+                {({ active, close }) => (
                   <Link
                     href={getLinkHref(locale, 'my')}
+                    onClick={() => close()}
                     className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                       active ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:text-white'
                     }`}
@@ -157,9 +172,10 @@ export default function LoginButton({
               </Menu.Item>
 
               <Menu.Item>
-                {({ active }) => (
+                {({ active, close }) => (
                   <Link
                     href={getLinkHref(locale, 'pricing')}
+                    onClick={() => close()}
                     className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                       active ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:text-white'
                     }`}
