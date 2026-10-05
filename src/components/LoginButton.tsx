@@ -6,7 +6,10 @@ import {
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
   PhotoIcon,
-  ChevronDownIcon
+  ChevronDownIcon,
+  BoltIcon,
+  SparklesIcon,
+  CreditCardIcon,
 } from '@heroicons/react/24/outline';
 import { useCommonContext } from '~/context/common-context';
 import { useSession } from 'next-auth/react';
@@ -98,6 +101,45 @@ export default function LoginButton({
               </div>
             </div>
 
+            {/* Credits & Subscription Status Box */}
+            <div className="p-3 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/40 border-b border-slate-800 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 block">
+                    Available Credits
+                  </span>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <BoltIcon className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="text-base font-extrabold text-amber-300">
+                      {userData?.available_times ?? 0}
+                    </span>
+                    <span className="text-[11px] text-slate-400 font-medium">Credits</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 block">
+                    Active Plan
+                  </span>
+                  <span className={`inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                    userData?.isPro
+                      ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 shadow-sm shadow-indigo-500/10'
+                      : 'bg-slate-800 text-slate-300 border-slate-700'
+                  }`}>
+                    {userData?.activePlan || 'Free Plan'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Upgrade / Top up Button */}
+              <Link
+                href={getLinkHref(locale, 'pricing')}
+                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition-all"
+              >
+                <SparklesIcon className="w-3.5 h-3.5" />
+                <span>Get Credits / Upgrade Plan</span>
+              </Link>
+            </div>
+
             {/* Quick Links */}
             <div className="p-1.5 space-y-0.5">
               <Menu.Item>
@@ -110,6 +152,20 @@ export default function LoginButton({
                   >
                     <PhotoIcon className="w-4 h-4 text-indigo-400" />
                     <span>My Gallery</span>
+                  </Link>
+                )}
+              </Menu.Item>
+
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    href={getLinkHref(locale, 'pricing')}
+                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+                      active ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <CreditCardIcon className="w-4 h-4 text-amber-400" />
+                    <span>Pricing &amp; Plans</span>
                   </Link>
                 )}
               </Menu.Item>

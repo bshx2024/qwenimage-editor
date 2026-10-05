@@ -22,19 +22,40 @@ export const CommonProvider = ({
   const [showGeneratingModal, setShowGeneratingModal] = useState(false);
   const [showPricingModal, setShowPricingModal] = useState(false);
 
+  const fetchUserCredits = async (uid: string) => {
+    if (!uid) return;
+    try {
+      const res = await fetch(`/api/user/getAvailableTimes?userId=${uid}`);
+      const data = await res.json();
+      setUserData((prev: any) => ({
+        ...prev,
+        available_times: data.available_times ?? 0,
+        subscribeStatus: data.subscribeStatus || '',
+        activePlan: data.activePlan || 'Free Plan',
+        isPro: Boolean(data.isPro),
+      }));
+    } catch (e) {
+      console.warn('Failed to fetch user credits:', e);
+    }
+  };
+
   // Immediate reactive sync with NextAuth session
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
+      // @ts-ignore
+      const uid = session.user.user_id || '';
       const u = {
-        // @ts-ignore
-        user_id: session.user.user_id || '',
+        user_id: uid,
         name: session.user.name || '',
         email: session.user.email || '',
         image: session.user.image || '',
+        available_times: 0,
+        activePlan: 'Loading...',
       };
       setUserData(u);
       setShowLoginModal(false);
       setIntervalUserData(undefined);
+      fetchUserCredits(uid);
     } else if (status === 'unauthenticated') {
       setUserData({});
     }
@@ -46,16 +67,18 @@ export const CommonProvider = ({
 
   async function init() {
     if (status == 'authenticated') {
-      const userData = {
-        // @ts-ignore
-        user_id: session?.user?.user_id,
+      // @ts-ignore
+      const uid = session?.user?.user_id || '';
+      const u = {
+        user_id: uid,
         name: session?.user?.name,
         email: session?.user?.email,
         image: session?.user?.image,
-      }
-      setUserData(userData);
+      };
+      setUserData((prev: any) => ({ ...prev, ...u }));
       setShowLoginModal(false);
       setIntervalUserData(undefined);
+      fetchUserCredits(uid);
     }
   }
 
@@ -78,6 +101,7 @@ export const CommonProvider = ({
         authText,
         menuText,
         pricingText,
+        refreshUserCredits: () => fetchUserCredits(userData?.user_id),
       }}
     >
       {children}

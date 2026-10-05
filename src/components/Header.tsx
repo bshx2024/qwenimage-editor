@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, ChevronDownIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, ChevronDownIcon, SparklesIcon, BoltIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import Link from "next/link";
 import { useCommonContext } from '~/context/common-context'
@@ -157,15 +157,13 @@ export default function Header({
             </Transition>
           </Menu>
 
-          {process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME !== '0' && (
-            <Link
-              href={getLinkHref(locale, 'pricing')}
-              onClick={() => checkPageAndLoading('pricing')}
-              className={`text-sm font-medium transition-colors ${page === 'pricing' ? 'text-indigo-400 font-semibold' : 'text-slate-200 hover:text-white'}`}
-            >
-              Pricing
-            </Link>
-          )}
+          <Link
+            href={getLinkHref(locale, 'pricing')}
+            onClick={() => checkPageAndLoading('pricing')}
+            className={`text-sm font-medium transition-colors ${page === 'pricing' ? 'text-indigo-400 font-semibold' : 'text-slate-200 hover:text-white'}`}
+          >
+            Pricing
+          </Link>
 
           {userData?.email && (
             <Link
@@ -180,6 +178,18 @@ export default function Header({
 
         {/* Right CTA / Auth */}
         <div className="hidden lg:flex lg:items-center lg:gap-3">
+          {userData?.email && (
+            <Link
+              href={getLinkHref(locale, 'pricing')}
+              onClick={() => checkPageAndLoading('pricing')}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition-all shadow-sm shadow-amber-500/10 cursor-pointer"
+              title="Available Credits — Click to Get More"
+            >
+              <BoltIcon className="w-3.5 h-3.5 text-amber-400" />
+              <span>{userData?.available_times ?? 0} Credits</span>
+            </Link>
+          )}
+
           <Link
             href={getLinkHref(locale, '')}
             className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md hover:opacity-95 transition-opacity"
@@ -250,15 +260,13 @@ export default function Header({
                 >
                   Qwen Image 2.1 vs Flux
                 </Link>
-                {process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME !== '0' && (
-                  <Link
-                    href={getLinkHref(locale, 'pricing')}
-                    onClick={() => checkPageAndLoading('pricing')}
-                    className="block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-slate-900"
-                  >
-                    Pricing
-                  </Link>
-                )}
+                <Link
+                  href={getLinkHref(locale, 'pricing')}
+                  onClick={() => checkPageAndLoading('pricing')}
+                  className="block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-slate-900"
+                >
+                  Pricing
+                </Link>
                 {userData?.email && (
                   <Link
                     href={getLinkHref(locale, 'my')}
