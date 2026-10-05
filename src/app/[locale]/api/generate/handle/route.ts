@@ -7,6 +7,8 @@ import { getDb } from "~/libs/db";
 import { getLanguage } from "~/servers/language";
 import { checkSubscribe } from "~/servers/subscribe";
 import { checkSensitiveInputText } from "~/servers/checkInput";
+import { getAISettings } from "~/servers/keyValue";
+import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
 
 export async function POST(req: Request) {
   try {
@@ -53,36 +55,64 @@ export async function POST(req: Request) {
     }
 
     const uid = uuidv4();
-    const replicateClient = getReplicateClient();
     const origin_language = await getLanguage(textStr);
 
-    let input: any;
-    let predictionParams: any = {
-      webhook: `${process.env.REPLICATE_WEBHOOK || process.env.NEXT_PUBLIC_SITE_URL}/api/generate/callByReplicate?uid=${uid}`,
-      webhook_events_filter: ["completed"],
-    };
+    // Retrieve active AI Provider settings from DB / Environment
+    const aiSettings = await getAISettings();
+    const activeProvider = aiSettings.provider;
+    let revisedText = textStr;
 
-    if (imageUrl) {
-      // Qwen Image Edit
-      input = await getQwenEditInput(imageUrl, textStr, checkSubscribeStatus);
-      if (process.env.REPLICATE_EDIT_VERSION) {
-        predictionParams.version = process.env.REPLICATE_EDIT_VERSION;
-      } else {
-        predictionParams.model = "qwen/qwen-image-edit";
-      }
+    if (activeProvider === 'bailian' && aiSettings.bailianApiKey) {
+      // 1. Dispatch to Alibaba Cloud Bailian (DashScope)
+      const bailianTask = await submitBailianTask({
+        uid,
+        prompt: textStr,
+        imageUrl: imageUrl || undefined,
+        taskType: imageUrl ? "image_edit" : "text2image",
+        model: aiSettings.bailianModel || "wanx2.1-t2i-turbo",
+        apiKey: aiSettings.bailianApiKey,
+        baseUrl: aiSettings.bailianBaseUrl
+      });
+
+      // Poll in background and update works table upon completion
+      processBailianTaskInBackground(
+        uid,
+        bailianTask.taskId,
+        aiSettings.bailianApiKey,
+        aiSettings.bailianBaseUrl
+      );
     } else {
-      // Qwen Image Generator
-      input = await getQwenGeneratorInput(textStr, checkSubscribeStatus);
-      if (process.env.REPLICATE_API_VERSION) {
-        predictionParams.version = process.env.REPLICATE_API_VERSION;
-      } else {
-        predictionParams.model = "qwen/qwen-image";
-      }
-    }
-    predictionParams.input = input;
+      // 2. Dispatch to Replicate
+      const replicateClient = getReplicateClient();
+      let input: any;
+      let predictionParams: any = {
+        webhook: `${process.env.REPLICATE_WEBHOOK || process.env.NEXT_PUBLIC_SITE_URL}/api/generate/callByReplicate?uid=${uid}`,
+        webhook_events_filter: ["completed"],
+      };
 
-    // Call Replicate API
-    await replicateClient.predictions.create(predictionParams);
+      if (imageUrl) {
+        // Qwen Image Edit
+        input = await getQwenEditInput(imageUrl, textStr, checkSubscribeStatus);
+        if (process.env.REPLICATE_EDIT_VERSION) {
+          predictionParams.version = process.env.REPLICATE_EDIT_VERSION;
+        } else {
+          predictionParams.model = "qwen/qwen-image-edit";
+        }
+      } else {
+        // Qwen Image Generator
+        input = await getQwenGeneratorInput(textStr, checkSubscribeStatus);
+        if (process.env.REPLICATE_API_VERSION) {
+          predictionParams.version = process.env.REPLICATE_API_VERSION;
+        } else {
+          predictionParams.model = "qwen/qwen-image";
+        }
+      }
+      predictionParams.input = input;
+      revisedText = input?.prompt || textStr;
+
+      // Call Replicate API
+      await replicateClient.predictions.create(predictionParams);
+    }
 
     // Save record to database with fallback if new columns aren't migrated yet
     try {
@@ -97,7 +127,7 @@ export async function POST(req: Request) {
             is_public,
             0,
             user_id,
-            input.prompt,
+            revisedText,
             true,
             origin_language,
             origin_language,
@@ -116,7 +146,7 @@ export async function POST(req: Request) {
             is_public,
             0,
             user_id,
-            input.prompt,
+            revisedText,
             true,
             origin_language,
             origin_language,

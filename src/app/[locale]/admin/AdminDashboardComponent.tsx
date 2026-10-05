@@ -47,7 +47,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'users' | 'works' | 'subscriptions' | 'sensitive' | 'config'
+    'overview' | 'users' | 'works' | 'subscriptions' | 'ai-engine' | 'sensitive' | 'config'
   >('overview');
 
   // Overview Data
@@ -80,6 +80,26 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [subsLoading, setSubsLoading] = useState<boolean>(false);
   const [paymentOrders, setPaymentOrders] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
+
+  // AI Provider & Bailian Settings State
+  const [aiSettings, setAiSettings] = useState<{
+    provider: 'bailian' | 'replicate';
+    bailianApiKey: string;
+    bailianBaseUrl: string;
+    bailianModel: string;
+    replicateToken: string;
+  }>({
+    provider: 'bailian',
+    bailianApiKey: '',
+    bailianBaseUrl: 'https://dashscope.aliyuncs.com',
+    bailianModel: 'wanx2.1-t2i-turbo',
+    replicateToken: '',
+  });
+  const [aiSettingsLoading, setAiSettingsLoading] = useState<boolean>(false);
+  const [isSavingAI, setIsSavingAI] = useState<boolean>(false);
+  const [isTestingBailian, setIsTestingBailian] = useState<boolean>(false);
+  const [bailianTestStatus, setBailianTestStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [showApiKey, setShowApiKey] = useState<boolean>(false);
 
   // Sensitive Words Data
   const [sensitiveWords, setSensitiveWords] = useState<any[]>([]);
@@ -128,6 +148,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     if (activeTab === 'users') fetchUsers();
     if (activeTab === 'works') fetchWorks();
     if (activeTab === 'subscriptions') fetchSubscriptions();
+    if (activeTab === 'ai-engine') fetchAISettings();
     if (activeTab === 'sensitive') fetchSensitiveWords();
   }, [activeTab, isAuthenticated]);
 
@@ -370,6 +391,79 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       console.error(e);
     } finally {
       setSubsLoading(false);
+    }
+  };
+
+  // AI Settings Fetcher
+  const fetchAISettings = async () => {
+    setAiSettingsLoading(true);
+    setBailianTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings');
+      const data = await res.json();
+      if (data.success && data.settings) {
+        setAiSettings(data.settings);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAiSettingsLoading(false);
+    }
+  };
+
+  const handleSaveAISettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingAI(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save',
+          ...aiSettings,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message || 'AI Engine settings saved to database!');
+      } else {
+        showToast(data.error || 'Failed to save AI settings', 'error');
+      }
+    } catch (e: any) {
+      showToast(e?.message || 'Network error saving settings', 'error');
+    } finally {
+      setIsSavingAI(false);
+    }
+  };
+
+  const handleTestBailian = async () => {
+    if (!aiSettings.bailianApiKey?.trim()) {
+      showToast('Please enter an API Key first to test.', 'error');
+      return;
+    }
+    setIsTestingBailian(true);
+    setBailianTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'test_bailian',
+          apiKey: aiSettings.bailianApiKey,
+          baseUrl: aiSettings.bailianBaseUrl,
+        }),
+      });
+      const data = await res.json();
+      setBailianTestStatus(data);
+      if (data.success) {
+        showToast('Bailian API Key verified! Connection healthy.');
+      } else {
+        showToast(data.message || 'Verification failed.', 'error');
+      }
+    } catch (e: any) {
+      setBailianTestStatus({ success: false, message: e?.message || 'Connection test failed' });
+    } finally {
+      setIsTestingBailian(false);
     }
   };
 
@@ -694,6 +788,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 { id: 'users', name: 'Users & Credits', icon: UsersIcon },
                 { id: 'works', name: 'Works & Gallery', icon: PhotoIcon },
                 { id: 'subscriptions', name: 'Subscriptions', icon: CreditCardIcon },
+                { id: 'ai-engine', name: 'AI Models & Bailian', icon: SparklesIcon },
                 { id: 'sensitive', name: 'Sensitive Words', icon: ShieldCheckIcon },
                 { id: 'config', name: 'Environment', icon: Cog6ToothIcon },
               ].map((tab) => {
@@ -1276,6 +1371,252 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                     </table>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB: AI ENGINES & BAILIAN */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'ai-engine' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                      <SparklesIcon className="w-5 h-5 text-cyan-400" />
+                      <span>AI Model Engines & Bailian Settings</span>
+                    </h2>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Configure official Alibaba Cloud Bailian (DashScope) API or Replicate fallback. Changes persist live in the database.
+                    </p>
+                  </div>
+                  <button
+                    onClick={fetchAISettings}
+                    disabled={aiSettingsLoading}
+                    className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400 transition-colors"
+                  >
+                    <ArrowPathIcon className={`w-3.5 h-3.5 ${aiSettingsLoading ? 'animate-spin' : ''}`} />
+                    <span>Reload Settings</span>
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveAISettings} className="space-y-6">
+                  {/* Provider Selector Card */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md space-y-4">
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      <CpuChipIcon className="w-4 h-4 text-cyan-400" />
+                      <span>Active Image Generation Provider</span>
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Bailian Radio Option */}
+                      <div
+                        onClick={() => setAiSettings((prev) => ({ ...prev, provider: 'bailian' }))}
+                        className={`cursor-pointer p-4 rounded-xl border transition-all ${
+                          aiSettings.provider === 'bailian'
+                            ? 'border-cyan-500/50 bg-cyan-950/20 shadow-md shadow-cyan-500/5'
+                            : 'border-slate-800 bg-slate-950 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-semibold text-white flex items-center gap-2">
+                            <span>Alibaba Cloud Bailian (阿里云百炼)</span>
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                            Recommended
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          Official DashScope API powering Wanx 2.1 (通义万相) and Qwen Image Edit. Lightning-fast response and cost-effective.
+                        </p>
+                      </div>
+
+                      {/* Replicate Radio Option */}
+                      <div
+                        onClick={() => setAiSettings((prev) => ({ ...prev, provider: 'replicate' }))}
+                        className={`cursor-pointer p-4 rounded-xl border transition-all ${
+                          aiSettings.provider === 'replicate'
+                            ? 'border-indigo-500/50 bg-indigo-950/20 shadow-md shadow-indigo-500/5'
+                            : 'border-slate-800 bg-slate-950 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-semibold text-white">Replicate API</span>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                            Fallback
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          Open-source cloud hosting for image models via replicate.com token.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bailian Detailed Settings Card */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md space-y-5">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div className="flex items-center gap-2">
+                        <KeyIcon className="w-4 h-4 text-cyan-400" />
+                        <h3 className="text-sm font-bold text-white">
+                          Alibaba Cloud Bailian (DashScope) Configuration
+                        </h3>
+                      </div>
+                      <a
+                        href="https://bailian.console.aliyun.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 font-medium"
+                      >
+                        <span>Open Bailian Console</span>
+                        <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+
+                    {/* API Key */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-semibold text-slate-300">
+                        Bailian DashScope API Key
+                      </label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <input
+                            type={showApiKey ? 'text' : 'password'}
+                            value={aiSettings.bailianApiKey}
+                            onChange={(e) =>
+                              setAiSettings((prev) => ({ ...prev, bailianApiKey: e.target.value.trim() }))
+                            }
+                            placeholder="sk-ws-xxxxxx or sk-xxxxxx"
+                            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono tracking-wide"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowApiKey(!showApiKey)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                          >
+                            {showApiKey ? (
+                              <EyeSlashIcon className="w-4 h-4" />
+                            ) : (
+                              <EyeIcon className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleTestBailian}
+                          disabled={isTestingBailian || !aiSettings.bailianApiKey}
+                          className="shrink-0 px-4 py-2 rounded-xl border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          <ArrowPathIcon className={`w-3.5 h-3.5 ${isTestingBailian ? 'animate-spin' : ''}`} />
+                          <span>{isTestingBailian ? 'Testing...' : 'Test Connection'}</span>
+                        </button>
+                      </div>
+                      <p className="text-[11px] text-slate-400">
+                        Create and copy your API Key from Alibaba Cloud Model Studio (阿里云百炼 &gt; API-KEY 管理).
+                      </p>
+
+                      {/* Connection Test Feedback Banner */}
+                      {bailianTestStatus && (
+                        <div
+                          className={`mt-2 p-3 rounded-xl border text-xs flex items-center gap-2.5 ${
+                            bailianTestStatus.success
+                              ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                              : 'bg-rose-950/30 border-rose-500/40 text-rose-300'
+                          }`}
+                        >
+                          {bailianTestStatus.success ? (
+                            <CheckCircleIcon className="w-4 h-4 shrink-0 text-emerald-400" />
+                          ) : (
+                            <ExclamationTriangleIcon className="w-4 h-4 shrink-0 text-rose-400" />
+                          )}
+                          <span>{bailianTestStatus.message}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                      {/* Model Selector */}
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-300">
+                          Default Generation Model
+                        </label>
+                        <select
+                          value={aiSettings.bailianModel}
+                          onChange={(e) =>
+                            setAiSettings((prev) => ({ ...prev, bailianModel: e.target.value }))
+                          }
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                        >
+                          <option value="wanx2.1-t2i-turbo">
+                            wanx2.1-t2i-turbo (Fastest & Cost-Efficient - Recommended)
+                          </option>
+                          <option value="wanx2.1-t2i-plus">
+                            wanx2.1-t2i-plus (Ultra-HD Photorealistic Quality)
+                          </option>
+                          <option value="qwen-image-edit">
+                            qwen-image-edit (Qwen Image Editing / Inpainting)
+                          </option>
+                        </select>
+                      </div>
+
+                      {/* Base URL */}
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-300">
+                          DashScope Base URL
+                        </label>
+                        <input
+                          type="text"
+                          value={aiSettings.bailianBaseUrl}
+                          onChange={(e) =>
+                            setAiSettings((prev) => ({ ...prev, bailianBaseUrl: e.target.value.trim() }))
+                          }
+                          placeholder="https://dashscope.aliyuncs.com"
+                          className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Replicate Card (Fallback) */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md space-y-4">
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      <Cog6ToothIcon className="w-4 h-4 text-indigo-400" />
+                      <span>Replicate API Settings (Fallback)</span>
+                    </h3>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold text-slate-300">
+                        Replicate API Token
+                      </label>
+                      <input
+                        type="password"
+                        value={aiSettings.replicateToken}
+                        onChange={(e) =>
+                          setAiSettings((prev) => ({ ...prev, replicateToken: e.target.value.trim() }))
+                        }
+                        placeholder="r8_xxxxxxxxxxxxxxxxxxxx (Optional if using Bailian)"
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
+                      />
+                      <p className="text-[11px] text-slate-400">
+                        Used only when provider is set to &quot;Replicate API&quot; or as environment fallback.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="flex items-center justify-between pt-2">
+                    <p className="text-xs text-slate-400">
+                      Settings are stored directly in your Neon database <code className="text-cyan-300 font-mono">key_value</code> table and take effect instantly.
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={isSavingAI}
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/20 transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                    >
+                      <SparklesIcon className={`w-4 h-4 ${isSavingAI ? 'animate-spin' : ''}`} />
+                      <span>{isSavingAI ? 'Saving Settings...' : 'Save & Apply Live Settings'}</span>
+                    </button>
+                  </div>
+                </form>
               </div>
             )}
 

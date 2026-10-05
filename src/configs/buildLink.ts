@@ -18,14 +18,22 @@ export const getCompressionImageLink = (url) => {
 }
 
 
-export const getArrayUrlResult = (origin) => {
-  if (origin) {
-    const jsonResult = JSON.parse(origin);
-    if (jsonResult.length > 0) {
-      return jsonResult;
+export const getArrayUrlResult = (origin: any): string[] => {
+  if (!origin) return [];
+  try {
+    const parsed = typeof origin === 'string' ? JSON.parse(origin) : origin;
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed.filter(Boolean);
+    }
+    if (typeof parsed === 'string' && parsed.startsWith('http')) {
+      return [parsed];
+    }
+  } catch (e) {
+    if (typeof origin === 'string' && origin.trim().startsWith('http')) {
+      return [origin.trim()];
     }
   }
-  return []
+  return [];
 }
 
 export const getTotalLinkHref = (locale = 'en', page = '') => {
