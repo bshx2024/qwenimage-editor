@@ -519,7 +519,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
                 4. Post-Production Inpainting & Production Readiness
               </h2>
               <p className="text-sm leading-relaxed text-slate-300">
-                A major workflow advantage highlighted in this technical review is conversational post-processing. Qwen natively supports conversational instruction editing: creators can upload an existing asset and request localized changes (such as swapping apparel, shifting lighting, or adding accessories) while preserving surrounding geometry.
+                A major workflow advantage highlighted in this technical review is conversational post-processing. Qwen natively supports conversational instruction editing: creators can upload an existing asset to the <Link href={getLinkHref(locale, '')} className="text-purple-400 hover:underline font-medium">online AI inpainting editor</Link> and request localized changes (such as swapping apparel, shifting lighting, or adding accessories) while preserving surrounding geometry.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
                 Nano Banana is strictly limited to text-to-image synthesis without native inpainting backbones. Attempting to modify a single object requires regenerating the entire canvas from scratch, resulting in severe character drift and wasted creative iterations.
@@ -614,7 +614,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
               >
                 <div className="text-xs text-purple-400 font-semibold mb-1">Benchmark</div>
                 <div className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
-                  Qwen Image 2.1 vs Midjourney →
+                  Qwen vs Midjourney →
                 </div>
                 <p className="text-xs text-slate-400 mt-1">Image quality, text rendering, and pricing breakdown.</p>
               </Link>
@@ -624,7 +624,7 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
               >
                 <div className="text-xs text-purple-400 font-semibold mb-1">Benchmark</div>
                 <div className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
-                  Qwen Image 2.1 vs Flux →
+                  Qwen vs Flux →
                 </div>
                 <p className="text-xs text-slate-400 mt-1">Quality, VRAM cost, and generation speed.</p>
               </Link>
