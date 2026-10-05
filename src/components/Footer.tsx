@@ -69,6 +69,21 @@ export default function Footer({
             <p className="text-xs leading-relaxed text-slate-400">
               Free online AI-powered visual suite for photo transformation, text-guided image editing, inpainting, and high-fidelity generation.
             </p>
+            <div className="pt-2 text-xs space-y-1.5 text-slate-400 border-t border-slate-800/80">
+              <div className="font-semibold text-slate-300">Customer Support:</div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-500">Email:</span>
+                <a href="mailto:support@qwenimage-editor.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+                  support@qwenimage-editor.com
+                </a>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-500">Report Abuse:</span>
+                <a href="mailto:report@qwenimage-editor.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+                  report@qwenimage-editor.com
+                </a>
+              </div>
+            </div>
             <div className="text-xs text-slate-500">
               © {new Date().getFullYear()} Qwen Image Editor. All rights reserved.
             </div>
@@ -187,6 +202,15 @@ export default function Footer({
               )}
               <li>
                 <Link
+                  href={getLinkHref(locale, 'terms-of-service')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('terms-of-service')}
+                >
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLinkHref(locale, 'privacy-policy')}
                   className="text-xs hover:text-indigo-400 transition-colors"
                   onClick={() => checkPageAndLoading('privacy-policy')}
@@ -196,12 +220,20 @@ export default function Footer({
               </li>
               <li>
                 <Link
-                  href={getLinkHref(locale, 'terms-of-service')}
+                  href={getLinkHref(locale, 'aup')}
                   className="text-xs hover:text-indigo-400 transition-colors"
-                  onClick={() => checkPageAndLoading('terms-of-service')}
+                  onClick={() => checkPageAndLoading('aup')}
                 >
-                  Terms of Service
+                  Acceptable Use Policy (AUP)
                 </Link>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@qwenimage-editor.com"
+                  className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                >
+                  Contact Support
+                </a>
               </li>
             </ul>
           </div>

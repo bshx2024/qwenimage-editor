@@ -131,6 +131,16 @@ export const getTermsOfServiceText = async () => {
   }
 }
 
+export const getAupText = async () => {
+  const tAup = await getTranslations('AupText');
+  return {
+    title: tAup('title') + ' | ' + process.env.NEXT_PUBLIC_WEBSITE_NAME,
+    description: tAup('description'),
+    h1Text: tAup('h1Text'),
+    detailText: tAup('detailText'),
+  }
+}
+
 export const getWorksText = async () => {
   const tWorks = await getTranslations('WorksText');
   return {
