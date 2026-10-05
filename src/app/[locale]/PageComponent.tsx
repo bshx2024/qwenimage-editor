@@ -449,20 +449,29 @@ export default function PageComponent({
                               >
                                 {activeTab === 'edit' ? (
                                   <>
+                                    <option value="qwen-image-2.1-pro" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Pro (Official 🚀)
+                                    </option>
+                                    <option value="wanx2.1-imageedit" className="bg-slate-900 text-slate-200">
+                                      Wanx 2.1 Image Edit (Inpaint 🎨)
+                                    </option>
                                     <option value="wanx2.1-i2i-turbo" className="bg-slate-900 text-slate-200">
-                                      Qwen / Wanx 2.1 Turbo (Fast ⚡)
+                                      Wanx 2.1 Turbo (Fast ⚡)
                                     </option>
                                     <option value="wanx2.1-i2i-plus" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Plus (Ultra-HD 🌟)
                                     </option>
-                                    <option value="qwen-image-edit" className="bg-slate-900 text-slate-200">
-                                      Qwen Image Inpaint &amp; Edit 🎨
-                                    </option>
                                   </>
                                 ) : (
                                   <>
+                                    <option value="qwen-image-2.1-pro" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Pro (Official 🚀)
+                                    </option>
+                                    <option value="qwen-image-3.0-pro" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 3.0 Pro (Flagship 👑)
+                                    </option>
                                     <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
-                                      Qwen / Wanx 2.1 Turbo (Fast ⚡)
+                                      Wanx 2.1 Turbo (Fast ⚡)
                                     </option>
                                     <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Plus (Ultra-HD 🌟)

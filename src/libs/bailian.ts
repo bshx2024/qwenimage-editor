@@ -96,10 +96,12 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   if (taskType === 'image_edit' && imageUrl) {
     endpoint = `${cleanBase}/api/v1/services/aigc/image2image/image-synthesis`;
     let editModel = 'wanx2.1-i2i-turbo';
-    if (model?.includes('plus')) {
+    if (model?.includes('imageedit')) {
+      editModel = 'wanx2.1-imageedit';
+    } else if (model?.includes('qwen-image')) {
+      editModel = model;
+    } else if (model?.includes('plus')) {
       editModel = 'wanx2.1-i2i-plus';
-    } else if (model === 'qwen-image-edit') {
-      editModel = 'qwen-image-edit';
     } else if (model?.includes('i2i')) {
       editModel = model;
     }

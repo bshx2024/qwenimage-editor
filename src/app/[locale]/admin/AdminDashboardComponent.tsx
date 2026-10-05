@@ -1546,14 +1546,20 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                           }
                           className="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
                         >
+                          <option value="qwen-image-2.1-pro">
+                            qwen-image-2.1-pro (官方千问图像 2.1 专业版)
+                          </option>
+                          <option value="qwen-image-3.0-pro">
+                            qwen-image-3.0-pro (官方千问图像 3.0 旗舰版)
+                          </option>
                           <option value="wanx2.1-t2i-turbo">
-                            wanx2.1-t2i-turbo (Fastest & Cost-Efficient - Recommended)
+                            wanx2.1-t2i-turbo (通义万相 2.1 极速版 - 经济高效)
                           </option>
                           <option value="wanx2.1-t2i-plus">
-                            wanx2.1-t2i-plus (Ultra-HD Photorealistic Quality)
+                            wanx2.1-t2i-plus (通义万相 2.1 高清画质版)
                           </option>
-                          <option value="qwen-image-edit">
-                            qwen-image-edit (Qwen Image Editing / Inpainting)
+                          <option value="wanx2.1-imageedit">
+                            wanx2.1-imageedit (通义万相 2.1 图像编辑重绘)
                           </option>
                         </select>
                       </div>
