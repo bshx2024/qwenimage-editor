@@ -117,7 +117,7 @@ export default function BlogListComponent({ locale = 'en' }: { locale?: string }
                         alt={post.author.name}
                         width={24}
                         height={24}
-                        className="w-6 h-6 rounded-full border border-indigo-500/30"
+                        className="w-6 h-6 rounded-full object-cover border border-indigo-500/30"
                         loading="lazy"
                         decoding="async"
                       />

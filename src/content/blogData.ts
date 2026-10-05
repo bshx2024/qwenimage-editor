@@ -30,7 +30,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alex Chen',
       role: 'Staff AI Infrastructure Engineer',
-      avatar: '/images/author-alex.svg',
+      avatar: '/images/author-alex.jpg',
       bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
     },
     keywords: [

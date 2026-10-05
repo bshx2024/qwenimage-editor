@@ -170,7 +170,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   alt={post.author.name}
                   width={32}
                   height={32}
-                  className="w-8 h-8 rounded-full border border-indigo-500/40 shadow-sm"
+                  className="w-8 h-8 rounded-full object-cover border border-indigo-500/40 shadow-sm"
                   loading="eager"
                   decoding="async"
                 />
@@ -457,7 +457,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                 alt={post.author.name}
                 width={64}
                 height={64}
-                className="w-16 h-16 rounded-full border-2 border-indigo-500/40 shadow-md shrink-0"
+                className="w-16 h-16 rounded-full object-cover border-2 border-indigo-500/40 shadow-md shrink-0"
                 loading="lazy"
                 decoding="async"
               />
