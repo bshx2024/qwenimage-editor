@@ -140,6 +140,15 @@ export default function Footer({
               </li>
               <li>
                 <Link
+                  href={getLinkHref(locale, 'blog')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('blog')}
+                >
+                  Engineering Blog
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLinkHref(locale, 'prompt')}
                   className="text-xs hover:text-indigo-400 transition-colors"
                   onClick={() => checkPageAndLoading('prompt')}

@@ -110,6 +110,13 @@ export default function Header({
           >
             Qwen 2.1
           </Link>
+          <Link
+            href={getLinkHref(locale, 'blog')}
+            onClick={() => checkPageAndLoading('blog')}
+            className={`text-sm font-medium transition-colors ${page === 'blog' ? 'text-indigo-400 font-semibold' : 'text-slate-200 hover:text-white'}`}
+          >
+            Blog
+          </Link>
 
           {/* Comparisons Dropdown */}
           <Menu as="div" className="relative inline-block text-left">
