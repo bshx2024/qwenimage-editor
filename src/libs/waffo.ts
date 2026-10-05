@@ -1,7 +1,28 @@
 import { WaffoPancake } from '@waffo/pancake-ts';
 import { WAFFO_PLANS } from '~/configs/waffoConfig';
+import { getPaymentSettings } from '~/servers/keyValue';
 
-let waffoClientInstance: WaffoPancake | null = null;
+export async function getWaffoClientAsync(): Promise<WaffoPancake | null> {
+  const settings = await getPaymentSettings();
+  const merchantId = (settings.waffoMerchantId || process.env.WAFFO_MERCHANT_ID || '').trim();
+  const privateKey = (settings.waffoPrivateKey || process.env.WAFFO_PRIVATE_KEY || '').trim();
+  const environment = (settings.waffoEnv || (process.env.WAFFO_ENV === 'test' ? 'test' : 'prod'));
+
+  if (!merchantId || !privateKey) {
+    return null;
+  }
+
+  try {
+    return new WaffoPancake({
+      merchantId,
+      privateKey,
+      environment
+    });
+  } catch (err: any) {
+    console.warn('WaffoPancake client initialization failed:', err?.message);
+    return null;
+  }
+}
 
 export function getWaffoClient(): WaffoPancake | null {
   const merchantId = process.env.WAFFO_MERCHANT_ID?.trim();
@@ -11,20 +32,16 @@ export function getWaffoClient(): WaffoPancake | null {
     return null;
   }
 
-  if (!waffoClientInstance) {
-    try {
-      waffoClientInstance = new WaffoPancake({
-        merchantId,
-        privateKey,
-        environment: (process.env.WAFFO_ENV === 'test' ? 'test' : 'prod')
-      });
-    } catch (err: any) {
-      console.warn('WaffoPancake client initialization failed:', err?.message);
-      return null;
-    }
+  try {
+    return new WaffoPancake({
+      merchantId,
+      privateKey,
+      environment: (process.env.WAFFO_ENV === 'test' ? 'test' : 'prod')
+    });
+  } catch (err: any) {
+    console.warn('WaffoPancake client initialization failed:', err?.message);
+    return null;
   }
-
-  return waffoClientInstance;
 }
 
 export interface CreateCheckoutParams {
@@ -46,24 +63,39 @@ export async function createWaffoCheckoutSession({
   }
 
   const successUrl = redirectUrl || `${process.env.NEXT_PUBLIC_SITE_URL || 'https://qwenimage-editor.com'}/pricing?payment_success=true&provider=waffo`;
+  const settings = await getPaymentSettings();
 
-  // 1. If merchant configured direct Waffo hosted checkout link, use it
-  if (plan.checkoutUrl) {
-    const url = new URL(plan.checkoutUrl);
-    url.searchParams.set('buyerIdentity', userId);
-    if (userEmail) {
-      url.searchParams.set('customerEmail', userEmail);
+  // 1. If merchant configured direct Waffo hosted checkout link in DB or env, use it
+  let directCheckoutUrl = plan.checkoutUrl;
+  if (planId === 'credits-pack-100' && settings.waffoStarterLink) directCheckoutUrl = settings.waffoStarterLink;
+  if (planId === 'pro-monthly' && settings.waffoProLink) directCheckoutUrl = settings.waffoProLink;
+  if (planId === 'pro-yearly' && settings.waffoMegaLink) directCheckoutUrl = settings.waffoMegaLink;
+
+  if (directCheckoutUrl) {
+    try {
+      const url = new URL(directCheckoutUrl);
+      url.searchParams.set('buyerIdentity', userId);
+      if (userEmail) {
+        url.searchParams.set('customerEmail', userEmail);
+      }
+      url.searchParams.set('returnUrl', successUrl);
+      return { checkoutUrl: url.toString() };
+    } catch (urlErr) {
+      console.warn('Invalid direct checkout URL:', directCheckoutUrl);
     }
-    url.searchParams.set('returnUrl', successUrl);
-    return { checkoutUrl: url.toString() };
   }
 
   // 2. Try official SDK authenticated checkout session
-  const client = getWaffoClient();
-  if (client && plan.productId) {
+  let productId = plan.productId;
+  if (planId === 'credits-pack-100' && settings.waffoProductStarter) productId = settings.waffoProductStarter;
+  if (planId === 'pro-monthly' && settings.waffoProductMonthly) productId = settings.waffoProductMonthly;
+  if (planId === 'pro-yearly' && settings.waffoProductYearly) productId = settings.waffoProductYearly;
+
+  const client = await getWaffoClientAsync();
+  if (client && productId) {
     try {
       const session = await client.checkout.authenticated.create({
-        productId: plan.productId,
+        productId: productId,
         buyerIdentity: userId,
         buyerEmail: userEmail || undefined,
         currency: 'USD',
@@ -88,6 +120,7 @@ export async function createWaffoCheckoutSession({
   const mockUrl = new URL(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://qwenimage-editor.com'}/pricing`);
   mockUrl.searchParams.set('waffo_pending', '1');
   mockUrl.searchParams.set('plan', planId);
-  mockUrl.searchParams.set('msg', 'Waffo credentials pending configuration in Vercel');
+  mockUrl.searchParams.set('msg', 'Waffo credentials pending configuration in Admin Console');
   return { checkoutUrl: mockUrl.toString() };
 }
+

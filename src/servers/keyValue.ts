@@ -134,3 +134,117 @@ export async function saveAISettings(settings: Partial<AISettings>): Promise<voi
     await setSetting('REPLICATE_API_TOKEN', settings.replicateToken);
   }
 }
+
+export interface PaymentSettings {
+  paymentGateway: 'waffo' | 'stripe';
+  waffoEnv: 'prod' | 'test';
+  waffoMerchantId: string;
+  waffoPrivateKey: string;
+  waffoWebhookSecret: string;
+  waffoStarterLink: string;
+  waffoProLink: string;
+  waffoMegaLink: string;
+  waffoProductStarter: string;
+  waffoProductMonthly: string;
+  waffoProductYearly: string;
+  stripePublishableKey: string;
+  stripeSecretKey: string;
+  stripeWebhookSecret: string;
+}
+
+export async function getPaymentSettings(): Promise<PaymentSettings> {
+  const [
+    paymentGateway,
+    waffoEnv,
+    waffoMerchantId,
+    waffoPrivateKey,
+    waffoWebhookSecret,
+    waffoStarterLink,
+    waffoProLink,
+    waffoMegaLink,
+    waffoProductStarter,
+    waffoProductMonthly,
+    waffoProductYearly,
+    stripePublishableKey,
+    stripeSecretKey,
+    stripeWebhookSecret,
+  ] = await Promise.all([
+    getSetting('PAYMENT_GATEWAY', 'NEXT_PUBLIC_PAYMENT_GATEWAY'),
+    getSetting('WAFFO_ENV', 'WAFFO_ENV'),
+    getSetting('WAFFO_MERCHANT_ID', 'WAFFO_MERCHANT_ID'),
+    getSetting('WAFFO_PRIVATE_KEY', 'WAFFO_PRIVATE_KEY'),
+    getSetting('WAFFO_WEBHOOK_SECRET', 'WAFFO_WEBHOOK_SECRET'),
+    getSetting('WAFFO_STARTER_LINK', 'NEXT_PUBLIC_WAFFO_STARTER_LINK'),
+    getSetting('WAFFO_PRO_LINK', 'NEXT_PUBLIC_WAFFO_PRO_LINK'),
+    getSetting('WAFFO_MEGA_LINK', 'NEXT_PUBLIC_WAFFO_MEGA_LINK'),
+    getSetting('WAFFO_PRODUCT_CREDITS_100', 'WAFFO_PRODUCT_CREDITS_100'),
+    getSetting('WAFFO_PRODUCT_PRO_MONTHLY', 'WAFFO_PRODUCT_PRO_MONTHLY'),
+    getSetting('WAFFO_PRODUCT_PRO_YEARLY', 'WAFFO_PRODUCT_PRO_YEARLY'),
+    getSetting('STRIPE_PUBLISHABLE_KEY', 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
+    getSetting('STRIPE_SECRET_KEY', 'STRIPE_SECRET_KEY'),
+    getSetting('STRIPE_WEBHOOK_SECRET', 'STRIPE_WEBHOOK_SECRET'),
+  ]);
+
+  return {
+    paymentGateway: (paymentGateway === 'stripe' ? 'stripe' : 'waffo'),
+    waffoEnv: (waffoEnv === 'test' ? 'test' : 'prod'),
+    waffoMerchantId: waffoMerchantId || '',
+    waffoPrivateKey: waffoPrivateKey || '',
+    waffoWebhookSecret: waffoWebhookSecret || '',
+    waffoStarterLink: waffoStarterLink || '',
+    waffoProLink: waffoProLink || '',
+    waffoMegaLink: waffoMegaLink || '',
+    waffoProductStarter: waffoProductStarter || '',
+    waffoProductMonthly: waffoProductMonthly || '',
+    waffoProductYearly: waffoProductYearly || '',
+    stripePublishableKey: stripePublishableKey || '',
+    stripeSecretKey: stripeSecretKey || '',
+    stripeWebhookSecret: stripeWebhookSecret || '',
+  };
+}
+
+export async function savePaymentSettings(settings: Partial<PaymentSettings>): Promise<void> {
+  if (settings.paymentGateway !== undefined) {
+    await setSetting('PAYMENT_GATEWAY', settings.paymentGateway);
+  }
+  if (settings.waffoEnv !== undefined) {
+    await setSetting('WAFFO_ENV', settings.waffoEnv);
+  }
+  if (settings.waffoMerchantId !== undefined) {
+    await setSetting('WAFFO_MERCHANT_ID', settings.waffoMerchantId.trim());
+  }
+  if (settings.waffoPrivateKey !== undefined) {
+    await setSetting('WAFFO_PRIVATE_KEY', settings.waffoPrivateKey.trim());
+  }
+  if (settings.waffoWebhookSecret !== undefined) {
+    await setSetting('WAFFO_WEBHOOK_SECRET', settings.waffoWebhookSecret.trim());
+  }
+  if (settings.waffoStarterLink !== undefined) {
+    await setSetting('WAFFO_STARTER_LINK', settings.waffoStarterLink.trim());
+  }
+  if (settings.waffoProLink !== undefined) {
+    await setSetting('WAFFO_PRO_LINK', settings.waffoProLink.trim());
+  }
+  if (settings.waffoMegaLink !== undefined) {
+    await setSetting('WAFFO_MEGA_LINK', settings.waffoMegaLink.trim());
+  }
+  if (settings.waffoProductStarter !== undefined) {
+    await setSetting('WAFFO_PRODUCT_CREDITS_100', settings.waffoProductStarter.trim());
+  }
+  if (settings.waffoProductMonthly !== undefined) {
+    await setSetting('WAFFO_PRODUCT_PRO_MONTHLY', settings.waffoProductMonthly.trim());
+  }
+  if (settings.waffoProductYearly !== undefined) {
+    await setSetting('WAFFO_PRODUCT_PRO_YEARLY', settings.waffoProductYearly.trim());
+  }
+  if (settings.stripePublishableKey !== undefined) {
+    await setSetting('STRIPE_PUBLISHABLE_KEY', settings.stripePublishableKey.trim());
+  }
+  if (settings.stripeSecretKey !== undefined) {
+    await setSetting('STRIPE_SECRET_KEY', settings.stripeSecretKey.trim());
+  }
+  if (settings.stripeWebhookSecret !== undefined) {
+    await setSetting('STRIPE_WEBHOOK_SECRET', settings.stripeWebhookSecret.trim());
+  }
+}
+

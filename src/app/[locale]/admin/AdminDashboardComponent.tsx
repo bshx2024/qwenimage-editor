@@ -24,6 +24,9 @@ import {
   SparklesIcon,
   ArrowPathIcon,
   KeyIcon,
+  ClipboardDocumentCheckIcon,
+  DocumentDuplicateIcon,
+  LinkIcon,
 } from '@heroicons/react/24/outline';
 
 interface AdminDashboardProps {
@@ -80,6 +83,47 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [subsLoading, setSubsLoading] = useState<boolean>(false);
   const [paymentOrders, setPaymentOrders] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
+
+  // Payment Gateway Settings State
+  const [paymentSubTab, setPaymentSubTab] = useState<'config' | 'orders' | 'subscriptions'>('config');
+  const [paymentSettings, setPaymentSettings] = useState<{
+    paymentGateway: 'waffo' | 'stripe';
+    waffoEnv: 'prod' | 'test';
+    waffoMerchantId: string;
+    waffoPrivateKey: string;
+    waffoWebhookSecret: string;
+    waffoStarterLink: string;
+    waffoProLink: string;
+    waffoMegaLink: string;
+    waffoProductStarter: string;
+    waffoProductMonthly: string;
+    waffoProductYearly: string;
+    stripePublishableKey: string;
+    stripeSecretKey: string;
+    stripeWebhookSecret: string;
+  }>({
+    paymentGateway: 'waffo',
+    waffoEnv: 'prod',
+    waffoMerchantId: '',
+    waffoPrivateKey: '',
+    waffoWebhookSecret: '',
+    waffoStarterLink: '',
+    waffoProLink: '',
+    waffoMegaLink: '',
+    waffoProductStarter: '',
+    waffoProductMonthly: '',
+    waffoProductYearly: '',
+    stripePublishableKey: '',
+    stripeSecretKey: '',
+    stripeWebhookSecret: '',
+  });
+  const [paymentSettingsLoading, setPaymentSettingsLoading] = useState<boolean>(false);
+  const [isSavingPayment, setIsSavingPayment] = useState<boolean>(false);
+  const [isTestingWaffo, setIsTestingWaffo] = useState<boolean>(false);
+  const [waffoTestStatus, setWaffoTestStatus] = useState<{ success: boolean; message?: string; error?: string } | null>(null);
+  const [showWaffoKey, setShowWaffoKey] = useState<boolean>(false);
+  const [showStripeKey, setShowStripeKey] = useState<boolean>(false);
+  const [copiedWebhook, setCopiedWebhook] = useState<boolean>(false);
 
   // AI Provider & Bailian Settings State
   const [aiSettings, setAiSettings] = useState<{
@@ -381,6 +425,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const fetchSubscriptions = async () => {
     setSubsLoading(true);
     fetchOrders();
+    fetchPaymentSettings();
     try {
       const res = await fetch(`/api/admin/subscriptions`);
       const data = await res.json();
@@ -391,6 +436,80 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       console.error(e);
     } finally {
       setSubsLoading(false);
+    }
+  };
+
+  // Payment Gateway Settings Fetcher & Handlers
+  const fetchPaymentSettings = async () => {
+    setPaymentSettingsLoading(true);
+    setWaffoTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings');
+      const data = await res.json();
+      if (data.success && data.paymentSettings) {
+        setPaymentSettings(data.paymentSettings);
+      }
+    } catch (e) {
+      console.error('Error fetching payment settings:', e);
+    } finally {
+      setPaymentSettingsLoading(false);
+    }
+  };
+
+  const handleSavePaymentSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingPayment(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save_payment',
+          paymentSettings,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message || 'Payment gateway settings saved to database!');
+      } else {
+        showToast(data.error || 'Failed to save payment settings', 'error');
+      }
+    } catch (e: any) {
+      showToast(e?.message || 'Network error saving payment settings', 'error');
+    } finally {
+      setIsSavingPayment(false);
+    }
+  };
+
+  const handleTestWaffo = async () => {
+    if (!paymentSettings.waffoMerchantId?.trim()) {
+      showToast('Please enter a Waffo Merchant ID first (e.g. MER_xxx).', 'error');
+      return;
+    }
+    setIsTestingWaffo(true);
+    setWaffoTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'test_waffo',
+          merchantId: paymentSettings.waffoMerchantId,
+          privateKey: paymentSettings.waffoPrivateKey,
+          environment: paymentSettings.waffoEnv,
+        }),
+      });
+      const data = await res.json();
+      setWaffoTestStatus(data);
+      if (data.success) {
+        showToast('Waffo credentials verified successfully!');
+      } else {
+        showToast(data.error || 'Waffo verification failed', 'error');
+      }
+    } catch (e: any) {
+      showToast(e?.message || 'Network error verifying Waffo', 'error');
+    } finally {
+      setIsTestingWaffo(false);
     }
   };
 
@@ -787,7 +906,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 { id: 'overview', name: 'Overview', icon: ChartBarIcon },
                 { id: 'users', name: 'Users & Credits', icon: UsersIcon },
                 { id: 'works', name: 'Works & Gallery', icon: PhotoIcon },
-                { id: 'subscriptions', name: 'Subscriptions', icon: CreditCardIcon },
+                { id: 'subscriptions', name: 'Payment & Gateways', icon: CreditCardIcon },
                 { id: 'ai-engine', name: 'AI Models & Bailian', icon: SparklesIcon },
                 { id: 'sensitive', name: 'Sensitive Words', icon: ShieldCheckIcon },
                 { id: 'config', name: 'Environment', icon: Cog6ToothIcon },
@@ -1230,147 +1349,611 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* TAB 4: SUBSCRIPTIONS & WAFFO ORDERS */}
+            {/* TAB 4: SUBSCRIPTIONS & PAYMENT GATEWAYS */}
             {/* ---------------------------------------------------- */}
             {activeTab === 'subscriptions' && (
-              <div className="space-y-8">
-                {/* Section 1: Waffo Pancake Payment Orders */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span>Payment Orders</span>
-                        <span className="rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 text-[11px] font-semibold text-cyan-300">
-                          Waffo Pancake & Stripe
-                        </span>
-                      </h2>
-                      <p className="text-xs text-slate-400 mt-0.5">Real-time payment transactions and credit fulfillments</p>
-                    </div>
+              <div className="space-y-6">
+                {/* Sub-navigation Pills */}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                  <div className="flex items-center gap-2">
                     <button
-                      onClick={fetchSubscriptions}
-                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400"
+                      type="button"
+                      onClick={() => setPaymentSubTab('config')}
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                        paymentSubTab === 'config'
+                          ? 'bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                          : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      }`}
+                    >
+                      <Cog6ToothIcon className="w-3.5 h-3.5" />
+                      <span>Gateway Setup (Waffo & Stripe)</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentSubTab('orders')}
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                        paymentSubTab === 'orders'
+                          ? 'bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                          : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      }`}
+                    >
+                      <CreditCardIcon className="w-3.5 h-3.5" />
+                      <span>Payment Orders ({paymentOrders.length})</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentSubTab('subscriptions')}
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                        paymentSubTab === 'subscriptions'
+                          ? 'bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                          : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      }`}
                     >
                       <ArrowPathIcon className="w-3.5 h-3.5" />
-                      <span>Refresh</span>
+                      <span>Recurring Subscriptions ({subscriptions.length})</span>
                     </button>
                   </div>
 
-                  <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
-                    <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
-                      <thead className="bg-slate-900 text-slate-300 font-semibold">
-                        <tr>
-                          <th className="px-5 py-3.5">Order ID</th>
-                          <th className="px-5 py-3.5">Gateway</th>
-                          <th className="px-5 py-3.5">Customer Email</th>
-                          <th className="px-5 py-3.5">Plan / Product</th>
-                          <th className="px-5 py-3.5">Amount</th>
-                          <th className="px-5 py-3.5">Credits Added</th>
-                          <th className="px-5 py-3.5">Status</th>
-                          <th className="px-5 py-3.5">Date</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
-                        {paymentOrders.length > 0 ? (
-                          paymentOrders.map((ord) => (
-                            <tr key={ord.id || ord.order_id} className="hover:bg-slate-900/60 transition-colors">
-                              <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
-                                {ord.order_id}
-                              </td>
-                              <td className="px-5 py-3">
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">
-                                  {ord.provider || 'waffo'}
-                                </span>
-                              </td>
-                              <td className="px-5 py-3 font-semibold text-white">
-                                {ord.user_email || ord.user_name || ord.user_id || 'Unknown'}
-                              </td>
-                              <td className="px-5 py-3 text-slate-300">
-                                {ord.plan_id || 'pro-monthly'}
-                              </td>
-                              <td className="px-5 py-3 font-semibold text-emerald-400">
-                                ${ord.amount ? Number(ord.amount).toFixed(2) : '0.00'} {ord.currency || 'USD'}
-                              </td>
-                              <td className="px-5 py-3 font-bold text-cyan-300">
-                                +{ord.credits_added || 0}
-                              </td>
-                              <td className="px-5 py-3">
-                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                                  {ord.status || 'completed'}
-                                </span>
-                              </td>
-                              <td className="px-5 py-3 text-slate-400 text-[11px]">
-                                {ord.created_at ? new Date(ord.created_at).toLocaleDateString() : '--'}
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={8} className="px-5 py-8 text-center text-slate-500">
-                              {ordersLoading ? 'Loading orders...' : 'No Waffo/Stripe payment orders recorded yet.'}
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+                  <button
+                    onClick={() => {
+                      fetchSubscriptions();
+                      fetchPaymentSettings();
+                    }}
+                    disabled={subsLoading || ordersLoading || paymentSettingsLoading}
+                    className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400 transition-colors"
+                  >
+                    <ArrowPathIcon className={`w-3.5 h-3.5 ${subsLoading || ordersLoading || paymentSettingsLoading ? 'animate-spin' : ''}`} />
+                    <span>Refresh</span>
+                  </button>
                 </div>
 
-                {/* Section 2: Active Subscriptions */}
-                <div className="space-y-4">
-                  <h3 className="text-base font-bold text-slate-200 tracking-tight">Recurring Subscriptions</h3>
-                  <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
-                    <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
-                      <thead className="bg-slate-900 text-slate-300 font-semibold">
-                        <tr>
-                          <th className="px-5 py-3.5">Customer Email</th>
-                          <th className="px-5 py-3.5">Subscription ID</th>
-                          <th className="px-5 py-3.5">Status</th>
-                          <th className="px-5 py-3.5">Created Date</th>
-                          <th className="px-5 py-3.5">Current Period Ends</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
-                        {subscriptions.length > 0 ? (
-                          subscriptions.map((sub) => (
-                            <tr key={sub.subscription_id} className="hover:bg-slate-900/60 transition-colors">
-                              <td className="px-5 py-3 font-semibold text-white">
-                                {sub.user_email || sub.user_name || sub.user_id || 'Unknown'}
-                              </td>
-                              <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
-                                {sub.subscription_id}
-                              </td>
-                              <td className="px-5 py-3">
-                                <span
-                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                                    sub.status === 'active'
-                                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                                      : 'bg-slate-800 text-slate-400 border border-slate-700'
-                                  }`}
-                                >
-                                  {sub.status}
+                {/* VIEW 1: GATEWAY CONFIGURATION */}
+                {paymentSubTab === 'config' && (
+                  <div className="space-y-6">
+                    {/* Overview Banner */}
+                    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-md space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                            <CreditCardIcon className="w-5 h-5 text-cyan-400" />
+                            <span>Payment Gateway Integration</span>
+                          </h2>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Configure global payments via <strong>Waffo Pancake</strong> (Merchant of Record supporting Credit Cards, Apple Pay, Google Pay, PayPal) or Stripe. Settings persist live in the database.
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
+                            paymentSettings.paymentGateway === 'waffo'
+                              ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+                              : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                          }`}>
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span>Active: {paymentSettings.paymentGateway === 'waffo' ? 'Waffo Pancake' : 'Stripe'}</span>
+                          </span>
+
+                          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                            {paymentSettings.waffoEnv === 'prod' ? 'Live Mode' : 'Test Sandbox'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Webhook Endpoint Callout */}
+                      <div className="p-4 rounded-xl border border-cyan-500/20 bg-cyan-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div className="space-y-1">
+                          <span className="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
+                            <LinkIcon className="w-3.5 h-3.5" />
+                            <span>Webhook Callback URL (Add to Waffo / Stripe Dashboard)</span>
+                          </span>
+                          <div className="font-mono text-xs text-slate-300 break-all select-all bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
+                            {typeof window !== 'undefined' ? `${window.location.origin}/api/waffo/webhook` : 'https://qwenimage-editor.com/api/waffo/webhook'}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = `${typeof window !== 'undefined' ? window.location.origin : 'https://qwenimage-editor.com'}/api/waffo/webhook`;
+                            navigator.clipboard.writeText(url);
+                            setCopiedWebhook(true);
+                            showToast('Webhook Callback URL copied to clipboard!');
+                            setTimeout(() => setCopiedWebhook(false), 2000);
+                          }}
+                          className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-medium transition-all cursor-pointer"
+                        >
+                          {copiedWebhook ? (
+                            <>
+                              <ClipboardDocumentCheckIcon className="w-4 h-4 text-emerald-400" />
+                              <span>Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <DocumentDuplicateIcon className="w-4 h-4" />
+                              <span>Copy URL</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Main Settings Form */}
+                    <form onSubmit={handleSavePaymentSettings} className="space-y-6">
+                      {/* Gateway Selector */}
+                      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-md space-y-4">
+                        <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                          <span>1. Primary Payment Gateway</span>
+                        </h3>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <label
+                            className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
+                              paymentSettings.paymentGateway === 'waffo'
+                                ? 'bg-indigo-500/10 border-indigo-500/40 ring-1 ring-indigo-500/30'
+                                : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="paymentGateway"
+                              value="waffo"
+                              checked={paymentSettings.paymentGateway === 'waffo'}
+                              onChange={() => setPaymentSettings({ ...paymentSettings, paymentGateway: 'waffo' })}
+                              className="mt-0.5 text-indigo-500 focus:ring-indigo-500"
+                            />
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-sm text-white">Waffo Pancake</span>
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                  Recommended MoR
                                 </span>
-                              </td>
-                              <td className="px-5 py-3 text-slate-400 text-[11px]">
-                                {sub.created ? new Date(sub.created).toLocaleDateString() : '--'}
-                              </td>
-                              <td className="px-5 py-3 text-slate-400 text-[11px]">
-                                {sub.current_period_end
-                                  ? new Date(sub.current_period_end).toLocaleDateString()
-                                  : '--'}
+                              </div>
+                              <p className="text-xs text-slate-400">
+                                Global Merchant of Record. Handles global compliance, sales tax/VAT, Visa, MasterCard, Apple Pay, Google Pay, PayPal.
+                              </p>
+                            </div>
+                          </label>
+
+                          <label
+                            className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
+                              paymentSettings.paymentGateway === 'stripe'
+                                ? 'bg-indigo-500/10 border-indigo-500/40 ring-1 ring-indigo-500/30'
+                                : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="paymentGateway"
+                              value="stripe"
+                              checked={paymentSettings.paymentGateway === 'stripe'}
+                              onChange={() => setPaymentSettings({ ...paymentSettings, paymentGateway: 'stripe' })}
+                              className="mt-0.5 text-indigo-500 focus:ring-indigo-500"
+                            />
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-sm text-white">Stripe Gateway</span>
+                              </div>
+                              <p className="text-xs text-slate-400">
+                                Direct merchant Stripe account with customer portal links and card processing.
+                              </p>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Waffo Pancake Configuration */}
+                      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-md space-y-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                          <div>
+                            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                              <span>2. Waffo Pancake Credentials</span>
+                              <span className="text-[11px] font-normal text-slate-400 normal-case">
+                                (Get from <a href="https://pancake.waffo.ai" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">Waffo Dashboard</a> &gt; Settings &gt; Developers)
+                              </span>
+                            </h3>
+                          </div>
+
+                          {/* Environment Toggle */}
+                          <div className="flex items-center gap-2 text-xs">
+                            <span className="text-slate-400">Environment:</span>
+                            <div className="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-0.5">
+                              <button
+                                type="button"
+                                onClick={() => setPaymentSettings({ ...paymentSettings, waffoEnv: 'prod' })}
+                                className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-colors ${
+                                  paymentSettings.waffoEnv === 'prod'
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'text-slate-400 hover:text-white'
+                                }`}
+                              >
+                                Production (Live)
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setPaymentSettings({ ...paymentSettings, waffoEnv: 'test' })}
+                                className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-colors ${
+                                  paymentSettings.waffoEnv === 'test'
+                                    ? 'bg-amber-600 text-white'
+                                    : 'text-slate-400 hover:text-white'
+                                }`}
+                              >
+                                Sandbox (Test)
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {/* Merchant ID */}
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-300">
+                              Merchant ID (<span className="text-cyan-400 font-mono">MER_xxx</span>)
+                            </label>
+                            <input
+                              type="text"
+                              value={paymentSettings.waffoMerchantId}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoMerchantId: e.target.value })}
+                              placeholder="e.g. MER_66b5f48e9a21..."
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                            <p className="text-[11px] text-slate-500">Your unique Merchant Short ID generated by Waffo Pancake.</p>
+                          </div>
+
+                          {/* Webhook Secret */}
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-300">
+                              Webhook Secret Key (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              value={paymentSettings.waffoWebhookSecret}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoWebhookSecret: e.target.value })}
+                              placeholder="Waffo webhook signing secret (if configured)"
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                            <p className="text-[11px] text-slate-500">Auto-verified with embedded public keys if left empty.</p>
+                          </div>
+                        </div>
+
+                        {/* RSA Private Key */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                              <KeyIcon className="w-3.5 h-3.5 text-indigo-400" />
+                              <span>RSA Private Key (PEM format)</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => setShowWaffoKey(!showWaffoKey)}
+                              className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-cyan-300 cursor-pointer"
+                            >
+                              {showWaffoKey ? (
+                                <>
+                                  <EyeSlashIcon className="w-3.5 h-3.5" />
+                                  <span>Hide Key</span>
+                                </>
+                              ) : (
+                                <>
+                                  <EyeIcon className="w-3.5 h-3.5" />
+                                  <span>Show Key</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                          {showWaffoKey ? (
+                            <textarea
+                              rows={5}
+                              value={paymentSettings.waffoPrivateKey}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoPrivateKey: e.target.value })}
+                              placeholder="-----BEGIN RSA PRIVATE KEY-----&#10;MIIEowIBAAKCAQEA...&#10;-----END RSA PRIVATE KEY-----"
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                          ) : (
+                            <input
+                              type="password"
+                              value={paymentSettings.waffoPrivateKey}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoPrivateKey: e.target.value })}
+                              placeholder="••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••"
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                          )}
+                          <p className="text-[11px] text-slate-500">
+                            The private key paired with your public key uploaded in Waffo Dashboard. Used for RSA-SHA256 request signing.
+                          </p>
+                        </div>
+
+                        {/* Test Status Banner */}
+                        {waffoTestStatus && (
+                          <div
+                            className={`p-3.5 rounded-xl border text-xs flex items-start gap-2.5 ${
+                              waffoTestStatus.success
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                                : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                            }`}
+                          >
+                            {waffoTestStatus.success ? (
+                              <CheckCircleIcon className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                            ) : (
+                              <ExclamationTriangleIcon className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+                            )}
+                            <div>
+                              <p className="font-semibold">{waffoTestStatus.success ? 'Verification Passed' : 'Verification Issue'}</p>
+                              <p className="mt-0.5 text-[11px] text-slate-300">{waffoTestStatus.message || waffoTestStatus.error}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Direct Checkout Links or Product IDs for 3 tiers */}
+                        <div className="border-t border-slate-800 pt-4 space-y-4">
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                              3-Tier Product Checkout Links or Product IDs
+                            </h4>
+                            <p className="text-[11px] text-slate-400 mt-0.5">
+                              You can either paste your Waffo direct payment links (e.g. <code className="text-cyan-400 bg-slate-950 px-1 py-0.5 rounded">https://pancake.waffo.ai/pay/...</code>) or specify Product IDs (<code className="text-cyan-400 bg-slate-950 px-1 py-0.5 rounded">PROD_xxx</code>).
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Tier 1: Starter Pack */}
+                            <div className="p-3.5 rounded-xl border border-slate-800/80 bg-slate-950/60 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-xs text-white">Starter Pack</span>
+                                <span className="text-[10px] font-bold text-emerald-400">$4.99 (100 Credits)</span>
+                              </div>
+                              <input
+                                type="text"
+                                value={paymentSettings.waffoStarterLink}
+                                onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoStarterLink: e.target.value })}
+                                placeholder="Payment Link or PROD_xxx"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+
+                            {/* Tier 2: Pro Monthly */}
+                            <div className="p-3.5 rounded-xl border border-slate-800/80 bg-slate-950/60 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-xs text-white">Pro Monthly</span>
+                                <span className="text-[10px] font-bold text-cyan-400">$19.90 / mo (500 Credits)</span>
+                              </div>
+                              <input
+                                type="text"
+                                value={paymentSettings.waffoProLink}
+                                onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoProLink: e.target.value })}
+                                placeholder="Payment Link or PROD_xxx"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+
+                            {/* Tier 3: Pro Yearly */}
+                            <div className="p-3.5 rounded-xl border border-slate-800/80 bg-slate-950/60 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-xs text-white">Pro Yearly</span>
+                                <span className="text-[10px] font-bold text-purple-400">$118.80 / yr (6,000 Credits)</span>
+                              </div>
+                              <input
+                                type="text"
+                                value={paymentSettings.waffoMegaLink}
+                                onChange={(e) => setPaymentSettings({ ...paymentSettings, waffoMegaLink: e.target.value })}
+                                placeholder="Payment Link or PROD_xxx"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Optional Stripe Section */}
+                      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-md space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                            3. Stripe Direct Gateway (Optional Fallback)
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => setShowStripeKey(!showStripeKey)}
+                            className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-cyan-300 cursor-pointer"
+                          >
+                            {showStripeKey ? (
+                              <>
+                                <EyeSlashIcon className="w-3.5 h-3.5" />
+                                <span>Hide Keys</span>
+                              </>
+                            ) : (
+                              <>
+                                <EyeIcon className="w-3.5 h-3.5" />
+                                <span>Show Keys</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-300">Stripe Publishable Key</label>
+                            <input
+                              type="text"
+                              value={paymentSettings.stripePublishableKey}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, stripePublishableKey: e.target.value })}
+                              placeholder="pk_live_..."
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-300">Stripe Secret Key</label>
+                            <input
+                              type={showStripeKey ? 'text' : 'password'}
+                              value={paymentSettings.stripeSecretKey}
+                              onChange={(e) => setPaymentSettings({ ...paymentSettings, stripeSecretKey: e.target.value })}
+                              placeholder="sk_live_..."
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 font-mono text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Submit & Action Buttons */}
+                      <div className="flex flex-wrap items-center gap-3 pt-2">
+                        <button
+                          type="submit"
+                          disabled={isSavingPayment}
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+                        >
+                          <SparklesIcon className="w-4 h-4" />
+                          <span>{isSavingPayment ? 'Saving Settings...' : 'Save Payment Gateway Settings'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleTestWaffo}
+                          disabled={isTestingWaffo || !paymentSettings.waffoMerchantId}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-semibold text-xs transition-colors cursor-pointer"
+                        >
+                          <ArrowPathIcon className={`w-3.5 h-3.5 ${isTestingWaffo ? 'animate-spin' : ''}`} />
+                          <span>{isTestingWaffo ? 'Testing...' : 'Test Waffo Connection'}</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {/* VIEW 2: PAYMENT ORDERS TABLE */}
+                {paymentSubTab === 'orders' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                          <span>Payment Orders</span>
+                          <span className="rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 text-[11px] font-semibold text-cyan-300">
+                            Waffo Pancake & Stripe
+                          </span>
+                        </h2>
+                        <p className="text-xs text-slate-400 mt-0.5">Real-time payment transactions and credit fulfillments</p>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
+                      <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
+                        <thead className="bg-slate-900 text-slate-300 font-semibold">
+                          <tr>
+                            <th className="px-5 py-3.5">Order ID</th>
+                            <th className="px-5 py-3.5">Gateway</th>
+                            <th className="px-5 py-3.5">Customer Email</th>
+                            <th className="px-5 py-3.5">Plan / Product</th>
+                            <th className="px-5 py-3.5">Amount</th>
+                            <th className="px-5 py-3.5">Credits Added</th>
+                            <th className="px-5 py-3.5">Status</th>
+                            <th className="px-5 py-3.5">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                          {paymentOrders.length > 0 ? (
+                            paymentOrders.map((ord) => (
+                              <tr key={ord.id || ord.order_id} className="hover:bg-slate-900/60 transition-colors">
+                                <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+                                  {ord.order_id}
+                                </td>
+                                <td className="px-5 py-3">
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">
+                                    {ord.provider || 'waffo'}
+                                  </span>
+                                </td>
+                                <td className="px-5 py-3 font-semibold text-white">
+                                  {ord.user_email || ord.user_name || ord.user_id || 'Unknown'}
+                                </td>
+                                <td className="px-5 py-3 text-slate-300">
+                                  {ord.plan_id || 'pro-monthly'}
+                                </td>
+                                <td className="px-5 py-3 font-semibold text-emerald-400">
+                                  ${ord.amount ? Number(ord.amount).toFixed(2) : '0.00'} {ord.currency || 'USD'}
+                                </td>
+                                <td className="px-5 py-3 font-bold text-cyan-300">
+                                  +{ord.credits_added || 0}
+                                </td>
+                                <td className="px-5 py-3">
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                    {ord.status || 'completed'}
+                                  </span>
+                                </td>
+                                <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                  {ord.created_at ? new Date(ord.created_at).toLocaleDateString() : '--'}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={8} className="px-5 py-8 text-center text-slate-500">
+                                {ordersLoading ? 'Loading orders...' : 'No Waffo/Stripe payment orders recorded yet.'}
                               </td>
                             </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
-                              {subsLoading ? 'Loading subscriptions...' : 'No subscriptions recorded yet.'}
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* VIEW 3: RECURRING SUBSCRIPTIONS */}
+                {paymentSubTab === 'subscriptions' && (
+                  <div className="space-y-4">
+                    <h3 className="text-base font-bold text-slate-200 tracking-tight">Recurring Subscriptions</h3>
+                    <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-xl">
+                      <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
+                        <thead className="bg-slate-900 text-slate-300 font-semibold">
+                          <tr>
+                            <th className="px-5 py-3.5">Customer Email</th>
+                            <th className="px-5 py-3.5">Subscription ID</th>
+                            <th className="px-5 py-3.5">Status</th>
+                            <th className="px-5 py-3.5">Created Date</th>
+                            <th className="px-5 py-3.5">Current Period Ends</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                          {subscriptions.length > 0 ? (
+                            subscriptions.map((sub) => (
+                              <tr key={sub.subscription_id} className="hover:bg-slate-900/60 transition-colors">
+                                <td className="px-5 py-3 font-semibold text-white">
+                                  {sub.user_email || sub.user_name || sub.user_id || 'Unknown'}
+                                </td>
+                                <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+                                  {sub.subscription_id}
+                                </td>
+                                <td className="px-5 py-3">
+                                  <span
+                                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                      sub.status === 'active'
+                                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                        : 'bg-slate-800 text-slate-400 border border-slate-700'
+                                    }`}
+                                  >
+                                    {sub.status}
+                                  </span>
+                                </td>
+                                <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                  {sub.created ? new Date(sub.created).toLocaleDateString() : '--'}
+                                </td>
+                                <td className="px-5 py-3 text-slate-400 text-[11px]">
+                                  {sub.current_period_end
+                                    ? new Date(sub.current_period_end).toLocaleDateString()
+                                    : '--'}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
+                                {subsLoading ? 'Loading subscriptions...' : 'No subscriptions recorded yet.'}
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
