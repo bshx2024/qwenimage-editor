@@ -6,13 +6,11 @@ import {
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
   PhotoIcon,
-  ChevronDownIcon,
-  ShieldCheckIcon
+  ChevronDownIcon
 } from '@heroicons/react/24/outline';
 import { useCommonContext } from '~/context/common-context';
 import { useSession } from 'next-auth/react';
 import { getLinkHref } from '~/configs/buildLink';
-import { whiteLoadingSvg } from './svg';
 
 interface LoginButtonProps {
   buttonType?: number;
@@ -112,20 +110,6 @@ export default function LoginButton({
                   >
                     <PhotoIcon className="w-4 h-4 text-indigo-400" />
                     <span>My Gallery</span>
-                  </Link>
-                )}
-              </Menu.Item>
-
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                    href={getLinkHref(locale, 'admin')}
-                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-                      active ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:text-white'
-                    }`}
-                  >
-                    <ShieldCheckIcon className="w-4 h-4 text-cyan-400" />
-                    <span>Admin Console</span>
                   </Link>
                 )}
               </Menu.Item>

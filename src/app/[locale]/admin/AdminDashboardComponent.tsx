@@ -502,10 +502,9 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                     />
                     <KeyIcon className="w-5 h-5 text-slate-500 absolute right-3.5 top-3.5 pointer-events-none" />
                   </div>
-                  <div className="flex items-center justify-between mt-2 text-[11px] text-slate-400">
-                    <span>Default: <code className="text-cyan-300 bg-slate-800 px-1.5 py-0.5 rounded">admin123456</code></span>
-                    <span>Configure via <code className="text-slate-300">.env.local</code></span>
-                  </div>
+                  <p className="mt-2 text-[11px] text-slate-500 text-right">
+                    Authorized webmasters only
+                  </p>
                 </div>
 
                 <button
