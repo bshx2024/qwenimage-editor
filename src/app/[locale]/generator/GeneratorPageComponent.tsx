@@ -660,9 +660,9 @@ export default function GeneratorPageComponent({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 inline-block"></span>
                   Native Multimodal Tokenizer
                 </h3>
@@ -671,24 +671,48 @@ export default function GeneratorPageComponent({
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span>
-                  Diffusion Transformer Backbone (DiT)
+                  Diffusion Transformer (DiT)
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Replaces traditional UNet bottlenecks with scalable self-attention transformers. Every image patch directly attends to conditional prompt tokens across all generative time-steps, ensuring sharp geometry and harmonious balance across varying aspect ratios.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-7 space-y-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-pink-400 inline-block"></span>
                   Bilingual Character Literacy
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Extensively pre-trained on millions of real-world text-heavy designs, book covers, and packaging mockups. The network synthesizes legible English and Chinese typography with proper glyph topology, font weight consistency, and surface perspective.
                 </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span>
+                  Spatial Entity Alignment
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Advanced positional embeddings prevent subject bleeding. Specify multi-object relationships like &quot;a vintage wooden chair placed to the left of an arched glass window&quot; and the generator anchors each element into accurate three-dimensional space without chaotic overlaps.
+                </p>
+              </div>
+            </div>
+
+            {/* Pro-Tips Banner */}
+            <div className="mt-10 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-950/40 via-purple-950/30 to-slate-900/60 p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                    Pro Creator Tip: Optimal Prompt Formula
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
+                    For optimal high-definition realism, structure your prompt sequentially: <strong>[Subject & Action]</strong> + <strong>[Environment & Spatial Backdrop]</strong> + <strong>[Lighting & Mood]</strong> + <strong>[Camera Lens & Material Texture]</strong>. This systematic approach maximizes the diffusion model&apos;s semantic reasoning power.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
