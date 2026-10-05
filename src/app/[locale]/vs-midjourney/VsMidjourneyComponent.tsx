@@ -422,7 +422,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 A common requirement among digital artists and agency teams is <strong>img2prompt</strong>: deciphering existing visual assets to create coherent variations or extract reusable aesthetic styles. Midjourney provides a basic <code>/describe</code> command that generates four generic prompts. However, these suggestions often hallucinate artists&apos; names and miss minute structural details.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
-                Because Qwen Image 2.1 is natively integrated with Qwen2 vision-language reasoning, it performs deep visual attribute decomposition. It identifies focal depth, camera lens specifications, ambient lighting angles, color temperatures, and typography hierarchy, allowing creators to replicate or modify complex artistic styles with mathematical precision.
+                Because Qwen Image 2.1 is natively integrated with Qwen2 vision-language reasoning, it performs deep visual attribute decomposition. It identifies focal depth, camera lens specifications, ambient lighting angles, color temperatures, and typography hierarchy, allowing creators to reverse-engineer prompts and synthesize pristine visuals with the <Link href={getLinkHref(locale, 'generator')} className="text-indigo-400 hover:underline font-medium">Qwen Image Generator</Link>.
               </p>
             </article>
 
@@ -446,7 +446,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 From a budget and enterprise scalability standpoint, Midjourney presents significant operational hurdles. Its pricing starts at $10/month and scales up to $60/month per user, without any programmatic API access for enterprise software integration.
               </p>
               <p className="text-sm leading-relaxed text-slate-300">
-                Conversely, Qwen Image 2.1 weights are open under permissive community licenses. Startups and enterprise developers can run private instances locally on NVIDIA GPUs (via ComfyUI or HuggingFace Diffusers) or integrate cost-effective REST APIs hosted on serverless infrastructure. For everyday creators, our web portal provides immediate free online access without Discord hurdles.
+                Conversely, Qwen Image 2.1 weights are open under permissive community licenses. Startups and enterprise developers can run private instances locally on NVIDIA GPUs (via ComfyUI or HuggingFace Diffusers) or integrate cost-effective REST APIs hosted on serverless infrastructure. For everyday creators, our platform provides immediate free online access with our <Link href={getLinkHref(locale, '')} className="text-indigo-400 hover:underline font-medium">online AI photo editor</Link> without Discord subscription barriers.
               </p>
             </article>
           </div>
