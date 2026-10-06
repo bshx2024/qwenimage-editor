@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
@@ -58,7 +59,11 @@ export default async function LocaleLayout({
             {children}
           </CommonProvider>
         </NextAuthProvider>
+        {process.env.NEXT_PUBLIC_GOOGLE_TAG_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_TAG_ID} />
+        )}
       </body>
     </html>
   );
 }
+

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { getLinkHref } from "~/configs/buildLink";
 import { useCommonContext } from "~/context/common-context";
-import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default function Footer({
   locale = 'en',
@@ -307,10 +306,6 @@ export default function Footer({
           </div>
         </div>
       </div>
-
-      {process.env.NEXT_PUBLIC_GOOGLE_TAG_ID && (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_TAG_ID} />
-      )}
     </footer>
   );
 }
