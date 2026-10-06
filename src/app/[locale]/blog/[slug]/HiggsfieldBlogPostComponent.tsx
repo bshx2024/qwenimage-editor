@@ -253,7 +253,7 @@ export default function HiggsfieldBlogPostComponent({
               <div className="space-y-1">
                 <div className="text-base font-bold text-white flex items-center gap-2">
                   <VideoCameraIcon className="w-5 h-5 text-pink-400" />
-                  <span>Higgsfield Genjutsu vs. AI Inpainting Cost &amp; Workflow Estimator</span>
+                  <span>Genjutsu Vid2Vid vs. AI Inpainting Cost &amp; Workflow Estimator</span>
                 </div>
                 <p className="text-xs text-slate-400">
                   Select your commercial production scope below to compare estimated costs, GPU wait times, and recommended pipeline configurations:
@@ -372,7 +372,7 @@ export default function HiggsfieldBlogPostComponent({
               In late August 2026, <strong>Higgsfield AI</strong> introduced <strong>Genjutsu</strong>, a generative diffusion system built explicitly for surgical video-to-video (Vid2Vid) transformation. Departing from purely generative text-to-video engines such as Sora or Kling AI, Genjutsu preserves source footage cinematography.
             </p>
             <p>
-              Rather than synthesizing clips from scratch, the <strong>Higgsfield Genjutsu model</strong> isolates motion paths, camera choreography, and environmental lighting from existing video footage. By decoupling the camera physics from the subject aesthetic, creators achieve two core workflows:
+              Rather than synthesizing clips from scratch, the <strong>Genjutsu foundation model</strong> isolates motion paths, camera choreography, and environmental lighting from existing video footage. By decoupling the camera physics from the subject aesthetic, creators achieve two core workflows:
             </p>
             <ul className="list-disc pl-5 space-y-2 text-slate-300">
               <li>
@@ -383,7 +383,7 @@ export default function HiggsfieldBlogPostComponent({
               </li>
             </ul>
             <p>
-              On September 17, 2026, developer access expanded with the public <strong>Higgsfield Genjutsu API</strong>, allowing studios to integrate pay-per-generation Vid2Vid processing into automated production stacks.
+              On September 17, 2026, developer access expanded with the public <strong>Higgsfield developer API</strong>, allowing studios to integrate pay-per-generation Vid2Vid processing into automated production stacks.
             </p>
 
             {/* Section 2 */}
@@ -425,7 +425,7 @@ export default function HiggsfieldBlogPostComponent({
               A frequent query among independent digital creators is <strong>higgsfield genjutsu free</strong>. Users frequently ask whether the platform offers permanent zero-cost tiers or modded mobile applications (frequently searched as <em>genjutsu app</em> or <em>apk downloads</em>).
             </p>
             <p>
-              In practice, <strong>Higgsfield Genjutsu is not a free software service</strong>. Video diffusion requires heavy GPU cluster infrastructure, reflected in their commercial tiering:
+              In practice, <strong>the Genjutsu platform is not a free software service</strong>. Video diffusion requires heavy GPU cluster infrastructure, reflected in their commercial tiering:
             </p>
             <ul className="list-disc pl-5 space-y-2 text-slate-300">
               <li>
@@ -523,7 +523,7 @@ export default function HiggsfieldBlogPostComponent({
                 </thead>
                 <tbody className="divide-y divide-slate-800 text-slate-300">
                   <tr className="hover:bg-slate-800/40 transition-colors">
-                    <td className="p-3 font-semibold text-pink-400">Higgsfield Genjutsu</td>
+                    <td className="p-3 font-semibold text-pink-400">Genjutsu (Higgsfield)</td>
                     <td className="p-3">Vid2Vid Diffusion</td>
                     <td className="p-3">Paid ($15/mo+ or API)</td>
                     <td className="p-3">3 – 8 minutes</td>
