@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="avatarBgElena" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899" />
+      <stop offset="50%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+    <linearGradient id="faceGradElena" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="100%" stop-color="#FCD34D" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="64" fill="url(#avatarBgElena)" />
+  <circle cx="64" cy="64" r="62" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="2" />
+  
+  <!-- Shoulders & Coat -->
+  <path d="M26 118 C26 94, 42 82, 64 82 C86 82, 102 94, 102 118 Z" fill="#0F172A" />
+  <path d="M48 86 L64 104 L80 86 Z" fill="#EC4899" opacity="0.6" />
+
+  <!-- Neck -->
+  <rect x="56" y="68" width="16" height="18" rx="4" fill="#FCD34D" />
+
+  <!-- Face -->
+  <ellipse cx="64" cy="54" rx="21" ry="24" fill="url(#faceGradElena)" />
+
+  <!-- Stylish Hair -->
+  <path d="M38 48 C36 28, 48 18, 64 18 C80 18, 92 28, 90 48 C86 38, 76 34, 64 34 C50 34, 42 40, 38 48 Z" fill="#18181B" />
+  <path d="M36 48 C34 60, 36 78, 42 84 C44 76, 42 64, 44 54 Z" fill="#18181B" />
+  <path d="M92 48 C94 60, 92 78, 86 84 C84 76, 86 64, 84 54 Z" fill="#18181B" />
+
+  <!-- Eyeglasses -->
+  <rect x="46" y="48" width="14" height="10" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+  <rect x="68" y="48" width="14" height="10" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+  <line x1="60" y1="53" x2="68" y2="53" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+
+  <!-- Smile -->
+  <path d="M57 66 Q64 71 71 66" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" />
+</svg>

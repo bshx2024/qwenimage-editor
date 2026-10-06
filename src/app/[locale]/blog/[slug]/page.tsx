@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { BLOG_POSTS, getBlogPostBySlug } from '~/content/blogData';
 import BlogPostComponent from './BlogPostComponent';
+import HiggsfieldBlogPostComponent from './HiggsfieldBlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -23,5 +24,10 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  if (slug === 'higgsfield-genjutsu-workflow-guide-free-alternatives') {
+    return <HiggsfieldBlogPostComponent post={post} locale={locale} />;
+  }
+
   return <BlogPostComponent post={post} locale={locale} />;
 }
+

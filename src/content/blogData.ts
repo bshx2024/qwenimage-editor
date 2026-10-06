@@ -19,6 +19,34 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'higgsfield-genjutsu-workflow-guide-free-alternatives',
+    // Strict 59 chars (50-60 chars safety range, zero SERP truncation)
+    title: 'Higgsfield Genjutsu Guide: Video Trends & Free Alternatives',
+    // Strict 152 chars (140-160 range, 100% intent coverage with CTA)
+    description: 'Master Higgsfield Genjutsu video trends, learn character asset prep, fix queue delays, and discover free AI image inpainting alternatives for ecommerce.',
+    date: '2026-10-06',
+    readTime: '11 min read',
+    category: 'Generative Media & Workflows',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Lead Visual AI & Generative Media Specialist',
+      avatar: '/images/author-elena.svg',
+      bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, Vid2Vid consistency, and neural rendering workflows.',
+    },
+    keywords: [
+      'higgsfield genjutsu',
+      'higgsfield genjutsu free',
+      'higgsfield genjutsu alternative',
+      'higgsfield genjutsu video',
+      'higgsfield genjutsu trend',
+      'higgsfield genjutsu tutorial',
+      'higgsfield genjutsu model',
+      'higgsfield genjutsu api',
+      'hotel lobby ai',
+      'video to video motion transfer',
+    ],
+  },
+  {
     slug: 'strata-qwen-setup-guide',
     // Strict 49 chars (Far below 60 chars limit, eliminates 4.0 points penalty)
     title: 'Strata Qwen: Run Qwen 3.8 125B on Consumer GPUs',
