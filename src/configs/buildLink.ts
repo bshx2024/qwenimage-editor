@@ -12,9 +12,15 @@ export const getLinkHref = (locale = 'en', page = '') => {
 }
 
 
-export const getCompressionImageLink = (url) => {
-  const beginUrl = process.env.NEXT_PUBLIC_STORAGE_URL + '/cdn-cgi/image/width=512,quality=85/';
-  return beginUrl + url;
+export const getCompressionImageLink = (url: any) => {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('//') || trimmed.startsWith('/')) {
+    return trimmed;
+  }
+  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
+  if (!storageUrl) return trimmed;
+  return `${storageUrl.replace(/\/+$/, '')}/${trimmed.replace(/^\/+/, '')}`;
 }
 
 

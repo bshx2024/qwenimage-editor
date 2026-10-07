@@ -139,7 +139,7 @@ const PageComponent = ({
                           className={"cursor-pointer"}
                         >
                           <img
-                            src={getCompressionImageLink(file.output_url[1])}
+                            src={getCompressionImageLink(file.output_url?.[0] || file.output_url?.[1])}
                             alt={file.input_text}
                             width={400}
                             height={400}
