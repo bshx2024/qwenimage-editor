@@ -58,22 +58,33 @@
 
 ---
 
-## 四、 作者与团队 E-E-A-T 实体认证规范 (Author & Trustworthiness)
+## 四、 作者团队 E-E-A-T 实体认证与真人头像规范 (Author & Trustworthiness)
 
-为了抵御 Google SpamBrain 与 Helpful Content Update 对“纯 AI 批量低质站”的降权打击，每篇技术博客**强制要求包含完整的真实作者/工程团队认证**：
+为了抵御 Google SpamBrain、Helpful Content Update 对“纯 AI 批量站”的算法降权打击，以及满足主流大模型（SearchGPT、Perplexity、Claude、Google AI Overviews）对专业信源实体的权威度打分，每篇技术博客**强制执行以下作者实体规范**：
 
-1. **顶部 Meta 栏轻量认证徽章**：
-   - 包含：作者高清头像图标（显式宽高）、作者全名、权威认证职称（如 `Verified AI Infrastructure Researcher`）。
-2. **文末深度作者卡片 (Author Bio Box)**：
-   - 必须包含：
-     - **作者高清头像 (Avatar)**：带柔光外边框，严禁图片变形与 CLS 抖动；
-     - **作者身份与头衔 (Job Title)**：明确具体的研究与工程范畴；
-     - **2~3 句专业背景履历背书 (Expertise & Credentials)**：说明其在开源大模型、分布式推理或视觉生成领域的技术实践沉淀；
-     - **社交与组织背书**：展示团队归属与知识图谱实体。
-3. **结构化数据声明 (JSON-LD Schema)**：
-   - `author` 属性严禁只留抽象字符串，必须完整声明为 `Person` 或 `Organization` 实体对象（包含 `name`、`jobTitle`、`image` 与 `url`）。
+1. **【P1 强制】作者真人真实摄影风格头像 (Real Human Portrait Photo)**：
+   - **严禁使用卡通插画、二次元、SVG 简笔画或抽象占位符作为作者头像**。
+   - **统一使用摄影级超写实真人专业肖像（Professional Studio Headshot / Realistic Portrait Photo）**：
+     - 人物形象须符合专业科技研发人员或领域学者特征（微表情自信亲和、商务正装/质感科研工装、现代办公室/实验室虚化景深背景）；
+     - 必须为 **1:1 正方形比例的高清 JPG/WebP 格式**（文件保存在 `public/images/author-*.jpg`，尺寸 $\ge 400\times400\text{px}$）；
+     - 前端组件渲染必须显式声明 `width` 与 `height`（如 `w-10 h-10`、`w-12 h-12`），外层包裹 `rounded-full` 与抗锯齿柔光边框，确保零 CLS 抖动。
+2. **【P1 强制】垂直领域作者轮换机制 (Domain-Specific Author Rotation)**：
+   - **严禁全站所有文章千篇一律由单一作者署名**（极易被搜索引擎识别为单点生成的内容农场模式）。
+   - 必须根据文章所属的技术垂直赛道进行严格的专家角色轮换：
+     - **大模型推理加速 / 本地显存架构**：署名基础设施架构师（如 `Alex Chen`，Staff AI Infrastructure Engineer）；
+     - **多模态视觉生成 / 电商图像修复**：署名视觉算法研究员（如 `Elena Rostova`，Lead Visual AI & Generative Media Specialist）；
+     - **视频扩散模型 / ComfyUI 渲染管线**：署名视频生成系统专家（如 `Dr. Marcus Vance`，Staff Generative Video Researcher & Systems Lead）；
+   - 每位作者在 `src/content/blogData.ts` 中必须具备独一无二的 2~3 句深度专业履历背书（Expertise & Credentials），严禁模板化雷同。
+3. **顶部 Meta 栏轻量认证徽章**：
+   - 包含：作者真实高清肖像图标、作者全名、权威认证职称。
+4. **文末深度作者卡片 (Author Bio Box)**：
+   - 必须包含：作者高清肖像、作者身份头衔、2~3 句科研背景沉淀及知识图谱背书。
+5. **结构化数据声明 (JSON-LD Schema)**：
+   - `author` 属性严禁只留抽象字符串，必须完整声明为 `Person` 实体对象（包含 `name`、`jobTitle`、`image` 真实肖像完整绝对路径与 `url`）。
 
-## 四、 结构化数据 Schema 强制规范 (JSON-LD)
+---
+
+## 五、 结构化数据 Schema 强制规范 (JSON-LD)
 
 所有页面必须根据页面类型注入规范的 Schema 并在发布前通过 Google Rich Results 验证：
 
@@ -87,7 +98,7 @@
 
 ---
 
-## 五、 双向内链闭环门禁 (Atomic Bidirectional Internal Linking)
+## 六、 双向内链闭环门禁 (Atomic Bidirectional Internal Linking)
 
 上线任何新文章或落地页时，严禁产生“孤岛页面（Orphan Page）”：
 1. **正向输出**：新页面必须包含指向主工具页（`/`）、定价页（`/pricing`）或对比页的上下文内链。
@@ -95,12 +106,13 @@
 
 ---
 
-## 六、 发布前 7 项快速自检表 (Pre-Publish Checklist)
+## 七、 发布前 8 项快速自检表 (Pre-Publish Checklist)
 
 - [ ] 1. **Title / H1 / Description 长度** 是否符合卡尺（Title 50~60 / H1 $\le$ 80 / Desc 140~160）？
 - [ ] 2. **首屏是否有 BLUF 首句结论框**，AI 爬虫可否直接抓取作摘要？
-- [ ] 3. **是否存在原地可交互的 Live Playground**，彻底消除 4.5 分 Doorway 惩罚？
-- [ ] 4. **组件内是否完全排除了 `<h1>`~`<h4>` 标签**，保持纯净单一 AST 语义树？
-- [ ] 5. **所有图片是否均显式配置了 `width`、`height` 和 `loading="lazy"`**？
-- [ ] 6. **是否已在 `public/sitemap.xml` 中配置权重与频次**？
-- [ ] 7. **本地 `npm run build` 是否 100% 退出码 0，SSG 预渲染无误**？
+- [ ] 3. **作者头像是否已配置为 1:1 真人真实摄影风格肖像（严禁卡通/SVG）**，且符合作者赛道轮换？
+- [ ] 4. **是否存在原地可交互的 Live Playground**，彻底消除 4.5 分 Doorway 惩罚？
+- [ ] 5. **组件内是否完全排除了 `<h1>`~`<h4>` 标签**，保持纯净单一 AST 语义树？
+- [ ] 6. **所有图片是否均显式配置了 `width`、`height` 和 `loading="lazy"`**？
+- [ ] 7. **是否已在 `public/sitemap.xml` 中配置权重与频次**？
+- [ ] 8. **本地 `npm run build` 是否 100% 退出码 0，SSG 预渲染无误**？
