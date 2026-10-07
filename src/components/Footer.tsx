@@ -237,6 +237,16 @@ export default function Footer({
               )}
               <li>
                 <Link
+                  href={getLinkHref(locale, 'disclaimer')}
+                  className="text-xs hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+                  onClick={() => checkPageAndLoading('disclaimer')}
+                >
+                  <span>Brand Disclaimer</span>
+                  <span className="rounded bg-amber-500/10 text-amber-400 text-[10px] px-1 py-0.5 border border-amber-500/20">Notice</span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLinkHref(locale, 'terms-of-service')}
                   className="text-xs hover:text-indigo-400 transition-colors"
                   onClick={() => checkPageAndLoading('terms-of-service')}
@@ -274,8 +284,39 @@ export default function Footer({
           </div>
         </div>
 
+        {/* Third-Party Service & Trademark Compliance Disclaimer */}
+        <div className="mt-10 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 sm:p-5 text-slate-300">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 rounded-lg bg-amber-500/10 p-1.5 text-amber-400 shrink-0">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="space-y-1.5 text-xs">
+              <div className="font-semibold text-amber-200 flex flex-wrap items-center gap-2">
+                <span>{locale?.startsWith('zh') ? '平台独立性与品牌免责声明' : 'Independent Third-Party Service & Brand Disclaimer'}</span>
+                <span className="text-[11px] text-slate-400 font-normal">| qwenimage-editor.com</span>
+              </div>
+              <p className="leading-relaxed text-slate-400 text-[11px] sm:text-xs">
+                {locale?.startsWith('zh')
+                  ? '本平台为独立第三方服务，通过官方合规API调用相关模型，与阿里巴巴（Alibaba Group）及通义千问官方不存在关联、从属或官方授权关系。“Qwen”、“通义千问”商标为阿里巴巴集团所有，本站提及仅用于说明底层调用的模型算法与技术来源。'
+                  : 'This platform is an independent third-party service and tool. We access generative AI models through compliant official APIs and are NOT affiliated with, authorized, sponsored, or endorsed by Alibaba Group or Tongyi Qianwen (Qwen) official. "Qwen", "Tongyi Qianwen", and related trademarks belong to Alibaba Group and are referenced solely for nominative descriptive purposes.'}
+              </p>
+              <div className="pt-1">
+                <Link
+                  href={getLinkHref(locale, 'disclaimer')}
+                  className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 underline underline-offset-2 transition-colors"
+                  onClick={() => checkPageAndLoading('disclaimer')}
+                >
+                  {locale?.startsWith('zh') ? '阅读完整品牌免责声明 →' : 'Read Full Brand Disclaimer & Legal Notice →'}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Contextual Internal Linking Hub (Entity Graph Interlinking) */}
-        <div className="mt-12 pt-8 border-t border-slate-900 text-xs space-y-4">
+        <div className="mt-10 pt-8 border-t border-slate-900 text-xs space-y-4">
           <div className="text-slate-300 font-semibold tracking-wider uppercase text-[11px]">
             AI Image Editing & Generative Knowledge Graph
           </div>

@@ -9,6 +9,7 @@ import { checkSubscribe } from "~/servers/subscribe";
 import { checkSensitiveInputText } from "~/servers/checkInput";
 import { getAISettings } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
+import { scanPromptSafety } from "~/servers/contentSafety";
 
 export async function POST(req: Request) {
   try {
@@ -62,6 +63,18 @@ export async function POST(req: Request) {
       } else {
         is_public = false;
       }
+    }
+
+    // Waffo Content Safety Screening API check
+    const safetyCheck = await scanPromptSafety(textStr, json.locale || 'en');
+    if (!safetyCheck.safe) {
+      return Response.json({
+        msg: safetyCheck.message || "Prompt contains restricted content. Generation aborted.",
+        status: 400,
+        safetyBlock: true,
+        reasonCode: safetyCheck.reasonCode,
+        requestId: safetyCheck.requestId
+      });
     }
 
     const uid = uuidv4();

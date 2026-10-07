@@ -417,13 +417,45 @@ export default function PageComponent({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
             {/* Header Titles */}
             <div className="text-center max-w-4xl mx-auto space-y-4 mb-8">
-              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-medium text-indigo-300 backdrop-blur-md">
-                <SparklesIcon className="w-4 h-4 text-indigo-400 animate-pulse" />
-                <span>Next-Gen Vision Foundation AI</span>
+              {/* Badges Bar: Feature + Independent Third-Party Compliance */}
+              <div className="flex flex-wrap items-center justify-center gap-2.5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-medium text-indigo-300 backdrop-blur-md">
+                  <SparklesIcon className="w-4 h-4 text-indigo-400 animate-pulse" />
+                  <span>Next-Gen Vision Foundation AI</span>
+                </div>
+                <Link
+                  href={getLinkHref(locale, 'disclaimer')}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300 backdrop-blur-md hover:bg-amber-500/20 transition-colors"
+                >
+                  <ShieldCheckIcon className="w-3.5 h-3.5 text-amber-400" />
+                  <span>
+                    {locale?.startsWith('zh')
+                      ? '独立第三方服务 • 官方API合规接入 • 与阿里巴巴官方无关联'
+                      : 'Independent Third-Party Service • Official API Access'}
+                  </span>
+                </Link>
               </div>
+
               <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 {indexText?.h1Text || "Free Online Qwen Image Editor & AI Photo Edit"}
               </h1>
+
+              {/* Prominent Third-Party Notice */}
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-2 text-center text-xs text-amber-200/90 max-w-2xl mx-auto backdrop-blur-md">
+                <span>
+                  {locale?.startsWith('zh')
+                    ? '⚠️ 声明：本平台为独立第三方服务工具，通过官方合规API调用相关模型，与阿里巴巴/通义千问官方无关联或授权关系。'
+                    : 'Notice: This platform is an independent third-party tool accessing AI models via compliant official APIs. We are not affiliated with or endorsed by Alibaba Group or Qwen.'}
+                </span>
+                {' '}
+                <Link
+                  href={getLinkHref(locale, 'disclaimer')}
+                  className="underline underline-offset-2 text-amber-300 hover:text-white font-medium ml-1"
+                >
+                  {locale?.startsWith('zh') ? '查看免责声明' : 'Learn More'}
+                </Link>
+              </div>
+
               {/* Conclusion First: Objective Definition for Direct AI Extraction */}
               <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
                 <strong>Qwen Image Editor</strong> is a browser-based multimodal AI inpainting and photo-editing platform powered by Alibaba Cloud Qwen-Image 2.1 foundation models, processing 1024×1024 to 2048×2048 images in 2.5–4.5 seconds with zero local GPU setup.
