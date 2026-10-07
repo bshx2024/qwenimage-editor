@@ -32,6 +32,7 @@ export default function GeneratorPageComponent({
     setShowPricingModal,
     setShowGeneratingModal,
     userData,
+    refreshUserCredits,
   } = useCommonContext();
 
   const [prompt, setPrompt] = useState(searchParams?.prompt || '');
@@ -91,6 +92,7 @@ export default function GeneratorPageComponent({
       if (data.uid) {
         setUid(data.uid);
         setPollInterval(3000);
+        refreshUserCredits?.();
       } else {
         setIsGenerating(false);
         setShowGeneratingModal(false);
@@ -116,10 +118,12 @@ export default function GeneratorPageComponent({
           const out = Array.isArray(data.output_url) ? data.output_url[0] : data.output_url;
           setResultImage(out);
         }
+        refreshUserCredits?.();
       } else if (data.status === 2) {
         setShowGeneratingModal(false);
         setIsGenerating(false);
         setPollInterval(undefined);
+        refreshUserCredits?.();
         alert(data.message || 'Generation failed, please try again.');
       }
     } catch (e) {

@@ -42,6 +42,7 @@ export async function POST(req: Request) {
       }
     }
 
+    const isRealUser = Boolean(user_id && user_id !== "guest");
     const checkSubscribeStatus = await checkSubscribe(user_id);
     if (!is_public) {
       if (!checkSubscribeStatus) {
@@ -50,9 +51,11 @@ export async function POST(req: Request) {
     }
 
     if (!checkSubscribeStatus) {
-      const check = await checkUserTimes(user_id, creditCost);
-      if (!check && process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
-        return Response.json({ msg: "Pricing to continue.", status: 602 });
+      if (isRealUser || process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
+        const check = await checkUserTimes(user_id, creditCost);
+        if (!check) {
+          return Response.json({ msg: "Pricing to continue.", status: 602 });
+        }
       }
     }
 
@@ -188,12 +191,10 @@ export async function POST(req: Request) {
       console.warn("DB insert error in generate/handle:", dbErr);
     }
 
-    if (
-      process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0" &&
-      process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0" &&
-      !checkSubscribeStatus
-    ) {
-      await countDownUserTimes(user_id, creditCost);
+    if (!checkSubscribeStatus) {
+      if (isRealUser || process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
+        await countDownUserTimes(user_id, creditCost);
+      }
     }
 
     return Response.json({ uid });

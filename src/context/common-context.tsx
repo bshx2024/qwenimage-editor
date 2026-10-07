@@ -101,7 +101,10 @@ export const CommonProvider = ({
         authText,
         menuText,
         pricingText,
-        refreshUserCredits: () => fetchUserCredits(userData?.user_id),
+        refreshUserCredits: (customUid?: string) => {
+          const targetId = customUid || userData?.user_id || (session?.user as any)?.user_id;
+          if (targetId) fetchUserCredits(targetId);
+        },
       }}
     >
       {children}

@@ -30,6 +30,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
     setShowPricingModal,
     setShowGeneratingModal,
     userData,
+    refreshUserCredits,
   } = useCommonContext();
 
   // Interactive Live Studio State (Solves P0: Landing = Actionable Tool)
@@ -91,6 +92,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
       if (data.uid) {
         setUid(data.uid);
         setPollInterval(3000);
+        refreshUserCredits?.();
       } else {
         setIsGenerating(false);
         setShowGeneratingModal(false);
@@ -116,10 +118,12 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
           const out = Array.isArray(data.output_url) ? data.output_url[0] : data.output_url;
           setResultImage(out);
         }
+        refreshUserCredits?.();
       } else if (data.status === 2) {
         setShowGeneratingModal(false);
         setIsGenerating(false);
         setPollInterval(undefined);
+        refreshUserCredits?.();
         alert(data.message || 'Generation failed, please try again.');
       }
     } catch (e) {

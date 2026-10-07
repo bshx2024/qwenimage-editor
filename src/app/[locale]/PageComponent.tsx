@@ -39,6 +39,7 @@ export default function PageComponent({
     setShowGeneratingModal,
     commonText,
     userData,
+    refreshUserCredits,
   } = useCommonContext();
 
   const [textStr, setTextStr] = useState('');
@@ -159,6 +160,7 @@ export default function PageComponent({
       if (result.uid) {
         setUid(result.uid);
         setIntervalResultInfo(3000);
+        refreshUserCredits?.();
       } else {
         setIsProcessing(false);
         setShowGeneratingModal(false);
@@ -185,10 +187,12 @@ export default function PageComponent({
           const out = Array.isArray(info.output_url) ? info.output_url[0] : info.output_url;
           setCurrentResultImage(out);
         }
+        refreshUserCredits?.();
       } else if (info.status === 2) {
         setShowGeneratingModal(false);
         setIsProcessing(false);
         setIntervalResultInfo(undefined);
+        refreshUserCredits?.();
         alert(info.message || 'Generation failed, please try again.');
       }
     } catch (e) {
