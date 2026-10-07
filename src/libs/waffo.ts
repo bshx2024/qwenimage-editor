@@ -12,10 +12,12 @@ export async function getWaffoClientAsync(): Promise<WaffoPancake | null> {
     return null;
   }
 
+  const normalizedKey = privateKey.includes('\\n') ? privateKey.replace(/\\n/g, '\n') : privateKey;
+
   try {
     return new WaffoPancake({
       merchantId,
-      privateKey,
+      privateKey: normalizedKey,
       environment
     });
   } catch (err: any) {
@@ -32,10 +34,12 @@ export function getWaffoClient(): WaffoPancake | null {
     return null;
   }
 
+  const normalizedKey = privateKey.includes('\\n') ? privateKey.replace(/\\n/g, '\n') : privateKey;
+
   try {
     return new WaffoPancake({
       merchantId,
-      privateKey,
+      privateKey: normalizedKey,
       environment: (process.env.WAFFO_ENV === 'test' ? 'test' : 'prod')
     });
   } catch (err: any) {
