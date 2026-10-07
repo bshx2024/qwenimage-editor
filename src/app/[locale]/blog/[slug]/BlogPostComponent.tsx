@@ -92,6 +92,35 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
             "item": `https://www.qwenimage-editor.com/blog/${post.slug}`
           }
         ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4070 Ti Super with 16GB VRAM run Strata Qwen 3.8 comfortably?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Using IQ2_XS quantization combined with 32GB system DDR5 RAM, 16GB cards achieve 35 to 55 tokens per second with full syntax correctness on coding tasks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Strata support AMD ROCm graphics cards on Linux?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Strata includes ROCm 6.1+ build flags for AMD Radeon RX 7900 XTX and 7900 XT GPUs on Ubuntu, delivering performance comparable to RTX 4080 setups."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Qwen 3.8 Flash Next compare to DeepSeek R1 for local coding?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Qwen 3.8 Flash Next provides significantly faster generation speed (40–120 TPS) and lower VRAM requirements through Strata's MoE tiering, whereas running DeepSeek R1 671B requires multi-node clustering."
+            }
+          }
+        ]
       }
     ]
   };
@@ -205,6 +234,26 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               <p>
                 <strong>Strata Qwen</strong> is a tiered local inference engine engineered by developer Niko1221 that runs Alibaba&apos;s 125B <em>Qwen 3.8 Flash Next</em> model on single consumer RTX 3090, 4090, and 5070 graphics cards. By offloading inactive MoE experts across GPU VRAM, System RAM, and NVMe SSD with IQ2 and IQ3 quantization, Strata achieves <strong>40 to 120 Tokens per second</strong> with zero cloud API fees.
               </p>
+            </div>
+
+            {/* High-Converting Bridge to Core Commercial Tool: Qwen Image Edit */}
+            <div className="p-4 sm:p-5 rounded-2xl border border-indigo-500/40 bg-gradient-to-r from-indigo-950/70 via-purple-950/40 to-slate-900/90 flex flex-col sm:flex-row items-center justify-between gap-3.5 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/30">
+                  <SparklesIcon className="w-5 h-5" />
+                </div>
+                <div className="text-xs sm:text-sm text-slate-300">
+                  <span className="font-semibold text-white">Need Qwen&apos;s visual models instead of coding LLMs?</span>{' '}
+                  <span className="text-slate-400 block sm:inline">Try cloud photo editing and inpainting with zero GPU setup.</span>
+                </div>
+              </div>
+              <Link
+                href={getLinkHref(locale, 'qwen-image-2-1')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shrink-0 shadow transition-all"
+              >
+                <BoltIcon className="w-3.5 h-3.5" />
+                <span>Launch Qwen Image Edit (Free) &rarr;</span>
+              </Link>
             </div>
 
             {/* In-Article Interactive Live Configurator (Solves -4.5pts P0 Doorway penalty) */}
@@ -439,7 +488,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shadow-lg transition-all"
                 >
                   <BoltIcon className="w-4 h-4" />
-                  <span>Launch Qwen 2.1 Online Studio (Free)</span>
+                  <span>Try Qwen Image Edit &amp; Inpainting Online (Free)</span>
                 </Link>
                 <Link
                   href={getLinkHref(locale, 'background-remover')}
