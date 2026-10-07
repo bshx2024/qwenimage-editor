@@ -30,7 +30,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Lead Visual AI & Generative Media Specialist',
-      avatar: '/images/author-elena.svg',
+      avatar: '/images/author-elena.jpg',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, Vid2Vid consistency, and neural rendering workflows.',
     },
     keywords: [
@@ -80,7 +80,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Marcus Vance',
       role: 'Staff Generative Video Researcher & Systems Lead',
-      avatar: '/images/author-marcus.svg',
+      avatar: '/images/author-marcus.jpg',
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, memory-efficient attention kernels, and asset prep workflows.',
     },
     keywords: [
