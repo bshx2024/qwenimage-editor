@@ -879,8 +879,16 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                       <tr>
                         <th className="py-3.5 px-4 font-semibold">Evaluation Metric</th>
                         <th className="py-3.5 px-4 font-bold text-indigo-400">Qwen Image 2.1</th>
-                        <th className="py-3.5 px-4 font-semibold text-slate-300">Midjourney v6.1</th>
-                        <th className="py-3.5 px-4 font-semibold text-slate-300">Flux.1 Dev</th>
+                        <th className="py-3.5 px-4 font-semibold text-slate-300">
+                          <Link href={getLinkHref(locale, 'vs-midjourney')} className="hover:text-indigo-400 underline decoration-slate-700 underline-offset-4 transition-colors">
+                            Midjourney v6.1 &rarr;
+                          </Link>
+                        </th>
+                        <th className="py-3.5 px-4 font-semibold text-slate-300">
+                          <Link href={getLinkHref(locale, 'vs-flux')} className="hover:text-indigo-400 underline decoration-slate-700 underline-offset-4 transition-colors">
+                            Flux.1 Dev &rarr;
+                          </Link>
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60 font-normal">
@@ -904,7 +912,11 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                       </tr>
                       <tr>
                         <td className="py-3.5 px-4 font-medium text-white">Entry Cost &amp; Licensing</td>
-                        <td className="py-3.5 px-4 text-emerald-400 font-medium">Free daily tier + $4.99 lifetime (Commercial)</td>
+                        <td className="py-3.5 px-4 text-emerald-400 font-medium">
+                          <Link href={getLinkHref(locale, 'pricing')} className="hover:underline">
+                            Free daily tier + $4.99 lifetime (Commercial) &rarr;
+                          </Link>
+                        </td>
                         <td className="py-3.5 px-4 text-slate-400">$10/month mandatory subscription</td>
                         <td className="py-3.5 px-4 text-slate-400">Non-commercial license (24GB VRAM GPU)</td>
                       </tr>
