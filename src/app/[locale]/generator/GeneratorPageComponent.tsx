@@ -19,6 +19,7 @@ import {
   ArrowsRightLeftIcon,
   CpuChipIcon,
 } from "@heroicons/react/24/outline";
+import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 
 export default function GeneratorPageComponent({
   locale = 'en',
@@ -55,9 +56,12 @@ export default function GeneratorPageComponent({
     e.preventDefault();
     if (!prompt.trim()) return;
 
+    // Guest trial check: allow visitors to test generate up to GUEST_TRIAL_LIMIT times without login
     if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0' && !userData) {
-      setShowLoginModal(true);
-      return;
+      if (getGuestTrialsRemaining() <= 0) {
+        setShowLoginModal(true);
+        return;
+      }
     }
 
     setIsGenerating(true);
@@ -84,12 +88,19 @@ export default function GeneratorPageComponent({
         return;
       }
       if (data.status === 602) {
-        setShowPricingModal(true);
+        if (!userData) {
+          setShowLoginModal(true);
+        } else {
+          setShowPricingModal(true);
+        }
         setIsGenerating(false);
         setShowGeneratingModal(false);
         return;
       }
       if (data.uid) {
+        if (!userData) {
+          recordGuestTrialUse();
+        }
         setUid(data.uid);
         setPollInterval(3000);
         refreshUserCredits?.();
@@ -108,7 +119,7 @@ export default function GeneratorPageComponent({
   const checkPoll = async () => {
     if (!uid) return;
     try {
-      const res = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || ''}`);
+      const res = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || 'guest'}`);
       const data = await res.json();
       if (data.status === 1) {
         setShowGeneratingModal(false);
@@ -387,6 +398,27 @@ export default function GeneratorPageComponent({
                       </div>
                     </div>
 
+                    {/* Guest Trial Prompt / Badge */}
+                    {!userData && (
+                      <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs">
+                        <div className="flex items-center gap-1.5 text-purple-300 font-medium">
+                          <SparklesIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <span>
+                            {getGuestTrialsRemaining() > 0
+                              ? `🎁 Free Guest Trial: ${getGuestTrialsRemaining()}/${GUEST_TRIAL_LIMIT} left (No login required)`
+                              : `Guest trial limit reached. Sign in for daily credits!`}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginModal(true)}
+                          className="text-purple-300 hover:text-white underline text-[11px] shrink-0 ml-2"
+                        >
+                          Sign In
+                        </button>
+                      </div>
+                    )}
+
                     {/* Generate Button */}
                     <div className="pt-2">
                       <button
@@ -402,7 +434,11 @@ export default function GeneratorPageComponent({
                         ) : (
                           <>
                             <SparklesIcon className="w-4 h-4" />
-                            <span>Generate with Qwen Image</span>
+                            <span>
+                              {!userData && getGuestTrialsRemaining() > 0
+                                ? 'Generate (Free Guest Trial • No Login)'
+                                : 'Generate with Qwen Image'}
+                            </span>
                           </>
                         )}
                       </button>

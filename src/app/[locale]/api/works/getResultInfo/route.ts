@@ -24,14 +24,12 @@ export const GET = async (req: Request) => {
     revised_text: ''
   };
 
-  if ((!userId || userId === 'undefined') && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
-    return Response.json(result);
-  }
+  const isGuestQuery = !userId || userId === 'undefined' || userId === 'guest';
 
   const db = getDb();
 
   let results;
-  if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
+  if (!isGuestQuery && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != '0') {
     results = await db.query('select * from works where uid=$1 and user_id=$2 and is_origin=$3 and is_delete=$4', [uid, userId, true, false]);
   } else {
     results = await db.query('select * from works where uid=$1 and is_origin=$2 and is_delete=$3', [uid, true, false]);

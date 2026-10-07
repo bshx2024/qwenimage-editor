@@ -24,6 +24,7 @@ import {
   ShieldCheckIcon,
   CpuChipIcon,
 } from "@heroicons/react/24/outline";
+import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 
 export default function PageComponent({
   locale = 'en',
@@ -115,9 +116,13 @@ export default function PageComponent({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!textStr && activeTab === 'generate') return;
+
+    // Guest trial check: allow visitors to test generate up to GUEST_TRIAL_LIMIT times without login
     if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0' && !userData) {
-      setShowLoginModal(true);
-      return;
+      if (getGuestTrialsRemaining() <= 0) {
+        setShowLoginModal(true);
+        return;
+      }
     }
 
     setIsProcessing(true);
@@ -153,13 +158,20 @@ export default function PageComponent({
         return;
       }
       if (result.status === 602) {
-        setShowPricingModal(true);
+        if (!userData) {
+          setShowLoginModal(true);
+        } else {
+          setShowPricingModal(true);
+        }
         setIsProcessing(false);
         setShowGeneratingModal(false);
         return;
       }
 
       if (result.uid) {
+        if (!userData) {
+          recordGuestTrialUse();
+        }
         setUid(result.uid);
         setIntervalResultInfo(3000);
         refreshUserCredits?.();
@@ -179,7 +191,7 @@ export default function PageComponent({
   const pollResult = async () => {
     if (!uid) return;
     try {
-      const response = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || ''}`);
+      const response = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || 'guest'}`);
       const info = await response.json();
       if (info.status === 1) {
         setShowGeneratingModal(false);
@@ -726,6 +738,27 @@ export default function PageComponent({
                       </div>
                     </div>
 
+                    {/* Guest Trial Prompt / Badge */}
+                    {!userData && (
+                      <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs">
+                        <div className="flex items-center gap-1.5 text-purple-300 font-medium">
+                          <SparklesIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <span>
+                            {getGuestTrialsRemaining() > 0
+                              ? `🎁 Free Guest Trial: ${getGuestTrialsRemaining()}/${GUEST_TRIAL_LIMIT} left (No login needed)`
+                              : `Guest trial limit reached. Sign in for daily free credits!`}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginModal(true)}
+                          className="text-purple-300 hover:text-white underline text-[11px] shrink-0 ml-2"
+                        >
+                          Sign In
+                        </button>
+                      </div>
+                    )}
+
                     {/* Generation Settings */}
                     <div className="flex items-center justify-between pt-2">
                       <div className="flex items-center gap-2">
@@ -759,7 +792,15 @@ export default function PageComponent({
                         ) : (
                           <>
                             <SparklesIcon className="w-4 h-4" />
-                            <span>{activeTab === 'edit' ? 'Apply Edit' : 'Generate'}</span>
+                            <span>
+                              {activeTab === 'edit'
+                                ? (!userData && getGuestTrialsRemaining() > 0
+                                    ? 'Apply Edit (Free Trial)'
+                                    : 'Apply Edit')
+                                : (!userData && getGuestTrialsRemaining() > 0
+                                    ? 'Generate (Free Trial)'
+                                    : 'Generate')}
+                            </span>
                           </>
                         )}
                       </button>

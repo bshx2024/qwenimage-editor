@@ -7,7 +7,7 @@ import { getDb } from "~/libs/db";
 import { getLanguage } from "~/servers/language";
 import { checkSubscribe } from "~/servers/subscribe";
 import { checkSensitiveInputText } from "~/servers/checkInput";
-import { getAISettings, setSetting } from "~/servers/keyValue";
+import { getAISettings, getSetting, setSetting } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
 import { scanPromptSafety } from "~/servers/contentSafety";
 
@@ -61,31 +61,50 @@ export async function POST(req: Request) {
       requestedModel.includes("3.0");
     const creditCost = isProModel ? 2 : 1;
 
-    if (!user_id && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
-      return Response.json({ msg: "Login to continue.", status: 601 });
-    }
+    const isGuest = !user_id || user_id === "guest";
+    const isRealUser = !isGuest;
+    let checkSubscribeStatus = false;
 
-    // Verify user in DB if login check is enabled
-    if (user_id && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
-      const resultsUser = await getUserById(user_id);
-      if (!resultsUser?.email) {
-        return Response.json({ msg: "Login to continue.", status: 601 });
+    if (isGuest) {
+      // Guest Trial Enforcement: Allow up to 2 free test generations per IP without login
+      if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
+        const forwarded = req.headers.get("x-forwarded-for");
+        const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+        const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
+        const GUEST_TRIAL_MAX = 2;
+        const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
+        const guestUsedCount = Number(guestUsedCountStr || 0);
+
+        if (guestUsedCount >= GUEST_TRIAL_MAX) {
+          return Response.json({
+            msg: "You have used your free guest trials (2/2)! Sign in with Google to get daily free credits.",
+            status: 601,
+            guestLimitReached: true,
+          });
+        }
       }
-    }
-
-    const isRealUser = Boolean(user_id && user_id !== "guest");
-    const checkSubscribeStatus = await checkSubscribe(user_id);
-    if (!is_public) {
-      if (!checkSubscribeStatus) {
-        return Response.json({ msg: "Pricing to continue.", status: 602 });
+    } else {
+      // Authenticated User Verification
+      if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
+        const resultsUser = await getUserById(user_id);
+        if (!resultsUser?.email) {
+          return Response.json({ msg: "Login to continue.", status: 601 });
+        }
       }
-    }
 
-    if (!checkSubscribeStatus) {
-      if (isRealUser || process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
-        const check = await checkUserTimes(user_id, creditCost);
-        if (!check) {
+      checkSubscribeStatus = await checkSubscribe(user_id);
+      if (!is_public) {
+        if (!checkSubscribeStatus) {
           return Response.json({ msg: "Pricing to continue.", status: 602 });
+        }
+      }
+
+      if (!checkSubscribeStatus) {
+        if (isRealUser || process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
+          const check = await checkUserTimes(user_id, creditCost);
+          if (!check) {
+            return Response.json({ msg: "Pricing to continue.", status: 602 });
+          }
         }
       }
     }
@@ -223,9 +242,20 @@ export async function POST(req: Request) {
       console.warn("DB insert error in generate/handle:", dbErr);
     }
 
-    if (!checkSubscribeStatus) {
-      if (isRealUser || process.env.NEXT_PUBLIC_CHECK_AVAILABLE_TIME != "0") {
-        await countDownUserTimes(user_id, creditCost);
+    // Track trial for guests or deduct credits for registered users
+    if (isGuest && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
+      const forwarded = req.headers.get("x-forwarded-for");
+      const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+      const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
+      const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
+      const nextCount = Number(guestUsedCountStr || 0) + 1;
+      await setSetting(`guest_trial_${cleanIp}`, String(nextCount)).catch(() => {});
+    }
+
+    if (isRealUser) {
+      const checkSubscribeStatus = await checkSubscribe(user_id);
+      if (!checkSubscribeStatus) {
+        await countDownUserTimes(user_id, creditCost).catch(() => {});
       }
     }
 
