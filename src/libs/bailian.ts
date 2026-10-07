@@ -244,50 +244,22 @@ export async function processBailianTaskInBackground(
         clearInterval(interval);
         const errorMsg = data?.output?.message || 'Bailian generation failed';
         console.error(`[Bailian] Task ${taskId} failed:`, errorMsg);
-        const db = getDb();
-        try {
-          await db.query(
-            'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
-            [errorMsg, uid]
-          );
-        } catch {
-          await db.query(
-            'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
-            [uid]
-          );
-        }
+        const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+        await markWorkFailedAndRefund(uid, errorMsg);
       } else if (attempts >= MAX_ATTEMPTS) {
         clearInterval(interval);
         console.warn(`[Bailian] Task ${taskId} timed out after ${MAX_ATTEMPTS} attempts`);
-        const db = getDb();
-        try {
-          await db.query(
-            'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
-            ['Generation timed out, please try again.', uid]
-          );
-        } catch {
-          await db.query(
-            'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
-            [uid]
-          );
-        }
+        const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+        await markWorkFailedAndRefund(uid, 'Generation timed out, please try again.');
       }
     } catch (err: any) {
       console.warn(`[Bailian] Error polling task ${taskId}:`, err?.message);
       if (attempts >= MAX_ATTEMPTS) {
         clearInterval(interval);
-        const db = getDb();
         try {
-          await db.query(
-            'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
-            ['Generation request failed, please try again.', uid]
-          );
-        } catch {
-          await db.query(
-            'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
-            [uid]
-          );
-        }
+          const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+          await markWorkFailedAndRefund(uid, 'Generation request failed, please try again.');
+        } catch {}
       }
     }
   }, 2500);

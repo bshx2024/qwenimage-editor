@@ -97,17 +97,8 @@ export const GET = async (req: Request) => {
             }
           } else if (taskStatus === 'FAILED' || taskStatus === 'CANCELED') {
             const errorMsg = taskData?.output?.message || 'Bailian generation failed';
-            try {
-              await db.query(
-                'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
-                [errorMsg, uid]
-              );
-            } catch {
-              await db.query(
-                'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
-                [uid]
-              );
-            }
+            const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+            await markWorkFailedAndRefund(uid, errorMsg);
             data.status = 2;
             data.message = errorMsg;
           }

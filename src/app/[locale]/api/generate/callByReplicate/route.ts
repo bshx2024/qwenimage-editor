@@ -14,7 +14,16 @@ export const POST = async (req: Request) => {
 
     const json = await req.json();
     const rawOutput = json.output;
-    console.log("callByReplicate received for uid:", uid, "output:", rawOutput);
+    const taskStatus = json.status;
+    console.log("callByReplicate received for uid:", uid, "status:", taskStatus, "output:", rawOutput);
+
+    // If Replicate explicitly reported failure or canceled
+    if (taskStatus === 'failed' || taskStatus === 'canceled' || json.error) {
+      const errorMsg = json.error || `Replicate task ${taskStatus}`;
+      const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+      await markWorkFailedAndRefund(uid, typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
+      return Response.json({ msg: 200, uid, status: 'failed' });
+    }
 
     // Replicate may return string, array of strings, or object
     const rawList: string[] = Array.isArray(rawOutput)
@@ -22,6 +31,12 @@ export const POST = async (req: Request) => {
       : typeof rawOutput === "string"
       ? [rawOutput]
       : [];
+
+    if (rawList.length === 0 && taskStatus === 'succeeded') {
+      const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+      await markWorkFailedAndRefund(uid, 'No output image generated');
+      return Response.json({ msg: 200, uid, status: 'failed' });
+    }
 
     const output_urls: string[] = [];
 

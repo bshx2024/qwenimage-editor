@@ -14,6 +14,8 @@ import {
   DocumentDuplicateIcon,
   CheckIcon,
   ArrowPathIcon,
+  TrashIcon,
+  ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 
 interface PageComponentProps {
@@ -35,12 +37,52 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
   const [alreadyLoadAll, setAlreadyLoadAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedUid, setCopiedUid] = useState<string | null>(null);
+  const [checkingUid, setCheckingUid] = useState<string | null>(null);
 
   const {
     setShowLoadingModal,
     setShowLoginModal,
     userData,
   } = useCommonContext();
+
+  const handleDeleteWork = async (uid: string) => {
+    if (!window.confirm('Remove this record from your gallery?')) return;
+    try {
+      const res = await fetch('/api/works/updateWork', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid }),
+      });
+      if (res.ok) {
+        setResultInfoList((prev) => prev.filter((item) => item.uid !== uid));
+      }
+    } catch (e) {
+      console.error('Failed to remove creation:', e);
+    }
+  };
+
+  const handleCheckStatus = async (uid: string) => {
+    setCheckingUid(uid);
+    try {
+      const res = await fetch(`/api/works/getResultInfo?uid=${uid}&userId=${userData?.user_id || 'guest'}`);
+      const data = await res.json();
+      if (data.status === 1 && Array.isArray(data.output_url) && data.output_url.length > 0) {
+        setResultInfoList((prev) =>
+          prev.map((item) => (item.uid === uid ? { ...item, ...data, output_url: data.output_url } : item))
+        );
+      } else if (data.status === 2) {
+        setResultInfoList((prev) =>
+          prev.map((item) => (item.uid === uid ? { ...item, status: 2, message: data.message } : item))
+        );
+      } else {
+        alert('Artwork is still processing. Please check again in a moment.');
+      }
+    } catch (e) {
+      console.error('Failed to refresh task status:', e);
+    } finally {
+      setCheckingUid(null);
+    }
+  };
 
   const fetchWorkList = async (page: number) => {
     if (!userData?.user_id) {
@@ -188,15 +230,25 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                     : '';
                   const cleanImgUrl = getCompressionImageLink(rawUrl);
                   const isCopied = copiedUid === file.uid;
+                  const isSuccess = !!cleanImgUrl;
+                  const isPending = !isSuccess && Number(file.status) === 0;
+                  const isFailed = !isSuccess && !isPending;
+                  const isChecking = checkingUid === file.uid;
 
                   return (
                     <div
                       key={file.uid || index}
-                      className="group rounded-2xl border border-slate-800 bg-slate-900/70 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 overflow-hidden flex flex-col"
+                      className={`group rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${
+                        isFailed
+                          ? 'border-amber-500/20 bg-slate-900/60 hover:border-amber-500/40'
+                          : isPending
+                          ? 'border-indigo-500/30 bg-slate-900/70 hover:border-indigo-500/50'
+                          : 'border-slate-800 bg-slate-900/70 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10'
+                      }`}
                     >
                       {/* Image Preview Box */}
                       <div className="relative w-full aspect-square bg-slate-950 overflow-hidden flex items-center justify-center">
-                        {cleanImgUrl ? (
+                        {isSuccess ? (
                           <img
                             src={cleanImgUrl}
                             alt={file.input_text || 'AI Visual Creation'}
@@ -205,34 +257,96 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                             loading="lazy"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
+                        ) : isPending ? (
+                          <div className="flex flex-col items-center justify-center text-center p-6 space-y-2.5">
+                            <ArrowPathIcon
+                              className={`w-9 h-9 text-indigo-400 ${isChecking ? 'animate-spin' : 'animate-pulse'}`}
+                            />
+                            <div className="text-xs font-semibold text-slate-200">Generating Artwork...</div>
+                            <p className="text-[11px] text-slate-400 leading-relaxed max-w-[200px]">
+                              Synthesis in progress. Click to check if it has completed.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => handleCheckStatus(file.uid)}
+                              disabled={isChecking}
+                              className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/90 hover:bg-indigo-600 text-[11px] font-semibold text-white shadow transition-colors disabled:opacity-50"
+                            >
+                              <ArrowPathIcon className={`w-3.5 h-3.5 ${isChecking ? 'animate-spin' : ''}`} />
+                              <span>{isChecking ? 'Checking...' : 'Check Status'}</span>
+                            </button>
+                          </div>
                         ) : (
-                          <div className="flex flex-col items-center justify-center text-slate-600 p-4 text-center">
-                            <PhotoIcon className="w-10 h-10 mb-2 opacity-40" />
-                            <span className="text-xs">Image unavailable</span>
+                          <div className="flex flex-col items-center justify-center text-center p-6 space-y-2">
+                            <ExclamationTriangleIcon className="w-9 h-9 text-amber-400/90" />
+                            <div className="text-xs font-semibold text-slate-200">Generation Failed</div>
+                            <p className="text-[11px] text-emerald-400 font-medium">
+                              Points refunded automatically
+                            </p>
+                            <div className="flex items-center gap-2 pt-2">
+                              <Link
+                                href={getLinkHref(locale, `?prompt=${encodeURIComponent(file.input_text || '')}`)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-200 transition-colors"
+                              >
+                                <SparklesIcon className="w-3.5 h-3.5 text-pink-400" />
+                                <span>Retry</span>
+                              </Link>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteWork(file.uid)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-[11px] font-medium text-red-400 transition-colors"
+                                title="Delete record"
+                              >
+                                <TrashIcon className="w-3.5 h-3.5" />
+                                <span>Remove</span>
+                              </button>
+                            </div>
                           </div>
                         )}
 
                         {/* Top Badges */}
                         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
-                          <span className="px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
-                            {file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
-                          </span>
+                          {isSuccess ? (
+                            <span className="px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
+                              {file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
+                            </span>
+                          ) : isPending ? (
+                            <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 backdrop-blur-md border border-indigo-500/30 text-[10px] font-semibold text-indigo-300 uppercase tracking-wider">
+                              Processing
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-[10px] font-semibold text-amber-300 tracking-wider">
+                              Failed · Refunded
+                            </span>
+                          )}
 
-                          <Link
-                            href={`https://pinterest.com/pin/create/button/?url=${getShareToPinterest(locale, 'sticker/' + file.uid, file.input_text)}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="pointer-events-auto p-1.5 rounded-lg bg-slate-950/80 hover:bg-red-600/90 border border-slate-800 hover:border-red-500 text-slate-300 hover:text-white transition-colors"
-                            title="Share on Pinterest"
-                          >
-                            <span className="w-3.5 h-3.5 block">{pinterestSvg}</span>
-                          </Link>
+                          <div className="flex items-center gap-1.5 pointer-events-auto">
+                            {isSuccess && (
+                              <Link
+                                href={`https://pinterest.com/pin/create/button/?url=${getShareToPinterest(locale, 'sticker/' + file.uid, file.input_text)}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="p-1.5 rounded-lg bg-slate-950/80 hover:bg-red-600/90 border border-slate-800 hover:border-red-500 text-slate-300 hover:text-white transition-colors"
+                                title="Share on Pinterest"
+                              >
+                                <span className="w-3.5 h-3.5 block">{pinterestSvg}</span>
+                              </Link>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteWork(file.uid)}
+                              className="p-1.5 rounded-lg bg-slate-950/80 hover:bg-red-600/90 border border-slate-800 hover:border-red-500 text-slate-400 hover:text-white transition-colors"
+                              title="Delete Creation"
+                            >
+                              <TrashIcon className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Hover Overlay with Quick Actions */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 z-10">
-                          <div className="flex items-center gap-1.5">
-                            {cleanImgUrl && (
+                        {/* Hover Overlay with Quick Actions (Only for Successful Images) */}
+                        {isSuccess && (
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 z-10">
+                            <div className="flex items-center gap-1.5">
                               <a
                                 href={cleanImgUrl}
                                 download={`qwen-${file.uid || 'image'}.png`}
@@ -243,35 +357,35 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                               >
                                 <ArrowDownTrayIcon className="w-4 h-4" />
                               </a>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => copyPrompt(file.input_text, file.uid)}
-                              className="p-2 rounded-xl bg-slate-900/90 hover:bg-purple-600 border border-slate-700/80 text-white transition-colors shadow-lg"
-                              title="Copy Prompt"
-                            >
-                              {isCopied ? (
-                                <CheckIcon className="w-4 h-4 text-emerald-400" />
-                              ) : (
-                                <DocumentDuplicateIcon className="w-4 h-4" />
-                              )}
-                            </button>
+                              <button
+                                type="button"
+                                onClick={() => copyPrompt(file.input_text, file.uid)}
+                                className="p-2 rounded-xl bg-slate-900/90 hover:bg-purple-600 border border-slate-700/80 text-white transition-colors shadow-lg"
+                                title="Copy Prompt"
+                              >
+                                {isCopied ? (
+                                  <CheckIcon className="w-4 h-4 text-emerald-400" />
+                                ) : (
+                                  <DocumentDuplicateIcon className="w-4 h-4" />
+                                )}
+                              </button>
+                              <Link
+                                href={getLinkHref(locale, `?prompt=${encodeURIComponent(file.input_text || '')}`)}
+                                className="p-2 rounded-xl bg-slate-900/90 hover:bg-pink-600 border border-slate-700/80 text-white transition-colors shadow-lg"
+                                title="Re-mix in Studio"
+                              >
+                                <SparklesIcon className="w-4 h-4" />
+                              </Link>
+                            </div>
+
                             <Link
-                              href={getLinkHref(locale, `?prompt=${encodeURIComponent(file.input_text || '')}`)}
-                              className="p-2 rounded-xl bg-slate-900/90 hover:bg-pink-600 border border-slate-700/80 text-white transition-colors shadow-lg"
-                              title="Re-mix in Studio"
+                              href={getLinkHref(locale, `sticker/${file.uid}`)}
+                              className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-[11px] font-semibold text-white transition-colors"
                             >
-                              <SparklesIcon className="w-4 h-4" />
+                              Details →
                             </Link>
                           </div>
-
-                          <Link
-                            href={getLinkHref(locale, `sticker/${file.uid}`)}
-                            className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-[11px] font-semibold text-white transition-colors"
-                          >
-                            Details →
-                          </Link>
-                        </div>
+                        )}
                       </div>
 
                       {/* Card Content & Metadata */}
@@ -286,13 +400,17 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                           <span>{file.created_at ? new Date(file.created_at).toLocaleDateString() : 'Recent'}</span>
                           {isCopied ? (
                             <span className="text-emerald-400 font-sans font-semibold">Prompt Copied!</span>
-                          ) : (
+                          ) : isSuccess ? (
                             <Link
                               href={getLinkHref(locale, `sticker/${file.uid}`)}
                               className="text-indigo-400 hover:text-indigo-300 font-sans"
                             >
                               View →
                             </Link>
+                          ) : isFailed ? (
+                            <span className="text-emerald-400/90 font-sans text-[10px]">Points Refunded</span>
+                          ) : (
+                            <span className="text-indigo-400 font-sans text-[10px]">Processing</span>
                           )}
                         </div>
                       </div>
