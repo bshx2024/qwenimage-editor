@@ -3,7 +3,7 @@ import HeadInfo from "~/components/HeadInfo";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInterval } from "ahooks";
 import { useCommonContext } from "~/context/common-context";
 import { getLinkHref } from "~/configs/buildLink";
@@ -30,9 +30,14 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
     setShowLoginModal,
     setShowPricingModal,
     setShowGeneratingModal,
+    setShowLoadingModal,
     userData,
     refreshUserCredits,
   } = useCommonContext();
+
+  useEffect(() => {
+    setShowLoadingModal(false);
+  }, [setShowLoadingModal]);
 
   // Interactive Live Studio State (Solves P0: Landing = Actionable Tool)
   const [prompt, setPrompt] = useState('Editorial fashion photography of a cybernetic model in silk robe, studio soft rim light, 8k sharp focus');

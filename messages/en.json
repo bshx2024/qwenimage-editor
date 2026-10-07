@@ -11,7 +11,7 @@
     "descriptionBelowH1Text": "Transform, inpaint, and edit photos directly in your browser with Qwen Image Edit 2511 & 2512. No ComfyUI, no local setup, and zero GPU requirements."
   },
   "CommonText": {
-    "loadingText": "Processing image...",
+    "loadingText": "Loading...",
     "generateText": "Editing image...",
     "placeholderText": "Describe edits or prompt (e.g., 'Change background to sunset beach, maintain lighting')...",
     "buttonText": "Apply Edit",

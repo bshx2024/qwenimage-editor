@@ -3,7 +3,7 @@ import HeadInfo from "~/components/HeadInfo";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import { useCommonContext } from "~/context/common-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInterval } from "ahooks";
 import Link from "next/link";
 import { getLinkHref } from "~/configs/buildLink";
@@ -32,9 +32,14 @@ export default function GeneratorPageComponent({
     setShowLoginModal,
     setShowPricingModal,
     setShowGeneratingModal,
+    setShowLoadingModal,
     userData,
     refreshUserCredits,
   } = useCommonContext();
+
+  useEffect(() => {
+    setShowLoadingModal(false);
+  }, [setShowLoadingModal]);
 
   const [prompt, setPrompt] = useState(searchParams?.prompt || '');
   const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16'>('1:1');

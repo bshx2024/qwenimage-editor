@@ -2,6 +2,7 @@
 import {createContext, useContext, useState, useEffect} from "react";
 import {useSession} from "next-auth/react";
 import {useInterval} from "ahooks";
+import {usePathname} from "next/navigation";
 
 
 const CommonContext = createContext(undefined);
@@ -13,6 +14,7 @@ export const CommonProvider = ({
                                  pricingText
                                }) => {
 
+  const pathname = usePathname();
   const {data: session, status} = useSession();
   const [userData, setUserData] = useState<any>({});
   const [intervalUserData, setIntervalUserData] = useState<number | undefined>(1000);
@@ -21,6 +23,13 @@ export const CommonProvider = ({
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [showGeneratingModal, setShowGeneratingModal] = useState(false);
   const [showPricingModal, setShowPricingModal] = useState(false);
+
+  // Automatically dismiss blocking loading modals when page route changes
+  useEffect(() => {
+    setShowLoadingModal(false);
+    setShowGeneratingModal(false);
+  }, [pathname]);
+
 
   const fetchUserCredits = async (uid: string) => {
     if (!uid) return;

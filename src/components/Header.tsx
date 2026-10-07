@@ -32,9 +32,6 @@ export default function Header({
 
   const checkPageAndLoading = (toPage: string) => {
     setMobileMenuOpen(false);
-    if (page !== toPage) {
-      setShowLoadingModal(true);
-    }
   }
 
   return (
