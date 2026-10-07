@@ -559,6 +559,61 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </div>
             </div>
 
+            {/* Related Tools Internal Grid */}
+            <div className="mt-12 pt-8 border-t border-slate-800/80">
+              <div className="text-center mb-6">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  Explore Related Visual AI Tools &amp; Tutorials
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <Link
+                  href={getLinkHref(locale, 'qwen-image-2-1')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-indigo-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-indigo-300 group-hover:text-indigo-200 block mb-1">
+                    Qwen Image 2.1 Online &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    In-browser generative studio with conversational inpainting and 2048px exports.
+                  </p>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'blog/minimax-h3-comfyui-guide-vram-workflow')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-blue-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-blue-300 group-hover:text-blue-200 block mb-1">
+                    MiniMax H3 ComfyUI Guide &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Master SageAttention VRAM tuning, ComfyUI nodes, and clean asset prep.
+                  </p>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-pink-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-pink-300 group-hover:text-pink-200 block mb-1">
+                    Higgsfield Genjutsu Guide &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Master Vid2Vid motion transfer, trend recreation, and ecommerce asset prep.
+                  </p>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'pricing')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-purple-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-purple-300 group-hover:text-purple-200 block mb-1">
+                    Credits &amp; Pricing Plans &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Affordable pay-as-you-go lifetime credits with 100% commercial usage rights.
+                  </p>
+                </Link>
+              </div>
+            </div>
+
           </div>
         </article>
       </main>

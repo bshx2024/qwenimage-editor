@@ -691,7 +691,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                   Explore Related Visual AI Tools &amp; Tutorials
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 <Link
                   href={getLinkHref(locale, 'qwen-image-2-1')}
                   className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-indigo-500/50 transition-all text-left block"
@@ -701,6 +701,17 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
                     In-browser generative studio with conversational inpainting and 2048px exports.
+                  </p>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-pink-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-pink-300 group-hover:text-pink-200 block mb-1">
+                    Higgsfield Genjutsu Guide &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Master Vid2Vid motion transfer, trend recreation, and ecommerce asset prep.
                   </p>
                 </Link>
                 <Link
