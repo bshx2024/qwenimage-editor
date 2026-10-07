@@ -85,6 +85,7 @@ export async function POST(req: Request) {
     const activeProvider = aiSettings.provider;
     let revisedText = textStr;
 
+    let initialOutputUrl = "";
     if (activeProvider === 'bailian' && aiSettings.bailianApiKey) {
       // 1. Dispatch to Alibaba Cloud Bailian (DashScope)
       const bailianTask = await submitBailianTask({
@@ -96,6 +97,10 @@ export async function POST(req: Request) {
         apiKey: aiSettings.bailianApiKey,
         baseUrl: aiSettings.bailianBaseUrl
       });
+
+      if (bailianTask?.taskId) {
+        initialOutputUrl = `bailian:${bailianTask.taskId}`;
+      }
 
       // Save Bailian task ID so serverless getResultInfo can query it reliably
       await setSetting(`bailian_task_${uid}`, bailianTask.taskId).catch(() => {});
@@ -149,7 +154,7 @@ export async function POST(req: Request) {
           [
             uid,
             textStr,
-            "",
+            initialOutputUrl,
             is_public,
             0,
             user_id,
@@ -168,7 +173,7 @@ export async function POST(req: Request) {
           [
             uid,
             textStr,
-            "",
+            initialOutputUrl,
             is_public,
             0,
             user_id,

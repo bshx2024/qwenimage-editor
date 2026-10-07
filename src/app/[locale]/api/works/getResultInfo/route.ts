@@ -47,7 +47,13 @@ export const GET = async (req: Request) => {
   // If work is still pending, poll Bailian task on-demand (essential for serverless runtimes)
   if (data.status === 0 && uid) {
     try {
-      const bailianTaskId = await getSetting(`bailian_task_${uid}`);
+      let bailianTaskId = '';
+      if (typeof data.output_url === 'string' && data.output_url.startsWith('bailian:')) {
+        bailianTaskId = data.output_url.replace('bailian:', '').trim();
+      } else {
+        bailianTaskId = await getSetting(`bailian_task_${uid}`).catch(() => '');
+      }
+
       if (bailianTaskId) {
         const aiSettings = await getAISettings();
         if (aiSettings.provider === 'bailian' && aiSettings.bailianApiKey) {
