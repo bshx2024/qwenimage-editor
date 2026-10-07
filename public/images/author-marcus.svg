@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="avatarBgMarcus" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="faceGradMarcus" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="64" fill="url(#avatarBgMarcus)" />
+  <circle cx="64" cy="64" r="62" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="2" />
+  
+  <!-- Shoulders & Coat -->
+  <path d="M24 118 C24 92, 40 80, 64 80 C88 80, 104 92, 104 118 Z" fill="#0F172A" />
+  <path d="M46 84 L64 102 L82 84 Z" fill="#3B82F6" opacity="0.6" />
+
+  <!-- Neck -->
+  <rect x="56" y="66" width="16" height="18" rx="4" fill="#F59E0B" />
+
+  <!-- Face -->
+  <ellipse cx="64" cy="52" rx="20" ry="23" fill="url(#faceGradMarcus)" />
+
+  <!-- Modern Hair -->
+  <path d="M42 44 C40 24, 52 16, 64 16 C78 16, 88 24, 86 44 C82 36, 72 32, 64 32 C52 32, 46 36, 42 44 Z" fill="#1E293B" />
+  <path d="M40 44 C38 52, 40 64, 44 68 C44 60, 42 50, 44 44 Z" fill="#1E293B" />
+
+  <!-- Eyeglasses -->
+  <rect x="46" y="46" width="14" height="10" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+  <rect x="68" y="46" width="14" height="10" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+  <line x1="60" y1="51" x2="68" y2="51" stroke="#FFFFFF" stroke-width="2" opacity="0.9" />
+
+  <!-- Friendly Expression -->
+  <path d="M57 64 Q64 69 71 64" fill="none" stroke="#92400E" stroke-width="2" stroke-linecap="round" />
+</svg>

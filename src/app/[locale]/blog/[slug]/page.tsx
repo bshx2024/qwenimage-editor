@@ -3,6 +3,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { BLOG_POSTS, getBlogPostBySlug } from '~/content/blogData';
 import BlogPostComponent from './BlogPostComponent';
 import HiggsfieldBlogPostComponent from './HiggsfieldBlogPostComponent';
+import MinimaxH3BlogPostComponent from './MinimaxH3BlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -26,6 +27,10 @@ export default async function BlogPostPage({
 
   if (slug === 'higgsfield-genjutsu-workflow-guide-free-alternatives') {
     return <HiggsfieldBlogPostComponent post={post} locale={locale} />;
+  }
+
+  if (slug === 'minimax-h3-comfyui-guide-vram-workflow') {
+    return <MinimaxH3BlogPostComponent post={post} locale={locale} />;
   }
 
   return <BlogPostComponent post={post} locale={locale} />;

@@ -303,6 +303,14 @@ export default function Footer({
             <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="hover:text-indigo-400 transition-colors">
               Strata Qwen 3.8 Local Inference Guide
             </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')} className="hover:text-indigo-400 transition-colors">
+              Higgsfield Genjutsu Video Guide
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/minimax-h3-comfyui-guide-vram-workflow')} className="hover:text-indigo-400 transition-colors">
+              MiniMax H3 ComfyUI Video Guide
+            </Link>
           </div>
         </div>
       </div>
