@@ -481,14 +481,14 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                   </span>
                 </div>
 
-                <div className="relative w-full aspect-square max-h-[320px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center">
+                <div className="relative w-full min-h-[280px] max-h-[360px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center p-2">
                   {resultImage ? (
                     <img
                       src={resultImage}
                       alt="Photorealistic AI Output Result"
                       width={512}
                       height={512}
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-[340px] object-contain rounded-lg"
                       loading="lazy"
                       decoding="async"
                     />

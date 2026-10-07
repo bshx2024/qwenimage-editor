@@ -84,12 +84,18 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   
   // Resolve valid text2image model on DashScope
   let t2iModel = 'wanx2.1-t2i-turbo';
-  if (model?.includes('plus')) {
+  if (model?.includes('plus') || model?.includes('pro') || model?.includes('3.0')) {
     t2iModel = 'wanx2.1-t2i-plus';
   } else if (model === 'wanx-v1') {
     t2iModel = 'wanx-v1';
   } else {
     t2iModel = 'wanx2.1-t2i-turbo';
+  }
+
+  let finalSize = size || '1024*1024';
+  if (t2iModel === 'wanx-v1') {
+    if (finalSize === '1344*768') finalSize = '1280*720';
+    if (finalSize === '768*1344') finalSize = '720*1280';
   }
 
   let payload: any = {
@@ -98,7 +104,7 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
       prompt: prompt
     },
     parameters: {
-      size: size,
+      size: finalSize,
       n: 1
     }
   };

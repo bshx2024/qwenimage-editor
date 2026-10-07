@@ -20,6 +20,37 @@ export async function POST(req: Request) {
     const imageUrl = json.imageUrl || ""; // Input image for editing
     const taskType = json.taskType || (imageUrl ? "image_edit" : "text2image");
     const requestedModel = String(json.model || "");
+    const aspectRatio = String(json.aspectRatio || "1:1");
+
+    // Compute target dimensions & size string for text-to-image
+    let resolvedSize = "1024*1024";
+    let width = 1024;
+    let height = 1024;
+
+    if (aspectRatio === "16:9") {
+      resolvedSize = "1344*768";
+      width = 1344;
+      height = 768;
+    } else if (aspectRatio === "9:16") {
+      resolvedSize = "768*1344";
+      width = 768;
+      height = 1344;
+    } else if (aspectRatio === "4:3") {
+      resolvedSize = "1152*864";
+      width = 1152;
+      height = 864;
+    } else if (aspectRatio === "3:4") {
+      resolvedSize = "864*1152";
+      width = 864;
+      height = 1152;
+    } else if (json.size) {
+      resolvedSize = String(json.size).replace("x", "*");
+      const parts = resolvedSize.split("*");
+      if (parts.length === 2 && !isNaN(Number(parts[0])) && !isNaN(Number(parts[1]))) {
+        width = Number(parts[0]);
+        height = Number(parts[1]);
+      }
+    }
 
     // Differentiated Credit Deduction:
     // Standard models (wanx2.1-t2i-turbo, wanx2.1-imageedit, wanx2.1-i2i-turbo): 1 Credit
@@ -98,7 +129,8 @@ export async function POST(req: Request) {
         taskType: imageUrl ? "image_edit" : "text2image",
         model: requestedModel || aiSettings.bailianModel || "wanx2.1-t2i-turbo",
         apiKey: aiSettings.bailianApiKey,
-        baseUrl: aiSettings.bailianBaseUrl
+        baseUrl: aiSettings.bailianBaseUrl,
+        size: resolvedSize,
       });
 
       if (bailianTask?.taskId) {
@@ -134,7 +166,7 @@ export async function POST(req: Request) {
         }
       } else {
         // Qwen Image Generator
-        input = await getQwenGeneratorInput(textStr, checkSubscribeStatus);
+        input = await getQwenGeneratorInput(textStr, checkSubscribeStatus, { width, height });
         if (process.env.REPLICATE_API_VERSION) {
           predictionParams.version = process.env.REPLICATE_API_VERSION;
         } else {

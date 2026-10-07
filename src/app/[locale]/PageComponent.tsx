@@ -48,6 +48,7 @@ export default function PageComponent({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
+  const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16'>('1:1');
   const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-i2i-turbo');
   const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('split');
   const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
@@ -128,6 +129,7 @@ export default function PageComponent({
         user_id: userData?.user_id || 'guest',
         is_public: isPublic,
         model: selectedModel,
+        aspectRatio,
       };
 
       if (activeTab === 'edit' && sourceImage) {
@@ -674,6 +676,36 @@ export default function PageComponent({
                         </div>
                       </div>
                     </div>
+
+                    {/* Aspect Ratio Selector (Text2Image Mode) */}
+                    {activeTab === 'generate' && (
+                      <div>
+                        <span className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                          Aspect Ratio
+                        </span>
+                        <div className="grid grid-cols-3 gap-2.5">
+                          {[
+                            { id: '1:1', label: '1:1 Square', icon: '1024×1024' },
+                            { id: '16:9', label: '16:9 Landscape', icon: '1344×768' },
+                            { id: '9:16', label: '9:16 Portrait', icon: '768×1344' },
+                          ].map((ratio) => (
+                            <button
+                              key={ratio.id}
+                              type="button"
+                              onClick={() => setAspectRatio(ratio.id as any)}
+                              className={`rounded-xl border p-2.5 text-left transition-all ${
+                                aspectRatio === ratio.id
+                                  ? 'border-indigo-500 bg-indigo-500/10 text-white shadow-md'
+                                  : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700'
+                              }`}
+                            >
+                              <div className="text-xs font-semibold">{ratio.label}</div>
+                              <div className="text-[10px] text-slate-500 mt-0.5">{ratio.icon}</div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Quick Preset Prompts */}
                     <div>
