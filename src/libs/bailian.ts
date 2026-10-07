@@ -81,8 +81,19 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   
   // Choose endpoint and payload based on task type
   let endpoint = `${cleanBase}/api/v1/services/aigc/text2image/image-synthesis`;
+  
+  // Resolve valid text2image model on DashScope
+  let t2iModel = 'wanx2.1-t2i-turbo';
+  if (model?.includes('plus')) {
+    t2iModel = 'wanx2.1-t2i-plus';
+  } else if (model === 'wanx-v1') {
+    t2iModel = 'wanx-v1';
+  } else {
+    t2iModel = 'wanx2.1-t2i-turbo';
+  }
+
   let payload: any = {
-    model: model || 'wanx2.1-t2i-turbo',
+    model: t2iModel,
     input: {
       prompt: prompt
     },
@@ -95,22 +106,20 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   // If input image is provided (Image Edit)
   if (taskType === 'image_edit' && imageUrl) {
     endpoint = `${cleanBase}/api/v1/services/aigc/image2image/image-synthesis`;
-    let editModel = 'wanx2.1-i2i-turbo';
-    if (model?.includes('imageedit')) {
-      editModel = 'wanx2.1-imageedit';
-    } else if (model?.includes('qwen-image')) {
-      editModel = model;
-    } else if (model?.includes('plus')) {
-      editModel = 'wanx2.1-i2i-plus';
-    } else if (model?.includes('i2i')) {
-      editModel = model;
+    
+    // Normalize image URL: if relative path, prepend public site domain
+    let finalImageUrl = imageUrl;
+    if (finalImageUrl.startsWith('/')) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com';
+      finalImageUrl = `${siteUrl.replace(/\/+$/, '')}${finalImageUrl}`;
     }
 
     payload = {
-      model: editModel,
+      model: 'wanx2.1-imageedit',
       input: {
+        function: 'description_edit',
         prompt: prompt,
-        image_url: imageUrl
+        base_image_url: finalImageUrl
       },
       parameters: {
         n: 1
@@ -244,11 +253,35 @@ export async function processBailianTaskInBackground(
       } else if (attempts >= MAX_ATTEMPTS) {
         clearInterval(interval);
         console.warn(`[Bailian] Task ${taskId} timed out after ${MAX_ATTEMPTS} attempts`);
+        const db = getDb();
+        try {
+          await db.query(
+            'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
+            ['Generation timed out, please try again.', uid]
+          );
+        } catch {
+          await db.query(
+            'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
+            [uid]
+          );
+        }
       }
     } catch (err: any) {
       console.warn(`[Bailian] Error polling task ${taskId}:`, err?.message);
       if (attempts >= MAX_ATTEMPTS) {
         clearInterval(interval);
+        const db = getDb();
+        try {
+          await db.query(
+            'UPDATE works SET status = 2, message = $1, updated_at = NOW() WHERE uid = $2',
+            ['Generation request failed, please try again.', uid]
+          );
+        } catch {
+          await db.query(
+            'UPDATE works SET status = 2, updated_at = NOW() WHERE uid = $1',
+            [uid]
+          );
+        }
       }
     }
   }, 2500);

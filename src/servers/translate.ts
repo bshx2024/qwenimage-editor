@@ -34,6 +34,10 @@ export const translateContent = async (userContent: string, to: string) => {
     }
   }
 
+  if (!apiKey) {
+    return userContent;
+  }
+
   // console.log('requestBody->>>>', body);
   const translateResult = await fetch(`${baseUrl}/v1/chat/completions`, {
     method: 'POST',
@@ -43,25 +47,25 @@ export const translateContent = async (userContent: string, to: string) => {
       authorization: `Bearer ${apiKey}`
     }
   })
-    .then(v => v.json()).catch(err => console.log(err)) || undefined;
-  // console.log('translateResult->>>>', translateResult);
+    .then(v => v.json()).catch(err => {
+      console.warn('translateContent error:', err);
+      return undefined;
+    });
+
   if (!translateResult) {
     return userContent;
   }
 
-  // console.log('translateResult.choices[0].message-->>>>', translateResult.choices[0].message);
-  // console.log('translateResult.choices[0].message?.content-->>>>', translateResult.choices[0].message?.content);
   let translateResultText = userContent;
   try {
-    if (translateResult?.choices[0]?.message?.content) {
-      translateResultText = JSON.parse(translateResult?.choices[0]?.message?.content).text || '';
+    if (translateResult?.choices?.[0]?.message?.content) {
+      translateResultText = JSON.parse(translateResult.choices[0].message.content).text || '';
     }
     return translateResultText;
   } catch (e) {
     console.log(e);
     return userContent;
   }
-
 }
 
 

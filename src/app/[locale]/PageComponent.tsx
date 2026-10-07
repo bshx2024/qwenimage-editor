@@ -159,6 +159,10 @@ export default function PageComponent({
       if (result.uid) {
         setUid(result.uid);
         setIntervalResultInfo(3000);
+      } else {
+        setIsProcessing(false);
+        setShowGeneratingModal(false);
+        alert(result.error || result.msg || 'Generation failed, please try again.');
       }
     } catch (err) {
       console.error('Generate failed:', err);
@@ -181,6 +185,11 @@ export default function PageComponent({
           const out = Array.isArray(info.output_url) ? info.output_url[0] : info.output_url;
           setCurrentResultImage(out);
         }
+      } else if (info.status === 2) {
+        setShowGeneratingModal(false);
+        setIsProcessing(false);
+        setIntervalResultInfo(undefined);
+        alert(info.message || 'Generation failed, please try again.');
       }
     } catch (e) {
       // Continue polling

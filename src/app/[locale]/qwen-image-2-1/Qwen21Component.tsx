@@ -91,6 +91,10 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
       if (data.uid) {
         setUid(data.uid);
         setPollInterval(3000);
+      } else {
+        setIsGenerating(false);
+        setShowGeneratingModal(false);
+        alert(data.error || data.msg || 'Generation failed, please try again.');
       }
     } catch (e) {
       console.error(e);
@@ -112,6 +116,11 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
           const out = Array.isArray(data.output_url) ? data.output_url[0] : data.output_url;
           setResultImage(out);
         }
+      } else if (data.status === 2) {
+        setShowGeneratingModal(false);
+        setIsGenerating(false);
+        setPollInterval(undefined);
+        alert(data.message || 'Generation failed, please try again.');
       }
     } catch (e) {
       // polling

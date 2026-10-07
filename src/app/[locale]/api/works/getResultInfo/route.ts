@@ -46,6 +46,7 @@ export const GET = async (req: Request) => {
   result.user_id = data.user_id;
   result.uid = data.uid;
   result.revised_text = data.revised_text;
+  result.message = data.message || '';
 
   return Response.json(result);
 }
