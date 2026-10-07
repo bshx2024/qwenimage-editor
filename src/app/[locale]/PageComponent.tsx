@@ -763,7 +763,34 @@ export default function PageComponent({
 
                   {/* Preview Canvas */}
                   <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 min-h-[380px] flex flex-col justify-center items-center relative overflow-hidden group">
-                    {currentResultImage ? (
+                    {isProcessing ? (
+                      <div className="w-full min-h-[360px] flex flex-col items-center justify-center p-8 text-center relative overflow-hidden rounded-xl border border-indigo-500/20 bg-slate-900/40 backdrop-blur-sm">
+                        {/* Animated laser scanning line */}
+                        <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#22d3ee] animate-pulse" />
+                        
+                        {/* Glowing Neural Ring */}
+                        <div className="relative mb-5 flex items-center justify-center">
+                          <div className="w-20 h-20 rounded-full border-2 border-indigo-500/30 border-t-cyan-400 animate-spin" />
+                          <SparklesIcon className="w-8 h-8 text-indigo-400 absolute animate-pulse" />
+                        </div>
+
+                        <h4 className="text-base font-bold text-white mb-1.5 flex items-center gap-2">
+                          <span>Synthesizing AI Image...</span>
+                          <span className="flex h-2 w-2 relative">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                          </span>
+                        </h4>
+                        <p className="text-xs text-slate-400 max-w-sm mb-4">
+                          Running Qwen & Wanx 2.1 neural diffusion. Texture rendering and upscale will automatically display here.
+                        </p>
+
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] font-mono text-cyan-300">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                          Estimated ~6–10s · Processing in Cloud GPU
+                        </div>
+                      </div>
+                    ) : currentResultImage ? (
                       <div className="w-full flex flex-col items-center">
                         {comparisonMode === 'split' && activeTab === 'edit' ? (
                           <div className="w-full">
