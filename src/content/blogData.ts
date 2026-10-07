@@ -72,8 +72,8 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'minimax-h3-comfyui-guide-vram-workflow',
     // Strict 54 chars (50-60 chars safety range, zero SERP truncation)
     title: 'MiniMax H3 ComfyUI Guide: Video Workflows & VRAM Tuning',
-    // Strict 153 chars (140-160 range, 100% intent coverage with CTA)
-    description: 'Master MiniMax H3 (Hailuo 3.0) in ComfyUI. Learn SageAttention memory tuning, T2V/I2V video workflows, prompt formulas, and clean asset prep without VRAM OOM.',
+    // Strict 154 chars (140-160 range, 100% token coverage for 'minimax h3 comfyui guide' + 'workflow')
+    description: 'Master MiniMax H3 in ComfyUI with this video workflow guide. Learn SageAttention VRAM tuning, T2V and I2V prompt nodes, and clean asset prep without VRAM OOM.',
     date: '2026-10-07',
     readTime: '10 min read',
     category: 'Generative Video & Workflows',
@@ -84,12 +84,12 @@ export const BLOG_POSTS: BlogPost[] = [
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, memory-efficient attention kernels, and asset prep workflows.',
     },
     keywords: [
-      'minimax h3',
-      'minimax h3 comfyui',
+      'minimax h3 comfyui guide',
+      'minimax h3 comfyui workflow',
+      'minimax h3 i2v workflow',
       'minimax h3 mem eff sage attention patch',
+      'minimax h3 prompt guide',
       'hailuo 3.0',
-      'minimax h3 workflow',
-      'minimax h3 prompt',
       'qwen image editor',
     ],
   },

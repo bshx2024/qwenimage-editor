@@ -397,7 +397,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
             {/* Section 1: Hardware Realities & Memory Breakdown */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              Hardware Requirements: Can I Run MiniMax H3 Locally?
+              MiniMax H3 ComfyUI Setup Guide: Hardware Requirements &amp; VRAM Limits
             </h2>
             <p>
               The emergence of <strong>MiniMax H3 (Hailuo 3.0)</strong> marks a paradigm shift in open-weights video generation. Unlike legacy generative models that require downstream audio synthesizers, H3 processes joint audio-visual latents in a single neural forward pass. However, uncompressed weights present unprecedented memory footprints.
@@ -455,7 +455,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
             {/* Section 2: Fixing CUDA Out of Memory with SageAttention */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              Fixing ComfyUI CUDA Out of Memory (OOM) Errors in MiniMax H3
+              MiniMax H3 ComfyUI SageAttention Guide: Fixing CUDA OOM on 24GB GPUs
             </h2>
             <p>
               When initializing the MiniMax H3 sampler node on an RTX 3090 or RTX 4090, creators frequently encounter the fatal error:
@@ -491,7 +491,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
             {/* Section 3: The Golden Rule of I2V - Upstream Asset Preparation */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              The Golden Rule of I2V: Asset Preprocessing with Qwen Image Editor
+              MiniMax H3 ComfyUI I2V Workflow Guide: Source Asset Preprocessing with Qwen
             </h2>
             <p>
               In generative video production, the <strong>Garbage In, Garbage Out (GIGO) principle</strong> is absolute. While MiniMax H3 excels at physics simulation, temporal continuity, and fluid camera trajectories, it <em>cannot repair defects in your source frame</em>.
@@ -533,7 +533,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
             {/* Section 4: MiniMax H3 Prompt Formula */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              MiniMax H3 Prompt Engineering: Two-Stage Audio-Visual Syntax
+              MiniMax H3 ComfyUI Prompt Guide: Two-Stage Audio-Visual Syntax
             </h2>
             <p>
               Because MiniMax H3 (Hailuo 3.0) synthesizes sound and video concurrently, traditional Midjourney-style descriptive prompts underperform. High-converting prompts adhere to a <strong>two-stage syntax formula</strong>: Visual Motion Vectors followed by Audio Ambience Cues.
@@ -557,7 +557,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
             {/* Section 5: Step-by-Step Production Guide */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              Complete Production Workflow in 3 Simple Steps
+              Step-by-Step MiniMax H3 ComfyUI Workflow Production Guide
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
               <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2 text-xs">
