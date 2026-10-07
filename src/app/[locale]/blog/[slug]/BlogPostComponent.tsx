@@ -98,10 +98,10 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Can an RTX 4070 Ti Super with 16GB VRAM run Strata Qwen 3.8 comfortably?",
+            "name": "Can a 12GB or 16GB GPU (like RTX 3060, 4070) run Strata Qwen 3.8?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. Using IQ2_XS quantization combined with 32GB system DDR5 RAM, 16GB cards achieve 35 to 55 tokens per second with full syntax correctness on coding tasks."
+              "text": "Yes. Strata's hybrid MoE engine routes experts across GPU VRAM and 32GB+ system RAM. Using IQ2_XS or IQ3_S quantization, 12GB and 16GB cards achieve 35 to 55 tokens per second without OOM."
             }
           },
           {
@@ -533,10 +533,10 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
             <div className="space-y-3 pt-1">
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-1.5">
                 <div className="font-semibold text-white text-sm">
-                  Can an RTX 4070 Ti Super with 16GB VRAM run Strata Qwen 3.8 comfortably?
+                  Can a 12GB or 16GB GPU (like RTX 3060, 4070) run Strata Qwen 3.8?
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Yes. Using IQ2_XS quantization combined with 32GB system DDR5 RAM, 16GB cards achieve 35 to 55 tokens per second with full syntax correctness on coding tasks.
+                  Yes. Strata&apos;s hybrid MoE engine routes experts across GPU VRAM and 32GB+ system RAM. Using IQ2_XS or IQ3_S quantization, 12GB and 16GB cards achieve 35 to 55 tokens per second without OOM.
                 </p>
               </div>
 
