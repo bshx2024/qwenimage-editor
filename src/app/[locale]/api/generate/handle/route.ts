@@ -7,7 +7,7 @@ import { getDb } from "~/libs/db";
 import { getLanguage } from "~/servers/language";
 import { checkSubscribe } from "~/servers/subscribe";
 import { checkSensitiveInputText } from "~/servers/checkInput";
-import { getAISettings } from "~/servers/keyValue";
+import { getAISettings, setSetting } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
 import { scanPromptSafety } from "~/servers/contentSafety";
 
@@ -97,7 +97,10 @@ export async function POST(req: Request) {
         baseUrl: aiSettings.bailianBaseUrl
       });
 
-      // Poll in background and update works table upon completion
+      // Save Bailian task ID so serverless getResultInfo can query it reliably
+      await setSetting(`bailian_task_${uid}`, bailianTask.taskId).catch(() => {});
+
+      // Poll in background (best-effort if runtime allows)
       processBailianTaskInBackground(
         uid,
         bailianTask.taskId,
