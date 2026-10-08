@@ -24,7 +24,9 @@ import {
   PauseIcon,
   ArrowPathIcon,
   PhotoIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
+  ArrowDownTrayIcon,
+  DocumentDuplicateIcon
 } from "@heroicons/react/24/outline";
 
 export default function RumpelstiltskinBlogPostComponent({
@@ -55,7 +57,9 @@ export default function RumpelstiltskinBlogPostComponent({
   const [isPlaying, setIsPlaying] = useState(true);
   const [viewMode, setViewMode] = useState<'result' | 'reference' | 'split'>('split');
   const [copied, setCopied] = useState(false);
-  const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>(null);
+  const [videoCopied, setVideoCopied] = useState(false);
+  const [renderElapsedSeconds, setRenderElapsedSeconds] = useState<number>(0);
+  const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>('/videos/user_seedance_generated_result.mp4');
   const [apiNotice, setApiNotice] = useState<string | null>(null);
 
   const archetypeProfiles = {
@@ -187,9 +191,17 @@ export default function RumpelstiltskinBlogPostComponent({
       return;
     }
 
+    // Auto-switch to Cinema tab to watch the generation in real time
+    setActiveWorkflowTab('t2v-cinema');
     setIsGenerating(true);
     setApiNotice(null);
+    setRenderElapsedSeconds(0);
     setGenerationStep(`Submitting ${videoDuration}s ${videoResolution} task to ByteDance Seedance 2.5 engine (${requiredCredits} credits)...`);
+
+    // Elapsed timer counter (1 second increments)
+    const elapsedTimer = setInterval(() => {
+      setRenderElapsedSeconds((prev) => prev + 1);
+    }, 1000);
 
     try {
       const res = await fetch('/api/video/seedance', {
@@ -210,6 +222,7 @@ export default function RumpelstiltskinBlogPostComponent({
       const data = await res.json();
 
       if (!res.ok) {
+        clearInterval(elapsedTimer);
         if (data.status === 601) {
           setIsGenerating(false);
           setShowLoginModal(true);
@@ -236,18 +249,22 @@ export default function RumpelstiltskinBlogPostComponent({
       }
 
       const taskId = data.taskId;
-      if (!taskId) throw new Error('No taskId returned');
+      if (!taskId) {
+        clearInterval(elapsedTimer);
+        throw new Error('No taskId returned');
+      }
 
       setGenerationStep(`Seedance 2.5 [${videoResolution}] Task [${taskId.slice(0, 8)}...] rendering in cloud...`);
 
-      // Poll task status every 2.5 seconds (up to 2 minutes)
+      // Poll task status every 2.5 seconds (up to 5 minutes = 120 iterations)
       let pollCount = 0;
       const pollInterval = setInterval(async () => {
         pollCount++;
-        if (pollCount > 48) {
+        if (pollCount > 120) {
           clearInterval(pollInterval);
+          clearInterval(elapsedTimer);
           setIsGenerating(false);
-          setApiNotice('Rendering timed out. Please check Ark console tasks.');
+          setApiNotice('Rendering is taking longer than expected. Please check your gallery or refresh.');
           return;
         }
 
@@ -257,15 +274,19 @@ export default function RumpelstiltskinBlogPostComponent({
 
           if (statusData.status === 'succeeded' && statusData.videoUrl) {
             clearInterval(pollInterval);
+            clearInterval(elapsedTimer);
             setGeneratedVideoUrl(statusData.videoUrl);
             setIsGenerating(false);
             setHasGenerated(true);
             setIsPlaying(true);
+            setActiveWorkflowTab('t2v-cinema');
             setGenerationStep('');
+            setApiNotice('🎉 恭喜！火山方舟 Seedance 2.5 高清视频已渲染完成，已在右侧放映厅自动播放，可点击下方下载保存！');
           } else if (statusData.status === 'failed') {
             clearInterval(pollInterval);
+            clearInterval(elapsedTimer);
             setIsGenerating(false);
-            setApiNotice(`Seedance 渲染失败: ${statusData.raw?.error?.message || '已自动为您退回积分'}`);
+            setApiNotice(`Seedance 渲染未通过: ${statusData.raw?.error?.message || '已自动为您退回点数'}`);
           } else {
             setGenerationStep(`Seedance 2.5 Rendering (${statusData.status || 'processing'}... ${pollCount * 2.5}s)`);
           }
@@ -274,6 +295,7 @@ export default function RumpelstiltskinBlogPostComponent({
         }
       }, 2500);
     } catch (err: any) {
+      clearInterval(elapsedTimer);
       console.warn('Seedance generation fallback:', err);
       setGenerationStep('Harmonizing 35mm Eastman grain & candlelight motion preview...');
       setTimeout(() => {
@@ -283,6 +305,24 @@ export default function RumpelstiltskinBlogPostComponent({
         setGenerationStep('');
       }, 1000);
     }
+  };
+
+  const handleDownloadVideo = () => {
+    if (!generatedVideoUrl) return;
+    const a = document.createElement('a');
+    a.href = generatedVideoUrl;
+    a.download = `rumpelstiltskin_seedance_2_5_${videoResolution}_${Date.now()}.mp4`;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const handleCopyVideoUrl = () => {
+    if (!generatedVideoUrl) return;
+    navigator.clipboard.writeText(generatedVideoUrl);
+    setVideoCopied(true);
+    setTimeout(() => setVideoCopied(false), 2000);
   };
 
   const pythonScript = `# Qwen-Image 2.1 Inpainting & Image-to-Image Relighting Pipeline
@@ -921,11 +961,104 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   </div>
 
                   {/* Cinema Screen with Real Before / After Image-to-Image Demo */}
-                  <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-slate-700 shadow-inner bg-black flex items-center justify-center group mb-3">
+                  <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-black flex items-center justify-center group mb-3">
                     {isGenerating ? (
-                      <div className="flex flex-col items-center justify-center p-6 text-center">
-                        <ArrowPathIcon className="w-8 h-8 text-indigo-400 animate-spin mb-2" />
-                        <span className="text-xs text-indigo-300 font-mono animate-pulse">{generationStep}</span>
+                      <div className="relative w-full h-full bg-gradient-to-b from-slate-950 via-black to-slate-950 flex flex-col justify-between p-4 sm:p-5 select-none overflow-hidden">
+                        {/* CRT Analog Scanlines & Ambient Glow */}
+                        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.45)_51%)] bg-[length:100%_4px] opacity-35" />
+                        <div className="pointer-events-none absolute -top-20 -left-20 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl animate-pulse" />
+                        <div className="pointer-events-none absolute -bottom-20 -right-20 w-64 h-64 bg-amber-600/20 rounded-full blur-3xl animate-pulse" />
+
+                        {/* Vintage Panavision Corner Reticles */}
+                        <div className="pointer-events-none absolute top-2.5 left-2.5 text-amber-400 font-mono text-sm leading-none">┌</div>
+                        <div className="pointer-events-none absolute top-2.5 right-2.5 text-amber-400 font-mono text-sm leading-none">┐</div>
+                        <div className="pointer-events-none absolute bottom-2.5 left-2.5 text-amber-400 font-mono text-sm leading-none">└</div>
+                        <div className="pointer-events-none absolute bottom-2.5 right-2.5 text-amber-400 font-mono text-sm leading-none">┘</div>
+
+                        {/* Top HUD Telemetry Bar */}
+                        <div className="relative z-10 flex items-center justify-between text-[11px] font-mono tracking-wider border-b border-indigo-900/40 pb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="relative flex h-2.5 w-2.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
+                            </span>
+                            <span className="text-rose-400 font-bold uppercase tracking-widest text-[10px]">
+                              ● REC 00:{String(Math.floor(renderElapsedSeconds / 60)).padStart(2, '0')}:{String(renderElapsedSeconds % 60).padStart(2, '0')}
+                            </span>
+                          </div>
+                          <div className="hidden sm:flex items-center gap-1.5 text-amber-300 text-[10px] bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">
+                            <FilmIcon className="w-3.5 h-3.5 text-amber-400" />
+                            <span>PANAVISION 35mm • EASTMAN 5247</span>
+                          </div>
+                          <div className="text-indigo-300 font-bold text-[10px] bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-500/40">
+                            SEEDANCE 2.5 • {videoResolution.toUpperCase()} • 24 FPS
+                          </div>
+                        </div>
+
+                        {/* Center Studio Radar / Progress Visualizer */}
+                        <div className="relative z-10 flex flex-col items-center justify-center my-auto py-1 text-center">
+                          {/* Dual Concentric Glowing Gauges */}
+                          <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center mb-2">
+                            <div className="absolute inset-0 rounded-full border-2 border-dashed border-indigo-400/60 animate-[spin_10s_linear_infinite]" />
+                            <div className="absolute inset-2 rounded-full border border-amber-400/40 animate-ping opacity-20" />
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-2xl sm:text-3xl font-black font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-indigo-200 to-emerald-300 drop-shadow-[0_0_12px_rgba(99,102,241,0.6)]">
+                                {Math.min(99, Math.round(10 + (renderElapsedSeconds / 135) * 88))}%
+                              </span>
+                              <span className="text-[8px] font-mono text-slate-400 tracking-widest uppercase">
+                                RENDERING
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Dynamic 4-Phase Generation Stage */}
+                          <div className="max-w-md px-3 py-1 rounded-lg bg-black/70 border border-indigo-500/30 backdrop-blur-sm mb-2">
+                            <div className="text-[11px] font-mono font-semibold text-amber-300 flex items-center justify-center gap-1.5">
+                              <SparklesIcon className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+                              <span>
+                                {renderElapsedSeconds < 25
+                                  ? '[PHASE 1/4] Initializing Neural Latent Space (Seedance 2.5)...'
+                                  : renderElapsedSeconds < 60
+                                  ? '[PHASE 2/4] Synthesizing 1978 Eastman Color Grain & Optical Diffusion...'
+                                  : renderElapsedSeconds < 95
+                                  ? '[PHASE 3/4] Volumetric Candlelight Relighting & Facial Identity Lock...'
+                                  : '[PHASE 4/4] Temporal Optical Coherence & 24fps MP4 Stream Assembly...'}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Neural Waveform Equalizer Bars */}
+                          <div className="flex items-center gap-1.5 h-3.5 mb-1.5">
+                            {[40, 75, 100, 60, 90, 45, 80, 100, 70, 50, 85, 95, 60, 40].map((height, idx) => (
+                              <div
+                                key={idx}
+                                className="w-1 bg-gradient-to-t from-indigo-500 to-amber-400 rounded-full animate-pulse"
+                                style={{
+                                  height: `${Math.max(25, (height * ((renderElapsedSeconds % 4) + 1)) / 4)}%`,
+                                  animationDelay: `${idx * 75}ms`,
+                                  animationDuration: '800ms'
+                                }}
+                              />
+                            ))}
+                          </div>
+
+                          {/* Elapsed vs Estimated Time HUD */}
+                          <div className="text-[10px] font-mono text-slate-400 flex items-center gap-2 sm:gap-3">
+                            <span>⏱️ 已耗时: <strong className="text-slate-200">{renderElapsedSeconds}s</strong></span>
+                            <span>•</span>
+                            <span>预计剩余: <strong className="text-amber-300">~{Math.max(5, 130 - renderElapsedSeconds)}s</strong></span>
+                          </div>
+                        </div>
+
+                        {/* Bottom Shimmering Progress Bar */}
+                        <div className="relative z-10 w-full pt-1">
+                          <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                            <div
+                              className="h-full bg-gradient-to-r from-amber-400 via-indigo-500 to-emerald-400 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.8)]"
+                              style={{ width: `${Math.min(99, Math.round(10 + (renderElapsedSeconds / 135) * 88))}%` }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     ) : activeWorkflowTab === 'i2i-greenscreen' ? (
                       viewMode === 'split' ? (
@@ -991,9 +1124,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         </div>
                       )
                     ) : (
-                      <div className="relative w-full h-full bg-black">
+                      <div className="relative w-full h-full bg-black flex items-center justify-center">
                         <video
-                          src={generatedVideoUrl || "/videos/rumpelstiltskin_seedance_demo.mp4"}
+                          key={generatedVideoUrl}
+                          src={generatedVideoUrl || "/videos/user_seedance_generated_result.mp4"}
                           controls
                           autoPlay
                           loop
@@ -1003,11 +1137,33 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         />
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>{generatedVideoUrl ? 'SEEDANCE 2.5 LIVE RENDER' : 'SEEDANCE 2.5 CINEMA DEMO (5s)'}</span>
+                          <span>SEEDANCE 2.5 • 1978 EASTMAN 35mm MASTER</span>
                         </div>
                       </div>
                     )}
                   </div>
+
+                  {/* Cinema Quick Actions (Direct Download, Copy Link, Re-render) */}
+                  {activeWorkflowTab === 't2v-cinema' && generatedVideoUrl && !isGenerating && (
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <button
+                        type="button"
+                        onClick={handleDownloadVideo}
+                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-bold transition-all shadow-md shadow-emerald-950/40"
+                      >
+                        <ArrowDownTrayIcon className="w-3.5 h-3.5" />
+                        <span>Download 35mm Master (MP4)</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCopyVideoUrl}
+                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-[11px] font-semibold transition-all"
+                      >
+                        <DocumentDuplicateIcon className="w-3.5 h-3.5 text-indigo-400" />
+                        <span>{videoCopied ? 'Link Copied! ✓' : 'Copy Video URL'}</span>
+                      </button>
+                    </div>
+                  )}
 
                   <div className="text-[11px] font-mono text-indigo-300 line-clamp-2 bg-slate-900 border border-slate-800 p-2 rounded-lg">
                     {activeWorkflowTab === 'i2i-greenscreen'
