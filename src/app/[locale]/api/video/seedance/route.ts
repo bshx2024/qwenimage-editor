@@ -4,17 +4,45 @@ import { getDb } from "~/libs/db";
 import { checkUserTimes, countDownUserTimes, refundUserTimes, markWorkFailedAndRefund } from "~/servers/manageUserTimes";
 import { checkSubscribe } from "~/servers/subscribe";
 
-const ARK_BASE_URL = process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3";
-const ARK_API_KEY = process.env.ARK_API_KEY;
-const DEFAULT_MODEL = process.env.ARK_SEEDANCE_MODEL === "doubao-seedance-2-5" 
-  ? "doubao-seedance-2-5-260628" 
-  : (process.env.ARK_SEEDANCE_MODEL || "doubao-seedance-2-5-260628");
+/**
+ * Dynamically resolves Ark API Key and configuration with multi-layer fallbacks
+ */
+function getArkConfig() {
+  let apiKey = process.env.ARK_API_KEY;
+  let baseUrl = process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3";
+  let model = process.env.ARK_SEEDANCE_MODEL || "doubao-seedance-2-5-260628";
 
-const RESOLUTION_CREDIT_MAP: Record<string, number> = {
-  "480p": 20,
-  "720p": 50,
-  "1080p": 90,
-};
+  // Dynamic fallback 1: read directly from .env.local if local Node process was started before file edit
+  if (!apiKey && typeof process !== "undefined") {
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const envLocal = path.join(process.cwd(), ".env.local");
+      if (fs.existsSync(envLocal)) {
+        const text = fs.readFileSync(envLocal, "utf8");
+        const keyMatch = text.match(/^\s*ARK_API_KEY\s*=\s*(.+)$/m);
+        if (keyMatch && keyMatch[1]) apiKey = keyMatch[1].trim();
+        const baseMatch = text.match(/^\s*ARK_BASE_URL\s*=\s*(.+)$/m);
+        if (baseMatch && baseMatch[1]) baseUrl = baseMatch[1].trim();
+        const modelMatch = text.match(/^\s*ARK_SEEDANCE_MODEL\s*=\s*(.+)$/m);
+        if (modelMatch && modelMatch[1]) model = modelMatch[1].trim();
+      }
+    } catch (e) {}
+  }
+
+  // Support alternative environment variable names
+  if (!apiKey) {
+    apiKey = process.env.VOLCENGINE_ARK_API_KEY || process.env.NEXT_PUBLIC_ARK_API_KEY;
+  }
+
+  if (model === "doubao-seedance-2-5") {
+    model = "doubao-seedance-2-5-260628";
+  } else if (model === "doubao-seedance-2-0") {
+    model = "doubao-seedance-2-0-260128";
+  }
+
+  return { apiKey, baseUrl, model };
+}
 
 /**
  * POST: Create video generation task with Volcengine Ark Seedance & Deduct Credits
@@ -26,6 +54,7 @@ export async function POST(req: NextRequest) {
   let isSubscribed = false;
 
   try {
+    const arkConfig = getArkConfig();
     const body = await req.json();
     let {
       prompt,
@@ -34,7 +63,7 @@ export async function POST(req: NextRequest) {
       duration = 5,
       resolution = "720p",
       userId,
-      model = DEFAULT_MODEL,
+      model = arkConfig.model,
     } = body;
 
     // Resolve short aliases to official full Ark model version IDs
@@ -88,7 +117,7 @@ export async function POST(req: NextRequest) {
             error: "INSUFFICIENT_CREDITS",
             status: 602,
             creditCost,
-            message: `Rendering ${resolution} video requires ${creditCost} credits. Please top up your balance.`,
+            message: `Rendering ${durSec}s ${resolution} video requires ${creditCost} credits. Please top up your balance.`,
           },
           { status: 402 }
         );
@@ -105,14 +134,14 @@ export async function POST(req: NextRequest) {
       await db.query(
         `INSERT INTO works (uid, input_text, output_url, is_public, status, user_id, revised_text, is_origin, origin_language, current_language, input_image_url, task_type)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-        [workUid, prompt, "", 1, 0, userId, resolution, 1, "en", "en", imageUrl || "", "video_seedance_2_5"]
+        [workUid, prompt, "", 1, 0, userId, resolution, 1, "en", "en", imageUrl || "", isMotionMimic ? "video_motion_mimic" : "video_seedance_2_5"]
       );
     } catch (dbErr: any) {
       console.warn("Works DB insert notice:", dbErr?.message);
     }
 
     // 3. Check ARK_API_KEY
-    if (!ARK_API_KEY) {
+    if (!arkConfig.apiKey) {
       // Refund credits if server environment is not configured
       if (deductedUserId && !isSubscribed) {
         await refundUserTimes(deductedUserId, creditCost);
@@ -120,7 +149,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: "ARK_API_KEY_NOT_CONFIGURED",
-          message: "火山方舟 ARK_API_KEY 未在 .env.local 中配置。请先在服务器环境变量中填入密钥。",
+          message: "火山方舟 ARK_API_KEY 未在 .env.local 或 Vercel 环境变量中配置。请先配置密钥。",
         },
         { status: 400 }
       );
@@ -174,11 +203,11 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    let arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
+    let arkResponse = await fetch(`${arkConfig.baseUrl}/contents/generations/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ARK_API_KEY}`,
+        Authorization: `Bearer ${arkConfig.apiKey}`,
       },
       body: JSON.stringify({
         model,
@@ -192,15 +221,16 @@ export async function POST(req: NextRequest) {
       const initialErr = await arkResponse.text();
       if (initialErr.includes("SensitiveContentDetected") || initialErr.includes("real person")) {
         console.warn("[Ark Seedance Note] Privacy filter flagged input image, falling back to pure text-to-video generation...");
-        arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
+        arkResponse = await fetch(`${arkConfig.baseUrl}/contents/generations/tasks`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${ARK_API_KEY}`,
+            Authorization: `Bearer ${arkConfig.apiKey}`,
           },
           body: JSON.stringify({
             model,
             content: [{ type: "text", text: prompt }],
+            duration: durSec,
           }),
         });
       } else {
@@ -259,11 +289,12 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
-    if (!ARK_API_KEY) {
+    const arkConfig = getArkConfig();
+    if (!arkConfig.apiKey) {
       return NextResponse.json(
         {
           error: "ARK_API_KEY_NOT_CONFIGURED",
-          message: "火山方舟 ARK_API_KEY 未在 .env.local 中配置。",
+          message: "火山方舟 ARK_API_KEY 未配置。",
         },
         { status: 400 }
       );
@@ -278,9 +309,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Missing taskId parameter" }, { status: 400 });
     }
 
-    const arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks/${taskId}`, {
+    const arkResponse = await fetch(`${arkConfig.baseUrl}/contents/generations/tasks/${taskId}`, {
       headers: {
-        Authorization: `Bearer ${ARK_API_KEY}`,
+        Authorization: `Bearer ${arkConfig.apiKey}`,
       },
     });
 
