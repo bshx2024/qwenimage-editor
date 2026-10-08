@@ -314,7 +314,7 @@ if __name__ == "__main__":
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
               <CommandLineIcon className="w-6 h-6 text-cyan-400" />
-              <span>2. Interactive S2 Stream &amp; Asset Configurator</span>
+              <span>2. Interactive Vidu S2 Stream &amp; Asset Configurator</span>
             </h2>
             <p className="text-xs text-slate-400">
               Configure streaming parameters, audio conditioning modes, and reference image settings below to generate executable WebSocket client scripts:
@@ -418,7 +418,7 @@ if __name__ == "__main__":
               <span>3. Vidu S2-Avatar: Powering Real-Time AI Video Calls</span>
             </h2>
             <p>
-              Search demand for <strong>AI video call online</strong> has spiked worldwide. Early implementations relied on rigid lip-sync models (like SadTalker or Wav2Lip) that unnaturally warped static 2D images. Rather than hunting for unverified desktop packages or third-party <strong>Vidu AI app download</strong> links, modern creators connect directly to streaming endpoints in browser environments like <strong>Vidu Studio online</strong>.
+              Search demand for <strong>AI video call online</strong> has spiked worldwide. Early implementations relied on rigid lip-sync models (like SadTalker or Wav2Lip) that unnaturally warped static 2D images. Rather than hunting for unverified desktop packages or third-party <strong>Vidu AI app download</strong> links, modern creators deploy Vidu S2 streaming endpoints directly in browser environments like <strong>Vidu Studio online</strong>.
             </p>
             <p>
               The <strong>S2-Avatar</strong> architecture conditions full-body temporal latent fields directly on audio feature vectors:
@@ -505,7 +505,7 @@ if __name__ == "__main__":
               <span>5. Solving Character Drift: Clean Image Asset Preparation Workflow</span>
             </h2>
             <p>
-              In developer discussions across GitHub and Reddit, the primary issue reported with real-time video streaming is <strong>character drift and facial melting</strong>.
+              In developer discussions across GitHub and Reddit, the primary issue reported with Vidu S2 streaming is <strong>character drift and facial melting</strong>.
             </p>
             <p>
               Because frame-aligned temporal attention relies on reference anchors as ground truth, any artifacts in your portrait—such as cluttered backgrounds, fringed edge cutouts, or sub-1080p pixelation—will be amplified across consecutive frames, leading to facial deformation within seconds.
@@ -518,7 +518,7 @@ if __name__ == "__main__":
                 <span>Standard Production Pipeline: Asset Preprocessing with Qwen</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                Rather than troubleshooting CUDA dependencies or local ComfyUI alpha-mattes, production teams prepare their streaming assets directly using <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-semibold hover:underline">Qwen Image Editor</Link>:
+                Rather than troubleshooting CUDA dependencies or local ComfyUI alpha-mattes, production teams prepare their Vidu S2 streaming assets directly using <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-semibold hover:underline">Qwen Image Editor</Link>:
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
@@ -544,7 +544,7 @@ if __name__ == "__main__":
 
               <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-indigo-500/20">
                 <span className="text-xs text-indigo-300">
-                  Ready to prepare clean character assets for your streaming pipeline?
+                  Ready to prepare clean character assets for your Vidu S2 streaming pipeline?
                 </span>
                 <Link
                   href={getLinkHref(locale, 'background-remover')}
