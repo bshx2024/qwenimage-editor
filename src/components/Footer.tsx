@@ -352,6 +352,10 @@ export default function Footer({
             <Link href={getLinkHref(locale, 'blog/minimax-h3-comfyui-guide-vram-workflow')} className="hover:text-indigo-400 transition-colors">
               MiniMax H3 ComfyUI Video Guide
             </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/vidu-s2-realtime-interactive-video-guide')} className="hover:text-cyan-400 transition-colors">
+              Vidu S2 Real-Time Video Guide
+            </Link>
           </div>
         </div>
       </div>

@@ -1,31 +1,20 @@
-# Qwen Image Editor (https://qwenimage-editor.com)
-> Online AI image editing and generation platform powered by Qwen foundation vision models (Qwen-Image-Edit 2511 / 2512 / Wanx 2.1).
+# Qwen Image Editor (qwenimage-editor.com)
 
-## Overview
-Qwen Image Editor is a specialized web-based AI photo editor designed for natural language inpainting, conversational image manipulation, bilingual typography rendering, and high-fidelity text-to-image synthesis. It allows users to edit images directly in modern web browsers without installing ComfyUI or owning high-end 24GB VRAM GPUs.
+> Next-generation AI image editor, inpainting studio, and multimodal generative AI workflow research hub.
 
-## Key Capabilities
-- Natural Language Inpainting: Localized object replacement, background swap, and clothing modifications guided by plain text instructions.
-- Facial & Character Consistency: Deep cross-attention preserves facial landmark geometry, gaze direction, and skin tones while modifying surrounding elements.
-- Bilingual Typography: Precise spelling and glyph rendering for English text, brand signage, and Chinese characters.
-- Cloud Inference: High-speed serverless inference with 2.5s - 4.5s average turnaround on 1024x1024 pixel assets.
-- Commercial Licensing: Users own 100% commercial usage rights for all generated and modified visual assets.
+## Core Online Tools & Studios
+- [Qwen Image 2.1 Online Studio](https://www.qwenimage-editor.com/qwen-image-2-1): Browser-based conversational inpainting and high-resolution 2048px image editing powered by state-of-the-art vision diffusion foundations.
+- [AI Background Remover](https://www.qwenimage-editor.com/background-remover): One-click edge-clean subject isolation for ecommerce products and real-time video asset preparation with crisp alpha transparency.
+- [AI Product Photo Editor](https://www.qwenimage-editor.com/product-photo-editor): Clean asset generation, studio background synthesis, and localized inpainting without manual masking.
+- [Text to Image Generator](https://www.qwenimage-editor.com/generator): High-fidelity generative visual studio supporting complex bilingual Chinese/English typography rendering.
 
-## Model Family & Provenance
-- Foundation Architecture: Multimodal Vision-Language Transformer developed by Alibaba Cloud Tongyi Lab.
-- Supported Checkpoints: Qwen-Image-Edit 2511 (high instruction adherence), Qwen-Image-Edit 2512 (enhanced multi-angle perspective and camera lighting), Wanx 2.1.
-- Open Source Weights & Heritage: https://github.com/QwenLM/Qwen-Image
+## Technical Guides & Architecture Research
+- [Vidu S2 Real-Time Interactive Video Guide](https://www.qwenimage-editor.com/blog/vidu-s2-realtime-interactive-video-guide): Complete guide to Shengshu Vidu S2 streaming architecture, S2-Avatar live video calls, frame-aligned attention, dynamic wardrobe replacement, and image asset preparation workflows.
+- [How to Run Strata Qwen 3.8 on 12GB+ GPUs](https://www.qwenimage-editor.com/blog/strata-qwen-setup-guide): Comprehensive setup guide for running the 125B MoE Qwen 3.8 Flash Next model on consumer hardware (12GB–24GB VRAM) without CUDA OOM crashes, including hybrid RAM/VRAM cache tuning and Claude Code integration.
+- [MiniMax H3 ComfyUI Guide](https://www.qwenimage-editor.com/blog/minimax-h3-comfyui-guide-vram-workflow): SageAttention VRAM patch guide, I2V prompt nodes, and native synchronized stereo audio synthesis pipelines.
+- [Higgsfield Genjutsu Workflow Guide](https://www.qwenimage-editor.com/blog/higgsfield-genjutsu-workflow-guide-free-alternatives): Motion transfer Vid2Vid techniques and free cloud image inpainting alternatives.
 
-## Core Web Pages & Endpoints
-- Homepage & Interactive Canvas: https://qwenimage-editor.com
-- Benchmark vs Midjourney: https://qwenimage-editor.com/vs-midjourney
-- Benchmark vs Flux: https://qwenimage-editor.com/vs-flux
-- Pricing & Subscription Plans: https://qwenimage-editor.com/pricing
-- Terms of Service: https://qwenimage-editor.com/terms-of-service
-- Privacy Policy: https://qwenimage-editor.com/privacy-policy
-
-## Pricing Structure
-- Free Tier: Daily complimentary trial credits for online inpainting and generation.
-- Starter Pack: $4.99 one-time payment for 100 non-expiring credits.
-- Pro Monthly: $19.90/month for 500 monthly credits with commercial license and GPU priority queue.
-- Pro Yearly: $118.80/year ($9.90/month) for 6,000 credits with VIP priority queue and support.
+## Model Benchmarks & Comparisons
+- [Qwen vs Midjourney](https://www.qwenimage-editor.com/vs-midjourney): In-depth comparison of image quality, text rendering accuracy, and conversational editing capabilities.
+- [Qwen vs Flux](https://www.qwenimage-editor.com/vs-flux): Architecture, prompt adherence, typography generation, and local vs. cloud inference tradeoffs.
+- [Qwen vs Nano Banana](https://www.qwenimage-editor.com/vs-nano-banana): Precision image editing and speed benchmark evaluation.
