@@ -46,6 +46,8 @@ export default function RumpelstiltskinBlogPostComponent({
   const [isPlaying, setIsPlaying] = useState(true);
   const [viewMode, setViewMode] = useState<'result' | 'reference' | 'split'>('split');
   const [copied, setCopied] = useState(false);
+  const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>(null);
+  const [apiNotice, setApiNotice] = useState<string | null>(null);
 
   const archetypeProfiles = {
     tuxedo: {
@@ -95,27 +97,88 @@ export default function RumpelstiltskinBlogPostComponent({
     }
   };
 
-  const handleRunVideoGeneration = () => {
-    setIsGenerating(true);
-    setGenerationStep('Stripping chroma-key green spill & calculating alpha transparency...');
-    
-    setTimeout(() => {
-      setGenerationStep('Harmonizing 1978 candlelight relighting & timber shadow casting...');
-    }, 600);
-
-    setTimeout(() => {
-      setGenerationStep('Synthesizing 35mm Panavision film grain & optical halation...');
-    }, 1100);
-
-    setTimeout(() => {
-      setIsGenerating(false);
-      setHasGenerated(true);
-      setIsPlaying(true);
-      setGenerationStep('');
-    }, 1600);
-  };
-
   const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar 16:9 --style raw`;
+
+  const handleRunVideoGeneration = async () => {
+    setIsGenerating(true);
+    setApiNotice(null);
+    setGenerationStep('Submitting generation task to ByteDance Seedance 2.5 engine...');
+
+    try {
+      const res = await fetch('/api/video/seedance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: compiledPrompt,
+          imageUrl: typeof window !== 'undefined' ? `${window.location.origin}/images/rumpelstiltskin_tuxedo_result.jpg` : '',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error === 'ARK_API_KEY_NOT_CONFIGURED') {
+          setGenerationStep('Ark API Key not configured; executing 35mm optical simulator preview...');
+          await new Promise((r) => setTimeout(r, 900));
+          setIsGenerating(false);
+          setHasGenerated(true);
+          setIsPlaying(true);
+          setGenerationStep('');
+          setApiNotice('火山方舟 Seedance 2.5 接口已集成！在 .env.local 中填入 ARK_API_KEY 即可体验云端实时视频渲染。');
+          return;
+        }
+        throw new Error(data.message || data.error || 'Seedance generation failed');
+      }
+
+      const taskId = data.taskId;
+      if (!taskId) throw new Error('No taskId returned');
+
+      setGenerationStep(`Seedance 2.5 Task [${taskId.slice(0, 8)}...] rendering in cloud...`);
+
+      // Poll task status every 2.5 seconds (up to 2 minutes)
+      let pollCount = 0;
+      const pollInterval = setInterval(async () => {
+        pollCount++;
+        if (pollCount > 48) {
+          clearInterval(pollInterval);
+          setIsGenerating(false);
+          setApiNotice('Rendering timed out. Please check Ark console tasks.');
+          return;
+        }
+
+        try {
+          const statusRes = await fetch(`/api/video/seedance?taskId=${taskId}`);
+          const statusData = await statusRes.json();
+
+          if (statusData.status === 'succeeded' && statusData.videoUrl) {
+            clearInterval(pollInterval);
+            setGeneratedVideoUrl(statusData.videoUrl);
+            setIsGenerating(false);
+            setHasGenerated(true);
+            setIsPlaying(true);
+            setGenerationStep('');
+          } else if (statusData.status === 'failed') {
+            clearInterval(pollInterval);
+            setIsGenerating(false);
+            setApiNotice(`Seedance 渲染失败: ${statusData.raw?.error?.message || '请查看控制台日志'}`);
+          } else {
+            setGenerationStep(`Seedance 2.5 Rendering (${statusData.status || 'processing'}... ${pollCount * 2.5}s)`);
+          }
+        } catch (e: any) {
+          console.error('Seedance polling error:', e);
+        }
+      }, 2500);
+    } catch (err: any) {
+      console.warn('Seedance generation fallback:', err);
+      setGenerationStep('Harmonizing 35mm Eastman grain & candlelight motion preview...');
+      setTimeout(() => {
+        setIsGenerating(false);
+        setHasGenerated(true);
+        setIsPlaying(true);
+        setGenerationStep('');
+      }, 1000);
+    }
+  };
 
   const pythonScript = `# Qwen-Image 2.1 Inpainting & Image-to-Image Relighting Pipeline
 import replicate
@@ -665,6 +728,20 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           </span>
                         </div>
                       )
+                    ) : generatedVideoUrl ? (
+                      <div className="relative w-full h-full bg-black">
+                        <video
+                          src={generatedVideoUrl}
+                          controls
+                          autoPlay
+                          loop
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-emerald-950/80 text-[10px] text-emerald-300 font-mono border border-emerald-500/40 flex items-center gap-1.5 pointer-events-none">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>SEEDANCE 2.5 LIVE RENDER</span>
+                        </div>
+                      </div>
                     ) : (
                       <div className="relative w-full h-full">
                         <img
@@ -697,9 +774,16 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
 
                   <div className="text-[11px] font-mono text-indigo-300 line-clamp-2 bg-slate-900 border border-slate-800 p-2 rounded-lg">
                     {activeWorkflowTab === 'i2i-greenscreen'
-                      ? 'AI Masterplate Ready for Image-to-Video: Kling 2.0 / MiniMax Video-01 Recommended'
+                      ? 'AI Masterplate Ready for Image-to-Video: Kling 2.0 / Seedance 2.5'
                       : compiledPrompt}
                   </div>
+
+                  {apiNotice && (
+                    <div className="mt-2 p-2 bg-indigo-950/60 border border-indigo-500/30 rounded-lg text-[11px] text-indigo-200 flex items-center gap-2">
+                      <SparklesIcon className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span>{apiNotice}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-slate-800">
