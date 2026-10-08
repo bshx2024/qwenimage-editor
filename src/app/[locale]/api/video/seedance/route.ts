@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
     let {
       prompt,
       imageUrl,
+      videoUrl,
+      duration = 5,
       resolution = "720p",
       userId,
       model = DEFAULT_MODEL,
@@ -46,7 +48,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required prompt" }, { status: 400 });
     }
 
-    creditCost = RESOLUTION_CREDIT_MAP[resolution] || 50;
+    const durSec = Number(duration) === 10 ? 10 : 5;
+    const isMotionMimic = Boolean(videoUrl);
+
+    // Tiered credit cost calculation
+    if (isMotionMimic) {
+      if (durSec === 10) {
+        creditCost = resolution === "1080p" ? 240 : resolution === "480p" ? 140 : 180;
+      } else {
+        creditCost = resolution === "1080p" ? 140 : resolution === "480p" ? 70 : 100;
+      }
+    } else {
+      if (durSec === 10) {
+        creditCost = resolution === "1080p" ? 160 : resolution === "480p" ? 40 : 90;
+      } else {
+        creditCost = resolution === "1080p" ? 90 : resolution === "480p" ? 20 : 50;
+      }
+    }
 
     // 1. Check Authentication & User Credits (Anti-Abuse Guard)
     if (!userId || userId === "guest" || userId === "undefined") {
@@ -126,7 +144,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Build content payload for Volcengine Ark Video Generation
-    const contentPayload: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+    const contentPayload: Array<{
+      type: string;
+      text?: string;
+      image_url?: { url: string };
+      video_url?: { url: string };
+    }> = [
       {
         type: "text",
         text: prompt,
@@ -142,6 +165,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    if (videoUrl) {
+      contentPayload.push({
+        type: "video_url",
+        video_url: {
+          url: videoUrl,
+        },
+      });
+    }
+
     let arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
       method: "POST",
       headers: {
@@ -151,6 +183,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model,
         content: contentPayload,
+        duration: durSec,
       }),
     });
 

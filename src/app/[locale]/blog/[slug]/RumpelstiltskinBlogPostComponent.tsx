@@ -42,6 +42,10 @@ export default function RumpelstiltskinBlogPostComponent({
   const [filmStock, setFilmStock] = useState<'35mm' | 'vhs' | 'animatronic'>('35mm');
   const [motionPreset, setMotionPreset] = useState<'tiptoe' | 'spinning' | 'transformation'>('tiptoe');
   const [videoResolution, setVideoResolution] = useState<'480p' | '720p' | '1080p'>('720p');
+  const [videoDuration, setVideoDuration] = useState<5 | 10>(5);
+  const [motionMode, setMotionMode] = useState<'preset' | 'mimic'>('preset');
+  const [customVideoUrl, setCustomVideoUrl] = useState<string>('');
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [customPrompt, setCustomPrompt] = useState<string>(
     'Exact character in black velvet patterned tuxedo tailcoat, white shirt, black bow tie, and curly-toed elf shoes, tiptoeing in candlelit 1778 barn, 35mm film grain, no green fringes'
   );
@@ -104,6 +108,60 @@ export default function RumpelstiltskinBlogPostComponent({
 
   const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar 16:9 --style raw`;
 
+  const calculateCurrentCreditCost = () => {
+    const isMimic = motionMode === 'mimic';
+    if (isMimic) {
+      if (videoDuration === 10) {
+        return videoResolution === '1080p' ? 240 : videoResolution === '480p' ? 140 : 180;
+      }
+      return videoResolution === '1080p' ? 140 : videoResolution === '480p' ? 70 : 100;
+    }
+    if (videoDuration === 10) {
+      return videoResolution === '1080p' ? 160 : videoResolution === '480p' ? 40 : 90;
+    }
+    return videoResolution === '1080p' ? 90 : videoResolution === '480p' ? 20 : 50;
+  };
+
+  const handleUploadDrivingVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('video/')) {
+      alert('Please upload a valid video file (MP4, WebM, MOV).');
+      return;
+    }
+
+    if (file.size > 25 * 1024 * 1024) {
+      alert('Video size exceeds 25MB limit. Please upload a short 5-10s video.');
+      return;
+    }
+
+    setIsUploadingVideo(true);
+    setApiNotice(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || 'Failed to upload driving video');
+      }
+
+      setCustomVideoUrl(data.url);
+      setApiNotice('Driving motion video uploaded! Seedance 2.5 will transfer movements to Rumpelstiltskin.');
+    } catch (err: any) {
+      alert('Upload failed: ' + (err.message || 'unknown error'));
+    } finally {
+      setIsUploadingVideo(false);
+    }
+  };
+
   const handleRunVideoGeneration = async () => {
     // 1. Authentication Check
     const userId = userData?.user_id;
@@ -113,28 +171,37 @@ export default function RumpelstiltskinBlogPostComponent({
       return;
     }
 
+    const isMimic = motionMode === 'mimic';
+    if (isMimic && !customVideoUrl) {
+      alert('Please upload a short driving motion video first to mimic its movements.');
+      return;
+    }
+
     // 2. Credits balance check
-    const creditCostMap: Record<string, number> = { '480p': 20, '720p': 50, '1080p': 90 };
-    const requiredCredits = creditCostMap[videoResolution] || 50;
+    const requiredCredits = calculateCurrentCreditCost();
     const userCredits = Number(userData?.available_times || 0);
 
     if (!userData?.isPro && userCredits < requiredCredits) {
       setShowPricingModal(true);
-      setApiNotice(`Rendering ${videoResolution} video requires ${requiredCredits} credits. You currently have ${userCredits} credits.`);
+      setApiNotice(`Rendering ${videoDuration}s ${videoResolution} ${isMimic ? 'motion mimic ' : ''}video requires ${requiredCredits} credits. You currently have ${userCredits} credits.`);
       return;
     }
 
     setIsGenerating(true);
     setApiNotice(null);
-    setGenerationStep(`Submitting ${videoResolution} task to ByteDance Seedance 2.5 engine (${requiredCredits} credits)...`);
+    setGenerationStep(`Submitting ${videoDuration}s ${videoResolution} task to ByteDance Seedance 2.5 engine (${requiredCredits} credits)...`);
 
     try {
       const res = await fetch('/api/video/seedance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: compiledPrompt,
-          imageUrl: typeof window !== 'undefined' ? `${window.location.origin}/images/rumpelstiltskin_tuxedo_result.jpg` : '',
+          prompt: isMimic
+            ? `${customPrompt}, precise motion transfer replication of driving actor choreography, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere --ar 16:9`
+            : compiledPrompt,
+          imageUrl: typeof window !== 'undefined' ? `${window.location.origin}/images/rumpelstiltskin_vintage_demo.jpg` : '',
+          videoUrl: isMimic ? customVideoUrl : '',
+          duration: videoDuration,
           resolution: videoResolution,
           userId,
         }),
@@ -605,66 +672,169 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    3. Choreographed Movement Preset
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: 'tiptoe', label: 'Tiptoe Dance' },
-                      { id: 'spinning', label: 'Straw to Gold' },
-                      { id: 'transformation', label: 'Prince Morph' },
-                    ].map((item) => (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => setMotionPreset(item.id as any)}
-                        className={`px-2 py-1.5 text-[11px] font-medium rounded-lg border transition-all text-center ${
-                          motionPreset === item.id
-                            ? 'bg-indigo-600 border-indigo-400 text-white'
-                            : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-750'
-                        }`}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
+                {/* 3. Movement & Motion Mimic Mode */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                      4. Output Quality &amp; Model Pricing
+                      3. Movement &amp; Motion Mimic
                     </label>
-                    <span className="text-[10px] text-amber-400 font-mono">
-                      Seedance 2.5
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: '480p', label: '480p Fast', cost: '20 Credits' },
-                      { id: '720p', label: '720p HD', cost: '50 Credits', popular: true },
-                      { id: '1080p', label: '1080p Ultra', cost: '90 Credits' },
-                    ].map((item) => (
+                    <div className="flex gap-1 text-[10px]">
                       <button
-                        key={item.id}
                         type="button"
-                        onClick={() => setVideoResolution(item.id as any)}
-                        className={`p-2 rounded-lg border text-center transition-all relative ${
-                          videoResolution === item.id
-                            ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-sm'
-                            : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:bg-slate-750'
+                        onClick={() => setMotionMode('preset')}
+                        className={`px-2 py-0.5 rounded transition-all ${
+                          motionMode === 'preset'
+                            ? 'bg-indigo-600 text-white font-semibold'
+                            : 'bg-slate-800 text-slate-400 hover:text-white'
                         }`}
                       >
-                        {item.popular && (
-                          <span className="absolute -top-2 right-2 bg-gradient-to-r from-amber-500 to-indigo-500 text-[8px] font-bold px-1.5 py-0.2 text-white rounded-full uppercase tracking-tighter">
-                            Popular
-                          </span>
-                        )}
-                        <div className="text-[11px] font-bold">{item.label}</div>
-                        <div className="text-[9px] text-indigo-300 font-mono mt-0.5">{item.cost}</div>
+                        Preset Dances
                       </button>
-                    ))}
+                      <button
+                        type="button"
+                        onClick={() => setMotionMode('mimic')}
+                        className={`px-2 py-0.5 rounded transition-all flex items-center gap-1 ${
+                          motionMode === 'mimic'
+                            ? 'bg-gradient-to-r from-amber-500 to-indigo-600 text-white font-semibold shadow-sm'
+                            : 'bg-slate-800 text-amber-300 hover:text-white'
+                        }`}
+                      >
+                        <span>Mimic My Video 🎬</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {motionMode === 'preset' ? (
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'tiptoe', label: 'Tiptoe Dance' },
+                        { id: 'spinning', label: 'Straw to Gold' },
+                        { id: 'transformation', label: 'Prince Morph' },
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setMotionPreset(item.id as any)}
+                          className={`px-2 py-1.5 text-[11px] font-medium rounded-lg border transition-all text-center ${
+                            motionPreset === item.id
+                              ? 'bg-indigo-600 border-indigo-400 text-white'
+                              : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-750'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="border border-dashed border-amber-500/40 bg-amber-950/20 rounded-xl p-3 text-center">
+                      {customVideoUrl ? (
+                        <div className="flex items-center justify-between gap-2 bg-black/60 p-2 rounded-lg border border-slate-700">
+                          <div className="flex items-center gap-2 overflow-hidden text-left">
+                            <VideoCameraIcon className="w-5 h-5 text-amber-400 shrink-0" />
+                            <div className="text-[11px] text-slate-200 truncate font-mono">
+                              Driving Motion Video Ready
+                            </div>
+                          </div>
+                          <label className="text-[10px] text-indigo-400 hover:text-indigo-300 cursor-pointer font-semibold underline shrink-0">
+                            Change
+                            <input
+                              type="file"
+                              accept="video/mp4,video/webm,video/quicktime"
+                              className="hidden"
+                              onChange={handleUploadDrivingVideo}
+                            />
+                          </label>
+                        </div>
+                      ) : (
+                        <label className="flex flex-col items-center justify-center cursor-pointer py-1.5">
+                          <VideoCameraIcon className="w-5 h-5 text-amber-400 mb-1 animate-pulse" />
+                          <span className="text-xs font-bold text-amber-300">
+                            {isUploadingVideo ? 'Uploading Driving Video...' : 'Upload Video to Mimic (MP4 / WebM)'}
+                          </span>
+                          <span className="text-[10px] text-slate-400 mt-0.5">
+                            AI Rumpelstiltskin will 1:1 replicate your dance steps &amp; body gait
+                          </span>
+                          <input
+                            type="file"
+                            accept="video/mp4,video/webm,video/quicktime"
+                            disabled={isUploadingVideo}
+                            className="hidden"
+                            onChange={handleUploadDrivingVideo}
+                          />
+                        </label>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* 4. Duration & Resolution Quality Pricing */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      4. Duration &amp; Resolution
+                    </label>
+                    <span className="text-[10px] text-amber-400 font-mono">
+                      Seedance 2.5 Multi-Modal
+                    </span>
+                  </div>
+
+                  {/* Duration Selector */}
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => setVideoDuration(5)}
+                      className={`p-1.5 rounded-lg border text-xs font-medium text-center transition-all ${
+                        videoDuration === 5
+                          ? 'bg-indigo-600/40 border-indigo-400 text-white font-bold shadow-sm'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      5s Viral Clip
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setVideoDuration(10)}
+                      className={`p-1.5 rounded-lg border text-xs font-medium text-center transition-all ${
+                        videoDuration === 10
+                          ? 'bg-indigo-600/40 border-indigo-400 text-white font-bold shadow-sm'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      10s Extended Story
+                    </button>
+                  </div>
+
+                  {/* Resolution Selector with Dynamic Credits */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: '480p', label: '480p Fast' },
+                      { id: '720p', label: '720p HD', popular: true },
+                      { id: '1080p', label: '1080p Ultra' },
+                    ].map((item) => {
+                      const cost = motionMode === 'mimic'
+                        ? (videoDuration === 10 ? (item.id === '1080p' ? 240 : item.id === '480p' ? 140 : 180) : (item.id === '1080p' ? 140 : item.id === '480p' ? 70 : 100))
+                        : (videoDuration === 10 ? (item.id === '1080p' ? 160 : item.id === '480p' ? 40 : 90) : (item.id === '1080p' ? 90 : item.id === '480p' ? 20 : 50));
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setVideoResolution(item.id as any)}
+                          className={`p-2 rounded-lg border text-center transition-all relative ${
+                            videoResolution === item.id
+                              ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-sm'
+                              : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:bg-slate-750'
+                          }`}
+                        >
+                          {item.popular && (
+                            <span className="absolute -top-2 right-2 bg-gradient-to-r from-amber-500 to-indigo-500 text-[8px] font-bold px-1.5 py-0.2 text-white rounded-full uppercase tracking-tighter">
+                              Popular
+                            </span>
+                          )}
+                          <div className="text-[11px] font-bold">{item.label}</div>
+                          <div className="text-[9px] text-indigo-300 font-mono mt-0.5">{cost} Credits</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -691,7 +861,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                     <span>
                       {isGenerating 
                         ? 'Rendering on Seedance 2.5 Cloud...' 
-                        : `Generate ${videoResolution} Video (${videoResolution === '1080p' ? '90' : videoResolution === '480p' ? '20' : '50'} Credits)`}
+                        : `Generate ${videoDuration}s ${videoResolution} ${motionMode === 'mimic' ? 'Motion Mimic Video' : 'Video'} (${calculateCurrentCreditCost()} Credits)`}
                     </span>
                   </button>
 
