@@ -7,6 +7,7 @@ import MinimaxH3BlogPostComponent from './MinimaxH3BlogPostComponent';
 import ViduS2BlogPostComponent from './ViduS2BlogPostComponent';
 import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent';
 import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
+import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -26,6 +27,10 @@ export default async function BlogPostPage({
   const post = getBlogPostBySlug(slug);
   if (!post) {
     notFound();
+  }
+
+  if (slug === 'rumpelstiltskin-ai-1987-movie-meme-workflow') {
+    return <RumpelstiltskinBlogPostComponent post={post} locale={locale} />;
   }
 
   if (slug === 'ideogram-4-5-open-source-weights-alternatives') {

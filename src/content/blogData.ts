@@ -19,6 +19,34 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'rumpelstiltskin-ai-1987-movie-meme-workflow',
+    // Strict 53 chars (50-60 chars safety range, locks primary keyword to Rumpelstiltskin AI)
+    title: 'Rumpelstiltskin AI: 1987 Movie Truth, Meme & AI Guide',
+    // Strict 154 chars (140-160 range, eliminates truncation penalty, exact 154 chars)
+    description: 'Is the viral Rumpelstiltskin TikTok video a real 1987 Billy Barty movie or AI? Uncover the meme truth, Riff Raff audio, and vintage AI workflow guide.',
+    date: '2026-10-08',
+    readTime: '10 min read',
+    category: 'Viral AI & Generative Workflows',
+    author: {
+      name: 'Dr. Marcus Vance',
+      role: 'Staff Generative Video Researcher & Systems Lead',
+      avatar: '/images/author-marcus.jpg',
+      bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, temporal character consistency, and vintage visual asset workflows.',
+    },
+    keywords: [
+      'rumpelstiltskin ai',
+      'rumpelstiltskin ai video',
+      'rumpelstiltskin meme',
+      'is rumpelstiltskin real',
+      '1987 rumpelstiltskin',
+      'rumpelstiltskin movie 1987',
+      'billy barty rumpelstiltskin',
+      'tip toeing in my jordans meme',
+      'rumpelstiltskin tiktok',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'ideogram-4-5-open-source-weights-alternatives',
     // Strict 53 chars (50-60 chars safety range, locks primary keyword to Ideogram 4.5)
     title: 'Ideogram 4.5: Guide, Open Source Status & Alternatives',
