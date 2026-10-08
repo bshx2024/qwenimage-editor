@@ -2,10 +2,12 @@
 import HeadInfo from "~/components/HeadInfo";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
+import PricingModal from "~/components/PricingModal";
 import Link from "next/link";
 import { useState } from "react";
 import { getLinkHref } from "~/configs/buildLink";
 import { BlogPost } from "~/content/blogData";
+import { useCommonContext } from "~/context/common-context";
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -32,11 +34,14 @@ export default function RumpelstiltskinBlogPostComponent({
   post: BlogPost;
   locale?: string;
 }) {
+  const { userData, setShowLoginModal, setShowPricingModal } = useCommonContext();
+
   // In-Page Interactive Live Video & Image-to-Image Harmonization Sandbox (P0 Doorway Elimination)
   const [activeWorkflowTab, setActiveWorkflowTab] = useState<'i2i-greenscreen' | 't2v-cinema'>('i2i-greenscreen');
   const [characterArchetype, setCharacterArchetype] = useState<'tuxedo' | 'gnome' | 'sorceress'>('tuxedo');
   const [filmStock, setFilmStock] = useState<'35mm' | 'vhs' | 'animatronic'>('35mm');
   const [motionPreset, setMotionPreset] = useState<'tiptoe' | 'spinning' | 'transformation'>('tiptoe');
+  const [videoResolution, setVideoResolution] = useState<'480p' | '720p' | '1080p'>('720p');
   const [customPrompt, setCustomPrompt] = useState<string>(
     'Exact character in black velvet patterned tuxedo tailcoat, white shirt, black bow tie, and curly-toed elf shoes, tiptoeing in candlelit 1778 barn, 35mm film grain, no green fringes'
   );
@@ -100,9 +105,28 @@ export default function RumpelstiltskinBlogPostComponent({
   const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar 16:9 --style raw`;
 
   const handleRunVideoGeneration = async () => {
+    // 1. Authentication Check
+    const userId = userData?.user_id;
+    if (!userId || userId === 'guest') {
+      setShowLoginModal(true);
+      setApiNotice('Please sign in to generate HD AI video with ByteDance Seedance 2.5.');
+      return;
+    }
+
+    // 2. Credits balance check
+    const creditCostMap: Record<string, number> = { '480p': 20, '720p': 50, '1080p': 90 };
+    const requiredCredits = creditCostMap[videoResolution] || 50;
+    const userCredits = Number(userData?.available_times || 0);
+
+    if (!userData?.isPro && userCredits < requiredCredits) {
+      setShowPricingModal(true);
+      setApiNotice(`Rendering ${videoResolution} video requires ${requiredCredits} credits. You currently have ${userCredits} credits.`);
+      return;
+    }
+
     setIsGenerating(true);
     setApiNotice(null);
-    setGenerationStep('Submitting generation task to ByteDance Seedance 2.5 engine...');
+    setGenerationStep(`Submitting ${videoResolution} task to ByteDance Seedance 2.5 engine (${requiredCredits} credits)...`);
 
     try {
       const res = await fetch('/api/video/seedance', {
@@ -111,12 +135,26 @@ export default function RumpelstiltskinBlogPostComponent({
         body: JSON.stringify({
           prompt: compiledPrompt,
           imageUrl: typeof window !== 'undefined' ? `${window.location.origin}/images/rumpelstiltskin_tuxedo_result.jpg` : '',
+          resolution: videoResolution,
+          userId,
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
+        if (data.status === 601) {
+          setIsGenerating(false);
+          setShowLoginModal(true);
+          setApiNotice('Please sign in to continue.');
+          return;
+        }
+        if (data.status === 602 || data.error === 'INSUFFICIENT_CREDITS') {
+          setIsGenerating(false);
+          setShowPricingModal(true);
+          setApiNotice(data.message || `Insufficient credits. Please top up.`);
+          return;
+        }
         if (data.error === 'ARK_API_KEY_NOT_CONFIGURED') {
           setGenerationStep('Ark API Key not configured; executing 35mm optical simulator preview...');
           await new Promise((r) => setTimeout(r, 900));
@@ -133,7 +171,7 @@ export default function RumpelstiltskinBlogPostComponent({
       const taskId = data.taskId;
       if (!taskId) throw new Error('No taskId returned');
 
-      setGenerationStep(`Seedance 2.5 Task [${taskId.slice(0, 8)}...] rendering in cloud...`);
+      setGenerationStep(`Seedance 2.5 [${videoResolution}] Task [${taskId.slice(0, 8)}...] rendering in cloud...`);
 
       // Poll task status every 2.5 seconds (up to 2 minutes)
       let pollCount = 0;
@@ -147,7 +185,7 @@ export default function RumpelstiltskinBlogPostComponent({
         }
 
         try {
-          const statusRes = await fetch(`/api/video/seedance?taskId=${taskId}`);
+          const statusRes = await fetch(`/api/video/seedance?taskId=${taskId}&uid=${data.uid || ''}&creditCost=${requiredCredits}`);
           const statusData = await statusRes.json();
 
           if (statusData.status === 'succeeded' && statusData.videoUrl) {
@@ -160,7 +198,7 @@ export default function RumpelstiltskinBlogPostComponent({
           } else if (statusData.status === 'failed') {
             clearInterval(pollInterval);
             setIsGenerating(false);
-            setApiNotice(`Seedance 渲染失败: ${statusData.raw?.error?.message || '请查看控制台日志'}`);
+            setApiNotice(`Seedance 渲染失败: ${statusData.raw?.error?.message || '已自动为您退回积分'}`);
           } else {
             setGenerationStep(`Seedance 2.5 Rendering (${statusData.status || 'processing'}... ${pollCount * 2.5}s)`);
           }
@@ -594,8 +632,45 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                 </div>
 
                 <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      4. Output Quality &amp; Model Pricing
+                    </label>
+                    <span className="text-[10px] text-amber-400 font-mono">
+                      Seedance 2.5
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: '480p', label: '480p Fast', cost: '20 Credits' },
+                      { id: '720p', label: '720p HD', cost: '50 Credits', popular: true },
+                      { id: '1080p', label: '1080p Ultra', cost: '90 Credits' },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setVideoResolution(item.id as any)}
+                        className={`p-2 rounded-lg border text-center transition-all relative ${
+                          videoResolution === item.id
+                            ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-sm'
+                            : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:bg-slate-750'
+                        }`}
+                      >
+                        {item.popular && (
+                          <span className="absolute -top-2 right-2 bg-gradient-to-r from-amber-500 to-indigo-500 text-[8px] font-bold px-1.5 py-0.2 text-white rounded-full uppercase tracking-tighter">
+                            Popular
+                          </span>
+                        )}
+                        <div className="text-[11px] font-bold">{item.label}</div>
+                        <div className="text-[9px] text-indigo-300 font-mono mt-0.5">{item.cost}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    4. Inpainting &amp; Relighting Instruction
+                    5. Inpainting &amp; Relighting Instruction
                   </label>
                   <textarea
                     rows={2}
@@ -605,19 +680,36 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleRunVideoGeneration}
-                  disabled={isGenerating}
-                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
-                >
-                  <PlayIcon className="w-4 h-4" />
-                  <span>
-                    {isGenerating 
-                      ? 'Executing Neural Relighting...' 
-                      : 'Generate 1978 Masterplate & Video Preview In This Page'}
-                  </span>
-                </button>
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={handleRunVideoGeneration}
+                    disabled={isGenerating}
+                    className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
+                  >
+                    <PlayIcon className="w-4 h-4" />
+                    <span>
+                      {isGenerating 
+                        ? 'Rendering on Seedance 2.5 Cloud...' 
+                        : `Generate ${videoResolution} Video (${videoResolution === '1080p' ? '90' : videoResolution === '480p' ? '20' : '50'} Credits)`}
+                    </span>
+                  </button>
+
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 px-1 font-mono">
+                    <span>
+                      {userData?.user_id 
+                        ? `Balance: ${userData.available_times ?? 0} Credits` 
+                        : 'Sign in to generate full video'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowPricingModal(true)}
+                      className="text-indigo-400 hover:underline font-semibold"
+                    >
+                      Top Up Credits &rarr;
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Dynamic In-Page Cinema Viewport & Image-to-Image Comparison */}
@@ -931,6 +1023,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
         </aside>
       </main>
 
+      <PricingModal locale={locale} page="" />
       <Footer />
     </div>
   );
