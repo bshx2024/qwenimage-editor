@@ -94,12 +94,12 @@ if __name__ == "__main__":
       a: "While Vidu S1 introduced proof-of-concept infinite-length conversation on single static cameras, Vidu S2 expands the capability envelope with: (1) dynamic mid-stream reference image replacement for live character wardrobe changes, (2) the S2-Editing pipeline for real-time video stream inpainting, and (3) stereoscopic spatial 3D video generation for vision headsets."
     },
     {
-      q: "Why does character drift happen in Vidu S2 and how do I prevent it?",
-      a: "Character drift in Vidu S2 occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because S2 uses frame-aligned attention, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
+      q: "Why does character drift happen during real-time streaming and how do I prevent it?",
+      a: "Character drift during video streaming occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because frame-aligned attention is sensitive to initial features, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
     },
     {
-      q: "How can creators prepare image assets for Vidu S2 without GPU hardware?",
-      a: "Creators can generate high-resolution character concept portraits and utilize cloud-based preprocessing tools like Qwen Image 2.1 to clean edges, inpaint hand deformities, and export standardized 2048px reference portraits with transparent backgrounds directly in the browser, bypassing the need for local 24GB VRAM workstation configurations."
+      q: "How can creators prepare streaming image assets without local GPUs?",
+      a: "Creators can generate high-resolution character portraits and use browser-based tools like Qwen Image 2.1 to clean edges, inpaint hand deformities, and export standardized 2048px reference portraits with transparent backgrounds directly online, bypassing local 24GB VRAM workstation limits."
     }
   ];
 
@@ -258,7 +258,7 @@ if __name__ == "__main__":
                 </div>
               </div>
               <div className="text-[11px] text-slate-400 font-mono">
-                Model: Shengshu Vidu S2 Streaming
+                Model: Shengshu S2 Streaming Engine
               </div>
             </div>
           </div>
@@ -274,7 +274,7 @@ if __name__ == "__main__":
               <span>Core Takeaway &amp; Operational Definition (BLUF)</span>
             </div>
             <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-              <strong>Vidu S2</strong> is a breakthrough real-time interactive video foundation model developed by Shengshu Technology, engineered on a dual <strong>Backbone-Refiner</strong> architecture with frame-aligned temporal attention. Unlike conventional offline video generators that require 15 to 90 seconds to render fixed video clips, Vidu S2 delivers low-latency streaming (&lt;300ms) for two core modalities: <strong>S2-Avatar</strong> (voice-driven real-time digital human interaction) and <strong>S2-Editing</strong> (live video stream inpainting and dynamic wardrobe swapping). However, maintaining strict identity consistency in real-time streaming requires high-precision 2048px reference assets isolated from background artifacts using tools like <Link href={getLinkHref(locale, 'background-remover')} className="text-cyan-400 underline font-medium hover:text-cyan-300">Qwen Image Editor Background Remover</Link>.
+              <strong>Vidu S2</strong> is a real-time interactive video foundation model developed by Shengshu Technology, engineered on a decoupled <strong>Backbone-Refiner</strong> architecture with frame-aligned temporal attention. Unlike offline video generators requiring 20 to 90 seconds to render fixed clips, this streaming framework delivers ultra-low latency (&lt;300ms) across two core pipelines: <strong>S2-Avatar</strong> (voice-driven digital human interaction) and <strong>S2-Editing</strong> (live video stream inpainting). Maintaining strict identity consistency across interactive sessions requires clean 2048px reference portraits preprocessed via <Link href={getLinkHref(locale, 'background-remover')} className="text-cyan-400 underline font-medium hover:text-cyan-300">Qwen Image Editor Background Remover</Link>.
             </p>
           </div>
 
@@ -285,39 +285,39 @@ if __name__ == "__main__":
               <span>1. Vidu S2 Architecture: From Offline Diffusion to Streaming Latents</span>
             </h2>
             <p>
-              The fundamental bottleneck of modern generative video has long been latency. Traditional state-of-the-art diffusion transformers—such as Kling 1.5, Runway Gen-3 Alpha, and Sora—operate under an autoregressive or full-temporal chunking paradigm. In these models, a complete 4-to-10 second spatio-temporal video volume must be diffused simultaneously through 30 to 50 denoising steps, imposing computational latency ranging from 20 to 120 seconds before the first frame can be watched.
+              The primary limitation of contemporary AI video has been generation latency. Standard diffusion transformers—such as Kling 1.5, Runway Gen-3 Alpha, and Sora—operate under full-temporal volume chunking, requiring 30 to 50 denoising steps across the entire spatio-temporal sequence. This creates 20 to 120 seconds of waiting time before playback begins.
             </p>
             <p>
-              Shengshu Technology&apos;s <strong>Vidu S2: Real-time Interactive Editable and Spatial Video Generation</strong> paper dismantles this barrier through a decoupled <strong>Backbone-Refiner framework</strong>:
+              Shengshu Technology&apos;s research paper dismantles this latency bottleneck through a decoupled <strong>Backbone-Refiner pipeline</strong>:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
                 <div className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
-                  The Real-Time Backbone
+                  Real-Time Streaming Backbone
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  A compact diffusion transformer operating at native 720p resolution that updates latent token sequences in rolling causal temporal windows. By restricting attention to preceding keyframes and active audio embeddings, latency drops below 280ms, enabling interactive frame rates of 24–30 FPS on high-throughput GPU clusters.
+                  A compact diffusion transformer operating at native 720p resolution that updates latent tokens in rolling causal windows. By restricting attention to preceding keyframes and active speech embeddings, latency drops below 280ms, maintaining interactive 24–30 FPS frame rates.
                 </p>
               </div>
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
                 <div className="text-xs font-bold text-indigo-300 uppercase tracking-wider">
-                  The Frame-Aligned Refiner
+                  Frame-Aligned Refiner
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  A high-frequency spatial refinement module that conditions on static reference embeddings. It continuously injects micro-details—such as iris highlights, hair strands, and fabric textures—without accumulating temporal drift or stalling the active streaming pipeline.
+                  A high-frequency spatial module conditioning on static reference embeddings. It continuously injects micro-details—such as iris highlights, hair geometry, and garment textures—without accumulating temporal drift or stalling live video output.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* Section 2: Interactive Playground Configurator (Eliminating Doorway Penalty) */}
+          {/* Section 2: Interactive Playground Configurator */}
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
               <CommandLineIcon className="w-6 h-6 text-cyan-400" />
-              <span>2. Interactive Vidu S2 Stream &amp; Asset Configurator</span>
+              <span>2. Interactive S2 Stream &amp; Asset Configurator</span>
             </h2>
             <p className="text-xs text-slate-400">
-              Configure your streaming parameters, audio conditioning pipeline, and image asset requirements below to generate ready-to-run WebSocket streaming code for S2-Avatar and S2-Editing sessions:
+              Configure streaming parameters, audio conditioning modes, and reference image settings below to generate executable WebSocket client scripts:
             </p>
 
             <div className="p-5 rounded-2xl border border-cyan-500/20 bg-slate-900/70 space-y-5">
@@ -418,20 +418,20 @@ if __name__ == "__main__":
               <span>3. Vidu S2-Avatar: Powering Real-Time AI Video Calls</span>
             </h2>
             <p>
-              A major search surge across Google revolves around <strong>AI video call online</strong>. Historically, conversational AI has been divided into two disconnected worlds: ultra-fast text/audio synthesis (such as OpenAI Realtime API or Gemini Live) paired with awkward, rigid lip-sync models (like SadTalker or Wav2Lip) that merely warp the lower half of an unmoving headshot.
+              Search demand for <strong>AI video call online</strong> has spiked worldwide. Early implementations relied on rigid lip-sync models (like SadTalker or Wav2Lip) that unnaturally warped static 2D images. Rather than hunting for unverified desktop packages or third-party <strong>Vidu AI app download</strong> links, modern creators connect directly to streaming endpoints in browser environments like <strong>Vidu Studio online</strong>.
             </p>
             <p>
-              <strong>Vidu S2-Avatar</strong> unifies multimodal streaming by conditioning full-body temporal latent fields directly on continuous audio feature frames:
+              The <strong>S2-Avatar</strong> architecture conditions full-body temporal latent fields directly on audio feature vectors:
             </p>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-300 list-disc list-inside">
               <li>
-                <strong className="text-white">Full-Body Expressive Kinetics:</strong> Unlike head-bobbing puppets, S2-Avatar models natural human kinetics—including breathing, chest motion, shoulder posture shifts, and spontaneous hand gestures that reflect emotional inflections in the speaker&apos;s voice.
+                <strong className="text-white">Full-Body Kinetics:</strong> Models expressive human motion—including torso breathing, head tilting, and natural hand gesturing tied directly to vocal cadence.
               </li>
               <li>
-                <strong className="text-white">Zero-Cut Dynamic Wardrobe Swapping:</strong> S2-Avatar introduces mid-session reference replacement. Developers can inject a new wardrobe PNG or accessory mask over WebSocket while the conversation is live. The refiner cross-attends to the new reference within 400ms, altering the avatar&apos;s clothing without resetting conversational memory or dropping video frames.
+                <strong className="text-white">Zero-Cut Dynamic Wardrobe Swapping:</strong> Developers can inject an updated wardrobe asset over WebSocket mid-conversation. The refiner cross-attends to new clothing within 400ms without restarting the session.
               </li>
               <li>
-                <strong className="text-white">Stereoscopic Spatial Video:</strong> S2 natively computes dual-camera disparity vectors, rendering dual-eye streams suitable for immersive Vision Pro and Meta Quest spatial video calls.
+                <strong className="text-white">Stereoscopic Spatial Video:</strong> Natively renders dual-eye streams calibrated for Apple Vision Pro and Meta Quest spatial video calls.
               </li>
             </ul>
           </section>
@@ -443,7 +443,7 @@ if __name__ == "__main__":
               <span>4. Generative Video Landscape: Vidu S2 vs. Competitors</span>
             </h2>
             <p>
-              To evaluate where Vidu S2 fits into your production stack, the matrix below benchmarks current generative video foundations as of October 2026:
+              To evaluate where real-time streaming fits into production workflows, the matrix below benchmarks leading video models as of October 2026:
             </p>
 
             <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40">
@@ -498,25 +498,17 @@ if __name__ == "__main__":
             </div>
           </section>
 
-          {/* Section 5: The Critical Bottleneck - Image Asset Preparation (Commercial Funnel) */}
+          {/* Section 5: The Critical Bottleneck - Image Asset Preparation */}
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
               <BoltIcon className="w-6 h-6 text-cyan-400" />
               <span>5. Solving Character Drift: Clean Image Asset Preparation Workflow</span>
             </h2>
             <p>
-              In developer discussions across GitHub and Reddit, the number one technical failure reported with Vidu S2 is <strong>character drift and facial melting</strong>.
+              In developer discussions across GitHub and Reddit, the primary issue reported with real-time video streaming is <strong>character drift and facial melting</strong>.
             </p>
             <p>
-              Because Vidu S2 utilizes frame-aligned temporal cross-attention, its spatial encoder assumes the reference image represents a clean ground-truth identity. If your input portrait has:
-            </p>
-            <ol className="space-y-1.5 text-xs sm:text-sm text-slate-300 list-decimal list-inside">
-              <li>Noisy or textured background elements (like bookshelves or foliage),</li>
-              <li>Imperfect edge cutouts with white halo fringing,</li>
-              <li>Or sub-1080p resolution with compression artifacts around the eyes and mouth,</li>
-            </ol>
-            <p>
-              the refiner model confuses background textures with character geometry. Within 5 seconds of real-time streaming, the avatar&apos;s face will deform, clothes will blend into the surroundings, and temporal stability collapses.
+              Because frame-aligned temporal attention relies on reference anchors as ground truth, any artifacts in your portrait—such as cluttered backgrounds, fringed edge cutouts, or sub-1080p pixelation—will be amplified across consecutive frames, leading to facial deformation within seconds.
             </p>
 
             {/* CRO High-Value Callout Card */}
@@ -526,33 +518,33 @@ if __name__ == "__main__":
                 <span>Standard Production Pipeline: Asset Preprocessing with Qwen</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                Rather than fighting CUDA errors and complex ComfyUI alpha-mattes locally, production studios prepare their Vidu S2 reference assets using <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-semibold hover:underline">Qwen Image Editor</Link>:
+                Rather than troubleshooting CUDA dependencies or local ComfyUI alpha-mattes, production teams prepare their streaming assets directly using <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-semibold hover:underline">Qwen Image Editor</Link>:
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/80 space-y-1">
                   <div className="text-xs font-bold text-white">Step 1: Background Removal</div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Use <Link href={getLinkHref(locale, 'background-remover')} className="text-cyan-400 hover:underline">AI Background Remover</Link> to eliminate 100% of halo fringes and generate crisp transparent PNG cutouts.
+                    Use <Link href={getLinkHref(locale, 'background-remover')} className="text-cyan-400 hover:underline">AI Background Remover</Link> to eliminate halo fringing and produce crisp transparent PNG cutouts.
                   </p>
                 </div>
                 <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/80 space-y-1">
                   <div className="text-xs font-bold text-white">Step 2: Inpainting Touch-Up</div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Fix eye symmetry, iris gleam, and hand deformities in <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-cyan-400 hover:underline">Qwen Image 2.1 Online</Link> to lock facial geometry.
+                    Refine eye symmetry, facial contours, and hand anatomy in <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-cyan-400 hover:underline">Qwen Image 2.1 Online</Link> to secure facial geometry.
                   </p>
                 </div>
                 <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/80 space-y-1">
                   <div className="text-xs font-bold text-white">Step 3: 2048px Master Export</div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Export high-DPI master keyframes ready for real-time injection into Vidu S2 WebSocket sessions with zero frame drops.
+                    Export high-DPI reference frames ready for live streaming sessions with zero frame drops.
                   </p>
                 </div>
               </div>
 
               <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-indigo-500/20">
                 <span className="text-xs text-indigo-300">
-                  Ready to prepare clean character assets for your S2 streaming pipeline?
+                  Ready to prepare clean character assets for your streaming pipeline?
                 </span>
                 <Link
                   href={getLinkHref(locale, 'background-remover')}
