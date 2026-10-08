@@ -38,6 +38,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedUid, setCopiedUid] = useState<string | null>(null);
   const [checkingUid, setCheckingUid] = useState<string | null>(null);
+  const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
 
   const {
     setShowLoadingModal,
@@ -262,6 +263,21 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                                 className="w-full h-full object-cover"
                               />
                             </div>
+                          ) : brokenImages[file.uid] ? (
+                            <div className="flex flex-col items-center justify-center p-5 text-center space-y-2 bg-slate-900/90 w-full h-full">
+                              <PhotoIcon className="w-8 h-8 text-slate-500 mb-0.5" />
+                              <div className="text-xs font-semibold text-slate-300">临时链接已过期 (24h)</div>
+                              <p className="text-[10px] text-slate-400 max-w-[170px] leading-tight">
+                                阿里百炼临时文件已到期销毁，支持一键重绘
+                              </p>
+                              <Link
+                                href={getLinkHref(locale, `?prompt=${encodeURIComponent(file.input_text || '')}`)}
+                                className="mt-1 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600/90 hover:bg-indigo-600 text-[10px] font-semibold text-white transition-colors"
+                              >
+                                <SparklesIcon className="w-3 h-3 text-pink-300" />
+                                <span>重新生成</span>
+                              </Link>
+                            </div>
                           ) : (
                             <img
                               src={cleanImgUrl}
@@ -269,6 +285,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                               width={400}
                               height={400}
                               loading="lazy"
+                              onError={() => setBrokenImages((prev) => ({ ...prev, [file.uid]: true }))}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           )
