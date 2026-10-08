@@ -39,11 +39,12 @@ export default function RumpelstiltskinBlogPostComponent({
   const { userData, setShowLoginModal, setShowPricingModal } = useCommonContext();
 
   // In-Page Interactive Live Video & Image-to-Image Harmonization Sandbox (P0 Doorway Elimination)
-  const [activeWorkflowTab, setActiveWorkflowTab] = useState<'i2i-greenscreen' | 't2v-cinema'>('i2i-greenscreen');
+  const [activeWorkflowTab, setActiveWorkflowTab] = useState<'i2i-greenscreen' | 't2v-cinema'>('t2v-cinema');
   const [characterArchetype, setCharacterArchetype] = useState<'tuxedo' | 'gnome' | 'sorceress'>('tuxedo');
   const [filmStock, setFilmStock] = useState<'35mm' | 'vhs' | 'animatronic'>('35mm');
   const [motionPreset, setMotionPreset] = useState<'tiptoe' | 'spinning' | 'transformation'>('tiptoe');
   const [videoResolution, setVideoResolution] = useState<'480p' | '720p' | '1080p'>('720p');
+  const [videoAspectRatio, setVideoAspectRatio] = useState<'9:16' | '16:9'>('9:16');
   const [videoDuration, setVideoDuration] = useState<5 | 10>(5);
   const [motionMode, setMotionMode] = useState<'preset' | 'mimic'>('preset');
   const [customVideoUrl, setCustomVideoUrl] = useState<string>('');
@@ -172,7 +173,7 @@ export default function RumpelstiltskinBlogPostComponent({
     }
   };
 
-  const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar 16:9 --style raw`;
+  const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar ${videoAspectRatio} --style raw`;
 
   const calculateCurrentCreditCost = () => {
     const isMimic = motionMode === 'mimic';
@@ -271,12 +272,13 @@ export default function RumpelstiltskinBlogPostComponent({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: isMimic
-            ? `${customPrompt}, precise motion transfer replication of driving actor choreography, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere --ar 16:9`
+            ? `${customPrompt}, precise motion transfer replication of driving actor choreography, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere --ar ${videoAspectRatio}`
             : `${compiledPrompt}${selectedReferenceType === 'green_screen' ? ', seamless chroma key extraction, composite subject cleanly into authentic candlelit 1778 barn interior, 35mm film grain, no green fringes or artifacts, 100% preserve character face, smile and black tuxedo clothing identity' : ''}`,
           imageUrl: getActiveReferenceUrl(),
           videoUrl: isMimic ? customVideoUrl : '',
           duration: videoDuration,
           resolution: videoResolution,
+          aspectRatio: videoAspectRatio,
           userId,
         }),
       });
@@ -883,11 +885,11 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   )}
                 </div>
 
-                {/* 4. Duration & Resolution Quality Pricing */}
+                {/* 4. Duration, Aspect Ratio & Resolution Quality Pricing */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                      4. Duration &amp; Resolution
+                      4. Duration, Ratio &amp; Resolution
                     </label>
                     <span className="text-[10px] text-amber-400 font-mono">
                       Seedance 2.5 Multi-Modal
@@ -917,6 +919,38 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       }`}
                     >
                       10s Extended Story
+                    </button>
+                  </div>
+
+                  {/* Aspect Ratio Selector (9:16 TikTok vs 16:9 Cinema) */}
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => setVideoAspectRatio('9:16')}
+                      className={`p-1.5 rounded-lg border text-xs font-medium text-center transition-all flex items-center justify-center gap-1.5 relative ${
+                        videoAspectRatio === '9:16'
+                          ? 'bg-indigo-600/40 border-indigo-400 text-white font-bold shadow-sm ring-1 ring-indigo-400'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>📱 9:16 Vertical</span>
+                      <span className="bg-emerald-500/20 text-emerald-300 text-[8px] font-bold px-1 py-0.2 rounded uppercase">
+                        TikTok / Reels
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setVideoAspectRatio('16:9')}
+                      className={`p-1.5 rounded-lg border text-xs font-medium text-center transition-all flex items-center justify-center gap-1.5 relative ${
+                        videoAspectRatio === '16:9'
+                          ? 'bg-indigo-600/40 border-indigo-400 text-white font-bold shadow-sm ring-1 ring-indigo-400'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <span>🎬 16:9 Landscape</span>
+                      <span className="bg-indigo-500/20 text-indigo-300 text-[8px] font-bold px-1 py-0.2 rounded uppercase">
+                        Cinema
+                      </span>
                     </button>
                   </div>
 
@@ -1232,20 +1266,24 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         </div>
                       )
                     ) : (
-                      <div className="relative w-full h-full bg-black flex items-center justify-center">
+                      <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
                         <video
-                          key={generatedVideoUrl}
+                          key={`${generatedVideoUrl}_${videoAspectRatio}`}
                           src={generatedVideoUrl || "/videos/user_seedance_generated_result.mp4"}
                           controls
                           autoPlay
                           loop
                           playsInline
                           poster="/images/rumpelstiltskin_green_screen.png"
-                          className="w-full h-full object-cover"
+                          className={
+                            videoAspectRatio === '9:16'
+                              ? 'h-full aspect-[9/16] object-contain rounded-lg shadow-[0_0_25px_rgba(0,0,0,0.9)] border border-slate-800'
+                              : 'w-full h-full object-cover'
+                          }
                         />
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/85 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>SEEDANCE 2.5 • 1978 EASTMAN 35mm MASTER</span>
+                          <span>SEEDANCE 2.5 • {videoAspectRatio === '9:16' ? '9:16 VERTICAL (TIKTOK/REELS)' : '16:9 CINEMATIC'} • {videoResolution.toUpperCase()}</span>
                         </div>
                       </div>
                     )}

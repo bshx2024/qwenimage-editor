@@ -62,6 +62,7 @@ export async function POST(req: NextRequest) {
       videoUrl,
       duration = 5,
       resolution = "720p",
+      aspectRatio,
       userId,
       model = arkConfig.model,
     } = body;
@@ -201,17 +202,22 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const arkBody: any = {
+      model,
+      content: contentPayload,
+      duration: durSec,
+    };
+    if (aspectRatio) {
+      arkBody.ratio = aspectRatio;
+    }
+
     let arkResponse = await fetch(`${arkConfig.baseUrl}/contents/generations/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${arkConfig.apiKey}`,
       },
-      body: JSON.stringify({
-        model,
-        content: contentPayload,
-        duration: durSec,
-      }),
+      body: JSON.stringify(arkBody),
     });
 
     // If Ark flags real person face privacy on the input image, gracefully fall back to full prompt T2V
