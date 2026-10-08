@@ -5,6 +5,7 @@ import BlogPostComponent from './BlogPostComponent';
 import HiggsfieldBlogPostComponent from './HiggsfieldBlogPostComponent';
 import MinimaxH3BlogPostComponent from './MinimaxH3BlogPostComponent';
 import ViduS2BlogPostComponent from './ViduS2BlogPostComponent';
+import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -24,6 +25,10 @@ export default async function BlogPostPage({
   const post = getBlogPostBySlug(slug);
   if (!post) {
     notFound();
+  }
+
+  if (slug === 'ai-font-generator-from-image-guide') {
+    return <AiFontGeneratorBlogPostComponent post={post} locale={locale} />;
   }
 
   if (slug === 'higgsfield-genjutsu-workflow-guide-free-alternatives') {

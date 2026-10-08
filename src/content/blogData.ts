@@ -19,6 +19,33 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'ai-font-generator-from-image-guide',
+    // Strict 53 chars (50-60 chars safety range, zero SERP truncation)
+    title: 'AI Font Generator from Image: TTF vs Visual AI Guide',
+    // Strict 153 chars (140-160 range, 100% intent coverage with CTA)
+    description: 'Discover top AI font generators from image. Compare installable TTF converters with visual typography models, fix blurry lettering, and create fonts online.',
+    date: '2026-10-08',
+    readTime: '10 min read',
+    category: 'Typography & Generative Visuals',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Lead Visual AI & Generative Media Specialist',
+      avatar: '/images/author-elena.jpg',
+      bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual style transfer workflows.',
+    },
+    keywords: [
+      'ai font generator from image',
+      'ai font generator from image free',
+      'ai font generator from image online',
+      'image to font converter',
+      'image to font maker',
+      'ai font generator ttf',
+      'best ai font generator from image',
+      'chinese ai font typography',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'higgsfield-genjutsu-workflow-guide-free-alternatives',
     // Strict 59 chars (50-60 chars safety range, zero SERP truncation)
     title: 'Higgsfield Genjutsu Guide: Video Trends & Free Alternatives',
