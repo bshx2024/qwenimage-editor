@@ -8,7 +8,7 @@ const ARK_BASE_URL = process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.
 const ARK_API_KEY = process.env.ARK_API_KEY;
 const DEFAULT_MODEL = process.env.ARK_SEEDANCE_MODEL || "doubao-seedance-2-5";
 
-export const RESOLUTION_CREDIT_MAP: Record<string, number> = {
+const RESOLUTION_CREDIT_MAP: Record<string, number> = {
   "480p": 20,
   "720p": 50,
   "1080p": 90,
