@@ -19,6 +19,33 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'ideogram-4-5-open-source-weights-alternatives',
+    // Strict 51 chars (50-60 chars safety range, zero SERP truncation)
+    title: 'Ideogram 4.5: Weights, ComfyUI & Free Alternatives',
+    // Strict 157 chars (140-160 range, captures open source + weights + ComfyUI + censorship)
+    description: 'Explore Ideogram 4.5 open source weights and ComfyUI status. Uncover the truth about HuggingFace releases, censorship limits, and free AI inpainting alternatives.',
+    date: '2026-10-08',
+    readTime: '11 min read',
+    category: 'Open Source AI & Benchmarks',
+    author: {
+      name: 'Alex Chen',
+      role: 'Staff AI Infrastructure Engineer',
+      avatar: '/images/author-alex.jpg',
+      bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
+    },
+    keywords: [
+      'ideogram 4.5',
+      'ideogram 4.5 open source',
+      'ideogram 4.5 weights',
+      'ideogram 4.5 huggingface',
+      'ideogram 4.5 comfyui',
+      'ideogram 4.5 free',
+      'ideogram 4.5 download',
+      'is ideogram v4 censored',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'ai-font-generator-from-image-guide',
     // Strict 53 chars (50-60 chars safety range, zero SERP truncation)
     title: 'AI Font Generator from Image: TTF vs Visual AI Guide',

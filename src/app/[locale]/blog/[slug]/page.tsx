@@ -6,6 +6,7 @@ import HiggsfieldBlogPostComponent from './HiggsfieldBlogPostComponent';
 import MinimaxH3BlogPostComponent from './MinimaxH3BlogPostComponent';
 import ViduS2BlogPostComponent from './ViduS2BlogPostComponent';
 import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent';
+import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -25,6 +26,10 @@ export default async function BlogPostPage({
   const post = getBlogPostBySlug(slug);
   if (!post) {
     notFound();
+  }
+
+  if (slug === 'ideogram-4-5-open-source-weights-alternatives') {
+    return <IdeogramBlogPostComponent post={post} locale={locale} />;
   }
 
   if (slug === 'ai-font-generator-from-image-guide') {
