@@ -79,11 +79,11 @@ if __name__ == "__main__":
   const faqData = [
     {
       q: "What is Vidu S2: Real-time Interactive Editable and Spatial Video Generation?",
-      a: "Vidu S2 is a next-generation neural streaming video generation model released by Shengshu Technology. Built on a dual Backbone-Refiner diffusion transformer architecture with frame-aligned attention, it breaks past traditional offline 4-to-10 second batch clipping to deliver real-time interactive avatar synthesis, live video stream inpainting, and stereoscopic spatial VR video at latencies below 300ms."
+      a: "Vidu S2 is a next-generation neural streaming video model released by Shengshu Technology. Built on a dual Backbone-Refiner diffusion transformer architecture with frame-aligned attention, it breaks past traditional offline 4-to-10 second batch clipping to deliver real-time interactive avatar synthesis, live video stream inpainting, and stereoscopic spatial VR video at latencies below 300ms."
     },
     {
       q: "How does Vidu S2-Avatar enable real-time AI video call online?",
-      a: "Vidu S2-Avatar conditions video generation on real-time audio input packets and reference character portraits. By dynamically caching facial landmark latents and executing continuous frame-aligned temporal synthesis, it maintains expressive full-body posture and synchronized lip movements, enabling instantaneous AI video call online interactions for virtual customer service and live avatars."
+      a: "Vidu S2-Avatar conditions visual synthesis on real-time audio input packets and reference character portraits. By dynamically caching facial landmark latents and executing continuous frame-aligned temporal synthesis, it maintains expressive full-body posture and synchronized lip movements, enabling instantaneous AI video call online interactions for virtual customer service and live avatars."
     },
     {
       q: "Is there an official Vidu S2 GitHub repository or open weights download?",
@@ -91,11 +91,11 @@ if __name__ == "__main__":
     },
     {
       q: "What is the difference between Vidu S1 and Vidu S2?",
-      a: "While Vidu S1 introduced proof-of-concept infinite-length conversation on single static cameras, Vidu S2 expands the capability envelope with: (1) dynamic mid-stream reference image replacement for live character wardrobe changes, (2) the S2-Editing pipeline for real-time video stream inpainting, and (3) stereoscopic spatial 3D video generation for vision headsets."
+      a: "While Vidu S1 introduced proof-of-concept infinite-length conversation on single static cameras, Vidu S2 expands the capability envelope with: (1) dynamic mid-stream reference image replacement for live character wardrobe changes, (2) the S2-Editing pipeline for real-time video stream inpainting, and (3) stereoscopic spatial 3D video rendering for vision headsets."
     },
     {
-      q: "Why does character drift happen during interactive video generation and how do I prevent it?",
-      a: "Character drift during video generation occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because frame-aligned attention is sensitive to initial features, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
+      q: "Why does character drift happen during interactive video synthesis and how do I prevent it?",
+      a: "Character drift during live video synthesis occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because frame-aligned attention is sensitive to initial features, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
     },
     {
       q: "How can creators prepare streaming image assets without local GPUs?",
@@ -470,7 +470,7 @@ if __name__ == "__main__":
                     <td className="p-3">Full Diffusion Transformer</td>
                     <td className="p-3">10–15s for 5s clip (Batch)</td>
                     <td className="p-3">Subject ID consistency</td>
-                    <td className="p-3">Commercial video generation &amp; cinematic clips</td>
+                    <td className="p-3">Commercial video creation &amp; cinematic clips</td>
                   </tr>
                   <tr className="hover:bg-slate-800/30">
                     <td className="p-3 font-semibold text-slate-200">Kling 1.5 Pro</td>

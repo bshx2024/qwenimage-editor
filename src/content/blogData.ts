@@ -96,10 +96,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'vidu-s2-realtime-interactive-video-guide',
-    // Strict 53 chars (50-60 chars range, zero SERP truncation, locks primary keyword to Vidu S2)
-    title: 'Vidu S2: Real-Time AI Video Generation & Avatar Guide',
-    // Strict 150 chars (140-160 range, 100% focused on Vidu S2)
-    description: 'Complete guide to Vidu S2 real-time video generation and S2-Avatar. Explore the architecture, live video call setups, and clean image asset workflows.',
+    // Strict 54 chars (50-60 chars range, zero SERP truncation, locks primary keyword to Vidu S2)
+    title: 'Vidu S2: Real-Time AI Model & Interactive Avatar Guide',
+    // Strict 148 chars (140-160 range, eliminates video generation collision, 100% focused on Vidu S2)
+    description: 'Complete guide to Vidu S2 real-time AI synthesis & S2-Avatar. Explore the architecture, live video call setups, and clean image asset workflows.',
     date: '2026-10-08',
     readTime: '11 min read',
     category: 'Multimodal Streaming & AI Video',
