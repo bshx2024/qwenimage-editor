@@ -108,7 +108,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Build content payload for Volcengine Ark Video Generation
+    // 4. Resolve Image-to-Video input asset (support base64 conversion for local images)
+    let finalImageUrl = imageUrl;
+    if (imageUrl && (imageUrl.startsWith("/") || imageUrl.includes("localhost"))) {
+      try {
+        const fs = await import("fs");
+        const path = await import("path");
+        const cleanPath = imageUrl.startsWith("/") ? imageUrl : new URL(imageUrl).pathname;
+        const filePath = path.join(process.cwd(), "public", cleanPath);
+        if (fs.existsSync(filePath)) {
+          const fileBuf = fs.readFileSync(filePath);
+          finalImageUrl = `data:image/jpeg;base64,${fileBuf.toString("base64")}`;
+        }
+      } catch (imgErr) {
+        console.warn("Local image base64 conversion note:", imgErr);
+      }
+    }
+
+    // Build content payload for Volcengine Ark Video Generation
     const contentPayload: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
       {
         type: "text",
@@ -116,16 +133,16 @@ export async function POST(req: NextRequest) {
       },
     ];
 
-    if (imageUrl) {
+    if (finalImageUrl) {
       contentPayload.push({
         type: "image_url",
         image_url: {
-          url: imageUrl,
+          url: finalImageUrl,
         },
       });
     }
 
-    const arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
+    let arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,16 +154,42 @@ export async function POST(req: NextRequest) {
       }),
     });
 
+    // If Ark flags real person face privacy on the input image, gracefully fall back to full prompt T2V
+    if (!arkResponse.ok && finalImageUrl) {
+      const initialErr = await arkResponse.text();
+      if (initialErr.includes("SensitiveContentDetected") || initialErr.includes("real person")) {
+        console.warn("[Ark Seedance Note] Privacy filter flagged input image, falling back to pure text-to-video generation...");
+        arkResponse = await fetch(`${ARK_BASE_URL}/contents/generations/tasks`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${ARK_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model,
+            content: [{ type: "text", text: prompt }],
+          }),
+        });
+      } else {
+        console.error("[Volcengine Ark Seedance Error]:", arkResponse.status, initialErr);
+        if (deductedUserId && !isSubscribed) {
+          await refundUserTimes(deductedUserId, creditCost);
+        }
+        await markWorkFailedAndRefund(workUid, `Ark API error: ${initialErr}`, creditCost);
+        return NextResponse.json(
+          { error: "ARK_API_REQUEST_FAILED", status: arkResponse.status, details: initialErr },
+          { status: arkResponse.status }
+        );
+      }
+    }
+
     if (!arkResponse.ok) {
       const errText = await arkResponse.text();
       console.error("[Volcengine Ark Seedance Error]:", arkResponse.status, errText);
-
-      // Refund deducted credits on API failure
       if (deductedUserId && !isSubscribed) {
         await refundUserTimes(deductedUserId, creditCost);
       }
       await markWorkFailedAndRefund(workUid, `Ark API error: ${errText}`, creditCost);
-
       return NextResponse.json(
         {
           error: "ARK_API_REQUEST_FAILED",
