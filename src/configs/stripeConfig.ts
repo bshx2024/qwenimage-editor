@@ -24,6 +24,7 @@ export const priceList: PriceItem[] = [
       "One-time payment, Never Expires",
       "Full Qwen & Wanx Model Access",
       "High Resolution Download",
+      "30-Day Cloud Gallery Retention",
       "Commercial Usage Allowed"
     ]
   },
@@ -37,10 +38,11 @@ export const priceList: PriceItem[] = [
     badge: "Flexible Billing",
     features: [
       "500 AI Credits Per Month",
-      "Commercial Usage License",
+      "👑 Lifetime Cloud Vault (Never Expire)",
       "Fast GPU Priority Queue",
       "Full Inpainting & Editing Tools",
-      "No Watermarks & Ultra HD"
+      "No Watermarks & Ultra HD",
+      "Commercial Usage License"
     ]
   },
   {
@@ -55,9 +57,10 @@ export const priceList: PriceItem[] = [
     features: [
       "6,000 AI Credits Per Year",
       "Only $9.90/month (billed annually)",
+      "👑 Unlimited Lifetime Cloud Vault Archiving",
       "VIP Dedicated Priority Queue",
-      "Commercial Usage License",
       "Highest Resolution & Fast Inpainting",
+      "Commercial Usage License",
       "Priority 24/7 Support"
     ]
   }

@@ -16,6 +16,8 @@ import {
   ArrowPathIcon,
   TrashIcon,
   ExclamationTriangleIcon,
+  ClockIcon,
+  FireIcon,
 } from "@heroicons/react/24/outline";
 
 interface PageComponentProps {
@@ -43,6 +45,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
   const {
     setShowLoadingModal,
     setShowLoginModal,
+    setShowPricingModal,
     userData,
   } = useCommonContext();
 
@@ -222,6 +225,34 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
           ) : (
             /* Visual Creations Grid */
             <>
+              {/* Pro Vault vs 7-Day Free Retention Banner */}
+              {!userData?.isPro && (
+                <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-indigo-950/70 via-purple-950/50 to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl shadow-indigo-950/30 backdrop-blur-md">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center shrink-0 border border-indigo-500/40 text-indigo-400">
+                      <ClockIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-white flex items-center gap-2">
+                        <span>7-Day Cloud Storage Protection</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">Free Plan</span>
+                      </div>
+                      <p className="text-[11px] text-slate-300 mt-0.5 leading-relaxed">
+                        Free tier creations are preserved for <strong>7 days</strong>. Upgrade to Pro for <strong>Lifetime Cloud Vault (Never Expire)</strong> + priority GPU rendering.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPricingModal(true)}
+                    className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white text-xs font-extrabold transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <SparklesIcon className="w-4 h-4" />
+                    <span>Upgrade to Pro Vault</span>
+                  </button>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {resultInfoList.map((file: any, index: number) => {
                   const rawUrl = Array.isArray(file.output_url)
@@ -238,6 +269,10 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                   const isFailed = !isSuccess && !isPending;
                   const isChecking = checkingUid === file.uid;
                   const isVideo = file.task_type?.startsWith('video_') || cleanImgUrl.endsWith('.mp4') || cleanImgUrl.includes('.mp4?');
+                  const isProUser = !!userData?.isPro;
+                  const createdAtTime = file.created_at ? new Date(file.created_at).getTime() : Date.now();
+                  const daysPassed = Math.floor((Date.now() - createdAtTime) / (1000 * 60 * 60 * 24));
+                  const daysLeft = Math.max(0, 7 - daysPassed);
 
                   return (
                     <div
@@ -338,19 +373,53 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
 
                         {/* Top Badges */}
                         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
-                          {isSuccess ? (
-                            <span className="px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
-                              {file.task_type?.startsWith('video_') ? 'Video' : file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
-                            </span>
-                          ) : isPending ? (
-                            <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 backdrop-blur-md border border-indigo-500/30 text-[10px] font-semibold text-indigo-300 uppercase tracking-wider">
-                              Processing
-                            </span>
-                          ) : (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-[10px] font-semibold text-amber-300 tracking-wider">
-                              Failed · Refunded
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5 pointer-events-auto">
+                            {isSuccess ? (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
+                                {file.task_type?.startsWith('video_') ? 'Video' : file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
+                              </span>
+                            ) : isPending ? (
+                              <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 backdrop-blur-md border border-indigo-500/30 text-[10px] font-semibold text-indigo-300 uppercase tracking-wider">
+                                Processing
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.5 rounded-md bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-[10px] font-semibold text-amber-300 tracking-wider">
+                                Failed · Refunded
+                              </span>
+                            )}
+
+                            {/* Cloud Retention / Pro Vault Archiving Badge */}
+                            {isSuccess && (
+                              isProUser ? (
+                                <span
+                                  className="px-2 py-0.5 rounded-md bg-amber-500/20 backdrop-blur-md border border-amber-400/40 text-[10px] font-bold text-amber-300 flex items-center gap-1 shadow-sm"
+                                  title="Pro Lifetime Vault: Permanently archived"
+                                >
+                                  <span>👑 Pro Vault</span>
+                                </span>
+                              ) : daysLeft <= 2 ? (
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPricingModal(true)}
+                                  className="px-2 py-0.5 rounded-md bg-amber-500/25 hover:bg-amber-500/40 backdrop-blur-md border border-amber-500/60 text-[10px] font-black text-amber-300 hover:text-white transition-all flex items-center gap-1 shadow-md shadow-amber-500/30 animate-pulse cursor-pointer"
+                                  title="Expiring soon! Upgrade to Pro to preserve forever in your Lifetime Vault."
+                                >
+                                  <FireIcon className="w-3 h-3 text-amber-400" />
+                                  <span>{daysLeft === 0 ? 'Expiring today 🔥' : `${daysLeft}d left 🔥`}</span>
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPricingModal(true)}
+                                  className="px-2 py-0.5 rounded-md bg-slate-950/85 hover:bg-indigo-600/30 backdrop-blur-md border border-slate-700/80 hover:border-indigo-500/50 text-[10px] font-medium text-slate-300 hover:text-indigo-200 transition-colors flex items-center gap-1 cursor-pointer"
+                                  title="Free tier retention is 7 days. Click to upgrade to Pro Lifetime Vault."
+                                >
+                                  <ClockIcon className="w-3 h-3 text-indigo-400" />
+                                  <span>{daysLeft}d left</span>
+                                </button>
+                              )
+                            )}
+                          </div>
 
                           <div className="flex items-center gap-1.5 pointer-events-auto">
                             {isSuccess && (
