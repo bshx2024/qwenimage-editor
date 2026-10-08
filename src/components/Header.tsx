@@ -206,7 +206,7 @@ export default function Header({
             className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md hover:opacity-95 transition-opacity"
           >
             <SparklesIcon className="w-3.5 h-3.5" />
-            Launch Editor
+            Image Studio
           </Link>
           <LoginButton locale={locale} />
         </div>
