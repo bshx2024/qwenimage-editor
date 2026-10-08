@@ -600,98 +600,8 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           </div>
         </header>
 
-        {/* BLUF: Disambiguation Truth Table (GEO Fact Anchor) */}
-        <section className="mb-10 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/20 border border-indigo-500/30 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-          <div className="text-xs font-bold tracking-wider uppercase text-indigo-400 mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShieldCheckIcon className="w-4 h-4 text-indigo-400" />
-              <span>Entity Disambiguation &amp; Fact-Check (Verified October 2026)</span>
-            </div>
-            <span className="px-2 py-0.5 rounded text-[10px] bg-indigo-500/20 text-indigo-300 font-mono">
-              Debunking Report
-            </span>
-          </div>
-
-          <div className="overflow-x-auto not-prose mb-4">
-            <table className="w-full text-left text-xs text-slate-300 border-collapse">
-              <thead className="bg-slate-900/80 text-slate-200 uppercase text-[11px] border-b border-slate-800">
-                <tr>
-                  <th className="py-2.5 px-3">Comparison Point</th>
-                  <th className="py-2.5 px-3">1987 Movie (Billy Barty)</th>
-                  <th className="py-2.5 px-3">2026 Viral TikTok Video (@stroinaya)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/60 font-medium">
-                <tr>
-                  <td className="py-2.5 px-3 text-slate-400">Media Origin</td>
-                  <td className="py-2.5 px-3 text-white">Live-Action Film (Cannon Films)</td>
-                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Synthetic Multimodal AI Video</td>
-                </tr>
-                <tr>
-                  <td className="py-2.5 px-3 text-slate-400">Lead Creator / Actor</td>
-                  <td className="py-2.5 px-3 text-white">Billy Barty (IMDb: tt0093892)</td>
-                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Digital Artist @stroinaya</td>
-                </tr>
-                <tr>
-                  <td className="py-2.5 px-3 text-slate-400">Iconic Scene</td>
-                  <td className="py-2.5 px-3 text-white">Grimm Brothers fairytale story</td>
-                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Tiptoe dance spinning straw to gold</td>
-                </tr>
-                <tr>
-                  <td className="py-2.5 px-3 text-slate-400">Associated Soundtrack</td>
-                  <td className="py-2.5 px-3 text-white">Orchestral film score</td>
-                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Riff Raff: Tip Toe Wing In My Jawwdinz</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p className="text-slate-200 text-sm leading-relaxed">
-            The <strong>viral rumpelstiltskin ai video</strong> captivating global audiences across TikTok, Instagram, and Reddit is not a lost 1978 or 1987 dark fantasy film. Instead, this <strong>viral rumpelstiltskin ai video meme</strong> represents an extraordinary demonstration of AI-engineered vintage cinematic practical effects created by digital artist @stroinaya. By mimicking 35mm Eastman color stock, optical halation, and tangible animatronic creature designs, the creator sparked the global <strong>1987 rumpelstiltskin ai movie myth</strong>, leading millions to question whether legendary actor Billy Barty starred in the footage.
-          </p>
-        </section>
-
-        {/* Article Body Content */}
-        <article className="prose prose-invert prose-indigo max-w-none text-slate-300 space-y-8">
-          
-          {/* Section 1 */}
-          <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-              <FilmIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              The 1987 Movie Myth: Did Billy Barty Star in the Viral Rumpelstiltskin Video?
-            </h2>
-            <p className="leading-relaxed">
-              Google Trends data records an unprecedented breakout (&gt;5,000%) for queries regarding the <strong>1987 rumpelstiltskin ai movie myth</strong>, including terms like <code className="text-indigo-300">1987 rumpelstiltskin</code>, <code className="text-indigo-300">rumpelstiltskin movie 1987</code>, and <code className="text-indigo-300">billy barty rumpelstiltskin</code>. The root cause of this viral confusion lies in an extraordinary historical parallel.
-            </p>
-            <p className="leading-relaxed">
-              In 1987, Cannon Movie Tales produced an authentic live-action fantasy feature titled <em>Rumpelstiltskin</em>, starring beloved American actor <strong>Billy Barty</strong> (1924–2000). Barty was revered worldwide for his memorable character performances in 1980s fantasy epics such as <em>Willow</em> and <em>Legend</em>.
-            </p>
-            <p className="leading-relaxed">
-              When modern social media users encountered the <strong>viral rumpelstiltskin ai video</strong> featuring realistic prosthetics, earthy medieval peasant garb, and subtle optical imperfections, millions assumed they had unearthed an unseen master tape from Barty&apos;s filmography. However, film archives confirm that the <strong>viral rumpelstiltskin ai video meme</strong> is 100% synthetic media created in late 2026.
-            </p>
-          </section>
-
-          {/* Section 2 */}
-          <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-              <MusicalNoteIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Tip Toeing in My Jordans: How Rumpelstiltskin AI Became a Viral TikTok Meme
-            </h2>
-            <p className="leading-relaxed">
-              The ignition switch for the <strong>viral rumpelstiltskin ai video</strong> was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
-            </p>
-            <p className="leading-relaxed">
-              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically known in German folklore as <em>Rumpelstilzchen</em>) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-slate-300">
-              <li>Tiptoeing into the kitchen at midnight to secure leftovers without waking roommates.</li>
-              <li>Slipping out of the office on Friday afternoon before management assigns weekend shifts.</li>
-              <li>Strutting with exaggerated arrogance after passing an exam with minimal preparation.</li>
-            </ul>
-          </section>
-
-          {/* Section 3: In-Page Live Video Generator & Image-to-Image Relighting Studio (P0 Guard) */}
-          <section className="my-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
+        {/* In-Page Multimodal Studio (Hero Tool - Above the Fold) */}
+          <section id="ai-studio" className="mb-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800">
               <div>
                 <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
@@ -1410,7 +1320,98 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
             </div>
           </section>
 
-          {/* Section 4 */}
+
+        {/* BLUF: Disambiguation Truth Table (GEO Fact Anchor) */}
+        <section className="mb-10 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/20 border border-indigo-500/30 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+          <div className="text-xs font-bold tracking-wider uppercase text-indigo-400 mb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShieldCheckIcon className="w-4 h-4 text-indigo-400" />
+              <span>Entity Disambiguation &amp; Fact-Check (Verified October 2026)</span>
+            </div>
+            <span className="px-2 py-0.5 rounded text-[10px] bg-indigo-500/20 text-indigo-300 font-mono">
+              Debunking Report
+            </span>
+          </div>
+
+          <div className="overflow-x-auto not-prose mb-4">
+            <table className="w-full text-left text-xs text-slate-300 border-collapse">
+              <thead className="bg-slate-900/80 text-slate-200 uppercase text-[11px] border-b border-slate-800">
+                <tr>
+                  <th className="py-2.5 px-3">Comparison Point</th>
+                  <th className="py-2.5 px-3">1987 Movie (Billy Barty)</th>
+                  <th className="py-2.5 px-3">2026 Viral TikTok Video (@stroinaya)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 font-medium">
+                <tr>
+                  <td className="py-2.5 px-3 text-slate-400">Media Origin</td>
+                  <td className="py-2.5 px-3 text-white">Live-Action Film (Cannon Films)</td>
+                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Synthetic Multimodal AI Video</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 text-slate-400">Lead Creator / Actor</td>
+                  <td className="py-2.5 px-3 text-white">Billy Barty (IMDb: tt0093892)</td>
+                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Digital Artist @stroinaya</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 text-slate-400">Iconic Scene</td>
+                  <td className="py-2.5 px-3 text-white">Grimm Brothers fairytale story</td>
+                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Tiptoe dance spinning straw to gold</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 text-slate-400">Associated Soundtrack</td>
+                  <td className="py-2.5 px-3 text-white">Orchestral film score</td>
+                  <td className="py-2.5 px-3 text-indigo-400 font-semibold">Riff Raff: Tip Toe Wing In My Jawwdinz</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-slate-200 text-sm leading-relaxed">
+            The <strong>viral rumpelstiltskin ai video</strong> captivating global audiences across TikTok, Instagram, and Reddit is not a lost 1978 or 1987 dark fantasy film. Instead, this <strong>viral rumpelstiltskin ai video meme</strong> represents an extraordinary demonstration of AI-engineered vintage cinematic practical effects created by digital artist @stroinaya. By mimicking 35mm Eastman color stock, optical halation, and tangible animatronic creature designs, the creator sparked the global <strong>1987 rumpelstiltskin ai movie myth</strong>, leading millions to question whether legendary actor Billy Barty starred in the footage.
+          </p>
+        </section>
+
+        {/* Article Body Content */}
+        <article className="prose prose-invert prose-indigo max-w-none text-slate-300 space-y-8">
+          
+          {/* Section 1 */}
+          <section className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
+              <FilmIcon className="w-7 h-7 text-indigo-400 inline-block" />
+              The 1987 Movie Myth: Did Billy Barty Star in the Viral Rumpelstiltskin Video?
+            </h2>
+            <p className="leading-relaxed">
+              Google Trends data records an unprecedented breakout (&gt;5,000%) for queries regarding the <strong>1987 rumpelstiltskin ai movie myth</strong>, including terms like <code className="text-indigo-300">1987 rumpelstiltskin</code>, <code className="text-indigo-300">rumpelstiltskin movie 1987</code>, and <code className="text-indigo-300">billy barty rumpelstiltskin</code>. The root cause of this viral confusion lies in an extraordinary historical parallel.
+            </p>
+            <p className="leading-relaxed">
+              In 1987, Cannon Movie Tales produced an authentic live-action fantasy feature titled <em>Rumpelstiltskin</em>, starring beloved American actor <strong>Billy Barty</strong> (1924–2000). Barty was revered worldwide for his memorable character performances in 1980s fantasy epics such as <em>Willow</em> and <em>Legend</em>.
+            </p>
+            <p className="leading-relaxed">
+              When modern social media users encountered the <strong>viral rumpelstiltskin ai video</strong> featuring realistic prosthetics, earthy medieval peasant garb, and subtle optical imperfections, millions assumed they had unearthed an unseen master tape from Barty&apos;s filmography. However, film archives confirm that the <strong>viral rumpelstiltskin ai video meme</strong> is 100% synthetic media created in late 2026.
+            </p>
+          </section>
+
+          {/* Section 2 */}
+          <section className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
+              <MusicalNoteIcon className="w-7 h-7 text-indigo-400 inline-block" />
+              Tip Toeing in My Jordans: How Rumpelstiltskin AI Became a Viral TikTok Meme
+            </h2>
+            <p className="leading-relaxed">
+              The ignition switch for the <strong>viral rumpelstiltskin ai video</strong> was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
+            </p>
+            <p className="leading-relaxed">
+              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically known in German folklore as <em>Rumpelstilzchen</em>) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-slate-300">
+              <li>Tiptoeing into the kitchen at midnight to secure leftovers without waking roommates.</li>
+              <li>Slipping out of the office on Friday afternoon before management assigns weekend shifts.</li>
+              <li>Strutting with exaggerated arrogance after passing an exam with minimal preparation.</li>
+            </ul>
+          </section>
+
+          {/* Section 3 */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <VideoCameraIcon className="w-7 h-7 text-indigo-400 inline-block" />
@@ -1447,7 +1448,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
             </div>
           </section>
 
-          {/* Section 5 */}
+          {/* Section 4 */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CheckCircleIcon className="w-7 h-7 text-indigo-400 inline-block" />
@@ -1475,7 +1476,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
             </p>
           </section>
 
-          {/* Section 6: FAQ */}
+          {/* Section 5: FAQ */}
           <section className="space-y-6 pt-6 border-t border-slate-800">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Frequently Asked Questions About Rumpelstiltskin AI
