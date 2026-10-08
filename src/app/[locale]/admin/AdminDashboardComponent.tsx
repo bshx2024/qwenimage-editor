@@ -1239,30 +1239,47 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 {/* Works Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {works.map((w) => {
-                    const imgUrl = Array.isArray(w.output_url) ? w.output_url[0] : w.output_url;
+                    const rawUrl = Array.isArray(w.output_url) ? w.output_url[0] : w.output_url;
+                    const isTaskPrefix = typeof rawUrl === 'string' && (rawUrl.startsWith('ark:') || rawUrl.startsWith('bailian:'));
+                    const imgUrl = isTaskPrefix ? '' : rawUrl;
+                    const isVideo = w.task_type?.startsWith('video_') || (typeof imgUrl === 'string' && (imgUrl.endsWith('.mp4') || imgUrl.includes('.mp4?')));
+
                     return (
                       <div
                         key={w.uid}
                         className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col backdrop-blur-md"
                       >
                         <div
-                          className="relative aspect-video bg-slate-950 cursor-pointer overflow-hidden group"
-                          onClick={() => imgUrl && setPreviewImage(imgUrl)}
+                          className="relative aspect-video bg-slate-950 overflow-hidden group"
+                          onClick={() => imgUrl && !isVideo && setPreviewImage(imgUrl)}
                         >
                           {imgUrl ? (
-                            <img
-                              src={imgUrl}
-                              alt={w.input_text || 'Work'}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                            />
+                            isVideo ? (
+                              <video
+                                src={imgUrl}
+                                controls
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <img
+                                src={imgUrl}
+                                alt={w.input_text || 'Work'}
+                                onError={(e) => {
+                                  (e.target as HTMLElement).style.display = 'none';
+                                }}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                              />
+                            )
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-600">
-                              No Image Available
+                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-500 font-mono">
+                              {isTaskPrefix ? 'Processing in Cloud...' : 'No Media Available'}
                             </div>
                           )}
-                          <div className="absolute top-2 left-2 flex gap-1.5">
+                          <div className="absolute top-2 left-2 flex gap-1.5 pointer-events-none">
                             <span className="rounded-md bg-slate-950/80 px-2 py-0.5 text-[10px] font-semibold text-cyan-300 border border-slate-800">
-                              {w.task_type || 'image'}
+                              {isVideo ? 'video_seedance_2_5' : w.task_type || 'image'}
                             </span>
                             {w.is_public && (
                               <span className="rounded-md bg-emerald-950/80 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 border border-emerald-800">
