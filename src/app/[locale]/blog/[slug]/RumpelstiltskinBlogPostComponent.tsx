@@ -304,7 +304,7 @@ export default function RumpelstiltskinBlogPostComponent({
           setHasGenerated(true);
           setIsPlaying(true);
           setGenerationStep('');
-          setApiNotice('火山方舟 Seedance 2.5 接口已集成！在 .env.local 中填入 ARK_API_KEY 即可体验云端实时视频渲染。');
+          setApiNotice('ByteDance Seedance 2.5 engine connected. Configure ARK_API_KEY in your environment for live rendering.');
           return;
         }
         throw new Error(data.message || data.error || 'Seedance generation failed');
@@ -343,12 +343,12 @@ export default function RumpelstiltskinBlogPostComponent({
             setIsPlaying(true);
             setActiveWorkflowTab('t2v-cinema');
             setGenerationStep('');
-            setApiNotice('🎉 恭喜！火山方舟 Seedance 2.5 高清视频已渲染完成，已在右侧放映厅自动播放，可点击下方下载保存！');
+            setApiNotice('🎉 Success! Seedance 2.5 HD video rendered and playing in cinema viewport. Click below to download!');
           } else if (statusData.status === 'failed') {
             clearInterval(pollInterval);
             clearInterval(elapsedTimer);
             setIsGenerating(false);
-            setApiNotice(`Seedance 渲染未通过: ${statusData.raw?.error?.message || '已自动为您退回点数'}`);
+            setApiNotice(`Seedance render notice: ${statusData.raw?.error?.message || 'Credits automatically refunded to your balance'}`);
           } else {
             setGenerationStep(`Seedance 2.5 Rendering (${statusData.status || 'processing'}... ${pollCount * 2.5}s)`);
           }
@@ -681,7 +681,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
               The ignition switch for the <strong>viral rumpelstiltskin ai video</strong> was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
             </p>
             <p className="leading-relaxed">
-              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically designated as <em>侏儒怪</em> in Chinese folklore) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
+              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically known in German folklore as <em>Rumpelstilzchen</em>) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-slate-300">
               <li>Tiptoeing into the kitchen at midnight to secure leftovers without waking roommates.</li>
@@ -770,10 +770,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                      2. I2V Reference Masterplate (生视频核心垫图源)
+                      2. I2V Reference Masterplate (Identity Lock)
                     </label>
                     <span className="text-[10px] text-emerald-400 font-mono">
-                      锁定面部与服饰
+                      Face &amp; Costume Lock
                     </span>
                   </div>
 
@@ -796,11 +796,11 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-[11px] font-bold text-emerald-300 flex items-center gap-1">
-                          <span>绿底抠图原画</span>
+                          <span>Viral Chroma Cutout</span>
                           {selectedReferenceType === 'green_screen' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
                         </div>
                         <div className="text-[9px] text-slate-400 line-clamp-1 mt-0.5">
-                          原版跳舞动作与笑容
+                          Original dance jump &amp; smirk
                         </div>
                       </div>
                     </button>
@@ -823,11 +823,11 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-[11px] font-bold text-indigo-300 flex items-center gap-1">
-                          <span>1978 调色母版</span>
+                          <span>1978 Relit Master</span>
                           {selectedReferenceType === 'relit_35mm' && <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />}
                         </div>
                         <div className="text-[9px] text-slate-400 line-clamp-1 mt-0.5">
-                          烛光谷仓35mm光影
+                          Candlelit barn 35mm grain
                         </div>
                       </div>
                     </button>
@@ -843,7 +843,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           : 'bg-slate-800/60 border-slate-700/70 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <span>🧔 乡村粗布矮人垫图</span>
+                      <span>🧔 Peasant Gnome Asset</span>
                     </button>
 
                     <label className={`px-2 py-1.5 rounded-lg border text-[11px] transition-all flex items-center gap-1.5 cursor-pointer justify-center ${
@@ -858,7 +858,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         disabled={isUploadingReference}
                         className="hidden"
                       />
-                      <span>{isUploadingReference ? '上传中...' : selectedReferenceType === 'custom' ? '✓ 自定义垫图已锁定' : '📤 上传自定义垫图'}</span>
+                      <span>{isUploadingReference ? 'Uploading...' : selectedReferenceType === 'custom' ? '✓ Custom Masterplate Locked' : '📤 Upload Custom Masterplate'}</span>
                     </label>
                   </div>
                 </div>
@@ -1210,9 +1210,9 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
 
                           {/* Elapsed vs Estimated Time HUD */}
                           <div className="text-[10px] font-mono text-slate-400 flex items-center gap-2 sm:gap-3">
-                            <span>⏱️ 已耗时: <strong className="text-slate-200">{renderElapsedSeconds}s</strong></span>
+                            <span>⏱️ Elapsed: <strong className="text-slate-200">{renderElapsedSeconds}s</strong></span>
                             <span>•</span>
-                            <span>预计剩余: <strong className="text-amber-300">~{Math.max(5, 130 - renderElapsedSeconds)}s</strong></span>
+                            <span>Est. Remaining: <strong className="text-amber-300">~{Math.max(5, 130 - renderElapsedSeconds)}s</strong></span>
                           </div>
                         </div>
 
@@ -1248,10 +1248,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                               {selectedReferenceType === 'green_screen' ? (
                                 <>
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                  <span>INPUT: 绿底垫图 (✓ 生效中)</span>
+                                  <span>INPUT: Chroma Key (✓ Active)</span>
                                 </>
                               ) : (
-                                <span>INPUT: 绿底垫图 (点击采用)</span>
+                                <span>INPUT: Chroma Key (Click to Select)</span>
                               )}
                             </span>
                           </div>
@@ -1274,10 +1274,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                               {selectedReferenceType === 'relit_35mm' ? (
                                 <>
                                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-                                  <span>OUTPUT: 1978母版 (✓ 生效中)</span>
+                                  <span>OUTPUT: 1978 Relit (✓ Active)</span>
                                 </>
                               ) : (
-                                <span>OUTPUT: 1978母版 (点击采用)</span>
+                                <span>OUTPUT: 1978 Relit (Click to Select)</span>
                               )}
                             </span>
                           </div>
@@ -1298,7 +1298,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           />
                           <span className="absolute top-2 left-2 bg-black/85 px-2 py-0.5 rounded text-[10px] text-emerald-400 font-mono flex items-center gap-1 border border-emerald-500/40">
                             {selectedReferenceType === 'green_screen' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
-                            Input Reference Asset (绿底抠图原画) {selectedReferenceType === 'green_screen' ? '• [✓ 当前生效垫图]' : '• [点击设为垫图]'}
+                            Input Reference Asset (Chroma Key) {selectedReferenceType === 'green_screen' ? '• [✓ Active Masterplate]' : '• [Click to Set as Masterplate]'}
                           </span>
                         </div>
                       ) : (
@@ -1317,7 +1317,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           />
                           <span className="absolute top-2 left-2 bg-black/85 px-2 py-0.5 rounded text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1">
                             {selectedReferenceType === 'relit_35mm' && <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />}
-                            1978 Candlelit Relit Masterplate {selectedReferenceType === 'relit_35mm' ? '• [✓ 当前生效垫图]' : '• [点击设为垫图]'}
+                            1978 Candlelit Relit Masterplate {selectedReferenceType === 'relit_35mm' ? '• [✓ Active Masterplate]' : '• [Click to Set as Masterplate]'}
                           </span>
                         </div>
                       )
@@ -1366,16 +1366,16 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   <div className="text-[11px] font-mono bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2 text-slate-300 min-w-0">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-ping" />
-                      <span className="text-emerald-400 font-semibold shrink-0">当前生效垫图:</span>
+                      <span className="text-emerald-400 font-semibold shrink-0">Active Reference Masterplate:</span>
                       <span className="truncate text-indigo-200 text-[10px]">
-                        {selectedReferenceType === 'green_screen' ? '🟢 绿底抠图原画 (rumpelstiltskin_green_screen.png)' :
-                         selectedReferenceType === 'relit_35mm' ? '🎬 1978 调色母版 (rumpelstiltskin_tuxedo_result.jpg)' :
-                         selectedReferenceType === 'rustic_gnome' ? '🧔 乡村粗布矮人 (rumpelstiltskin_vintage_demo.jpg)' :
-                         '📤 自定义上传垫图'}
+                        {selectedReferenceType === 'green_screen' ? '🟢 Viral Chroma Cutout (rumpelstiltskin_green_screen.png)' :
+                         selectedReferenceType === 'relit_35mm' ? '🎬 1978 Relit Master (rumpelstiltskin_tuxedo_result.jpg)' :
+                         selectedReferenceType === 'rustic_gnome' ? '🧔 Peasant Dwarf (rumpelstiltskin_vintage_demo.jpg)' :
+                         '📤 Custom Uploaded Masterplate'}
                       </span>
                     </div>
                     <span className="text-[9px] text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded font-sans shrink-0 font-medium">
-                      100% 保持燕尾服角色面容
+                      100% Face &amp; Costume Identity Locked
                     </span>
                   </div>
 
