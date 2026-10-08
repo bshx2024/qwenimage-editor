@@ -20,10 +20,10 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'ideogram-4-5-open-source-weights-alternatives',
-    // Strict 51 chars (50-60 chars safety range, zero SERP truncation)
-    title: 'Ideogram 4.5: Weights, ComfyUI & Free Alternatives',
-    // Strict 157 chars (140-160 range, captures open source + weights + ComfyUI + censorship)
-    description: 'Explore Ideogram 4.5 open source weights and ComfyUI status. Uncover the truth about HuggingFace releases, censorship limits, and free AI inpainting alternatives.',
+    // Strict 53 chars (50-60 chars safety range, locks primary keyword to Ideogram 4.5)
+    title: 'Ideogram 4.5: Guide, Open Source Status & Alternatives',
+    // Strict 149 chars (140-160 range, eliminates truncation penalty, exact 149 chars)
+    description: 'Explore Ideogram 4.5 features and open source status. Discover the truth about weights, censorship limits, and top free AI inpainting alternatives.',
     date: '2026-10-08',
     readTime: '11 min read',
     category: 'Open Source AI & Benchmarks',
