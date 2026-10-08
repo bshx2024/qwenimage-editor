@@ -94,8 +94,8 @@ if __name__ == "__main__":
       a: "While Vidu S1 introduced proof-of-concept infinite-length conversation on single static cameras, Vidu S2 expands the capability envelope with: (1) dynamic mid-stream reference image replacement for live character wardrobe changes, (2) the S2-Editing pipeline for real-time video stream inpainting, and (3) stereoscopic spatial 3D video generation for vision headsets."
     },
     {
-      q: "Why does character drift happen during real-time streaming and how do I prevent it?",
-      a: "Character drift during video streaming occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because frame-aligned attention is sensitive to initial features, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
+      q: "Why does character drift happen during interactive video generation and how do I prevent it?",
+      a: "Character drift during video generation occurs when source reference images contain complex background clutter, asymmetric edge fringing, or low resolution. Because frame-aligned attention is sensitive to initial features, any background noise in the reference is amplified across sequential frames. Isolating subjects onto clean alpha backgrounds using Qwen Image Editor Background Remover eliminates 98% of identity hallucinations."
     },
     {
       q: "How can creators prepare streaming image assets without local GPUs?",
@@ -288,12 +288,12 @@ if __name__ == "__main__":
               The primary limitation of contemporary AI video has been generation latency. Standard diffusion transformers—such as Kling 1.5, Runway Gen-3 Alpha, and Sora—operate under full-temporal volume chunking, requiring 30 to 50 denoising steps across the entire spatio-temporal sequence. This creates 20 to 120 seconds of waiting time before playback begins.
             </p>
             <p>
-              Shengshu Technology&apos;s research paper dismantles this latency bottleneck through a decoupled <strong>Backbone-Refiner pipeline</strong>:
+              Shengshu Technology&apos;s Vidu S2 research paper dismantles this latency bottleneck through a decoupled <strong>Backbone-Refiner pipeline</strong>:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
                 <div className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
-                  Real-Time Streaming Backbone
+                  Real-Time Causal Backbone
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
                   A compact diffusion transformer operating at native 720p resolution that updates latent tokens in rolling causal windows. By restricting attention to preceding keyframes and active speech embeddings, latency drops below 280ms, maintaining interactive 24–30 FPS frame rates.
@@ -443,7 +443,7 @@ if __name__ == "__main__":
               <span>4. Generative Video Landscape: Vidu S2 vs. Competitors</span>
             </h2>
             <p>
-              To evaluate where real-time streaming fits into production workflows, the matrix below benchmarks leading video models as of October 2026:
+              To evaluate where Vidu S2 fits into production workflows, the matrix below benchmarks leading video models as of October 2026:
             </p>
 
             <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40">
