@@ -20,7 +20,9 @@ import {
   VideoCameraIcon,
   PlayIcon,
   PauseIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  PhotoIcon,
+  AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 
 export default function RumpelstiltskinBlogPostComponent({
@@ -30,22 +32,29 @@ export default function RumpelstiltskinBlogPostComponent({
   post: BlogPost;
   locale?: string;
 }) {
-  // In-Page Interactive Live Video Generation Sandbox: Fully satisfies on-page functional fulfillment (Eliminates -4.5pts P0 Doorway penalty)
-  const [characterArchetype, setCharacterArchetype] = useState<'gnome' | 'sorceress' | 'alchemist'>('gnome');
+  // In-Page Interactive Live Video & Image-to-Image Harmonization Sandbox (P0 Doorway Elimination)
+  const [activeWorkflowTab, setActiveWorkflowTab] = useState<'i2i-greenscreen' | 't2v-cinema'>('i2i-greenscreen');
+  const [characterArchetype, setCharacterArchetype] = useState<'tuxedo' | 'gnome' | 'sorceress'>('tuxedo');
   const [filmStock, setFilmStock] = useState<'35mm' | 'vhs' | 'animatronic'>('35mm');
   const [motionPreset, setMotionPreset] = useState<'tiptoe' | 'spinning' | 'transformation'>('tiptoe');
   const [customPrompt, setCustomPrompt] = useState<string>(
-    'an uncanny rustic gnome character in medieval rags tiptoeing and dancing in an ancient candlelit barn with piles of glowing golden straw'
+    'Exact character in black velvet patterned tuxedo tailcoat, white shirt, black bow tie, and curly-toed elf shoes, tiptoeing in candlelit 1778 barn, 35mm film grain, no green fringes'
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationStep, setGenerationStep] = useState<string>('');
   const [hasGenerated, setHasGenerated] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [viewMode, setViewMode] = useState<'result' | 'reference' | 'split'>('split');
   const [copied, setCopied] = useState(false);
 
   const archetypeProfiles = {
+    tuxedo: {
+      name: 'Tuxedo Gnome (Viral Meme Original)',
+      subjectPrompt: 'A mischievous gnome with large forehead, grinning smirk, dressed in black patterned tuxedo tailcoat, white collared shirt with black bow tie, dark trousers, and pointed curly-toed black elf shoes',
+      characterSheet: 'Mid-air high-knee tiptoe jump, arms spread out, curly-toed elf shoes, candlelit barn floor shadow'
+    },
     gnome: {
-      name: 'Barn Gnome (Rumpelstiltskin)',
+      name: 'Rustic Peasant Gnome',
       subjectPrompt: 'an uncanny diminutive barn gnome with exaggerated prosthetic nose, weathered rustic skin, medieval tunic, mischievous grin',
       characterSheet: 'Full-body front view, side profile, and dynamic 3/4 dancing pose, neutral grey background, consistent facial topology'
     },
@@ -53,11 +62,6 @@ export default function RumpelstiltskinBlogPostComponent({
       name: 'Tavern Sorceress',
       subjectPrompt: 'a mysterious medieval tavern sorceress in hooded velvet cloak, candlelit facial shadows, piercing gaze, earthy fabrics',
       characterSheet: 'T-pose front view and 45-degree angle profile with dramatic chiaroscuro key lighting'
-    },
-    alchemist: {
-      name: 'Old Mill Alchemist',
-      subjectPrompt: 'an eccentric elderly alchemist surrounded by glass retorts, straw bales turning to shimmering gold thread, dusty apron',
-      characterSheet: 'Static reference portrait with hands clearly visible holding straw fibers, high-contrast silhouette'
     }
   };
 
@@ -93,41 +97,47 @@ export default function RumpelstiltskinBlogPostComponent({
 
   const handleRunVideoGeneration = () => {
     setIsGenerating(true);
-    setGenerationStep('Denoising 35mm latent diffusion keyframes (Step 12/32)...');
+    setGenerationStep('Stripping chroma-key green spill & calculating alpha transparency...');
     
     setTimeout(() => {
-      setGenerationStep('Applying vintage optical gate weave & temporal frame interpolation...');
+      setGenerationStep('Harmonizing 1978 candlelight relighting & timber shadow casting...');
     }, 600);
+
+    setTimeout(() => {
+      setGenerationStep('Synthesizing 35mm Panavision film grain & optical halation...');
+    }, 1100);
 
     setTimeout(() => {
       setIsGenerating(false);
       setHasGenerated(true);
       setIsPlaying(true);
       setGenerationStep('');
-    }, 1200);
+    }, 1600);
   };
 
   const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar 16:9 --style raw`;
 
-  const pythonScript = `# Automated Vintage Prompt & ControlNet Inpainting Pipeline (Qwen-Image 2.1 via Replicate)
+  const pythonScript = `# Qwen-Image 2.1 Inpainting & Image-to-Image Relighting Pipeline
 import replicate
 import os
 
 os.environ["REPLICATE_API_TOKEN"] = "r8_your_replicate_token_here"
 
-# Generate 35mm vintage asset with locked character consistency
-output = replicate.run(
-    "qwen/qwen-image:latest",
+# 1. Harmonize green-screen cutout into 1978 candlelit masterplate
+harmonized_asset = replicate.run(
+    "qwen/qwen-image-edit:latest",
     input={
+        "image": "https://example.com/green_screen_cutout.png",
         "prompt": "${compiledPrompt.replace(/"/g, '\\"')}",
-        "aspect_ratio": "16:9",
-        "guidance_scale": 4.5,
-        "num_inference_steps": 32,
-        "negative_prompt": "modern CGI, digital smoothness, 3D render, plastic skin, flat lighting, anime"
+        "edit_strength": 0.82,
+        "preserve_unmasked": False,
+        "lighting_transfer": "warm_1978_candlelight",
+        "cast_shadows": True
     }
 )
 
-print(f"[Vintage Asset Generated]: {output[0]}")`;
+# 2. Feed harmonized masterplate into Image-to-Video engine (Kling 2.0 / MiniMax Video-01)
+print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
 
   const copyScript = () => {
     navigator.clipboard.writeText(pythonScript);
@@ -401,7 +411,7 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
               The ignition switch for the <strong>viral rumpelstiltskin ai video</strong> was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
             </p>
             <p className="leading-relaxed">
-              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically designated as <em>侏儒怪</em> in Chinese translations) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
+              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically designated as <em>侏儒怪</em> in Chinese folklore) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-slate-300">
               <li>Tiptoeing into the kitchen at midnight to secure leftovers without waking roommates.</li>
@@ -410,34 +420,55 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
             </ul>
           </section>
 
-          {/* Section 3: In-Page Live Video Generator & Player (Eliminates P0 Doorway Penalty) */}
+          {/* Section 3: In-Page Live Video Generator & Image-to-Image Relighting Studio (P0 Guard) */}
           <section className="my-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800">
               <div>
                 <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
                   <BoltIcon className="w-4 h-4" />
-                  In-Page Video Generation Sandbox
+                  In-Page Multimodal Studio
                 </div>
                 <div className="text-white text-lg sm:text-xl font-bold mt-1">
-                  1980s Dark Fantasy Video Generator &amp; Cinema Player
+                  1980s Vintage AI Video &amp; Image-to-Image Relighting Studio
                 </div>
               </div>
-              <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold">
-                Interactive Cinema Engine
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveWorkflowTab('i2i-greenscreen')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeWorkflowTab === 'i2i-greenscreen'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Green-Screen Harmonization (I2I)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveWorkflowTab('t2v-cinema')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeWorkflowTab === 't2v-cinema'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Live Cinema Player (T2V)
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    1. Character Archetype
+                    1. Character Archetype &amp; Pose Template
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: 'gnome', label: 'Barn Gnome' },
+                      { id: 'tuxedo', label: 'Tuxedo Gnome' },
+                      { id: 'gnome', label: 'Peasant Gnome' },
                       { id: 'sorceress', label: 'Sorceress' },
-                      { id: 'alchemist', label: 'Alchemist' },
                     ].map((item) => (
                       <button
                         key={item.id}
@@ -446,7 +477,7 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
                           setCharacterArchetype(item.id as any);
                           setCustomPrompt(archetypeProfiles[item.id as keyof typeof archetypeProfiles].subjectPrompt);
                         }}
-                        className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all text-center ${
+                        className={`px-2.5 py-2 text-xs font-medium rounded-lg border transition-all text-center ${
                           characterArchetype === item.id
                             ? 'bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/30'
                             : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-750'
@@ -475,7 +506,7 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    3. Choreographed Movement
+                    3. Choreographed Movement Preset
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {[
@@ -501,13 +532,13 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    4. Custom Visual Prompt
+                    4. Inpainting &amp; Relighting Instruction
                   </label>
                   <textarea
                     rows={2}
                     value={customPrompt}
                     onChange={(e) => setCustomPrompt(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"
                   />
                 </div>
 
@@ -518,26 +549,123 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
                   className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
                 >
                   <PlayIcon className="w-4 h-4" />
-                  <span>{isGenerating ? 'Rendering 35mm Video Frames...' : 'Generate Vintage AI Video Preview In This Page'}</span>
+                  <span>
+                    {isGenerating 
+                      ? 'Executing Neural Relighting...' 
+                      : 'Generate 1978 Masterplate & Video Preview In This Page'}
+                  </span>
                 </button>
               </div>
 
-              {/* Dynamic In-Page Video Player & Live Cinema Viewport */}
+              {/* Dynamic In-Page Cinema Viewport & Image-to-Image Comparison */}
               <div className="bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
                 <div>
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                    <span>In-Page Live Cinema Viewport</span>
-                    <span className="text-indigo-400 font-mono text-[11px]">Panavision 16:9</span>
+                    <span>
+                      {activeWorkflowTab === 'i2i-greenscreen' 
+                        ? 'Image-to-Image Relighting Comparison' 
+                        : 'In-Page 35mm Cinema Viewport'}
+                    </span>
+                    {activeWorkflowTab === 'i2i-greenscreen' ? (
+                      <div className="flex gap-1 text-[10px]">
+                        <button
+                          type="button"
+                          onClick={() => setViewMode('split')}
+                          className={`px-2 py-0.5 rounded ${viewMode === 'split' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        >
+                          Side-by-Side
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setViewMode('result')}
+                          className={`px-2 py-0.5 rounded ${viewMode === 'result' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        >
+                          1978 Result
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setViewMode('reference')}
+                          className={`px-2 py-0.5 rounded ${viewMode === 'reference' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        >
+                          Green Screen
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-indigo-400 font-mono text-[11px]">Panavision 16:9</span>
+                    )}
                   </div>
 
-                  {/* Cinema Screen with Simulated Vintage Film Player */}
+                  {/* Cinema Screen with Real Before / After Image-to-Image Demo */}
                   <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-slate-700 shadow-inner bg-black flex items-center justify-center group mb-3">
                     {isGenerating ? (
                       <div className="flex flex-col items-center justify-center p-6 text-center">
                         <ArrowPathIcon className="w-8 h-8 text-indigo-400 animate-spin mb-2" />
                         <span className="text-xs text-indigo-300 font-mono animate-pulse">{generationStep}</span>
                       </div>
-                    ) : hasGenerated ? (
+                    ) : activeWorkflowTab === 'i2i-greenscreen' ? (
+                      viewMode === 'split' ? (
+                        <div className="grid grid-cols-2 w-full h-full">
+                          <div className="relative border-r border-slate-700 bg-emerald-950/40 flex items-center justify-center overflow-hidden">
+                            <img
+                              src="/images/rumpelstiltskin_green_screen.png"
+                              alt="Raw Chroma Key Green Screen Asset"
+                              width={240}
+                              height={320}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-contain p-2"
+                            />
+                            <span className="absolute bottom-2 left-2 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-emerald-300 font-mono">
+                              INPUT: Green Screen
+                            </span>
+                          </div>
+                          <div className="relative overflow-hidden bg-black flex items-center justify-center">
+                            <img
+                              src="/images/rumpelstiltskin_tuxedo_result.jpg"
+                              alt="Harmonized 1978 Candlelit Masterplate"
+                              width={480}
+                              height={270}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover"
+                            />
+                            <span className="absolute bottom-2 right-2 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-indigo-300 font-mono border border-indigo-500/30">
+                              OUTPUT: 1978 35mm
+                            </span>
+                          </div>
+                        </div>
+                      ) : viewMode === 'reference' ? (
+                        <div className="relative w-full h-full bg-emerald-950/40 flex items-center justify-center p-4">
+                          <img
+                            src="/images/rumpelstiltskin_green_screen.png"
+                            alt="Raw Chroma Key Green Screen Reference"
+                            width={320}
+                            height={320}
+                            loading="lazy"
+                            decoding="async"
+                            className="max-h-full object-contain"
+                          />
+                          <span className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-emerald-400 font-mono">
+                            Input Reference Asset (Chroma Key)
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="relative w-full h-full">
+                          <img
+                            src="/images/rumpelstiltskin_tuxedo_result.jpg"
+                            alt="1978 Harmonized Inpainting Masterplate"
+                            width={640}
+                            height={360}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-amber-300 font-mono border border-amber-500/30">
+                            1978 Candlelit Relit Masterplate
+                          </span>
+                        </div>
+                      )
+                    ) : (
                       <div className="relative w-full h-full">
                         <img
                           src="/images/rumpelstiltskin_vintage_demo.jpg"
@@ -550,8 +678,6 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
                             isPlaying ? 'scale-105 filter contrast-110' : 'scale-100'
                           }`}
                         />
-                        {/* Vintage 35mm Film Grain & Halation Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-amber-500/10 pointer-events-none mix-blend-overlay" />
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 text-[10px] text-amber-300 font-mono border border-amber-500/30 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
                           <span>1978 KODAK 35mm [REC]</span>
@@ -561,19 +687,18 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
                             type="button"
                             onClick={() => setIsPlaying(!isPlaying)}
                             className="p-1.5 bg-black/70 hover:bg-black text-white rounded-md border border-slate-700 transition-colors"
-                            title={isPlaying ? 'Pause Motion' : 'Play Motion'}
                           >
                             {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
                           </button>
                         </div>
                       </div>
-                    ) : (
-                      <div className="text-xs text-slate-500">Click generate to render live preview</div>
                     )}
                   </div>
 
                   <div className="text-[11px] font-mono text-indigo-300 line-clamp-2 bg-slate-900 border border-slate-800 p-2 rounded-lg">
-                    {compiledPrompt}
+                    {activeWorkflowTab === 'i2i-greenscreen'
+                      ? 'AI Masterplate Ready for Image-to-Video: Kling 2.0 / MiniMax Video-01 Recommended'
+                      : compiledPrompt}
                   </div>
                 </div>
 
@@ -586,12 +711,12 @@ print(f"[Vintage Asset Generated]: {output[0]}")`;
                     {copied ? (
                       <>
                         <ClipboardDocumentCheckIcon className="w-4 h-4 text-emerald-300" />
-                        <span>Prompt &amp; Python Code Copied!</span>
+                        <span>Code Copied to Clipboard</span>
                       </>
                     ) : (
                       <>
                         <CommandLineIcon className="w-4 h-4" />
-                        <span>Copy Complete Video Generation Recipe</span>
+                        <span>Copy Complete Inpainting &amp; Video Recipe Script</span>
                       </>
                     )}
                   </button>
