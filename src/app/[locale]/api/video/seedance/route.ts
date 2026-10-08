@@ -264,10 +264,25 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await arkResponse.json();
+    const taskId = data.id || data.task_id;
+
+    // Persist ark task reference to works record so gallery /my can poll status
+    if (taskId && workUid) {
+      try {
+        const db = getDb();
+        await db.query(
+          "UPDATE works SET output_url = $1 WHERE uid = $2",
+          [`ark:${taskId}`, workUid]
+        );
+      } catch (dbUpdateErr: any) {
+        console.warn("Could not save ark task id to works:", dbUpdateErr?.message);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       uid: workUid,
-      taskId: data.id || data.task_id,
+      taskId: taskId,
       status: data.status,
       creditCost,
       raw: data,

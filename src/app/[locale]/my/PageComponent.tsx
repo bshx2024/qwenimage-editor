@@ -68,14 +68,14 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
       const data = await res.json();
       if (data.status === 1 && Array.isArray(data.output_url) && data.output_url.length > 0) {
         setResultInfoList((prev) =>
-          prev.map((item) => (item.uid === uid ? { ...item, ...data, output_url: data.output_url } : item))
+          prev.map((item) => (item.uid === uid ? { ...item, ...data, status: 1, output_url: data.output_url } : item))
         );
       } else if (data.status === 2) {
         setResultInfoList((prev) =>
           prev.map((item) => (item.uid === uid ? { ...item, status: 2, message: data.message } : item))
         );
       } else {
-        alert('Artwork is still processing. Please check again in a moment.');
+        alert('Creation is still rendering in the cloud. Please check again shortly.');
       }
     } catch (e) {
       console.error('Failed to refresh task status:', e);
@@ -228,12 +228,15 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                     : typeof file.output_url === 'string'
                     ? file.output_url
                     : '';
-                  const cleanImgUrl = getCompressionImageLink(rawUrl);
+                  const isTaskPrefix = typeof rawUrl === 'string' && (rawUrl.startsWith('ark:') || rawUrl.startsWith('bailian:'));
+                  const validUrl = isTaskPrefix ? '' : rawUrl;
+                  const cleanImgUrl = getCompressionImageLink(validUrl);
                   const isCopied = copiedUid === file.uid;
-                  const isSuccess = !!cleanImgUrl;
+                  const isSuccess = !!cleanImgUrl && Number(file.status) === 1;
                   const isPending = !isSuccess && Number(file.status) === 0;
                   const isFailed = !isSuccess && !isPending;
                   const isChecking = checkingUid === file.uid;
+                  const isVideo = file.task_type?.startsWith('video_') || cleanImgUrl.endsWith('.mp4') || cleanImgUrl.includes('.mp4?');
 
                   return (
                     <div
@@ -246,17 +249,29 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                           : 'border-slate-800 bg-slate-900/70 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10'
                       }`}
                     >
-                      {/* Image Preview Box */}
+                      {/* Media Preview Box (Image or Video) */}
                       <div className="relative w-full aspect-square bg-slate-950 overflow-hidden flex items-center justify-center">
                         {isSuccess ? (
-                          <img
-                            src={cleanImgUrl}
-                            alt={file.input_text || 'AI Visual Creation'}
-                            width={400}
-                            height={400}
-                            loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
+                          isVideo ? (
+                            <div className="relative w-full h-full bg-black flex items-center justify-center">
+                              <video
+                                src={cleanImgUrl}
+                                controls
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <img
+                              src={cleanImgUrl}
+                              alt={file.input_text || 'AI Visual Creation'}
+                              width={400}
+                              height={400}
+                              loading="lazy"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          )
                         ) : isPending ? (
                           <div className="flex flex-col items-center justify-center text-center p-6 space-y-2.5">
                             <ArrowPathIcon
@@ -308,7 +323,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
                           {isSuccess ? (
                             <span className="px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
-                              {file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
+                              {file.task_type?.startsWith('video_') ? 'Video' : file.task_type === 'image_edit' ? 'Edit' : 'T2I'}
                             </span>
                           ) : isPending ? (
                             <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 backdrop-blur-md border border-indigo-500/30 text-[10px] font-semibold text-indigo-300 uppercase tracking-wider">

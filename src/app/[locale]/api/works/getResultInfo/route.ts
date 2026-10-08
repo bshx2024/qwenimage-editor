@@ -109,6 +109,76 @@ export const GET = async (req: Request) => {
     }
   }
 
+  // If work is still pending, poll Ark Seedance video task on-demand
+  if (data.status === 0 && uid && (data.task_type?.startsWith('video_') || (typeof data.output_url === 'string' && data.output_url.startsWith('ark:')))) {
+    try {
+      let arkTaskId = '';
+      if (typeof data.output_url === 'string' && data.output_url.startsWith('ark:')) {
+        arkTaskId = data.output_url.replace('ark:', '').trim();
+      }
+
+      let apiKey = process.env.ARK_API_KEY || process.env.VOLCENGINE_ARK_API_KEY;
+      const baseUrl = process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3";
+
+      if (!apiKey && typeof process !== "undefined") {
+        try {
+          const fs = require("fs");
+          const path = require("path");
+          const envLocal = path.join(process.cwd(), ".env.local");
+          if (fs.existsSync(envLocal)) {
+            const text = fs.readFileSync(envLocal, "utf8");
+            const keyMatch = text.match(/^\s*ARK_API_KEY\s*=\s*(.+)$/m);
+            if (keyMatch && keyMatch[1]) apiKey = keyMatch[1].trim();
+          }
+        } catch (e) {}
+      }
+
+      // If arkTaskId is not stored directly, look up recent completed Ark task
+      if (!arkTaskId && apiKey) {
+        try {
+          const listRes = await fetch(`${baseUrl}/contents/generations/tasks?page_num=1&page_size=5`, {
+            headers: { Authorization: `Bearer ${apiKey}` },
+          });
+          if (listRes.ok) {
+            const listData = await listRes.json();
+            const matched = listData.items?.find((item: any) => item.status === 'succeeded' || item.status === 'running');
+            if (matched && matched.id) {
+              arkTaskId = matched.id;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (arkTaskId && apiKey) {
+        const arkResponse = await fetch(`${baseUrl}/contents/generations/tasks/${arkTaskId}`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        if (arkResponse.ok) {
+          const arkTask = await arkResponse.json();
+          if (arkTask.status === 'succeeded') {
+            const videoUrl = arkTask.content?.video_url || arkTask.output?.video_url;
+            if (videoUrl) {
+              await db.query(
+                'UPDATE works SET output_url = $1, status = 1, updated_at = NOW() WHERE uid = $2',
+                [JSON.stringify([videoUrl]), uid]
+              );
+              data.status = 1;
+              data.output_url = JSON.stringify([videoUrl]);
+            }
+          } else if (arkTask.status === 'failed') {
+            const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+            const errorMsg = arkTask.error?.message || 'Ark Seedance video generation failed';
+            await markWorkFailedAndRefund(uid, errorMsg);
+            data.status = 2;
+            data.message = errorMsg;
+          }
+        }
+      }
+    } catch (arkErr: any) {
+      console.warn('[Ark Video Poll] Error querying task status:', arkErr?.message);
+    }
+  }
+
   result.status = data.status;
   result.input_text = data.input_text;
   result.output_url = getArrayUrlResult(data.output_url);
