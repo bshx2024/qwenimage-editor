@@ -820,45 +820,20 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           </span>
                         </div>
                       )
-                    ) : generatedVideoUrl ? (
+                    ) : (
                       <div className="relative w-full h-full bg-black">
                         <video
-                          src={generatedVideoUrl}
+                          src={generatedVideoUrl || "/videos/rumpelstiltskin_seedance_demo.mp4"}
                           controls
                           autoPlay
                           loop
+                          playsInline
+                          poster="/images/rumpelstiltskin_vintage_demo.jpg"
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-emerald-950/80 text-[10px] text-emerald-300 font-mono border border-emerald-500/40 flex items-center gap-1.5 pointer-events-none">
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>SEEDANCE 2.5 LIVE RENDER</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="relative w-full h-full">
-                        <img
-                          src="/images/rumpelstiltskin_vintage_demo.jpg"
-                          alt="Rumpelstiltskin 1978 Vintage AI Video Preview"
-                          width={640}
-                          height={360}
-                          loading="lazy"
-                          decoding="async"
-                          className={`w-full h-full object-cover transition-transform duration-1000 ${
-                            isPlaying ? 'scale-105 filter contrast-110' : 'scale-100'
-                          }`}
-                        />
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 text-[10px] text-amber-300 font-mono border border-amber-500/30 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
-                          <span>1978 KODAK 35mm [REC]</span>
-                        </div>
-                        <div className="absolute bottom-2 right-2 flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="p-1.5 bg-black/70 hover:bg-black text-white rounded-md border border-slate-700 transition-colors"
-                          >
-                            {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
-                          </button>
+                          <span>{generatedVideoUrl ? 'SEEDANCE 2.5 LIVE RENDER' : 'SEEDANCE 2.5 CINEMA DEMO (5s)'}</span>
                         </div>
                       </div>
                     )}

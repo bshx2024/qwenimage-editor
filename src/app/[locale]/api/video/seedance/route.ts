@@ -6,7 +6,9 @@ import { checkSubscribe } from "~/servers/subscribe";
 
 const ARK_BASE_URL = process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3";
 const ARK_API_KEY = process.env.ARK_API_KEY;
-const DEFAULT_MODEL = process.env.ARK_SEEDANCE_MODEL || "doubao-seedance-2-5";
+const DEFAULT_MODEL = process.env.ARK_SEEDANCE_MODEL === "doubao-seedance-2-5" 
+  ? "doubao-seedance-2-5-260628" 
+  : (process.env.ARK_SEEDANCE_MODEL || "doubao-seedance-2-5-260628");
 
 const RESOLUTION_CREDIT_MAP: Record<string, number> = {
   "480p": 20,
@@ -25,13 +27,20 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const {
+    let {
       prompt,
       imageUrl,
       resolution = "720p",
       userId,
       model = DEFAULT_MODEL,
     } = body;
+
+    // Resolve short aliases to official full Ark model version IDs
+    if (model === "doubao-seedance-2-5") {
+      model = "doubao-seedance-2-5-260628";
+    } else if (model === "doubao-seedance-2-0") {
+      model = "doubao-seedance-2-0-260128";
+    }
 
     if (!prompt) {
       return NextResponse.json({ error: "Missing required prompt" }, { status: 400 });
