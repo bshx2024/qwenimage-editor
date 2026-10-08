@@ -56,11 +56,73 @@ export default function RumpelstiltskinBlogPostComponent({
   const [hasGenerated, setHasGenerated] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [viewMode, setViewMode] = useState<'result' | 'reference' | 'split'>('split');
+  const [selectedReferenceType, setSelectedReferenceType] = useState<'green_screen' | 'relit_35mm' | 'rustic_gnome' | 'custom'>('green_screen');
+  const [customReferenceImageUrl, setCustomReferenceImageUrl] = useState<string | null>(null);
+  const [isUploadingReference, setIsUploadingReference] = useState(false);
   const [copied, setCopied] = useState(false);
   const [videoCopied, setVideoCopied] = useState(false);
   const [renderElapsedSeconds, setRenderElapsedSeconds] = useState<number>(0);
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>('/videos/user_seedance_generated_result.mp4');
   const [apiNotice, setApiNotice] = useState<string | null>(null);
+
+  const getActiveReferenceUrl = () => {
+    const baseOrigin = typeof window !== 'undefined' && !window.location.origin.includes('localhost')
+      ? window.location.origin
+      : 'https://www.qwenimage-editor.com';
+
+    if (selectedReferenceType === 'custom' && customReferenceImageUrl) {
+      return customReferenceImageUrl;
+    }
+    if (selectedReferenceType === 'relit_35mm') {
+      return `${baseOrigin}/images/rumpelstiltskin_tuxedo_result.jpg`;
+    }
+    if (selectedReferenceType === 'rustic_gnome') {
+      return `${baseOrigin}/images/rumpelstiltskin_vintage_demo.jpg`;
+    }
+    // Default: green screen meme cutout
+    return `${baseOrigin}/images/rumpelstiltskin_green_screen.png`;
+  };
+
+  const handleUploadReferenceImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image size exceeds 10MB limit.');
+      return;
+    }
+
+    setIsUploadingReference(true);
+    setApiNotice(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || 'Failed to upload reference image');
+      }
+
+      setCustomReferenceImageUrl(data.url);
+      setSelectedReferenceType('custom');
+      setApiNotice('Custom masterplate uploaded! Character identity locked for video generation.');
+    } catch (err: any) {
+      alert('Upload failed: ' + (err.message || 'unknown error'));
+    } finally {
+      setIsUploadingReference(false);
+    }
+  };
 
   const archetypeProfiles = {
     tuxedo: {
@@ -210,8 +272,8 @@ export default function RumpelstiltskinBlogPostComponent({
         body: JSON.stringify({
           prompt: isMimic
             ? `${customPrompt}, precise motion transfer replication of driving actor choreography, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere --ar 16:9`
-            : compiledPrompt,
-          imageUrl: typeof window !== 'undefined' ? `${window.location.origin}/images/rumpelstiltskin_vintage_demo.jpg` : '',
+            : `${compiledPrompt}${selectedReferenceType === 'green_screen' ? ', seamless chroma key extraction, composite subject cleanly into authentic candlelit 1778 barn interior, 35mm film grain, no green fringes or artifacts, 100% preserve character face, smile and black tuxedo clothing identity' : ''}`,
+          imageUrl: getActiveReferenceUrl(),
           videoUrl: isMimic ? customVideoUrl : '',
           duration: videoDuration,
           resolution: videoResolution,
@@ -684,6 +746,13 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         onClick={() => {
                           setCharacterArchetype(item.id as any);
                           setCustomPrompt(archetypeProfiles[item.id as keyof typeof archetypeProfiles].subjectPrompt);
+                          if (item.id === 'tuxedo') {
+                            setSelectedReferenceType('green_screen');
+                          } else if (item.id === 'gnome') {
+                            setSelectedReferenceType('rustic_gnome');
+                          } else {
+                            setSelectedReferenceType('green_screen');
+                          }
                         }}
                         className={`px-2.5 py-2 text-xs font-medium rounded-lg border transition-all text-center ${
                           characterArchetype === item.id
@@ -697,9 +766,106 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   </div>
                 </div>
 
+                {/* 2. I2V Reference Masterplate Selection */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      2. I2V Reference Masterplate (生视频核心垫图源)
+                    </label>
+                    <span className="text-[10px] text-emerald-400 font-mono">
+                      锁定面部与服饰
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReferenceType('green_screen')}
+                      className={`p-2 rounded-lg border text-left transition-all relative flex items-start gap-2 ${
+                        selectedReferenceType === 'green_screen'
+                          ? 'bg-emerald-950/60 border-emerald-400 text-white shadow-md ring-1 ring-emerald-400'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:bg-slate-750'
+                      }`}
+                    >
+                      <div className="w-10 h-10 rounded bg-emerald-950 border border-emerald-600/40 shrink-0 overflow-hidden flex items-center justify-center">
+                        <img
+                          src="/images/rumpelstiltskin_green_screen.png"
+                          alt="Green Screen Cutout"
+                          className="w-full h-full object-contain p-0.5"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[11px] font-bold text-emerald-300 flex items-center gap-1">
+                          <span>绿底抠图原画</span>
+                          {selectedReferenceType === 'green_screen' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                        </div>
+                        <div className="text-[9px] text-slate-400 line-clamp-1 mt-0.5">
+                          原版跳舞动作与笑容
+                        </div>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReferenceType('relit_35mm')}
+                      className={`p-2 rounded-lg border text-left transition-all relative flex items-start gap-2 ${
+                        selectedReferenceType === 'relit_35mm'
+                          ? 'bg-indigo-950/60 border-indigo-400 text-white shadow-md ring-1 ring-indigo-400'
+                          : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:bg-slate-750'
+                      }`}
+                    >
+                      <div className="w-10 h-10 rounded bg-slate-900 border border-indigo-600/40 shrink-0 overflow-hidden flex items-center justify-center">
+                        <img
+                          src="/images/rumpelstiltskin_tuxedo_result.jpg"
+                          alt="1978 Result"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[11px] font-bold text-indigo-300 flex items-center gap-1">
+                          <span>1978 调色母版</span>
+                          {selectedReferenceType === 'relit_35mm' && <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />}
+                        </div>
+                        <div className="text-[9px] text-slate-400 line-clamp-1 mt-0.5">
+                          烛光谷仓35mm光影
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReferenceType('rustic_gnome')}
+                      className={`px-2 py-1.5 rounded-lg border text-[11px] transition-all flex items-center gap-1.5 flex-1 justify-center ${
+                        selectedReferenceType === 'rustic_gnome'
+                          ? 'bg-amber-950/40 border-amber-400 text-amber-200 ring-1 ring-amber-400'
+                          : 'bg-slate-800/60 border-slate-700/70 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>🧔 乡村粗布矮人垫图</span>
+                    </button>
+
+                    <label className={`px-2 py-1.5 rounded-lg border text-[11px] transition-all flex items-center gap-1.5 cursor-pointer justify-center ${
+                      selectedReferenceType === 'custom'
+                        ? 'bg-purple-950/50 border-purple-400 text-purple-200 ring-1 ring-purple-400'
+                        : 'bg-slate-800/60 border-slate-700/70 text-slate-400 hover:text-slate-200'
+                    }`}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleUploadReferenceImage}
+                        disabled={isUploadingReference}
+                        className="hidden"
+                      />
+                      <span>{isUploadingReference ? '上传中...' : selectedReferenceType === 'custom' ? '✓ 自定义垫图已锁定' : '📤 上传自定义垫图'}</span>
+                    </label>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    2. Cinematic Era &amp; Film Stock
+                    3. Cinematic Era &amp; Film Stock
                   </label>
                   <select
                     value={filmStock}
@@ -712,11 +878,11 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                   </select>
                 </div>
 
-                {/* 3. Movement & Motion Mimic Mode */}
+                {/* 4. Movement & Motion Mimic Mode */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                      3. Movement &amp; Motion Mimic
+                      4. Movement &amp; Motion Mimic
                     </label>
                     <div className="flex gap-1 text-[10px]">
                       <button
@@ -1063,7 +1229,12 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                     ) : activeWorkflowTab === 'i2i-greenscreen' ? (
                       viewMode === 'split' ? (
                         <div className="grid grid-cols-2 w-full h-full">
-                          <div className="relative border-r border-slate-700 bg-emerald-950/40 flex items-center justify-center overflow-hidden">
+                          <div
+                            onClick={() => setSelectedReferenceType('green_screen')}
+                            className={`relative border-r border-slate-700 bg-emerald-950/40 flex items-center justify-center overflow-hidden cursor-pointer group transition-all ${
+                              selectedReferenceType === 'green_screen' ? 'ring-2 ring-emerald-400 ring-inset' : 'opacity-85 hover:opacity-100'
+                            }`}
+                          >
                             <img
                               src="/images/rumpelstiltskin_green_screen.png"
                               alt="Raw Chroma Key Green Screen Asset"
@@ -1071,13 +1242,25 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                               height={320}
                               loading="lazy"
                               decoding="async"
-                              className="w-full h-full object-contain p-2"
+                              className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform"
                             />
-                            <span className="absolute bottom-2 left-2 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-emerald-300 font-mono">
-                              INPUT: Green Screen
+                            <span className="absolute bottom-2 left-2 bg-black/85 px-2 py-0.5 rounded text-[9px] text-emerald-300 font-mono flex items-center gap-1 border border-emerald-500/40">
+                              {selectedReferenceType === 'green_screen' ? (
+                                <>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  <span>INPUT: 绿底垫图 (✓ 生效中)</span>
+                                </>
+                              ) : (
+                                <span>INPUT: 绿底垫图 (点击采用)</span>
+                              )}
                             </span>
                           </div>
-                          <div className="relative overflow-hidden bg-black flex items-center justify-center">
+                          <div
+                            onClick={() => setSelectedReferenceType('relit_35mm')}
+                            className={`relative overflow-hidden bg-black flex items-center justify-center cursor-pointer group transition-all ${
+                              selectedReferenceType === 'relit_35mm' ? 'ring-2 ring-indigo-400 ring-inset' : 'opacity-85 hover:opacity-100'
+                            }`}
+                          >
                             <img
                               src="/images/rumpelstiltskin_tuxedo_result.jpg"
                               alt="Harmonized 1978 Candlelit Masterplate"
@@ -1085,15 +1268,25 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                               height={270}
                               loading="lazy"
                               decoding="async"
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                             />
-                            <span className="absolute bottom-2 right-2 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-indigo-300 font-mono border border-indigo-500/30">
-                              OUTPUT: 1978 35mm
+                            <span className="absolute bottom-2 right-2 bg-black/85 px-2 py-0.5 rounded text-[9px] text-indigo-300 font-mono border border-indigo-500/40 flex items-center gap-1">
+                              {selectedReferenceType === 'relit_35mm' ? (
+                                <>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                                  <span>OUTPUT: 1978母版 (✓ 生效中)</span>
+                                </>
+                              ) : (
+                                <span>OUTPUT: 1978母版 (点击采用)</span>
+                              )}
                             </span>
                           </div>
                         </div>
                       ) : viewMode === 'reference' ? (
-                        <div className="relative w-full h-full bg-emerald-950/40 flex items-center justify-center p-4">
+                        <div
+                          onClick={() => setSelectedReferenceType('green_screen')}
+                          className="relative w-full h-full bg-emerald-950/40 flex items-center justify-center p-4 cursor-pointer"
+                        >
                           <img
                             src="/images/rumpelstiltskin_green_screen.png"
                             alt="Raw Chroma Key Green Screen Reference"
@@ -1103,12 +1296,16 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                             decoding="async"
                             className="max-h-full object-contain"
                           />
-                          <span className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-emerald-400 font-mono">
-                            Input Reference Asset (Chroma Key)
+                          <span className="absolute top-2 left-2 bg-black/85 px-2 py-0.5 rounded text-[10px] text-emerald-400 font-mono flex items-center gap-1 border border-emerald-500/40">
+                            {selectedReferenceType === 'green_screen' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                            Input Reference Asset (绿底抠图原画) {selectedReferenceType === 'green_screen' ? '• [✓ 当前生效垫图]' : '• [点击设为垫图]'}
                           </span>
                         </div>
                       ) : (
-                        <div className="relative w-full h-full">
+                        <div
+                          onClick={() => setSelectedReferenceType('relit_35mm')}
+                          className="relative w-full h-full cursor-pointer"
+                        >
                           <img
                             src="/images/rumpelstiltskin_tuxedo_result.jpg"
                             alt="1978 Harmonized Inpainting Masterplate"
@@ -1118,8 +1315,9 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                             decoding="async"
                             className="w-full h-full object-cover"
                           />
-                          <span className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-amber-300 font-mono border border-amber-500/30">
-                            1978 Candlelit Relit Masterplate
+                          <span className="absolute top-2 left-2 bg-black/85 px-2 py-0.5 rounded text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1">
+                            {selectedReferenceType === 'relit_35mm' && <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />}
+                            1978 Candlelit Relit Masterplate {selectedReferenceType === 'relit_35mm' ? '• [✓ 当前生效垫图]' : '• [点击设为垫图]'}
                           </span>
                         </div>
                       )
@@ -1132,7 +1330,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           autoPlay
                           loop
                           playsInline
-                          poster="/images/rumpelstiltskin_vintage_demo.jpg"
+                          poster="/images/rumpelstiltskin_green_screen.png"
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
@@ -1165,10 +1363,20 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                     </div>
                   )}
 
-                  <div className="text-[11px] font-mono text-indigo-300 line-clamp-2 bg-slate-900 border border-slate-800 p-2 rounded-lg">
-                    {activeWorkflowTab === 'i2i-greenscreen'
-                      ? 'AI Masterplate Ready for Image-to-Video: Kling 2.0 / Seedance 2.5'
-                      : compiledPrompt}
+                  <div className="text-[11px] font-mono bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-slate-300 min-w-0">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-ping" />
+                      <span className="text-emerald-400 font-semibold shrink-0">当前生效垫图:</span>
+                      <span className="truncate text-indigo-200 text-[10px]">
+                        {selectedReferenceType === 'green_screen' ? '🟢 绿底抠图原画 (rumpelstiltskin_green_screen.png)' :
+                         selectedReferenceType === 'relit_35mm' ? '🎬 1978 调色母版 (rumpelstiltskin_tuxedo_result.jpg)' :
+                         selectedReferenceType === 'rustic_gnome' ? '🧔 乡村粗布矮人 (rumpelstiltskin_vintage_demo.jpg)' :
+                         '📤 自定义上传垫图'}
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded font-sans shrink-0 font-medium">
+                      100% 保持燕尾服角色面容
+                    </span>
                   </div>
 
                   {apiNotice && (

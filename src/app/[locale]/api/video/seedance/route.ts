@@ -155,20 +155,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Resolve Image-to-Video input asset (support base64 conversion for local images)
+    // 4. Resolve Image-to-Video input asset (ensure accessible public HTTPS URL for Volcengine Ark)
     let finalImageUrl = imageUrl;
-    if (imageUrl && (imageUrl.startsWith("/") || imageUrl.includes("localhost"))) {
-      try {
-        const fs = await import("fs");
-        const path = await import("path");
-        const cleanPath = imageUrl.startsWith("/") ? imageUrl : new URL(imageUrl).pathname;
-        const filePath = path.join(process.cwd(), "public", cleanPath);
-        if (fs.existsSync(filePath)) {
-          const fileBuf = fs.readFileSync(filePath);
-          finalImageUrl = `data:image/jpeg;base64,${fileBuf.toString("base64")}`;
+    if (imageUrl) {
+      if (imageUrl.startsWith("/")) {
+        finalImageUrl = `https://www.qwenimage-editor.com${imageUrl}`;
+      } else if (imageUrl.includes("localhost") || imageUrl.includes("127.0.0.1")) {
+        try {
+          const parsed = new URL(imageUrl);
+          finalImageUrl = `https://www.qwenimage-editor.com${parsed.pathname}`;
+        } catch {
+          finalImageUrl = imageUrl;
         }
-      } catch (imgErr) {
-        console.warn("Local image base64 conversion note:", imgErr);
       }
     }
 
