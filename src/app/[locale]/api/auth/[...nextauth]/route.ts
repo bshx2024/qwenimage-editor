@@ -3,7 +3,8 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { OAuth2Client } from 'google-auth-library';
 import {checkAndSaveUser, getUserByEmail} from "~/servers/user";
-import {headers} from "next/headers";
+import {headers, cookies} from "next/headers";
+import {extractAttributionFromRequest} from "~/libs/attribution-server";
 
 if (process.env.NEXTAUTH_URL) {
   let cleanUrl = process.env.NEXTAUTH_URL.trim();
@@ -52,8 +53,9 @@ const authOptions: NextAuthOptions = {
         }
         const user = {email, name, image}
         const headerAll = headers();
-        const userIp = headerAll.get("x-forwarded-for");
-        await checkAndSaveUser(user.name, user.email, user.image, userIp);
+        const cookieStore = cookies();
+        const { attribution, clientEnv } = extractAttributionFromRequest(headerAll, (k) => cookieStore.get(k)?.value);
+        await checkAndSaveUser(user.name, user.email, user.image, clientEnv.ip, { attribution, clientEnv });
         return user
       }
     })
@@ -63,8 +65,9 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({user, account, profile, email, credentials}) {
       const headerAll = headers();
-      const userIp = headerAll.get("x-forwarded-for");
-      await checkAndSaveUser(user.name, user.email, user.image, userIp);
+      const cookieStore = cookies();
+      const { attribution, clientEnv } = extractAttributionFromRequest(headerAll, (k) => cookieStore.get(k)?.value);
+      await checkAndSaveUser(user.name, user.email, user.image, clientEnv.ip, { attribution, clientEnv });
       return true
     },
     async redirect({url, baseUrl}) {

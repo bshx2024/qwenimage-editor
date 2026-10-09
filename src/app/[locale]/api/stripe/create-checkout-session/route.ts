@@ -48,7 +48,19 @@ export async function POST(req: Request) {
         redirectPath = `${getURL()}${redirectUrl}`;
       }
 
-      // 4. Create a checkout session in Stripe
+      // 4. Prepare attribution metadata
+      const enrichedMetadata = {
+        ...(metadata || {}),
+        user_id: user_id,
+        user_email: userEmail,
+        first_source: userInfo.first_source || '',
+        first_medium: userInfo.first_medium || '',
+        first_campaign: userInfo.first_campaign || '',
+        first_landing: userInfo.first_landing || '',
+        register_country: userInfo.register_country || '',
+      };
+
+      // 5. Create a checkout session in Stripe
       let session: Stripe.Response<Stripe.Checkout.Session>;
       if (price.type === 'recurring') {
         // @ts-ignore
@@ -69,8 +81,9 @@ export async function POST(req: Request) {
           allow_promotion_codes: true,
           subscription_data: {
             trial_from_plan: true,
-            metadata
+            metadata: enrichedMetadata
           },
+          metadata: enrichedMetadata,
           success_url: redirectPath,
           cancel_url: redirectPath
         });
@@ -90,6 +103,7 @@ export async function POST(req: Request) {
           ],
           mode: 'payment',
           allow_promotion_codes: true,
+          metadata: enrichedMetadata,
           success_url: redirectPath,
           cancel_url: redirectPath
         });

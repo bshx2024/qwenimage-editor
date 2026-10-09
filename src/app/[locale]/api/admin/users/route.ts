@@ -31,26 +31,59 @@ export async function GET(request: Request) {
     const countRes = await db.query(countQuery, params);
     const total = parseInt(countRes.rows[0]?.total || '0', 10);
 
-    const listQuery = `
-      SELECT 
-        u.id, 
-        u.user_id, 
-        u.name, 
-        u.email, 
-        u.image, 
-        u.last_login_ip, 
-        u.created_at, 
-        u.updated_at,
-        coalesce(a.available_times, 0) as available_times,
-        a.stripe_customer_id
-      FROM user_info u
-      LEFT JOIN user_available a ON u.user_id = a.user_id
-      ${whereClause}
-      ORDER BY u.created_at DESC
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `;
-
-    const listRes = await db.query(listQuery, [...params, pageSize, offset]);
+    let listRes;
+    try {
+      const listQuery = `
+        SELECT 
+          u.id, 
+          u.user_id, 
+          u.name, 
+          u.email, 
+          u.image, 
+          u.last_login_ip, 
+          coalesce(u.first_source, '') as first_source,
+          coalesce(u.first_landing, '') as first_landing,
+          coalesce(u.register_country, '') as register_country,
+          coalesce(u.register_device, '') as register_device,
+          coalesce(u.first_touch_at, 0) as first_touch_at,
+          u.created_at, 
+          u.updated_at,
+          coalesce(a.available_times, 0) as available_times,
+          a.stripe_customer_id
+        FROM user_info u
+        LEFT JOIN user_available a ON u.user_id = a.user_id
+        ${whereClause}
+        ORDER BY u.created_at DESC
+        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+      `;
+      listRes = await db.query(listQuery, [...params, pageSize, offset]);
+    } catch (e: any) {
+      // Fallback for database instances where columns are not yet migrated
+      const fallbackQuery = `
+        SELECT 
+          u.id, 
+          u.user_id, 
+          u.name, 
+          u.email, 
+          u.image, 
+          u.last_login_ip, 
+          '' as first_source,
+          '' as first_landing,
+          '' as register_country,
+          '' as register_device,
+          0 as first_touch_at,
+          u.created_at, 
+          u.updated_at,
+          coalesce(a.available_times, 0) as available_times,
+          a.stripe_customer_id
+        FROM user_info u
+        LEFT JOIN user_available a ON u.user_id = a.user_id
+        ${whereClause}
+        ORDER BY u.created_at DESC
+        LIMIT $${params.length + 1} OFFSET $${params.length + 2}
+      `;
+      listRes = await db.query(fallbackQuery, [...params, pageSize, offset]);
+    }
 
     return NextResponse.json({
       success: true,

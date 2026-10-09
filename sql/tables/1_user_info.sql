@@ -9,7 +9,21 @@ create table user_info
     name          varchar,
     email         varchar,
     image         varchar,
-    last_login_ip varchar
+    last_login_ip varchar,
+    first_source     varchar(64) default '',
+    first_medium     varchar(64) default '',
+    first_campaign   varchar(128) default '',
+    first_referrer   varchar(255) default '',
+    first_landing    varchar(255) default '',
+    first_touch_at   bigint default 0,
+    last_source      varchar(64) default '',
+    last_medium      varchar(64) default '',
+    last_campaign    varchar(128) default '',
+    register_country varchar(64) default '',
+    register_device  varchar(32) default '',
+    register_os      varchar(32) default '',
+    register_browser varchar(32) default '',
+    register_lang    varchar(32) default ''
 );
 
 comment on table user_info is 'user info table';

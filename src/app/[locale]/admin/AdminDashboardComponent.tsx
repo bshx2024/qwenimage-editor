@@ -1106,6 +1106,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                         <th className="px-5 py-3.5">Email</th>
                         <th className="px-5 py-3.5">Credits Available</th>
                         <th className="px-5 py-3.5">Registered</th>
+                        <th className="px-5 py-3.5">Source / Country</th>
                         <th className="px-5 py-3.5">Last Login IP</th>
                         <th className="px-5 py-3.5 text-right">Actions</th>
                       </tr>
@@ -1138,6 +1139,23 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                             <td className="px-5 py-3 text-slate-400 text-[11px]">
                               {u.created_at ? new Date(u.created_at).toLocaleDateString() : '--'}
                             </td>
+                            <td className="px-5 py-3 text-[11px]">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                                  {u.first_source || 'direct'}
+                                </span>
+                                {u.register_country && (
+                                  <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-blue-950/60 text-blue-300 border border-blue-800/60" title={`Device: ${u.register_device || 'pc'}`}>
+                                    {u.register_country}
+                                  </span>
+                                )}
+                              </div>
+                              {u.first_landing && (
+                                <div className="text-[10px] text-slate-500 truncate max-w-[130px]" title={u.first_landing}>
+                                  {u.first_landing}
+                                </div>
+                              )}
+                            </td>
                             <td className="px-5 py-3 text-slate-500 text-[11px]">{u.last_login_ip || '--'}</td>
                             <td className="px-5 py-3 text-right">
                               <button
@@ -1155,7 +1173,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={6} className="px-5 py-8 text-center text-slate-500">
+                          <td colSpan={7} className="px-5 py-8 text-center text-slate-500">
                             {usersLoading ? 'Loading users...' : 'No users found.'}
                           </td>
                         </tr>

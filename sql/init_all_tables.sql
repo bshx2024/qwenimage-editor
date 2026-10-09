@@ -12,7 +12,21 @@ CREATE TABLE IF NOT EXISTS user_info (
     name VARCHAR,
     email VARCHAR UNIQUE,
     image VARCHAR,
-    last_login_ip VARCHAR
+    last_login_ip VARCHAR,
+    first_source VARCHAR(64) DEFAULT '',
+    first_medium VARCHAR(64) DEFAULT '',
+    first_campaign VARCHAR(128) DEFAULT '',
+    first_referrer VARCHAR(255) DEFAULT '',
+    first_landing VARCHAR(255) DEFAULT '',
+    first_touch_at BIGINT DEFAULT 0,
+    last_source VARCHAR(64) DEFAULT '',
+    last_medium VARCHAR(64) DEFAULT '',
+    last_campaign VARCHAR(128) DEFAULT '',
+    register_country VARCHAR(64) DEFAULT '',
+    register_device VARCHAR(32) DEFAULT '',
+    register_os VARCHAR(32) DEFAULT '',
+    register_browser VARCHAR(32) DEFAULT '',
+    register_lang VARCHAR(32) DEFAULT ''
 );
 
 -- 2. User Available Credits Table

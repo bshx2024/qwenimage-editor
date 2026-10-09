@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import { locales } from '~/i18n/config';
 import { CommonProvider } from '~/context/common-context';
 import { NextAuthProvider } from '~/context/next-auth-context';
+import { AttributionTracker } from '~/components/AttributionTracker';
 import { getAuthText, getCommonText, getMenuText, getPricingText } from "~/i18n/languageText";
 
 const inter = Inter({ subsets: ['latin'] });
@@ -50,6 +51,7 @@ export default async function LocaleLayout({
           strategy="lazyOnload"
         />
         <NextAuthProvider>
+          <AttributionTracker />
           <CommonProvider
             commonText={commonText}
             authText={authText}
