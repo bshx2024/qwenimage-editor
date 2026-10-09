@@ -599,9 +599,9 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
             <span>{post.category}</span>
           </div>
 
-          {/* Strict H1 <= 80 Chars (77 Chars, targeting 1987 rumpelstiltskin) */}
+          {/* Strict H1 <= 80 Chars (68 Chars, targeting 1987 rumpelstiltskin) */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
-            1987 Rumpelstiltskin: The Real 1980s Movie Myth, Viral TikTok Meme &amp; AI Generator
+            1987 Rumpelstiltskin: 1980s Movie Myth, Viral TikTok Meme &amp; AI Maker
           </h1>
 
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
@@ -735,6 +735,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         <img
                           src="/images/rumpelstiltskin_green_screen.png"
                           alt="Green Screen Cutout"
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-contain p-0.5"
                         />
                       </div>
@@ -762,6 +766,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                         <img
                           src="/images/rumpelstiltskin_tuxedo_result.jpg"
                           alt="1978 Result"
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -1463,7 +1471,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <FilmIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Was There a Rumpelstiltskin Movie in the 1980s? Did Billy Barty Star in It?
+              The 1987 Rumpelstiltskin Movie: Real 1980s Film or TikTok Viral AI Meme?
             </h2>
             <p className="leading-relaxed">
               Google Trends data records an exponential breakout for queries surrounding the <strong>1987 rumpelstiltskin</strong> film, including search terms like <code className="text-indigo-300">1987 rumpelstiltskin</code>, <code className="text-indigo-300">rumpelstiltskin film 1987</code>, <code className="text-indigo-300">rumpelstiltskin 1987 videos</code>, and <code className="text-indigo-300">rumpelstiltskin 1987 billy barty</code>. The root cause of this viral curiosity lies in an extraordinary historical parallel.
@@ -1480,13 +1488,13 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <MusicalNoteIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Tip Toeing in My Jordans: How Rumpelstiltskin AI Became a Viral TikTok Meme
+              Tip Toeing in My Jordans: How 1987 Rumpelstiltskin Became a Viral Meme
             </h2>
             <p className="leading-relaxed">
-              The ignition switch for the <strong>viral rumpelstiltskin ai video</strong> was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
+              The ignition switch for the viral <strong>1987 rumpelstiltskin</strong> sensation was the viral soundtrack adoption. Social video editors married the dancing gnome visuals with the 2014 Southern hip-hop anthem <strong>&quot;Tip Toe Wing In My Jawwdinz&quot;</strong> by colorful rap icon <strong>Riff Raff</strong>.
             </p>
             <p className="leading-relaxed">
-              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically known in German folklore as <em>Rumpelstilzchen</em>) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>rumpelstiltskin ai video meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
+              The surreal aesthetic dissonance between an ancient Grimm Brothers folklore character (historically known in German folklore as <em>Rumpelstilzchen</em>) performing comical stealth strides and heavy Southern trap 808s birthed the unstoppable <strong>1987 rumpelstiltskin meme</strong>. TikTok and YouTube Shorts users utilized the format to celebrate absurdly confident moments:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-slate-300">
               <li>Tiptoeing into the kitchen at midnight to secure leftovers without waking roommates.</li>
@@ -1499,10 +1507,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <VideoCameraIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Reverse-Engineering the Vintage Aesthetic: 35mm Film Prompts &amp; Camera Recipes
+              Recreating 1987 Rumpelstiltskin: 35mm Vintage Prompts &amp; Film Camera Recipes
             </h2>
             <p className="leading-relaxed">
-              Why did the <strong>viral rumpelstiltskin ai video</strong> deceive seasoned cinephiles where generic AI clips fail? The engineering triumph lies in technical imperfection. Rather than producing sterile 8K digital imagery, creators reverse-engineered the optical hallmarks of European 1970s fantasy cinema:
+              Why did the viral <strong>1987 rumpelstiltskin</strong> video deceive seasoned cinephiles where generic AI clips fail? The engineering triumph lies in technical imperfection. Rather than producing sterile 8K digital imagery, creators reverse-engineered the optical hallmarks of European 1970s fantasy cinema:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 not-prose">
@@ -1526,7 +1534,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                 <div className="text-indigo-400 font-bold text-xs uppercase mb-1">Pillar 3: Lighting Rig</div>
                 <div className="text-white font-semibold text-sm mb-2">Tungsten &amp; Candlelight</div>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Directional incandescent key lights and rich falloff shadows mimic classic soundstage set constructions, elevating the <strong>rumpelstiltskin ai video meme</strong>.
+                  Directional incandescent key lights and rich falloff shadows mimic classic soundstage set constructions, elevating the <strong>1987 rumpelstiltskin</strong> aesthetic.
                 </p>
               </div>
             </div>
@@ -1536,10 +1544,10 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CheckCircleIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Character Consistency Workflows: Preparing Uncanny Video Assets with AI
+              Character Consistency Workflows: Generating 1987 Rumpelstiltskin AI Assets
             </h2>
             <p className="leading-relaxed">
-              The primary roadblock for creators attempting to recreate the <strong>viral rumpelstiltskin ai video</strong> is identity drift across temporal frames. When video diffusion models animate energetic choreography, faces often warp into grotesque melting artifacts.
+              The primary roadblock for creators attempting to recreate the viral <strong>1987 rumpelstiltskin</strong> video is identity drift across temporal frames. When video diffusion models animate energetic choreography, faces often warp into grotesque melting artifacts.
             </p>
             <p className="leading-relaxed">
               Professional production studios resolve this challenge by breaking the workflow into discrete multimodal stages:
@@ -1556,14 +1564,14 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
               </li>
             </ol>
             <p className="leading-relaxed">
-              By separating high-resolution static asset preparation from motion interpolation, creators consistently defeat temporal drift, successfully delivering commercial-grade productions that rival the <strong>viral rumpelstiltskin ai video meme</strong>.
+              By separating high-resolution static asset preparation from motion interpolation, creators consistently defeat temporal drift, successfully delivering commercial-grade productions that rival the <strong>1987 rumpelstiltskin</strong> viral video.
             </p>
           </section>
 
           {/* Section 5: FAQ */}
           <section className="space-y-6 pt-6 border-t border-slate-800">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Frequently Asked Questions About Rumpelstiltskin AI
+              Frequently Asked Questions About 1987 Rumpelstiltskin
             </h2>
             <div className="space-y-4 not-prose">
               {faqData.map((item, idx) => (

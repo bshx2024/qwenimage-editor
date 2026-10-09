@@ -20,8 +20,8 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'rumpelstiltskin-ai-1987-movie-meme-workflow',
-    // Strict 59 chars (50-60 chars safety range, targets 1987 rumpelstiltskin viral wave)
-    title: '1987 Rumpelstiltskin: Movie Truth, Viral TikTok Meme & AI Maker',
+    // Strict 56 chars (well within 50-60 safety range, 100% zero SERP truncation)
+    title: '1987 Rumpelstiltskin: Movie Truth, TikTok Meme & AI Maker',
     // Strict 155 chars (140-160 range, answers Google PAA Was there a real 1987 Rumpelstiltskin movie)
     description: 'Was there a real 1987 Rumpelstiltskin movie? Uncover the viral TikTok meme truth, Billy Barty film history, and create your own 1987 vintage AI video now.',
     date: '2026-10-08',
