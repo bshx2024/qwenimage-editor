@@ -342,7 +342,7 @@ export default function Footer({
             </Link>
             <span className="text-slate-700">•</span>
             <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="hover:text-indigo-400 transition-colors">
-              Strata Qwen 3.8 Local Inference Guide
+              Strata Qwen 3.8 GitHub Setup Guide
             </Link>
             <span className="text-slate-700">•</span>
             <Link href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')} className="hover:text-indigo-400 transition-colors">

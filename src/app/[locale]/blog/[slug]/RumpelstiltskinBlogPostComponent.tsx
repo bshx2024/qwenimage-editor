@@ -175,18 +175,24 @@ export default function RumpelstiltskinBlogPostComponent({
 
   const compiledPrompt = `${customPrompt}, ${motionProfiles[motionPreset].actionPrompt}, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere, award-winning cinematic practical effects --ar ${videoAspectRatio} --style raw`;
 
-  const calculateCurrentCreditCost = () => {
+  const calculateCurrentCreditCost = (
+    overrideDuration?: number,
+    overrideRes?: '480p' | '720p' | '1080p'
+  ) => {
     const isMimic = motionMode === 'mimic';
+    const dur = overrideDuration ?? videoDuration;
+    const res = overrideRes ?? videoResolution;
+
     if (isMimic) {
-      if (videoDuration === 10) {
-        return videoResolution === '1080p' ? 240 : videoResolution === '480p' ? 140 : 180;
+      if (dur === 10) {
+        return res === '1080p' ? 220 : res === '480p' ? 120 : 160;
       }
-      return videoResolution === '1080p' ? 140 : videoResolution === '480p' ? 70 : 100;
+      return res === '1080p' ? 120 : res === '480p' ? 65 : 85;
     }
-    if (videoDuration === 10) {
-      return videoResolution === '1080p' ? 160 : videoResolution === '480p' ? 40 : 90;
+    if (dur === 10) {
+      return res === '1080p' ? 140 : res === '480p' ? 80 : 100;
     }
-    return videoResolution === '1080p' ? 90 : videoResolution === '480p' ? 20 : 50;
+    return res === '1080p' ? 75 : res === '480p' ? 45 : 55;
   };
 
   const handleUploadDrivingVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -961,9 +967,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       { id: '720p', label: '720p HD', popular: true },
                       { id: '1080p', label: '1080p Ultra' },
                     ].map((item) => {
-                      const cost = motionMode === 'mimic'
-                        ? (videoDuration === 10 ? (item.id === '1080p' ? 240 : item.id === '480p' ? 140 : 180) : (item.id === '1080p' ? 140 : item.id === '480p' ? 70 : 100))
-                        : (videoDuration === 10 ? (item.id === '1080p' ? 160 : item.id === '480p' ? 40 : 90) : (item.id === '1080p' ? 90 : item.id === '480p' ? 20 : 50));
+                      const cost = calculateCurrentCreditCost(videoDuration, item.id as any);
                       return (
                         <button
                           key={item.id}

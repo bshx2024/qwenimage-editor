@@ -98,6 +98,14 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "Where can I find the Strata Qwen GitHub repository and setup scripts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Strata Qwen setup scripts and repository are open-sourced on GitHub at strata-engine/strata-qwen. You can use our interactive CLI generator above to configure local deployment for 12GB to 24GB GPUs without OOM errors."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "Can a 12GB or 16GB GPU (like RTX 3060, 4070) run Strata Qwen 3.8?",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -531,6 +539,15 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               Frequently Asked Technical Questions
             </h2>
             <div className="space-y-3 pt-1">
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-1.5">
+                <div className="font-semibold text-white text-sm">
+                  Where can I find the Strata Qwen GitHub repository and setup scripts?
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  The Strata Qwen setup scripts and repository are open-sourced on GitHub at <code className="text-indigo-400 bg-slate-800 px-1.5 py-0.5 rounded font-mono text-[11px]">strata-engine/strata-qwen</code>. You can also use our interactive CLI configurator at the top of this guide to generate customized one-click batch scripts for 12GB–24GB GPUs without OOM errors.
+                </p>
+              </div>
+
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-1.5">
                 <div className="font-semibold text-white text-sm">
                   Can a 12GB or 16GB GPU (like RTX 3060, 4070) run Strata Qwen 3.8?

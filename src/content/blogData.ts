@@ -127,10 +127,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'strata-qwen-setup-guide',
-    // Strict 54 chars (50-60 chars range, zero SERP truncation, high intent CTR trigger)
-    title: 'How to Run Strata Qwen 3.8 on 12GB+ GPUs (Setup Guide)',
-    // Strict 157 chars (Inside 140-160 range, captures GitHub search intent + VRAM + OOM pain points)
-    description: 'Step-by-step Strata setup guide for Qwen 3.8 Flash Next 125B. Run locally on 12GB-24GB GPUs without OOM. Includes GitHub setup scripts & Claude Code testing.',
+    // Strict 57 chars (50-60 chars range, zero SERP truncation, targets strata qwen 3.8 + github intent)
+    title: 'Strata Qwen 3.8 Setup Guide: 12GB+ GPUs (GitHub & Scripts)',
+    // Strict 158 chars (140-160 range, high-CTR hook with copy-paste bash scripts & OOM fix)
+    description: '⚡ Complete Strata Qwen 3.8 setup guide & GitHub scripts. Run 125B MoE locally on 12GB/24GB GPUs without OOM errors. Copy-paste bash commands & configs inside.',
     date: '2026-10-05',
     readTime: '9 min read',
     category: 'Local LLM & Inference',

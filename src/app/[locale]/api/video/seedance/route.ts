@@ -49,7 +49,7 @@ function getArkConfig() {
  */
 export async function POST(req: NextRequest) {
   let deductedUserId: string | null = null;
-  let creditCost = 50;
+  let creditCost = 55;
   let workUid: string = uuidv4();
   let isSubscribed = false;
 
@@ -81,18 +81,18 @@ export async function POST(req: NextRequest) {
     const durSec = Number(duration) === 10 ? 10 : 5;
     const isMotionMimic = Boolean(videoUrl);
 
-    // Tiered credit cost calculation
+    // Tiered credit cost calculation aligned with positive margins (>60% gross profit)
     if (isMotionMimic) {
       if (durSec === 10) {
-        creditCost = resolution === "1080p" ? 240 : resolution === "480p" ? 140 : 180;
+        creditCost = resolution === "1080p" ? 220 : resolution === "480p" ? 120 : 160;
       } else {
-        creditCost = resolution === "1080p" ? 140 : resolution === "480p" ? 70 : 100;
+        creditCost = resolution === "1080p" ? 120 : resolution === "480p" ? 65 : 85;
       }
     } else {
       if (durSec === 10) {
-        creditCost = resolution === "1080p" ? 160 : resolution === "480p" ? 40 : 90;
+        creditCost = resolution === "1080p" ? 140 : resolution === "480p" ? 80 : 100;
       } else {
-        creditCost = resolution === "1080p" ? 90 : resolution === "480p" ? 20 : 50;
+        creditCost = resolution === "1080p" ? 75 : resolution === "480p" ? 45 : 55;
       }
     }
 
