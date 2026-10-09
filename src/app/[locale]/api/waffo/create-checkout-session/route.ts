@@ -6,7 +6,7 @@ export const revalidate = 0;
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { planId, userId, userEmail, redirectUrl } = body;
+    const { planId, userId, userEmail, redirectUrl, bonusCredits } = body;
 
     if (!userId) {
       return NextResponse.json(
@@ -26,7 +26,8 @@ export async function POST(req: Request) {
       planId,
       userId,
       userEmail,
-      redirectUrl
+      redirectUrl,
+      bonusCredits: Number(bonusCredits) || undefined
     });
 
     return NextResponse.json({ checkoutUrl });

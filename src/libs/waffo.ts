@@ -53,13 +53,15 @@ export interface CreateCheckoutParams {
   userId: string;
   userEmail?: string;
   redirectUrl?: string;
+  bonusCredits?: number;
 }
 
 export async function createWaffoCheckoutSession({
   planId,
   userId,
   userEmail = '',
-  redirectUrl = ''
+  redirectUrl = '',
+  bonusCredits
 }: CreateCheckoutParams): Promise<{ checkoutUrl: string }> {
   const plan = WAFFO_PLANS[planId];
   if (!plan) {
@@ -98,6 +100,7 @@ export async function createWaffoCheckoutSession({
   const client = await getWaffoClientAsync();
   if (client && productId) {
     try {
+      const creditsToAssign = bonusCredits && bonusCredits > 0 ? bonusCredits : plan.credits;
       const session = await client.checkout.authenticated.create({
         productId: productId,
         buyerIdentity: userId,
@@ -108,7 +111,7 @@ export async function createWaffoCheckoutSession({
         metadata: {
           planId: plan.id,
           userId: userId,
-          credits: String(plan.credits)
+          credits: String(creditsToAssign)
         }
       });
 

@@ -72,6 +72,31 @@ export async function POST(req: Request) {
               checkoutSession.customer as string,
               true
             );
+          } else if (checkoutSession.mode === 'payment') {
+            const userId = checkoutSession.metadata?.user_id;
+            const credits = Number(checkoutSession.metadata?.credits) || 100;
+            if (userId) {
+              try {
+                const { addCreditsToUser, ensurePaymentOrdersTable } = await import('~/servers/waffo');
+                await addCreditsToUser(userId, credits);
+                await ensurePaymentOrdersTable();
+                const db = getDb();
+                const orderId = checkoutSession.id;
+                const amount = (checkoutSession.amount_total || 499) / 100;
+                const userEmail = checkoutSession.customer_details?.email || checkoutSession.metadata?.user_email || '';
+                await db.query(`
+                  INSERT INTO payment_orders (order_id, provider, user_id, user_email, amount, currency, status, plan_id, credits_added, raw_payload)
+                  VALUES ($1, 'stripe', $2, $3, $4, $5, 'completed', $6, $7, $8)
+                  ON CONFLICT (order_id) DO UPDATE SET
+                    status = 'completed',
+                    credits_added = $7,
+                    updated_at = NOW()
+                `, [orderId, userId, userEmail, amount, 'USD', 'starter_boost', credits, JSON.stringify(checkoutSession)]);
+                console.log(`[Stripe Webhook] One-time order fulfilled: +${credits} credits for user ${userId}`);
+              } catch (fulfilErr: any) {
+                console.error('[Stripe Webhook] Failed to fulfill one-time credits:', fulfilErr?.message);
+              }
+            }
           }
           break;
         }
