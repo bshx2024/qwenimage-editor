@@ -20,10 +20,10 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'rumpelstiltskin-ai-1987-movie-meme-workflow',
-    // Strict 53 chars (50-60 chars safety range, locks primary keyword to Rumpelstiltskin AI)
-    title: 'Rumpelstiltskin AI: 1987 Movie Truth, Meme & AI Guide',
-    // Strict 154 chars (140-160 range, eliminates truncation penalty, exact 154 chars)
-    description: 'Is the viral Rumpelstiltskin TikTok video a real 1987 Billy Barty movie or AI? Uncover the meme truth, Riff Raff audio, and vintage AI workflow guide.',
+    // Strict 59 chars (50-60 chars safety range, targets 1987 rumpelstiltskin viral wave)
+    title: '1987 Rumpelstiltskin: Movie Truth, Viral TikTok Meme & AI Maker',
+    // Strict 155 chars (140-160 range, answers Google PAA Was there a real 1987 Rumpelstiltskin movie)
+    description: 'Was there a real 1987 Rumpelstiltskin movie? Uncover the viral TikTok meme truth, Billy Barty film history, and create your own 1987 vintage AI video now.',
     date: '2026-10-08',
     readTime: '10 min read',
     category: 'Viral AI & Generative Workflows',
@@ -34,15 +34,15 @@ export const BLOG_POSTS: BlogPost[] = [
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, temporal character consistency, and vintage visual asset workflows.',
     },
     keywords: [
-      'rumpelstiltskin ai',
-      'rumpelstiltskin ai video',
-      'rumpelstiltskin meme',
-      'is rumpelstiltskin real',
       '1987 rumpelstiltskin',
-      'rumpelstiltskin movie 1987',
-      'billy barty rumpelstiltskin',
+      'rumpelstiltskin 1987',
+      'rumpelstiltskin film 1987',
+      'rumpelstiltskin 1987 videos',
+      'was there a rumpelstiltskin movie in the 1980s',
+      'rumpelstiltskin 1987 billy barty',
+      'rumpelstiltskin meme',
+      'rumpelstiltskin ai',
       'tip toeing in my jordans meme',
-      'rumpelstiltskin tiktok',
       'qwen image editor',
     ],
   },

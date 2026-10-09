@@ -345,6 +345,10 @@ export default function Footer({
               Strata Qwen 3.8 GitHub Setup Guide
             </Link>
             <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/rumpelstiltskin-ai-1987-movie-meme-workflow')} className="hover:text-indigo-400 transition-colors">
+              1987 Rumpelstiltskin Movie Truth &amp; AI Maker
+            </Link>
+            <span className="text-slate-700">•</span>
             <Link href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')} className="hover:text-indigo-400 transition-colors">
               Higgsfield Genjutsu Video Guide
             </Link>
