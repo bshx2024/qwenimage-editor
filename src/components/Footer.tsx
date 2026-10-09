@@ -341,24 +341,24 @@ export default function Footer({
               Flexible Credits & Pricing Plans
             </Link>
             <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'background-remover')} className="hover:text-indigo-400 transition-colors">
+              AI Background Remover &amp; Changer
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'product-photo-editor')} className="hover:text-indigo-400 transition-colors">
+              AI Product Photo Studio
+            </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="hover:text-indigo-400 transition-colors">
+              Qwen Image Benchmark Hub
+            </Link>
+            <span className="text-slate-700">•</span>
             <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="hover:text-indigo-400 transition-colors">
-              Strata Qwen 3.8 GitHub Setup Guide
+              Strata Qwen GitHub Setup Guide
             </Link>
             <span className="text-slate-700">•</span>
-            <Link href={getLinkHref(locale, 'blog/rumpelstiltskin-ai-1987-movie-meme-workflow')} className="hover:text-indigo-400 transition-colors">
-              1987 Rumpelstiltskin Movie Truth &amp; AI Maker
-            </Link>
-            <span className="text-slate-700">•</span>
-            <Link href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')} className="hover:text-indigo-400 transition-colors">
-              Higgsfield Genjutsu Video Guide
-            </Link>
-            <span className="text-slate-700">•</span>
-            <Link href={getLinkHref(locale, 'blog/minimax-h3-comfyui-guide-vram-workflow')} className="hover:text-indigo-400 transition-colors">
-              MiniMax H3 ComfyUI Video Guide
-            </Link>
-            <span className="text-slate-700">•</span>
-            <Link href={getLinkHref(locale, 'blog/vidu-s2-realtime-interactive-video-guide')} className="hover:text-cyan-400 transition-colors">
-              Vidu S2 Real-Time Video Guide
+            <Link href={getLinkHref(locale, 'vs-nano-banana')} className="hover:text-indigo-400 transition-colors">
+              Qwen vs Nano Banana Benchmark
             </Link>
           </div>
         </div>

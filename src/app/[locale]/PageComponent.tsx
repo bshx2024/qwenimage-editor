@@ -749,32 +749,29 @@ export default function PageComponent({
                               >
                                 {activeTab === 'edit' ? (
                                   <>
-                                    <option value="qwen-image-2.1-pro" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Pro (Official 🚀 - 2 Credits)
-                                    </option>
                                     <option value="wanx2.1-imageedit" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Image Edit (Inpaint 🎨 - 1 Credit)
+                                      Qwen/Wanx Image Edit (Instruction Inpaint 🎨 - 1 Credit)
                                     </option>
                                     <option value="wanx2.1-i2i-turbo" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Turbo (Fast ⚡ - 1 Credit)
+                                      Wanx 2.1 Turbo (Fast Edit ⚡ - 1 Credit)
                                     </option>
                                     <option value="wanx2.1-i2i-plus" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
+                                      Wanx 2.1 Plus (High Fidelity 🌟 - 2 Credits)
+                                    </option>
+                                    <option value="qwen-image-edit" className="bg-slate-900 text-slate-200">
+                                      Qwen Multimodal Edit (Official API 🚀 - 2 Credits)
                                     </option>
                                   </>
                                 ) : (
                                   <>
-                                    <option value="qwen-image-2.1-pro" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Pro (Official 🚀 - 2 Credits)
-                                    </option>
-                                    <option value="qwen-image-3.0-pro" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 3.0 Pro (Flagship 👑 - 2 Credits)
-                                    </option>
                                     <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Turbo (Fast ⚡ - 1 Credit)
                                     </option>
                                     <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
+                                    </option>
+                                    <option value="qwen-image" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image Multimodal (Official API 🚀 - 2 Credits)
                                     </option>
                                   </>
                                 )}
@@ -1559,9 +1556,9 @@ export default function PageComponent({
                 <div className="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 font-bold flex items-center justify-center text-sm border border-pink-500/30">
                   3
                 </div>
-                <h3 className="text-base font-bold text-white">Step 3: Download in 4K</h3>
+                <h3 className="text-base font-bold text-white">Step 3: Download in High Resolution</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Receive the neural inpainting result in 2.5–4.5 seconds and download the uncompressed 2048×2048 lossless WebP or PNG asset.
+                  Receive your neural inpainting results with accurate subject coherence and download high-resolution lossless PNG or WebP assets.
                 </p>
               </div>
             </div>
@@ -1603,7 +1600,7 @@ export default function PageComponent({
                     </tr>
                     <tr>
                       <td className="py-3.5 px-4 font-medium text-white">Commercial Rights</td>
-                      <td className="py-3.5 px-4 text-emerald-400 font-medium">100% Commercial rights (Free & Paid)</td>
+                      <td className="py-3.5 px-4 text-emerald-400 font-medium">Full Commercial Rights on User Outputs</td>
                       <td className="py-3.5 px-4 text-slate-400">Paid subscribers only ($10+/mo)</td>
                       <td className="py-3.5 px-4 text-slate-400">Non-commercial research only</td>
                     </tr>
