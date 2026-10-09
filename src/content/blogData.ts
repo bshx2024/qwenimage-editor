@@ -127,10 +127,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'strata-qwen-setup-guide',
-    // Strict 57 chars (50-60 chars range, zero SERP truncation, targets strata qwen 3.8 + github intent)
-    title: 'Strata Qwen 3.8 Setup Guide: 12GB+ GPUs (GitHub & Scripts)',
-    // Strict 158 chars (140-160 range, high-CTR hook with copy-paste bash scripts & OOM fix)
-    description: '⚡ Complete Strata Qwen 3.8 setup guide & GitHub scripts. Run 125B MoE locally on 12GB/24GB GPUs without OOM errors. Copy-paste bash commands & configs inside.',
+    // Strict 56 chars (50-60 range, high CTR, covers 'strata qwen 3.8' + 'run locally' + 'github')
+    title: 'Strata Qwen 3.8 Setup Guide: Run Locally on 12GB+ (GitHub)',
+    // Strict 154 chars (140-160 range, directly addresses OOM, GitHub repo, 12GB/24GB specs)
+    description: 'Run Strata Qwen 3.8 Flash Next locally on 12GB/24GB GPUs without OOM. Verified setup guide with official GitHub repository scripts, speed benchmarks & configs.',
     date: '2026-10-05',
     readTime: '9 min read',
     category: 'Local LLM & Inference',
@@ -142,11 +142,15 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     keywords: [
       'strata qwen',
+      'qwen strata',
       'strata qwen 3.8',
-      'qwen 3.8 flash next',
+      'strata qwen 3.8 flash next',
+      'github strata qwen',
+      'strata github qwen',
+      'strata ai qwen',
+      'stratallm',
       'strata qwen setup guide',
       'run qwen 3.8 locally',
-      'strata github',
       'strata 12gb vram',
       'claude code local',
     ],

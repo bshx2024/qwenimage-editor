@@ -98,10 +98,18 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "What is Strata Qwen (StrataLLM)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Strata Qwen (also known as StrataLLM or Strata AI) is an open-source tiered inference engine that runs Alibaba's 125B Qwen 3.8 Flash Next model locally on consumer GPUs (12GB to 24GB VRAM) at 40 to 120 tokens per second without out-of-memory (OOM) errors."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "Where can I find the Strata Qwen GitHub repository and setup scripts?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The Strata Qwen setup scripts and repository are open-sourced on GitHub at strata-engine/strata-qwen. You can use our interactive CLI generator above to configure local deployment for 12GB to 24GB GPUs without OOM errors."
+              "text": "The official Strata Qwen setup scripts and repository are open-sourced on GitHub at strata-engine/strata-qwen. You can use our interactive CLI generator to configure local deployment for 12GB to 24GB GPUs without OOM errors."
             }
           },
           {
@@ -236,11 +244,13 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
         <article className="py-12">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-8 text-slate-300 text-sm sm:text-base leading-relaxed">
             
-            {/* Conclusion First (BLUF Box - Clean AST without Heading tags) */}
-            <div className="p-5 rounded-2xl border border-indigo-500/30 bg-indigo-950/20 text-slate-200 text-xs sm:text-sm font-mono leading-relaxed space-y-1">
-              <div className="text-indigo-400 font-bold text-sm">Conclusion (BLUF):</div>
+            {/* Conclusion First (Featured Snippet Magnet: Definition Box) */}
+            <div className="p-5 rounded-2xl border border-indigo-500/30 bg-indigo-950/20 text-slate-200 text-xs sm:text-sm font-mono leading-relaxed space-y-1.5">
+              <div className="text-indigo-400 font-bold text-sm flex items-center gap-2">
+                <span>Quick Answer &amp; Overview: What is Strata Qwen?</span>
+              </div>
               <p>
-                <strong>Strata Qwen</strong> is a tiered local inference engine engineered by developer Niko1221 that runs Alibaba&apos;s 125B <em>Qwen 3.8 Flash Next</em> model on single consumer RTX 3090, 4090, and 5070 graphics cards. By offloading inactive MoE experts across GPU VRAM, System RAM, and NVMe SSD with IQ2 and IQ3 quantization, Strata achieves <strong>40 to 120 Tokens per second</strong> with zero cloud API fees.
+                <strong>Strata Qwen</strong> (also referred to as <em>StrataLLM</em> or <em>Strata AI</em>) is an open-source tiered inference engine created by developer Niko1221 that runs Alibaba&apos;s 125B <em>Qwen 3.8 Flash Next</em> model on consumer RTX 3060, 4070, 3090, and 4090 GPUs. By offloading inactive MoE experts across GPU VRAM (12GB–24GB), System RAM, and NVMe SSD with IQ2 and IQ3 quantization, Strata achieves <strong>40 to 120 Tokens per second (TPS)</strong> locally with zero OOM errors and zero cloud API costs.
               </p>
             </div>
 
@@ -407,10 +417,10 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
 
             {/* Section 3: Installation & Common Fixes */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
-              Step-by-Step GitHub Setup &amp; Dependency Resolution
+              Strata Qwen GitHub Repository &amp; Step-by-Step Setup Guide
             </h2>
             <p>
-              Deploying Strata Qwen locally requires configuring your build environment properly to prevent runtime MSVC compilation errors and CUDA driver mismatches.
+              Deploying Strata Qwen (StrataLLM) locally from the GitHub repository requires configuring your build environment properly to prevent runtime MSVC compilation errors and CUDA driver mismatches.
             </p>
 
             <h3 className="text-lg font-semibold text-indigo-300">
@@ -539,6 +549,15 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               Frequently Asked Technical Questions
             </h2>
             <div className="space-y-3 pt-1">
+              <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-1.5">
+                <div className="font-semibold text-white text-sm">
+                  What is Strata Qwen (StrataLLM)?
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Strata Qwen (also known as StrataLLM or Strata AI) is an open-source tiered inference engine that runs Alibaba&apos;s 125B Qwen 3.8 Flash Next model locally on consumer GPUs (12GB to 24GB VRAM) at 40 to 120 tokens per second without out-of-memory (OOM) errors.
+                </p>
+              </div>
+
               <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-1.5">
                 <div className="font-semibold text-white text-sm">
                   Where can I find the Strata Qwen GitHub repository and setup scripts?
