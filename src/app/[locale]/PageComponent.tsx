@@ -56,8 +56,111 @@ export default function PageComponent({
   const [uid, setUid] = useState('');
   const [intervalResultInfo, setIntervalResultInfo] = useState<number | undefined>(undefined);
   const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true });
+  const [downloadFormat, setDownloadFormat] = useState<'png' | 'jpg' | 'webp'>('png');
+  const [showFormatDropdown, setShowFormatDropdown] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // High-Resolution Multi-Format Image Downloader (PNG / JPG / WebP)
+  const handleDownloadWithFormat = async (imgUrl: string | null, format: 'png' | 'jpg' | 'webp' = downloadFormat) => {
+    if (!imgUrl) return;
+    setIsDownloading(true);
+    setShowFormatDropdown(false);
+    try {
+      const res = await fetch(imgUrl);
+      const blob = await res.blob();
+
+      // If source is already requested PNG, trigger direct stream download
+      if (format === 'png' && (blob.type === 'image/png' || imgUrl.endsWith('.png'))) {
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `qwen-image-${Date.now()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        setIsDownloading(false);
+        return;
+      }
+
+      // Convert format via in-browser HTML5 Canvas
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      const objectUrl = URL.createObjectURL(blob);
+
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth || img.width;
+          canvas.height = img.naturalHeight || img.height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Canvas 2D context unavailable');
+
+          if (format === 'jpg') {
+            // Fill clean white background for non-alpha JPEG
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+          ctx.drawImage(img, 0, 0);
+
+          const mimeType = format === 'jpg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
+          canvas.toBlob(
+            (convertedBlob) => {
+              if (convertedBlob) {
+                const downloadUrl = URL.createObjectURL(convertedBlob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `qwen-image-${Date.now()}.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(downloadUrl);
+              }
+              URL.revokeObjectURL(objectUrl);
+              setIsDownloading(false);
+            },
+            mimeType,
+            0.95
+          );
+        } catch (canvasErr) {
+          const a = document.createElement('a');
+          a.href = objectUrl;
+          a.download = `qwen-image-${Date.now()}.${format}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(objectUrl);
+          setIsDownloading(false);
+        }
+      };
+
+      img.onerror = () => {
+        const a = document.createElement('a');
+        a.href = imgUrl;
+        a.download = `qwen-image-${Date.now()}.${format}`;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(objectUrl);
+        setIsDownloading(false);
+      };
+
+      img.src = objectUrl;
+    } catch (err) {
+      console.warn('Download conversion fallback:', err);
+      const a = document.createElement('a');
+      a.href = imgUrl;
+      a.download = `qwen-image-${Date.now()}.${format}`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setIsDownloading(false);
+    }
+  };
 
   useEffect(() => {
     if (activeTab === 'edit') {
@@ -897,21 +1000,83 @@ export default function PageComponent({
                           </div>
                         )}
 
-                        {/* Action Bar */}
+                        {/* Action Bar with Multi-Format Downloader (PNG / JPG / WebP) */}
                         <div className="mt-5 w-full flex items-center justify-between pt-3 border-t border-slate-800/80">
                           <div className="text-xs text-slate-400">
                             Status: <span className="text-emerald-400 font-medium">Ready</span>
                           </div>
-                          <a
-                            href={currentResultImage}
-                            download="qwen-image-editor-result.png"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 px-3.5 py-1.5 text-xs font-semibold text-slate-100 transition-colors"
-                          >
-                            <ArrowDownTrayIcon className="w-4 h-4" />
-                            Download High-Res
-                          </a>
+
+                          <div className="relative inline-flex items-center rounded-xl shadow-lg">
+                            <button
+                              type="button"
+                              disabled={isDownloading || !currentResultImage}
+                              onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat)}
+                              className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-all disabled:opacity-50"
+                            >
+                              <ArrowDownTrayIcon className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
+                              <span>{isDownloading ? 'Preparing...' : `Download (${downloadFormat.toUpperCase()})`}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+                              className="inline-flex items-center justify-center rounded-r-xl border-l border-indigo-500/40 bg-indigo-700 hover:bg-indigo-600 px-2 py-1.5 text-xs font-semibold text-white transition-colors"
+                              title="Choose Download Format"
+                            >
+                              <ChevronDownIcon className="w-3.5 h-3.5" />
+                            </button>
+
+                            {/* Format Dropdown Menu */}
+                            {showFormatDropdown && (
+                              <div className="absolute right-0 bottom-full mb-2 w-48 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md p-1.5 shadow-2xl z-30 space-y-1">
+                                <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                  Select Export Format
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setDownloadFormat('png');
+                                    handleDownloadWithFormat(currentResultImage, 'png');
+                                  }}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
+                                >
+                                  <div>
+                                    <span className="font-semibold text-white">PNG (Lossless)</span>
+                                    <span className="text-[10px] text-slate-400 block">Best for edits &amp; transparency</span>
+                                  </div>
+                                  {downloadFormat === 'png' && <span className="text-indigo-400 font-bold">✓</span>}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setDownloadFormat('jpg');
+                                    handleDownloadWithFormat(currentResultImage, 'jpg');
+                                  }}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
+                                >
+                                  <div>
+                                    <span className="font-semibold text-white">JPG (High Quality)</span>
+                                    <span className="text-[10px] text-slate-400 block">Compact for social &amp; stores</span>
+                                  </div>
+                                  {downloadFormat === 'jpg' && <span className="text-indigo-400 font-bold">✓</span>}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setDownloadFormat('webp');
+                                    handleDownloadWithFormat(currentResultImage, 'webp');
+                                  }}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
+                                >
+                                  <div>
+                                    <span className="font-semibold text-white">WebP (Fast Web)</span>
+                                    <span className="text-[10px] text-slate-400 block">Ultra-small file size</span>
+                                  </div>
+                                  {downloadFormat === 'webp' && <span className="text-indigo-400 font-bold">✓</span>}
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ) : (
