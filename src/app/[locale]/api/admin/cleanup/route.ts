@@ -57,7 +57,19 @@ export async function POST(request: Request) {
       }
     }
 
-    // 2. Clean up failed tasks older than 24 hours
+    // 2. Clean up Replicate temporary delivery links older than 4 hours (they are purged by Replicate CDN within 1-4h)
+    const expiredReplicateRes = await db.query(
+      `UPDATE works 
+       SET is_delete = true, updated_at = NOW() 
+       WHERE is_delete = false 
+         AND created_at < NOW() - INTERVAL '4 hours'
+         AND (
+           output_url::text LIKE '%replicate.delivery%'
+         )`
+    );
+    const cleanedExpiredReplicateWorks = expiredReplicateRes.rowCount || 0;
+
+    // 3. Clean up failed tasks older than 24 hours
     const failedRes = await db.query(
       `UPDATE works 
        SET is_delete = true, updated_at = NOW() 
@@ -69,11 +81,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Automated 7-Day Cloud Storage cleanup executed successfully',
+      message: 'Automated Cloud Storage and Expired Links cleanup executed successfully',
       stats: {
         totalEvaluated: candidates.length,
         cleanedFreeWorks,
         protectedProWorks,
+        cleanedExpiredReplicateWorks,
         cleanedFailedWorks,
         timestamp: new Date().toISOString(),
       },

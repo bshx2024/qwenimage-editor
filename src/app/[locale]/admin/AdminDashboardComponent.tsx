@@ -77,6 +77,8 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [workPublicFilter, setWorkPublicFilter] = useState<string>('all');
   const [worksLoading, setWorksLoading] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
+  const [isCleaning, setIsCleaning] = useState<boolean>(false);
 
   // Subscriptions & Payment Orders Data
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -402,6 +404,30 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       }
     } catch (e) {
       showToast('Failed to delete work', 'error');
+    }
+  };
+
+  const handleRunCleanup = async () => {
+    if (!confirm('Run Automated Storage & Retention Cleanup now?\n\nThis will remove:\n• Expired Replicate links (>4h)\n• Free user creations older than 7 days\n• Failed tasks older than 24 hours')) return;
+    setIsCleaning(true);
+    try {
+      const res = await fetch(`/api/admin/cleanup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast(
+          `Cleanup finished! Expired Replicate: ${data.stats?.cleanedExpiredReplicateWorks ?? 0}, Free (>7d): ${data.stats?.cleanedFreeWorks ?? 0}, Failed: ${data.stats?.cleanedFailedWorks ?? 0}`
+        );
+        fetchWorks(workPage, workSearch, workTaskType, workPublicFilter);
+      } else {
+        showToast(data.error || 'Cleanup failed', 'error');
+      }
+    } catch (e: any) {
+      showToast('Cleanup request failed: ' + e?.message, 'error');
+    } finally {
+      setIsCleaning(false);
     }
   };
 
@@ -1215,6 +1241,17 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <h2 className="text-xl font-bold text-white tracking-tight">Works Gallery Moderation</h2>
                   <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleRunCleanup}
+                      disabled={isCleaning}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-semibold transition-all disabled:opacity-50"
+                      title="Run retention cleanup now (cleans expired Replicate links, free works older than 7 days, failed tasks older than 24h)"
+                    >
+                      <ArrowPathIcon className={`w-3.5 h-3.5 ${isCleaning ? 'animate-spin' : ''}`} />
+                      <span>{isCleaning ? 'Cleaning...' : 'Run Retention Cleanup'}</span>
+                    </button>
+
                     <select
                       value={workTaskType}
                       onChange={(e) => {
@@ -1273,9 +1310,28 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                       >
                         <div
                           className="relative aspect-video bg-slate-950 overflow-hidden group cursor-pointer"
-                          onClick={() => displayImg && !isVideo && setPreviewImage(displayImg)}
+                          onClick={() => displayImg && !isVideo && !brokenImages[w.uid] && setPreviewImage(displayImg)}
                         >
-                          {outputImg ? (
+                          {brokenImages[w.uid] ? (
+                            <div className="relative w-full h-full bg-slate-900/90 flex flex-col items-center justify-center p-3 text-center space-y-1">
+                              <PhotoIcon className="w-7 h-7 text-amber-400 mb-0.5" />
+                              <span className="text-xs font-semibold text-slate-300">临时链接已过期 (404)</span>
+                              <span className="text-[10px] text-slate-400 max-w-[200px]">
+                                外部 CDN 临时文件已销毁
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteWork(w.uid);
+                                }}
+                                className="mt-1 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-[10px] font-semibold text-rose-300 border border-rose-500/30 transition-colors"
+                              >
+                                <TrashIcon className="w-3 h-3" />
+                                <span>清理失效记录</span>
+                              </button>
+                            </div>
+                          ) : outputImg ? (
                             isVideo ? (
                               <video
                                 src={outputImg}
@@ -1288,8 +1344,8 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                               <img
                                 src={outputImg}
                                 alt={w.input_text || 'Work'}
-                                onError={(e) => {
-                                  (e.target as HTMLElement).style.display = 'none';
+                                onError={() => {
+                                  setBrokenImages((prev) => ({ ...prev, [w.uid]: true }));
                                 }}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                               />
@@ -1332,7 +1388,11 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                                 Public
                               </span>
                             )}
-                            {isProcessing ? (
+                            {brokenImages[w.uid] ? (
+                              <span className="rounded-md bg-amber-950/80 px-2 py-0.5 text-[10px] font-semibold text-amber-300 border border-amber-800">
+                                Expired (404)
+                              </span>
+                            ) : isProcessing ? (
                               <span className="rounded-md bg-amber-950/80 px-2 py-0.5 text-[10px] font-semibold text-amber-300 border border-amber-800">
                                 Pending
                               </span>
