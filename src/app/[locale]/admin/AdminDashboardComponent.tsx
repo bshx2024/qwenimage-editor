@@ -1259,8 +1259,12 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                   {works.map((w) => {
                     const rawUrl = Array.isArray(w.output_url) ? w.output_url[0] : w.output_url;
                     const isTaskPrefix = typeof rawUrl === 'string' && (rawUrl.startsWith('ark:') || rawUrl.startsWith('bailian:'));
-                    const imgUrl = isTaskPrefix ? '' : rawUrl;
-                    const isVideo = w.task_type?.startsWith('video_') || (typeof imgUrl === 'string' && (imgUrl.endsWith('.mp4') || imgUrl.includes('.mp4?')));
+                    const outputImg = isTaskPrefix ? '' : rawUrl;
+                    const isVideo = w.task_type?.startsWith('video_') || (typeof outputImg === 'string' && (outputImg.endsWith('.mp4') || outputImg.includes('.mp4?')));
+                    const inputImg = w.input_image_url || '';
+                    const displayImg = outputImg || inputImg;
+                    const isFailed = w.status === 2 || (!outputImg && !isTaskPrefix && w.status !== 0);
+                    const isProcessing = w.status === 0 || isTaskPrefix;
 
                     return (
                       <div
@@ -1268,13 +1272,13 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                         className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col backdrop-blur-md"
                       >
                         <div
-                          className="relative aspect-video bg-slate-950 overflow-hidden group"
-                          onClick={() => imgUrl && !isVideo && setPreviewImage(imgUrl)}
+                          className="relative aspect-video bg-slate-950 overflow-hidden group cursor-pointer"
+                          onClick={() => displayImg && !isVideo && setPreviewImage(displayImg)}
                         >
-                          {imgUrl ? (
+                          {outputImg ? (
                             isVideo ? (
                               <video
-                                src={imgUrl}
+                                src={outputImg}
                                 controls
                                 loop
                                 playsInline
@@ -1282,7 +1286,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                               />
                             ) : (
                               <img
-                                src={imgUrl}
+                                src={outputImg}
                                 alt={w.input_text || 'Work'}
                                 onError={(e) => {
                                   (e.target as HTMLElement).style.display = 'none';
@@ -1290,18 +1294,55 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                               />
                             )
+                          ) : inputImg ? (
+                            <div className="relative w-full h-full">
+                              <img
+                                src={inputImg}
+                                alt="User uploaded input"
+                                className="w-full h-full object-cover opacity-60 filter grayscale group-hover:scale-105 transition-transform"
+                              />
+                              <div className="absolute inset-0 bg-slate-950/60 flex flex-col items-center justify-center p-2 text-center">
+                                <span className="text-[11px] font-semibold text-rose-400">Generation Failed</span>
+                                <span className="text-[10px] text-slate-400">Showing User Input Image</span>
+                              </div>
+                            </div>
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-500 font-mono">
-                              {isTaskPrefix ? 'Processing in Cloud...' : 'No Media Available'}
+                            <div className="w-full h-full flex flex-col items-center justify-center text-xs font-mono p-3 text-center space-y-1">
+                              {isProcessing ? (
+                                <>
+                                  <span className="text-amber-400 font-semibold animate-pulse">Processing in Cloud...</span>
+                                  <span className="text-[10px] text-slate-500">Awaiting model completion</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-rose-400 font-semibold">Generation Failed</span>
+                                  <span className="text-[10px] text-slate-500">No output generated by AI model</span>
+                                </>
+                              )}
                             </div>
                           )}
-                          <div className="absolute top-2 left-2 flex gap-1.5 pointer-events-none">
+
+                          {/* Top Badges */}
+                          <div className="absolute top-2 left-2 flex flex-wrap gap-1.5 pointer-events-none">
                             <span className="rounded-md bg-slate-950/80 px-2 py-0.5 text-[10px] font-semibold text-cyan-300 border border-slate-800">
                               {isVideo ? 'video_seedance_2_5' : w.task_type || 'image'}
                             </span>
                             {w.is_public && (
                               <span className="rounded-md bg-emerald-950/80 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 border border-emerald-800">
                                 Public
+                              </span>
+                            )}
+                            {isProcessing ? (
+                              <span className="rounded-md bg-amber-950/80 px-2 py-0.5 text-[10px] font-semibold text-amber-300 border border-amber-800">
+                                Pending
+                              </span>
+                            ) : isFailed ? (
+                              <span className="rounded-md bg-rose-950/80 px-2 py-0.5 text-[10px] font-semibold text-rose-300 border border-rose-800">
+                                Failed
+                              </span>
+                            ) : (
+                              <span className="rounded-md bg-emerald-950/80 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 border border-emerald-800">
+                                Completed
                               </span>
                             )}
                           </div>
