@@ -157,10 +157,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'minimax-h3-comfyui-guide-vram-workflow',
-    // Strict 54 chars (50-60 chars safety range, zero SERP truncation)
-    title: 'MiniMax H3 ComfyUI Guide: Video Workflows & VRAM Tuning',
-    // Strict 154 chars (140-160 range, 100% token coverage for 'minimax h3 comfyui guide' + 'workflow')
-    description: 'Master MiniMax H3 in ComfyUI with this video workflow guide. Learn SageAttention VRAM tuning, T2V and I2V prompt nodes, and clean asset prep without VRAM OOM.',
+    // Strict 57 chars (50-60 chars safety range, zero SERP truncation, high-CTR hook)
+    title: 'MiniMax H3 ComfyUI Guide: Fix VRAM OOM on 24GB (Workflows)',
+    // Strict 152 chars (140-160 range, captures stability matrix + 24GB VRAM + workflows)
+    description: 'Run MiniMax H3 (Hailuo 3.0) in ComfyUI on 24GB GPUs without OOM. Complete guide for SageAttention patch, Stability Matrix setup & I2V video workflows.',
     date: '2026-10-07',
     readTime: '10 min read',
     category: 'Generative Video & Workflows',
@@ -172,9 +172,12 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     keywords: [
       'minimax h3 comfyui guide',
+      'minimax h3 stability matrix',
       'minimax h3 comfyui workflow',
-      'minimax h3 i2v workflow',
+      'minimax h3 fix vram oom',
       'minimax h3 mem eff sage attention patch',
+      'hailuo 3.0 comfyui',
+      'minimax h3 i2v workflow',
       'minimax h3 prompt guide',
       'hailuo 3.0',
       'qwen image editor',

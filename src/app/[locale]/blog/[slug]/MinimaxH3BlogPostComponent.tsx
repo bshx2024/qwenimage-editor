@@ -78,6 +78,10 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
       a: "Image-to-Video diffusion models cannot rectify input artifacts. If a source image contains background clutter, edge fringing, or low resolution, MiniMax H3 amplifies these flaws into temporal hallucinations across all 15 seconds. High-resolution preprocessing with Qwen Image 2.1 ensures sharp 2048px inputs and consistent facial geometry."
     },
     {
+      q: "Can I run MiniMax H3 using Stability Matrix?",
+      a: "Yes. In Stability Matrix, open your ComfyUI package and navigate to the Extensions tab to install the SageAttention repository. Place the MiniMax H3 checkpoint weights in your models folder, and configure extra launch flags with '--lowvram' and '--attention-backend sage_attention_v2' to generate video on 24GB GPUs without OOM errors."
+    },
+    {
       q: "How do I fix CUDA out of memory errors when generating video in ComfyUI?",
       a: "To eliminate CUDA OOM errors: (1) Install the SageAttention v2 node patch, (2) launch ComfyUI with the '--lowvram' parameter, (3) limit initial generation frames to 768px before running the 2K upscale pass, and (4) offload all image inpainting and asset preprocessing to cloud tools rather than loading separate Stable Diffusion checkpoints in the same VRAM session."
     }
@@ -277,11 +281,11 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
         <article className="py-12">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-8 text-slate-300 text-sm sm:text-base leading-relaxed">
             
-            {/* Conclusion First (BLUF Box - Clean AST without Heading tags) */}
-            <div className="p-5 rounded-2xl border border-blue-500/30 bg-blue-950/20 text-slate-200 text-xs sm:text-sm font-mono leading-relaxed space-y-1">
-              <div className="text-blue-400 font-bold text-sm">Conclusion (BLUF):</div>
+            {/* Conclusion First (Featured Snippet Magnet: BLUF Box) */}
+            <div className="p-5 rounded-2xl border border-blue-500/30 bg-blue-950/20 text-slate-200 text-xs sm:text-sm font-mono leading-relaxed space-y-1.5">
+              <div className="text-blue-400 font-bold text-sm">Quick Answer &amp; Overview (BLUF):</div>
               <p>
-                <strong>MiniMax H3 (Hailuo 3.0)</strong> is an open-weights omni-modal foundation model capable of generating up to 15-second 2K cinematic video accompanied by synchronized native stereo audio in a single inference pass. While unquantized FP16 checkpoints demand 120GB+ VRAM, integrating Tsinghua&apos;s <em>mem_eff SageAttention patch</em> in ComfyUI enables stable generation on <strong>24GB GPUs (RTX 3090/4090)</strong>. For zero-VRAM workflows, developers offload upstream source image inpainting and 2048px asset preparation to cloud editors like <strong>Qwen Image Editor</strong>.
+                <strong>MiniMax H3 (Hailuo 3.0)</strong> is an open-weights omni-modal foundation model capable of generating up to 15-second 2K cinematic video with synchronized native stereo audio. While unquantized FP16 checkpoints require 120GB+ VRAM, deploying the <em>mem_eff SageAttention patch</em> in ComfyUI or <strong>Stability Matrix</strong> enables stable video generation on consumer <strong>24GB GPUs (RTX 3090/4090)</strong> without CUDA out-of-memory (OOM) errors.
               </p>
             </div>
 
@@ -488,6 +492,19 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
             <div className="rounded-xl border border-slate-800 bg-slate-950 p-4 font-mono text-xs text-emerald-300">
               python main.py --lowvram --preview-method auto --attention-backend sage_attention_v2
             </div>
+
+            <h3 className="text-lg font-semibold text-blue-300">
+              Step 3: Setup via Stability Matrix (One-Click GUI Deployment)
+            </h3>
+            <p className="text-xs sm:text-sm">
+              If you run ComfyUI through <strong>Stability Matrix</strong> rather than command line:
+            </p>
+            <ul className="text-xs sm:text-sm space-y-1.5 list-disc list-inside text-slate-300">
+              <li>Open <strong>Stability Matrix</strong> &rarr; Navigate to your <strong>ComfyUI</strong> package.</li>
+              <li>Go to the <strong>Extensions</strong> tab and search for or install the <code>SageAttention</code> custom node.</li>
+              <li>Under package launch settings, append the extra arguments: <code>--lowvram --attention-backend sage_attention_v2</code>.</li>
+              <li>Place the MiniMax H3 checkpoint weights inside <code>Models/Diffusion_Models</code> to bypass CLI path configuration.</li>
+            </ul>
 
             {/* Section 3: The Golden Rule of I2V - Upstream Asset Preparation */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
