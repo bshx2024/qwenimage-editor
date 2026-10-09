@@ -168,7 +168,7 @@ export async function POST(req: Request) {
       );
     } else {
       // 2. Dispatch to Replicate
-      const replicateClient = getReplicateClient();
+      const replicateClient = getReplicateClient(aiSettings.replicateToken);
       let input: any;
       let predictionParams: any = {
         webhook: `${process.env.REPLICATE_WEBHOOK || process.env.NEXT_PUBLIC_SITE_URL}/api/generate/callByReplicate?uid=${uid}`,

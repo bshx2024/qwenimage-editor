@@ -108,8 +108,11 @@ export async function getAISettings(): Promise<AISettings> {
     getSetting('REPLICATE_API_TOKEN', 'REPLICATE_API_TOKEN'),
   ]);
 
+  const defaultProvider = process.env.AI_PROVIDER === 'replicate' ? 'replicate' : 'bailian';
+  const effectiveProvider = provider === 'replicate' || provider === 'bailian' ? provider : defaultProvider;
+
   return {
-    provider: (provider === 'replicate' ? 'replicate' : 'bailian'),
+    provider: effectiveProvider,
     bailianApiKey: bailianApiKey || process.env.DASHSCOPE_API_KEY || '',
     bailianBaseUrl: bailianBaseUrl || 'https://dashscope.aliyuncs.com',
     bailianModel: bailianModel || 'wanx2.1-t2i-turbo',
