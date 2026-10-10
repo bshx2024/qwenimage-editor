@@ -236,19 +236,25 @@ export default function PhotoCraftBlogPostComponent({
             <span>{post.category}</span>
           </div>
 
-          {/* Strict H1 58 Chars: Locks 'PhotoCraft Online Review' */}
+          {/* User-recommended H1 */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-            PhotoCraft Online Review: Can It Replace Adobe Photoshop?
+            PhotoCraft Online: What It Is, How to Use It, and What It Can Replace
           </h1>
 
-          {/* GEO Direct Answer Summary Block (Citable, Neutral, Fact-Verified) */}
-          <div className="my-4 p-4 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-200 leading-relaxed not-prose">
-            <div className="flex items-center gap-1.5 font-bold text-indigo-400 text-xs uppercase tracking-wider mb-1.5">
+          {/* Quick Answer Direct Answer Summary Block (Citable, Neutral, Search-Intent Aligned) */}
+          <div className="my-4 p-4 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-200 leading-relaxed not-prose space-y-2">
+            <div className="flex items-center gap-1.5 font-bold text-indigo-400 text-xs uppercase tracking-wider mb-1">
               <DocumentMagnifyingGlassIcon className="w-4 h-4" />
-              <span>Executive Summary &amp; Verification (October 2026)</span>
+              <span>Quick Answer: PhotoCraft Overview &amp; Capabilities (October 2026)</span>
             </div>
             <p>
-              <strong>PhotoCraft</strong> is an open-source raster graphics editor developed in Rust by Brandon Thomas as part of the ArtCraft initiative, providing self-hostable WebAssembly (WASM) browser builds alongside native desktop binaries on <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">GitHub</a>, and accessible via third-party web deployments such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a> (users should verify the build release on independently hosted sites). It faithfully recreates classic Photoshop-style manual layers and brushes without recurring subscription fees, but does not feature prompt-based generative diffusion. For creators seeking prompt-driven inpainting and automated image editing, multimodal models like Qwen Image Editor serve as a complementary cloud alternative.
+              <strong>What is PhotoCraft?</strong> PhotoCraft is an open-source, Rust-based raster graphics editor created by Brandon Thomas as part of the ArtCraft initiative (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">GitHub</a>). Built with <code>egui/eframe</code> and <code>wgpu</code>, it delivers classic Photoshop-style manual layers, brushes, and color adjustments with zero subscription fees.
+            </p>
+            <p>
+              <strong>Can you use it online?</strong> Yes. PhotoCraft supports WebAssembly (WASM) and can be self-hosted from official release artifacts or accessed via third-party community deployments such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a>.
+            </p>
+            <p>
+              <strong>Can it replace Photoshop or AI tools?</strong> PhotoCraft serves as a lightweight alternative for core manual pixel editing and simple PSD files. However, <em>it contains no prompt-based generative AI</em>. For automated object removal, background synthesis, or prompt-guided inpainting, dedicated cloud tools like Qwen Image Editor provide a complementary solution.
             </p>
           </div>
 
@@ -332,14 +338,14 @@ export default function PhotoCraftBlogPostComponent({
             <div>
               <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
                 <BoltIcon className="w-4 h-4" />
-                Interactive UI Simulation &amp; Preset Demonstration
+                Interactive Preset Simulation (Pre-Rendered Showcase)
               </div>
               <h2 className="text-white text-lg sm:text-xl font-bold mt-1">
-                Try Generative AI Inpainting Workflow (Interactive Preset Simulation)
+                Try Generative AI Inpainting Workflow (Preset Simulation)
               </h2>
             </div>
             <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-semibold flex items-center gap-1.5">
-              <span>Client-Side Preview</span>
+              <span>Preset Simulation Only</span>
             </span>
           </div>
 
@@ -355,7 +361,7 @@ export default function PhotoCraftBlogPostComponent({
                   This in-page tool demonstrates the prompt inpainting workflow using <strong>pre-rendered showcase visual presets</strong> (Portrait, Ecommerce, Vintage). It runs locally in your browser: <em>no files are uploaded to remote servers, no user credits are deducted, and it displays pre-computed sample outputs</em>.
                 </p>
                 <p>
-                  To run <strong>live neural diffusion on your own custom photos</strong> with dedicated cloud GPU clusters, open the <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Full Cloud AI Editor</Link> (includes 1 free guest generation).
+                  To run <strong>live neural diffusion on your own custom photos</strong> with dedicated cloud GPU clusters, open the <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Live AI Studio</Link> (includes 1 free guest generation).
                 </p>
               </div>
 
@@ -395,7 +401,7 @@ export default function PhotoCraftBlogPostComponent({
                   className="w-full py-2 border border-dashed border-slate-700 hover:border-indigo-500 bg-slate-900/60 rounded-lg text-xs text-slate-300 flex items-center justify-center gap-2 transition-colors"
                 >
                   <PhotoIcon className="w-4 h-4 text-indigo-400" />
-                  <span>Upload Local Photo (JPG / PNG / WebP, Max 10MB)</span>
+                  <span>Preview Local Photo in Canvas (Simulation only — not edited by AI)</span>
                 </button>
               </div>
 
@@ -412,30 +418,38 @@ export default function PhotoCraftBlogPostComponent({
                 />
               </div>
 
-              <button
-                type="button"
-                onClick={handleRunInpainting}
-                disabled={isProcessing}
-                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
-              >
-                {isProcessing ? (
-                  <>
-                    <ArrowPathIcon className="w-4 h-4 animate-spin" />
-                    <span>{processStep}</span>
-                  </>
-                ) : (
-                  <>
-                    <SparklesIcon className="w-4 h-4" />
-                    <span>Run Inpainting Simulation (Preset Demo)</span>
-                  </>
-                )}
-              </button>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={handleRunInpainting}
+                  disabled={isProcessing}
+                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <ArrowPathIcon className="w-4 h-4 animate-spin" />
+                      <span>{processStep}</span>
+                    </>
+                  ) : (
+                    <>
+                      <SparklesIcon className="w-4 h-4" />
+                      <span>Simulate Sample Output (Pre-Rendered Preset)</span>
+                    </>
+                  )}
+                </button>
 
-              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
-                <span>Simulation Target: <strong>Qwen-Image Diffusion v2</strong></span>
-                <Link href={getLinkHref('/', locale)} className="text-emerald-400 hover:text-emerald-300 font-medium underline">
-                  Launch Real Cloud GPU Editor &rarr;
+                <Link
+                  href={getLinkHref('/', locale)}
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 text-center"
+                >
+                  <SparklesIcon className="w-4 h-4" />
+                  <span>Open Live AI Studio (Real-Time Cloud GPU Inpainting)</span>
                 </Link>
+              </div>
+
+              <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+                <span>Model Target: <strong>Qwen Multimodal Diffusion</strong></span>
+                <span className="text-slate-500 text-[10px]">1 Free Guest Credit Included</span>
               </div>
             </div>
 
@@ -495,7 +509,7 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CpuChipIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              1. What Is PhotoCraft? Project Overview &amp; Official Repositories
+              1. Quick Answer: What Is PhotoCraft and Who Is It For?
             </h2>
             <p className="leading-relaxed">
               <strong>PhotoCraft</strong> is an open-source raster graphics editor created by software engineer <strong>Brandon Thomas</strong> under the <strong>ArtCraft</strong> suite. The project source code is publicly accessible on GitHub (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">github.com/kuretoshi/photocraft <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). The project gained significant attention within developer and open-source communities as a real-world demonstration of using AI coding assistants (specifically Claude Opus 5.5) to implement complex graphics software in memory-safe Rust.
@@ -509,7 +523,7 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ServerStackIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              2. Can You Use PhotoCraft Online in the Browser? (WebAssembly Status)
+              2. Official Source &amp; Online Access: GitHub, WASM, and Third-Party Sites
             </h2>
             <p className="leading-relaxed">
               Users frequently search for <strong>&ldquo;PhotoCraft online&rdquo;</strong> to determine whether the editor can run in a browser without local compilation.
@@ -537,7 +551,7 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <SparklesIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              3. What Editing Features Does PhotoCraft Include? (And What It Doesn&rsquo;t)
+              3. Features, Limitations &amp; Compatibility (Verified Scope)
             </h2>
             <p className="leading-relaxed">
               As documented in the official ArtCraft repository, PhotoCraft provides an expanding suite of native graphics editing tools built on its egui and wgpu graphics pipeline:
@@ -559,7 +573,7 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-6 pt-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ArrowsRightLeftIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              4. Illustrative Workflow Comparison: Manual Raster vs. Generative Diffusion
+              4. Hands-on Workflow Comparison: Manual Raster vs. Generative Diffusion
             </h2>
             <p className="leading-relaxed">
               To illustrate how manual raster tools compare with automated multimodal AI inpainting, we outline typical editing tasks across both paradigms using standardized sample imagery:
@@ -669,17 +683,20 @@ export default function PhotoCraftBlogPostComponent({
             </div>
           </section>
 
-          {/* Section 5: Comparison Table */}
+          {/* Section 5: Task-Based Decision Matrix */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <PhotoIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              5. Feature Comparison: PhotoCraft vs. Adobe Photoshop vs. Qwen Image Editor
+              5. Task-Based Decision Matrix: PhotoCraft vs. Adobe Photoshop vs. Qwen Image Editor
             </h2>
+            <p className="leading-relaxed text-sm text-slate-300">
+              Rather than declaring an absolute &ldquo;winner&rdquo;, compare how each application serves specific creative tasks and production constraints:
+            </p>
             <div className="overflow-x-auto not-prose my-4">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="border-b border-slate-700 bg-slate-900/80 text-slate-200">
-                    <th className="p-3 font-semibold">Evaluation Criteria</th>
+                    <th className="p-3 font-semibold">User Creative Task</th>
                     <th className="p-3 font-semibold text-indigo-300">PhotoCraft (ArtCraft)</th>
                     <th className="p-3 font-semibold text-slate-400">Adobe Photoshop CC</th>
                     <th className="p-3 font-semibold text-emerald-300">Qwen Image Editor</th>
@@ -687,64 +704,40 @@ export default function PhotoCraftBlogPostComponent({
                 </thead>
                 <tbody className="divide-y border-b border-slate-800 divide-slate-800 text-slate-300">
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Platform Delivery</td>
-                    <td className="p-3">Desktop (Rust) &amp; Self-Hostable WASM</td>
-                    <td className="p-3">Desktop Windows / macOS installer</td>
-                    <td className="p-3 text-emerald-400 font-semibold">100% Web Browser Studio</td>
+                    <td className="p-3 font-semibold text-white">Manual Raster Drawing &amp; Retouching</td>
+                    <td className="p-3 text-indigo-300 font-medium">Core Focus: Layers, masks, Curves/Levels, brushes &amp; vector primitives (Alpha)</td>
+                    <td className="p-3">Industry Standard: Full pixel/vector suite, history brushes, Camera Raw &amp; Pen tool</td>
+                    <td className="p-3 text-slate-400">Not designed for manual pixel brushes; focuses purely on prompt-driven transformations</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Typography &amp; Vector Tools</td>
-                    <td className="p-3">Vector shapes, path tools &amp; text layers (Alpha stage)</td>
-                    <td className="p-3">Full vector Pen tool, OpenType engine &amp; shapes</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Generative bilingual AI typography synthesized directly in latent space</td>
+                    <td className="p-3 font-semibold text-white">Natural Language Image Modifications</td>
+                    <td className="p-3 text-slate-400">No support: Zero built-in generative AI models or text instruction capabilities</td>
+                    <td className="p-3">Supported via Adobe Firefly (requires paid plan, generative credits &amp; active connection)</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Primary Use Case: Multi-turn conversational prompts for outfit, lighting, and scene edits</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Layer Styles &amp; Smart Objects</td>
-                    <td className="p-3">Basic layer opacity, blend modes &amp; clipping masks; layer grouping in progress (Alpha)</td>
-                    <td className="p-3">Comprehensive layer styles (Stroke, Shadow, Glow), nested groups &amp; Smart Objects</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Prompt-guided semantic region decomposition &amp; lighting synthesis</td>
+                    <td className="p-3 font-semibold text-white">Inpainting &amp; Background Replacement</td>
+                    <td className="p-3">Manual Workflow: Requires lasso path tracing, feathering, and pasting external plate assets</td>
+                    <td className="p-3">Hybrid: Supports Adobe Generative Fill alongside classic pen tool compositing</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Primary Use Case: Brush-free prompt replacement or localized mask inpainting in seconds</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Advanced Selection &amp; Masking</td>
-                    <td className="p-3">Marquee (rect/ellipse), polygonal/freehand lasso, wand &amp; layer masks</td>
-                    <td className="p-3">AI Select Subject, Object Selection tool, Refine Edge hair masking &amp; vector masks</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Interactive prompt guidance with bounding box and brush semantic masks</td>
+                    <td className="p-3 font-semibold text-white">Layered PSD Workflow</td>
+                    <td className="p-3 text-indigo-300">Supported: Reads and saves basic layered .psd files (Alpha; PSB &amp; smart filters planned)</td>
+                    <td className="p-3">Native Standard: Complete fidelity across all complex PSD/PSB layer trees &amp; smart objects</td>
+                    <td className="p-3 text-slate-400">Web Raster Output: Clean high-res PNG/JPG/WebP export (not a PSD layer substitute)</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Filters &amp; Non-Destructive Adjustments</td>
-                    <td className="p-3">Curves, Levels, Color Balance, Brightness adjustment layers (Alpha stage)</td>
-                    <td className="p-3">Complete adjustment layers, Camera Raw, neural filters &amp; smart filters</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Conversational prompt-guided global style, color and lighting re-harmonization</td>
+                    <td className="p-3 font-semibold text-white">Local Processing &amp; Data Privacy</td>
+                    <td className="p-3 text-indigo-300">Local-First: Native desktop builds run 100% locally; WASM runs inside browser sandbox</td>
+                    <td className="p-3">Desktop installation; requires periodic Adobe CC account authorization &amp; telemetry</td>
+                    <td className="p-3">Cloud GPU Processing: Ephemeral inference pipelines for instant cross-device accessibility</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Color Spaces &amp; Bit Depth</td>
-                    <td className="p-3">Standard 8-bit sRGB workflow (optimized for WebAssembly / wgpu canvas)</td>
-                    <td className="p-3">8 / 16 / 32-bit float, CMYK, ProPhoto RGB, Lab &amp; Pantone color profiles</td>
-                    <td className="p-3 text-emerald-400 font-semibold">8-bit sRGB clean web raster export</td>
-                  </tr>
-                  <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">PSD / PSB Compatibility Scope</td>
-                    <td className="p-3">Layered PSD reading &amp; saving (Alpha maturity; basic layers/masks; PSB planned)</td>
-                    <td className="p-3">Native industry standard for all layered PSD / PSB files &amp; complex layer trees</td>
-                    <td className="p-3 text-emerald-400 font-semibold">High-res 2048px clean PNG/JPG/WebP export</td>
-                  </tr>
-                  <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Generative AI Inpainting</td>
-                    <td className="p-3 text-slate-400">None (Pure manual raster/vector editing focus)</td>
-                    <td className="p-3">Adobe Firefly cloud fill (requires paid plan &amp; generative credits)</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Bilingual multi-turn conversational inpainting &amp; editing</td>
-                  </tr>
-                  <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Offline Privacy / Execution</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Local desktop (zero cloud API dependencies; WASM assets load locally)</td>
-                    <td className="p-3 text-slate-300">Desktop install; requires periodic Adobe account verification for licensing</td>
-                    <td className="p-3">Cloud GPU inference studio</td>
-                  </tr>
-                  <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Pricing &amp; Licensing</td>
-                    <td className="p-3 text-emerald-400 font-semibold">100% Free Open Source (MIT/Apache)</td>
+                    <td className="p-3 font-semibold text-white">Cost &amp; Software Licensing</td>
+                    <td className="p-3 text-indigo-300 font-semibold">100% Free &amp; Open Source (MIT/Apache license, no subscriptions)</td>
                     <td className="p-3 text-slate-300">$22.99 – $59.99/mo (Paid subscription; periodic internet connection required)</td>
-                    <td className="p-3 text-emerald-400 font-semibold">1 Free Guest Credit + $4.99 Starter (100 credits)</td>
+                    <td className="p-3 text-emerald-400 font-semibold">1 Free Guest Credit + Google Login Bonus; $4.99 Starter (100 permanent credits)</td>
                   </tr>
                 </tbody>
               </table>
@@ -752,113 +745,63 @@ export default function PhotoCraftBlogPostComponent({
 
             <div className="p-3 bg-slate-900/50 border border-slate-800 rounded-lg text-[11px] text-slate-400 leading-relaxed not-prose space-y-1">
               <div>
-                <strong className="text-slate-300">Information Source &amp; Alpha Scope Note:</strong> PhotoCraft capabilities are verified from official repository documentation (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">github.com/kuretoshi/photocraft</a>) and commit logs as of October 2026.
-              </div>
-              <div>
-                * While basic multi-layer PSD files can be imported and exported, complex proprietary Photoshop structures (nested smart filters, PSB large canvas formats, dynamic text warp, and proprietary layer FX) are not guaranteed 100% round-trip fidelity in current Alpha builds.
+                <strong className="text-slate-300">Decision Guidance:</strong> If your project requires pixel-level deterministic brushwork, vector paths, or offline PSD editing, PhotoCraft and Photoshop are the appropriate choices. If your goal is rapid prompt-guided iteration (such as e-commerce background cleanup or character outfit swaps), generative diffusion tools provide an automated alternative.
               </div>
             </div>
           </section>
 
-          {/* Section 6: Pricing and Trial Verification */}
-          <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-              <ClipboardDocumentCheckIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              6. Pricing, Free Trial Limits &amp; Credit Structure Verification
-            </h2>
-            <p className="leading-relaxed">
-              To ensure transparency across software licensing and cloud infrastructure costs, we verified the current pricing models as of October 2026:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 not-prose text-xs">
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-1.5">
-                <span className="text-indigo-400 font-bold block">PhotoCraft</span>
-                <span className="text-white font-semibold text-sm">$0.00 (Free &amp; Open Source)</span>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Available free under open-source licensing. Zero subscription fees, zero cloud API charges, and no account requirements.
-                </p>
-              </div>
-
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-1.5">
-                <span className="text-slate-400 font-bold block">Adobe Photoshop</span>
-                <span className="text-white font-semibold text-sm">$22.99 – $59.99 / month</span>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Requires ongoing Adobe Creative Cloud subscription. Cloud generative features consume monthly generative credit allocations.
-                </p>
-              </div>
-
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-1.5">
-                <span className="text-emerald-400 font-bold block">Qwen Image Editor</span>
-                <span className="text-white font-semibold text-sm">Free Trial + $4.99 Starter</span>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Includes 1 free guest generation (zero login required) plus 2 free credits upon Google login. The Starter Pack provides 100 credits for a one-time purchase of $4.99 (credits never expire, commercial usage rights included).
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 7: Tool Selection Guidance */}
+          {/* Section 6: Tool Selection Guidance */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CommandLineIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              7. Tool Selection Guide: Which Should You Use?
+              6. Who Should Use Which Tool? (Tool Selection Guide)
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose my-4">
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+              <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
                 <div className="font-semibold text-indigo-300 text-sm flex items-center gap-2">
                   <CheckIcon className="w-4 h-4 text-emerald-400" />
                   Choose PhotoCraft If:
                 </div>
-                <ul className="text-xs text-slate-300 space-y-1.5">
-                  <li>• You want an open-source, subscription-free raster tool for manual brushwork.</li>
-                  <li>• PhotoCraft supports local image editing without requiring cloud-based generative AI APIs. Native desktop builds execute entirely on local hardware; browser builds still require application assets to be loaded, and offline behavior should be verified for the specific deployment.</li>
-                  <li>• You appreciate exploring cutting-edge Rust and WebAssembly graphics projects.</li>
+                <ul className="text-xs text-slate-300 space-y-2">
+                  <li>• You need a subscription-free, open-source tool for classic raster painting and brushwork.</li>
+                  <li>• You require local file processing without cloud API dependencies or mandatory accounts.</li>
+                  <li>• You want to open, edit, and save basic layered Adobe Photoshop (.psd) files on desktop or browser.</li>
+                  <li>• You are interested in evaluating real-world Rust/WASM graphics software compiled from source.</li>
                 </ul>
               </div>
 
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+              <div className="p-5 bg-slate-900 border border-indigo-500/30 rounded-xl space-y-3">
                 <div className="font-semibold text-emerald-300 text-sm flex items-center gap-2">
-                  <CheckIcon className="w-4 h-4 text-emerald-400" />
+                  <SparklesIcon className="w-4 h-4 text-emerald-400" />
                   Choose Qwen Image Editor If:
                 </div>
-                <ul className="text-xs text-slate-300 space-y-1.5">
-                  <li>• Your primary tasks are automated object removal, outfit recoloring, and background synthesis.</li>
-                  <li>• You want zero setup across any device without compiling local code.</li>
-                  <li>• You need commercial asset generation with native bilingual typography.</li>
+                <ul className="text-xs text-slate-300 space-y-2">
+                  <li>• Your primary goal is prompt-guided image changes (erasing objects, recoloring outfits, or relighting scenes).</li>
+                  <li>• You need commercial asset synthesis with sharp typography without manually sourcing background plates.</li>
+                  <li>• You prefer zero setup in any mobile or desktop browser without local compilation.</li>
                 </ul>
+                <div className="pt-2">
+                  <Link
+                    href={getLinkHref('/', locale)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 underline"
+                  >
+                    <span>Launch Qwen Cloud Studio for Prompt Inpainting</span>
+                    <ArrowRightIcon className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Section 8: Methodology, Testing Environment & References */}
-          <section className="space-y-4 pt-4 border-t border-slate-800">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-              <WrenchScrewdriverIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              8. Analysis Scope, Sources &amp; Methodology
-            </h2>
-            <div className="space-y-3 not-prose text-xs text-slate-300">
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
-                <strong className="text-white block mb-1">Documentation-Backed Analysis &amp; Scope Overview:</strong>
-                This technical review evaluates PhotoCraft and cloud generative workflows based on publicly available documentation, repository commit histories, and illustrative workflow demonstrations (reviewed October 2026). PhotoCraft&rsquo;s core architecture (<code>egui</code> immediate-mode GUI, <code>eframe</code> harness, and <code>wgpu</code> hardware rendering) was verified from official repository commits on GitHub (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">github.com/kuretoshi/photocraft</a>). WebAssembly canvas behaviors were inspected via community build releases and independent public deployments (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Side-by-side editing scenarios illustrate procedural differences between manual desktop raster manipulation and cloud-based prompt-guided diffusion, rather than empirical hardware speed benchmarks. No proprietary server telemetry or unverified infrastructure claims are asserted.
-              </div>
-              <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
-                <strong className="text-white block mb-1">References &amp; Project Links:</strong>
-                <ul className="space-y-1 text-slate-400">
-                  <li>• PhotoCraft GitHub Repository (Source Code &amp; WASM Build Artifacts): <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a></li>
-                  <li>• PhotoCraft Independent Third-Party Web Deployment: <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a></li>
-                  <li>• Adobe Photoshop Official Technical Specifications: <a href="https://www.adobe.com/products/photoshop.html" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">adobe.com/products/photoshop.html</a></li>
-                  <li>• Qwen Multimodal Diffusion Models: <a href="https://huggingface.co/Qwen" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">huggingface.co/Qwen</a></li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 9: FAQ */}
-          <section className="space-y-4 pt-4 border-t border-slate-800">
+          {/* Section 7: Frequently Asked Questions & References */}
+          <section className="space-y-6 pt-4 border-t border-slate-800">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ShieldCheckIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              Frequently Asked Questions (FAQ)
+              7. Frequently Asked Questions (FAQ) &amp; Verifiable Sources
             </h2>
-            <div className="space-y-4 not-prose mt-6">
+            
+            {/* FAQ Cards */}
+            <div className="space-y-3 not-prose">
               {faqData.map((item, idx) => (
                 <div key={idx} className="p-4 bg-slate-900/80 border border-slate-800 rounded-xl">
                   <h3 className="font-semibold text-white text-sm mb-2">{item.q}</h3>
@@ -866,7 +809,25 @@ export default function PhotoCraftBlogPostComponent({
                 </div>
               ))}
             </div>
+
+            {/* Verifiable Sources Box */}
+            <div className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl not-prose text-xs text-slate-300 space-y-2">
+              <div className="font-bold text-white flex items-center gap-2">
+                <WrenchScrewdriverIcon className="w-4 h-4 text-indigo-400" />
+                <span>Verification Scope &amp; Reference Links:</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                This review evaluates PhotoCraft and cloud generative workflows based on publicly available documentation, repository commit histories, and illustrative workflow demonstrations (reviewed October 2026).
+              </p>
+              <ul className="space-y-1 text-slate-400 text-[11px]">
+                <li>• PhotoCraft GitHub Repository (Source &amp; Release History): <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a></li>
+                <li>• PhotoCraft Independent Third-Party Web Deployment: <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a></li>
+                <li>• Adobe Photoshop Official Technical Specifications: <a href="https://www.adobe.com/products/photoshop.html" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">adobe.com/products/photoshop.html</a></li>
+                <li>• Qwen Multimodal Diffusion Models: <a href="https://huggingface.co/Qwen" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">huggingface.co/Qwen</a></li>
+              </ul>
+            </div>
           </section>
+
 
         </article>
 
