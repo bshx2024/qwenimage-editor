@@ -233,9 +233,9 @@ export default function PhotoCraftBlogPostComponent({
             <span>{post.category}</span>
           </div>
 
-          {/* Strict H1 67 Chars: 100% Matches 'PhotoCraft Online' Target Keyword */}
+          {/* Strict H1 58 Chars: 100% Matches 'PhotoCraft Online Review' Target Keyword */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
-            PhotoCraft Online: Free AI Alternative to the Rust Photoshop Clone
+            PhotoCraft Online Review: Can It Replace Adobe Photoshop?
           </h1>
 
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">

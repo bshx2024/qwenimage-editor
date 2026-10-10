@@ -20,8 +20,8 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'photocraft-online-ai-review-photoshop-alternative',
-    // Strict 57 chars (<= 60 limit, 100% covers 'PhotoCraft Online', 'AI Editor', 'Photoshop Alternative')
-    title: 'PhotoCraft Online: Free AI Editor & Photoshop Alternative',
+    // Strict 57 chars (<= 60 limit, locks 'PhotoCraft Online' as unambiguous target keyword)
+    title: 'PhotoCraft Online Review: Best Free Photoshop Alternative',
     // Strict 156 chars (<= 160 limit, 100% covers 'PhotoCraft online', 'Rust Photoshop clone', 'online AI alternative')
     description: 'Looking for PhotoCraft online? Review the trending Rust Photoshop clone, test its features, and use the best free online AI alternative directly in browser.',
     date: '2026-10-10',
