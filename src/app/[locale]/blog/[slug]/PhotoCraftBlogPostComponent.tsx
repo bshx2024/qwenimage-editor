@@ -25,7 +25,8 @@ import {
   DocumentMagnifyingGlassIcon,
   ArrowsRightLeftIcon,
   ArrowTopRightOnSquareIcon,
-  ClipboardDocumentCheckIcon
+  ClipboardDocumentCheckIcon,
+  InformationCircleIcon
 } from "@heroicons/react/24/outline";
 
 export default function PhotoCraftBlogPostComponent({
@@ -119,7 +120,7 @@ export default function PhotoCraftBlogPostComponent({
     },
     {
       q: "When should I choose PhotoCraft versus Qwen Image Editor?",
-      a: "Choose PhotoCraft if you want an open-source, local-first Photoshop alternative for manual brush drawing, layer masking, and offline privacy without subscription fees. Choose Qwen Image Editor if you want prompt-guided automation—such as replacing outfits, erasing unwanted objects, or generating bilingual commercial assets in seconds."
+      a: "Choose PhotoCraft if you want an open-source, local-first Photoshop alternative designed for manual editing without cloud API dependencies and free of recurring subscription fees. Choose Qwen Image Editor if you want prompt-guided automation—such as replacing outfits, erasing unwanted objects, or generating bilingual commercial assets in seconds."
     }
   ];
 
@@ -304,7 +305,7 @@ export default function PhotoCraftBlogPostComponent({
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Core Architecture:</span>
-              <span className="text-white font-semibold">Memory-Safe Rust, egui / eframe GUI, wgpu Acceleration</span>
+              <span className="text-white font-semibold">Rust, egui/eframe UI, wgpu GPU acceleration, and WebAssembly browser support</span>
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Generative AI Alternative:</span>
@@ -313,7 +314,7 @@ export default function PhotoCraftBlogPostComponent({
           </div>
 
           <p className="text-slate-200 text-sm leading-relaxed">
-            Following viral demonstrations of its open-source Rust architecture, creative professionals have actively explored <strong>PhotoCraft online</strong> to assess whether it can replace legacy commercial tools. This review evaluates PhotoCraft&rsquo;s documented features, inspects its WebAssembly browser implementation, and compares manual raster workflows with automated generative AI alternatives through reproducible test benchmarks.
+            Following viral demonstrations of its open-source Rust architecture, creative professionals have actively explored <strong>PhotoCraft online</strong> to assess whether it can replace legacy commercial tools. This review evaluates PhotoCraft&rsquo;s documented features, inspects its WebAssembly browser implementation, and compares manual raster workflows with automated generative AI alternatives through illustrative workflow comparisons.
           </p>
         </section>
 
@@ -337,8 +338,17 @@ export default function PhotoCraftBlogPostComponent({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left Controls */}
             <div className="space-y-4">
-              <div className="p-2.5 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-[11px] text-slate-300 leading-relaxed">
-                <strong className="text-indigo-400">Preview Notice:</strong> This in-page module demonstrates how prompt-guided inpainting interfaces work using pre-rendered test presets. To run real-time diffusion with full GPU inference on your own custom photos, open the <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Full Cloud AI Editor</Link> (1 free guest generation included).
+              <div className="p-3 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-[11px] text-slate-300 space-y-1.5 leading-relaxed">
+                <div className="flex items-center gap-1.5 font-bold text-indigo-400">
+                  <InformationCircleIcon className="w-3.5 h-3.5" />
+                  <span>Interactive Demo Transparency Notice</span>
+                </div>
+                <p>
+                  This in-page tool demonstrates the prompt inpainting workflow using <strong>pre-rendered showcase visual presets</strong> (Portrait, Ecommerce, Vintage). It runs locally in your browser: <em>no files are uploaded to remote servers, no user credits are deducted, and it displays pre-computed sample outputs</em>.
+                </p>
+                <p>
+                  To run <strong>live neural diffusion on your own custom photos</strong> with dedicated cloud GPU clusters, open the <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Full Cloud AI Editor</Link> (includes 1 free guest generation).
+                </p>
               </div>
 
               <div>
@@ -408,7 +418,7 @@ export default function PhotoCraftBlogPostComponent({
                 ) : (
                   <>
                     <SparklesIcon className="w-4 h-4" />
-                    <span>Run Inpainting Simulation</span>
+                    <span>Run Inpainting Simulation (Preset Demo)</span>
                   </>
                 )}
               </button>
@@ -426,11 +436,11 @@ export default function PhotoCraftBlogPostComponent({
               <div className="relative aspect-video rounded-lg overflow-hidden bg-slate-900 border border-slate-800">
                 <img
                   src={hasResult ? editedImage : activeImage}
-                  alt="Generative inpainting benchmark test"
+                  alt="Generative inpainting showcase"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-black/70 text-indigo-300 backdrop-blur-sm border border-white/10">
-                  {hasResult ? 'AI Inpainted Output (2048px)' : 'Original Reference Image'}
+                  {hasResult ? 'Sample Preset Result (2048px Showcase)' : 'Sample Reference Image'}
                 </div>
               </div>
 
@@ -456,14 +466,14 @@ export default function PhotoCraftBlogPostComponent({
                   className="flex-1 py-2 bg-emerald-600/90 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition-all text-center flex items-center justify-center gap-1.5 shadow"
                 >
                   <ArrowDownTrayIcon className="w-3.5 h-3.5" />
-                  <span>Download Clean 2048px Result</span>
+                  <span>Download Sample Preset Asset</span>
                 </a>
                 <button
                   type="button"
                   onClick={() => setHasResult(!hasResult)}
                   className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition-colors"
                 >
-                  Toggle Before/After
+                  Toggle Sample Preset
                 </button>
               </div>
             </div>
@@ -528,14 +538,14 @@ export default function PhotoCraftBlogPostComponent({
             </p>
           </section>
 
-          {/* Section 4: Visual Benchmark Suite */}
+          {/* Section 4: Illustrative Workflow Comparison */}
           <section className="space-y-6 pt-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ArrowsRightLeftIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              4. Hands-On Visual Benchmark: Real Test Cases (October 2026)
+              4. Illustrative Workflow Comparison: Manual Raster vs. Generative Diffusion
             </h2>
             <p className="leading-relaxed">
-              To illustrate how manual raster tools compare with automated multimodal AI inpainting, we conducted benchmark editing tasks across both paradigms in October 2026 using standardized test imagery:
+              To illustrate how manual raster tools compare with automated multimodal AI inpainting, we outline typical editing tasks across both paradigms using standardized sample imagery:
             </p>
 
             {/* Test Case 1: Scene Transformation & Fashion Wardrobe Inpainting */}
@@ -543,25 +553,25 @@ export default function PhotoCraftBlogPostComponent({
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-indigo-500/20 text-indigo-300 uppercase">
-                    Test Case #1: Scene Inpainting &amp; Wardrobe Transformation
+                    Workflow Scenario #1: Scene Inpainting &amp; Wardrobe Transformation
                   </span>
                   <h3 className="text-white font-bold text-base mt-1">
                     Daytime Cafe Portrait to Cyberpunk Neon Street
                   </h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Verified Benchmark • Oct 2026</span>
+                <span className="text-xs text-slate-400 font-mono">Illustrative Workflow Comparison</span>
               </div>
 
               <figure className="space-y-2">
                 <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-indigo-500/30 shadow-xl">
                   <img
                     src="/images/qwen_editor_demo.jpg"
-                    alt="Side-by-side benchmark: Original daytime cafe portrait on left vs AI edited cyberpunk scene on right"
+                    alt="Side-by-side comparison: Original daytime cafe portrait on left vs AI edited cyberpunk scene on right"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <figcaption className="text-center text-[11px] text-slate-400 font-medium">
-                  <strong>Side-by-side test verification:</strong> Left displays the unedited daytime cafe portrait; right displays the inpaint result preserving facial identity while replacing the background and jacket with synchronized cyberpunk neon reflections.
+                  <strong>Side-by-side illustration:</strong> Left displays the unedited daytime cafe portrait; right illustrates prompt-guided inpainting replacing the background and jacket with synchronized cyberpunk neon reflections while preserving facial identity.
                 </figcaption>
               </figure>
 
@@ -572,7 +582,7 @@ export default function PhotoCraftBlogPostComponent({
                     Requires manual magnetic lasso/pen path extraction around hair and shoulders, searching for background plate assets, perspective alignment, and manual color curve grading for neon ambient rim lighting.
                   </p>
                   <span className="text-amber-400 font-mono text-[11px] block">
-                    Estimated Manual Workflow: ~15–20 min (Professional design task estimate)
+                    Manual Workflow Baseline (Illustrative Estimate): ~15–20 min based on standard design practice
                   </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
@@ -581,8 +591,8 @@ export default function PhotoCraftBlogPostComponent({
                     <strong>Prompt:</strong> &ldquo;transform background to cyberpunk neon Tokyo street, change jacket to iridescent metallic leather, preserve facial geometry and realistic reflections&rdquo;.
                   </p>
                   <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
-                    <div>Logged GPU Wall-Clock Time: <strong>4.21 seconds</strong></div>
-                    <div className="text-[10px] text-slate-400">Environment: NVIDIA A100-SXM4 (80GB), 28 steps, bfloat16, 1024&times;1024 base canvas</div>
+                    <div>Generative Diffusion (Sample Test): <strong>~4–5 seconds</strong> typical cloud GPU inference</div>
+                    <div className="text-[10px] text-slate-400">Target environment: Multimodal diffusion pipeline, 28 steps, bfloat16, 1024&times;1024 canvas</div>
                   </div>
                 </div>
               </div>
@@ -593,25 +603,25 @@ export default function PhotoCraftBlogPostComponent({
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 uppercase">
-                    Test Case #2: Commercial Typography &amp; Poster Layout
+                    Workflow Scenario #2: Commercial Typography &amp; Poster Layout
                   </span>
                   <h3 className="text-white font-bold text-base mt-1">
                     Standard AI Text Distortion vs. Qwen 2026 Typographic Coherence
                   </h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Empirical Benchmark • Oct 2026</span>
+                <span className="text-xs text-slate-400 font-mono">Illustrative Workflow Comparison</span>
               </div>
 
               <figure className="space-y-2">
                 <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 shadow-xl">
                   <img
                     src="/images/model_compare_demo.jpg"
-                    alt="Side-by-side typography benchmark: Standard diffusion text distortion on left vs Qwen 2026 crisp typography on right"
+                    alt="Side-by-side typography comparison: Standard diffusion text distortion on left vs Qwen 2026 crisp typography on right"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <figcaption className="text-center text-[11px] text-slate-400 font-medium">
-                  <strong>Side-by-side test verification:</strong> Left displays traditional diffusion font distortion (&ldquo;AI GEN: IWAGE&rdquo;); right displays Qwen 2026&rsquo;s crisp, legible magazine cover typography (&ldquo;QWEN IMAGE 2026 NEXT GEN EDITING&rdquo;).
+                  <strong>Side-by-side illustration:</strong> Left illustrates traditional diffusion font distortion (&ldquo;AI GEN: IWAGE&rdquo;); right illustrates Qwen 2026&rsquo;s legible magazine cover typography (&ldquo;QWEN IMAGE 2026 NEXT GEN EDITING&rdquo;).
                 </figcaption>
               </figure>
 
@@ -622,7 +632,7 @@ export default function PhotoCraftBlogPostComponent({
                     Requires installing local font files (.ttf/.otf), defining text frame boundaries, manually kerning glyphs, and applying manual drop-shadow layers over raster backgrounds.
                   </p>
                   <span className="text-amber-400 font-mono text-[11px] block">
-                    Estimated Manual Workflow: ~5–10 min (Standard layout time)
+                    Manual Workflow Baseline (Illustrative Estimate): ~5–10 min based on standard layout steps
                   </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
@@ -631,8 +641,8 @@ export default function PhotoCraftBlogPostComponent({
                     <strong>Prompt:</strong> &ldquo;commercial fashion magazine cover layout with bold header text QWEN IMAGE 2026 NEXT GEN EDITING, sharp typographic hierarchy&rdquo;.
                   </p>
                   <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
-                    <div>Logged GPU Wall-Clock Time: <strong>4.48 seconds</strong></div>
-                    <div className="text-[10px] text-slate-400">Baseline comparison: Tested against standard open-source SDXL baseline prompt execution</div>
+                    <div>Generative Diffusion (Sample Test): <strong>~4–5 seconds</strong> typical cloud GPU inference</div>
+                    <div className="text-[10px] text-slate-400">Baseline comparison: Compared against standard open-source SDXL baseline prompt execution</div>
                   </div>
                 </div>
               </div>
@@ -741,7 +751,7 @@ export default function PhotoCraftBlogPostComponent({
                 </div>
                 <ul className="text-xs text-slate-300 space-y-1.5">
                   <li>• You want an open-source, subscription-free raster tool for manual brushwork.</li>
-                  <li>• You require 100% offline, local-first file privacy without cloud API dependencies.</li>
+                  <li>• You prefer software designed for local editing without cloud API dependencies (native desktop builds execute entirely on local hardware; for browser builds, inspect DevTools network activity to verify third-party host telemetry).</li>
                   <li>• You appreciate exploring cutting-edge Rust and WebAssembly graphics projects.</li>
                 </ul>
               </div>
