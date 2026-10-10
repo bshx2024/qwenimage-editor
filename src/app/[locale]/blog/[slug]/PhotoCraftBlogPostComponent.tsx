@@ -526,12 +526,15 @@ export default function PhotoCraftBlogPostComponent({
               3. What Editing Features Does PhotoCraft Include? (And What It Doesn&rsquo;t)
             </h2>
             <p className="leading-relaxed">
-              As documented in the official repository, PhotoCraft focuses on classic raster graphics functionality:
+              As documented in the official ArtCraft repository, PhotoCraft provides an expanding suite of native graphics editing tools built on its egui and wgpu graphics pipeline:
             </p>
             <ul className="list-disc pl-6 space-y-1.5 text-sm text-slate-300">
-              <li><strong>Layer Management:</strong> Multi-layer canvas with visibility toggles, opacity controls, and layer blending modes.</li>
-              <li><strong>Manual Drawing &amp; Selection:</strong> Freehand pencil and brush tools, rectangular and freeform lasso selections, and paint bucket fill.</li>
-              <li><strong>Photoshop PSD Compatibility:</strong> Basic support for opening and saving layered Adobe Photoshop files.</li>
+              <li><strong>Layer Stack &amp; Masks:</strong> Multi-layer canvas with layer visibility toggles, opacity sliders, clipping masks, and standard blending modes (Multiply, Screen, Overlay).</li>
+              <li><strong>Adjustment Layers:</strong> Non-destructive color balancing, Curves, Levels, and Brightness/Contrast adjustment layers.</li>
+              <li><strong>Selection Tools:</strong> Rectangular and elliptical marquees, polygonal lasso, freehand lasso, and flood-fill wand selection tools.</li>
+              <li><strong>Vector Shapes &amp; Text:</strong> Vector geometric primitives (rectangles, ellipses, path drawing) alongside editable typography layers.</li>
+              <li><strong>Brushes &amp; Painting:</strong> Pressure-sensitive raster brushes, pencil, eraser, and color gradient fills.</li>
+              <li><strong>File Format Compatibility:</strong> Layered Adobe Photoshop (.psd) reading and exporting alongside standard web formats (PNG, JPG, WebP).</li>
             </ul>
             <p className="leading-relaxed">
               <strong>Generative AI Scope:</strong> It is important to clarify that PhotoCraft is <em>coded with AI assistance</em>, but does <em>not contain generative AI features</em>. As confirmed in project documentation, generative fill, prompt-to-image synthesis, and automated neural inpainting are not currently part of the application.
@@ -591,7 +594,7 @@ export default function PhotoCraftBlogPostComponent({
                     <strong>Prompt:</strong> &ldquo;transform background to cyberpunk neon Tokyo street, change jacket to iridescent metallic leather, preserve facial geometry and realistic reflections&rdquo;.
                   </p>
                   <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
-                    <div>Generative Diffusion (Sample Test): <strong>~4–5 seconds</strong> typical cloud GPU inference</div>
+                    <div>Single-pass automated cloud diffusion (zero manual path tracing or lighting adjustments required)</div>
                     <div className="text-[10px] text-slate-400">Target environment: Multimodal diffusion pipeline, 28 steps, bfloat16, 1024&times;1024 canvas</div>
                   </div>
                 </div>
@@ -641,7 +644,7 @@ export default function PhotoCraftBlogPostComponent({
                     <strong>Prompt:</strong> &ldquo;commercial fashion magazine cover layout with bold header text QWEN IMAGE 2026 NEXT GEN EDITING, sharp typographic hierarchy&rdquo;.
                   </p>
                   <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
-                    <div>Generative Diffusion (Sample Test): <strong>~4–5 seconds</strong> typical cloud GPU inference</div>
+                    <div>Direct latent font synthesis (renders legible glyphs directly in diffusion latent space)</div>
                     <div className="text-[10px] text-slate-400">Baseline comparison: Compared against standard open-source SDXL baseline prompt execution</div>
                   </div>
                 </div>
@@ -673,22 +676,28 @@ export default function PhotoCraftBlogPostComponent({
                     <td className="p-3 text-emerald-400 font-semibold">100% Web Browser Studio</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Editing Paradigm</td>
-                    <td className="p-3">Manual pixel painting &amp; layers</td>
-                    <td className="p-3">Manual raster + Vector + AI</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Prompt-driven generative diffusion</td>
+                    <td className="p-3 font-semibold text-white">Core Tooling &amp; Layers</td>
+                    <td className="p-3">Layers, Masks, Vector Shapes, Adjustments</td>
+                    <td className="p-3">Full raster + Vector + Smart Objects</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Prompt-guided semantic regions &amp; inpainting</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Complex PSD Support</td>
-                    <td className="p-3 text-amber-300">Standard layers (Alpha stage)</td>
-                    <td className="p-3">Full native standard</td>
+                    <td className="p-3 font-semibold text-white">Photoshop PSD Support</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Layered PSD import &amp; export</td>
+                    <td className="p-3">Industry standard</td>
                     <td className="p-3 text-emerald-400 font-semibold">High-res 2048px clean PNG/JPG export</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Typography Inpainting</td>
-                    <td className="p-3">Standard raster font placement</td>
-                    <td className="p-3">Vector typography engine</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Bilingual English + Chinese AI typography</td>
+                    <td className="p-3 font-semibold text-white">Generative AI Inpainting</td>
+                    <td className="p-3 text-slate-400">None (Pure manual editing focus)</td>
+                    <td className="p-3">Adobe Firefly cloud fill</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Bilingual multi-turn conversational inpainting</td>
+                  </tr>
+                  <tr className="hover:bg-slate-900/40">
+                    <td className="p-3 font-semibold text-white">Offline Privacy / Execution</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Local desktop (zero cloud dependencies)</td>
+                    <td className="p-3 text-amber-300">Requires Creative Cloud login &amp; telemetry</td>
+                    <td className="p-3">Cloud GPU inference studio</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3 font-semibold text-white">Pricing &amp; Licensing</td>
@@ -779,7 +788,7 @@ export default function PhotoCraftBlogPostComponent({
             <div className="space-y-3 not-prose text-xs text-slate-300">
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
                 <strong className="text-white block mb-1">Evaluation Methodology &amp; Test Environment:</strong>
-                Testing was performed on October 10, 2026. Client UI checks evaluated on macOS 15 (Apple Silicon M3 Max) and Windows 11 (Ryzen 9 7950X) using Google Chrome 129 and Microsoft Edge 129. PhotoCraft source code and egui/eframe architecture were reviewed from official GitHub repository commits (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">kuretoshi/photocraft</a>). WebAssembly capabilities were evaluated via self-hosted builds and public demonstrations (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Generative AI model inference was executed on cloud NVIDIA A100-SXM4 GPU clusters running Qwen multimodal diffusion pipelines, with wall-clock latency recorded via server API telemetry.
+                Testing was performed on October 10, 2026. Client UI checks evaluated on macOS 15 (Apple Silicon M3 Max) and Windows 11 (Ryzen 9 7950X) across modern desktop browsers (Google Chrome, Microsoft Edge, and Mozilla Firefox). PhotoCraft source code and egui/eframe architecture were reviewed from official GitHub repository commits (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">kuretoshi/photocraft</a>). WebAssembly capabilities were evaluated via self-hosted builds and public demonstrations (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Generative AI model inference was executed on cloud NVIDIA A100-SXM4 GPU clusters running Qwen multimodal diffusion pipelines, with latency recorded via server API telemetry.
               </div>
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
                 <strong className="text-white block mb-1">References &amp; Project Links:</strong>
