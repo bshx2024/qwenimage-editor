@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCommonContext } from "~/context/common-context";
 import LoadingDots from "./LoadingDots";
 import { priceList, PriceItem } from "~/configs/stripeConfig";
@@ -14,11 +14,45 @@ export default function Pricing({
   isPricing?: boolean;
 }) {
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
+  const [trafficSource, setTrafficSource] = useState<'search' | 'chatgpt' | 'ai_engine' | 'blog' | 'direct' | 'default'>('default');
   const {
     setShowLoginModal,
     userData,
     pricingText
   } = useCommonContext();
+
+  // Dynamic traffic source detection (CRO optimization)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      let storedSource = sessionStorage.getItem('qwen_traffic_source') as any;
+      if (!storedSource) {
+        const ref = (document.referrer || '').toLowerCase();
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmSource = (urlParams.get('utm_source') || urlParams.get('source') || '').toLowerCase();
+
+        if (utmSource.includes('chatgpt') || ref.includes('chatgpt.com') || ref.includes('openai.com')) {
+          storedSource = 'chatgpt';
+        } else if (utmSource.includes('perplexity') || ref.includes('perplexity.ai') || ref.includes('claude.ai')) {
+          storedSource = 'ai_engine';
+        } else if (
+          utmSource.includes('google') ||
+          utmSource.includes('bing') ||
+          ref.includes('google.') ||
+          ref.includes('bing.') ||
+          ref.includes('duckduckgo.')
+        ) {
+          storedSource = 'search';
+        } else if (window.location.pathname.includes('/blog') || ref.includes('/blog/')) {
+          storedSource = 'blog';
+        } else {
+          storedSource = 'direct';
+        }
+        sessionStorage.setItem('qwen_traffic_source', storedSource);
+      }
+      setTrafficSource(storedSource);
+    } catch {}
+  }, []);
 
   const handleCheckout = async (price: PriceItem) => {
     setPriceIdLoading(price.id);
@@ -90,6 +124,32 @@ export default function Pricing({
     }
   };
 
+  const isSearchOrBlog = trafficSource === 'search' || trafficSource === 'blog';
+  const isAIReferral = trafficSource === 'chatgpt' || trafficSource === 'ai_engine';
+
+  // Highlight hero plan based on source intent (Search/Blog -> Starter $4.99; AI -> Yearly/Trio)
+  const heroPlanId = isSearchOrBlog
+    ? 'price_starter'
+    : isAIReferral
+    ? 'price_yearly'
+    : 'price_yearly';
+
+  // Dynamic ordering of plans based on source
+  let displayPlans = priceList;
+  if (isSearchOrBlog) {
+    displayPlans = [
+      priceList.find((p) => p.id === 'price_starter')!,
+      priceList.find((p) => p.id === 'price_monthly')!,
+      priceList.find((p) => p.id === 'price_yearly')!,
+    ].filter(Boolean);
+  } else if (isAIReferral) {
+    displayPlans = [
+      priceList.find((p) => p.id === 'price_yearly')!,
+      priceList.find((p) => p.id === 'price_monthly')!,
+      priceList.find((p) => p.id === 'price_starter')!,
+    ].filter(Boolean);
+  }
+
   return (
     <section id="pricing-plans" className={`w-full py-12 md:py-16 text-white ${isPricing ? "" : "background-div"}`}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -108,19 +168,28 @@ export default function Pricing({
             Generate high-resolution AI visuals with official Qwen Image &amp; Wanx 2.1 models. Upgrade or cancel anytime.
           </p>
 
-          {/* Free Tier Highlight Banner */}
+          {/* Dynamic Source Highlight Banner */}
           <div className="inline-flex items-center gap-2 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-200">
             <BoltIcon className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>🎁 New users get 2 Free Credits on Google sign in to try all features!</span>
+            <span>
+              {isSearchOrBlog ? (
+                <>🎯 <strong>Creator Welcome Pass:</strong> 160 AI Credits for only <strong>$4.99</strong> — Instant Access, Never Expires!</>
+              ) : isAIReferral ? (
+                <>⚡ <strong>AI Power User Tier:</strong> Priority GPU Queue, Unlimited Inpainting &amp; Maximum Resolution!</>
+              ) : (
+                <>🎁 New users get 2 Free Credits on Google sign in to try all features!</>
+              )}
+            </span>
           </div>
         </div>
 
-        {/* 3 Pricing Cards Grid */}
+        {/* 3 Pricing Cards Grid (Dynamic Ordering by Traffic Source) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
-          {priceList.map((plan) => {
+          {displayPlans.map((plan) => {
             const isYearly = plan.id === 'price_yearly';
             const isMonthly = plan.id === 'price_monthly';
             const isStarter = plan.id === 'price_starter';
+            const isHero = plan.id === heroPlanId;
 
             const priceFormatted = (plan.unit_amount / 100).toFixed(2);
 
@@ -128,22 +197,26 @@ export default function Pricing({
               <div
                 key={plan.id}
                 className={`relative flex flex-col justify-between rounded-3xl p-7 transition-all duration-300 backdrop-blur-xl ${
-                  isYearly
-                    ? 'border-2 border-indigo-500 bg-slate-900/90 shadow-2xl shadow-indigo-500/20 md:-translate-y-2'
+                  isHero
+                    ? 'border-2 border-indigo-500 bg-slate-900/95 shadow-2xl shadow-indigo-500/25 md:-translate-y-2'
                     : 'border border-slate-800 bg-slate-900/60 shadow-xl hover:border-slate-700'
                 }`}
               >
-                {/* Popular Pill */}
-                {plan.badge && (
+                {/* Popular Pill / Badge */}
+                {(plan.badge || isHero) && (
                   <div className="mb-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                        isYearly
+                        isHero
                           ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-md'
                           : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
                       }`}
                     >
-                      {plan.badge}
+                      {isSearchOrBlog && isStarter
+                        ? '🎯 Top Choice for New Users'
+                        : isAIReferral && isYearly
+                        ? '👑 Recommended by AI Assistants — Save 50%'
+                        : plan.badge}
                     </span>
                   </div>
                 )}
@@ -194,8 +267,8 @@ export default function Pricing({
                   disabled={priceIdLoading === plan.id}
                   onClick={() => handleCheckout(plan)}
                   className={`w-full py-3.5 px-6 rounded-2xl text-xs font-extrabold transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 ${
-                    isYearly
-                      ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white shadow-indigo-500/25'
+                    isHero
+                      ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white shadow-indigo-500/30 ring-2 ring-indigo-400/40'
                       : isMonthly
                       ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 hover:opacity-95 text-white shadow-cyan-500/20'
                       : 'border border-slate-700 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white'
