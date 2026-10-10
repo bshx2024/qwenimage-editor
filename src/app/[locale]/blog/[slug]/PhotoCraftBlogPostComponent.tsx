@@ -507,14 +507,20 @@ export default function PhotoCraftBlogPostComponent({
               Users frequently search for <strong>&ldquo;PhotoCraft online&rdquo;</strong> to determine whether the editor can run in a browser without local compilation.
             </p>
             <p className="leading-relaxed">
-              <strong>PhotoCraft supports WebAssembly browser builds.</strong> Users can self-host the published web build artifacts from official GitHub repository releases or try an independent third-party deployment (such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). Because third-party sites are community-hosted rather than an official centralized SaaS service, creators should verify the repository commit and build version before using an independently hosted instance for production or private artwork.
+              <strong>PhotoCraft supports WebAssembly browser builds.</strong> To avoid confusion between project sources and web hosting, creators should distinguish among three execution environments:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-sm text-slate-300">
               <li>
-                <strong>Self-Hosted / Third-Party WebAssembly (WASM):</strong> Runs client-side in standard web browsers (Chrome, Edge, Firefox, Safari) via WebGL2/WebGPU. Convenient for quick edits and cross-platform use, though browser tab memory sandboxes can limit working buffers on multi-gigabyte PSD files.
+                <strong>Official GitHub Repository &amp; Releases:</strong> Maintained under Brandon Thomas&rsquo;s ArtCraft project (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a>). Provides open source code, native desktop build scripts, and official WebAssembly build artifacts that creators can self-host.
               </li>
               <li>
-                <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows, providing unconstrained system RAM access and native GPU rendering pipelines for heavier multi-layer projects.
+                <strong>Self-Hosted WebAssembly (WASM):</strong> Organizations or individuals can host the published web build artifacts on an internal static server or local web root, providing browser access without third-party external dependencies.
+              </li>
+              <li>
+                <strong>Independent Third-Party Web Deployments:</strong> Public community-hosted websites such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>. While these demonstrate the client-side WASM canvas, they are independent community instances rather than an official centralized SaaS service. Browser builds still require the application assets to load, and offline behavior should be verified for the specific deployment.
+              </li>
+              <li>
+                <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows, providing unconstrained system RAM access, native GPU rendering pipelines, and complete offline hardware execution.
               </li>
             </ul>
           </section>
@@ -760,7 +766,7 @@ export default function PhotoCraftBlogPostComponent({
                 </div>
                 <ul className="text-xs text-slate-300 space-y-1.5">
                   <li>• You want an open-source, subscription-free raster tool for manual brushwork.</li>
-                  <li>• You prefer software designed for local editing without cloud API dependencies (native desktop builds execute entirely on local hardware; for browser builds, inspect DevTools network activity to verify third-party host telemetry).</li>
+                  <li>• PhotoCraft supports local image editing without requiring cloud-based generative AI APIs. Native desktop builds execute entirely on local hardware; browser builds still require application assets to be loaded, and offline behavior should be verified for the specific deployment.</li>
                   <li>• You appreciate exploring cutting-edge Rust and WebAssembly graphics projects.</li>
                 </ul>
               </div>
