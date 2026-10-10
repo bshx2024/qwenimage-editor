@@ -8,6 +8,7 @@ import ViduS2BlogPostComponent from './ViduS2BlogPostComponent';
 import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent';
 import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
 import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent';
+import PhotoCraftBlogPostComponent from './PhotoCraftBlogPostComponent';
 
 export const revalidate = 3600;
 
@@ -27,6 +28,10 @@ export default async function BlogPostPage({
   const post = getBlogPostBySlug(slug);
   if (!post) {
     notFound();
+  }
+
+  if (slug === 'photocraft-online-ai-review-photoshop-alternative') {
+    return <PhotoCraftBlogPostComponent post={post} locale={locale} />;
   }
 
   if (slug === 'rumpelstiltskin-ai-1987-movie-meme-workflow') {

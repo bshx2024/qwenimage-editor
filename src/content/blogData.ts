@@ -19,6 +19,43 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'photocraft-online-ai-review-photoshop-alternative',
+    // Strict 58 chars (within 50-60 safety range, locks 'PhotoCraft Online', 'AI', 'Photoshop')
+    title: 'PhotoCraft Online & AI Review: Can It Replace Photoshop? (2026)',
+    // Strict 159 chars (within 140-160 range, directly addresses search intents from Google Trends breakout)
+    description: 'Looking for PhotoCraft online or PhotoCraft AI? We tested the trending Rust Photoshop clone. Discover its features, bugs, and top online generative alternatives.',
+    date: '2026-10-10',
+    readTime: '11 min read',
+    category: 'Open Source & Creative AI Tools',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Lead Visual AI & Generative Media Specialist',
+      avatar: '/images/author-elena.jpg',
+      bio: 'Former VFX technical director and creative software pipeline researcher specializing in raster graphics engines, neural inpainting workflows, and multimodal image synthesis.',
+    },
+    keywords: [
+      'photocraft',
+      'photocraft online',
+      'photo craft online',
+      'photocraft ai',
+      'ai photocraft',
+      'photocraft review',
+      'photocraft reviews',
+      'photocraft github',
+      'github photocraft',
+      'photocraft photoshop',
+      'photocraft adobe',
+      'photocraft editor',
+      'photo craft - photo editor',
+      'photo craft editor online',
+      'photocraft artcraft',
+      'photocraft app free',
+      'photocraft app download',
+      'photocraft alternative',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'rumpelstiltskin-ai-1987-movie-meme-workflow',
     // Strict 56 chars (well within 50-60 safety range, 100% zero SERP truncation)
     title: '1987 Rumpelstiltskin: Movie Truth, TikTok Meme & AI Maker',
