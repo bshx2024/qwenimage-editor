@@ -512,117 +512,87 @@ export default function PhotoCraftBlogPostComponent({
               To evaluate how PhotoCraft&rsquo;s manual raster tools compare with automated multimodal AI inpainting, we tested identical visual editing tasks across both workflows in October 2026.
             </p>
 
-            {/* Test Case 1: Fashion Portrait Wardrobe Alteration */}
+            {/* Test Case 1: Scene Transformation & Fashion Wardrobe Inpainting */}
             <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 not-prose">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-indigo-500/20 text-indigo-300 uppercase">
-                    Test Case #1: Fashion Portrait Retouching
+                    Test Case #1: Scene Inpainting &amp; Wardrobe Transformation
                   </span>
                   <h3 className="text-white font-bold text-base mt-1">
-                    Clothing Texture &amp; Outfit Replacement
+                    Daytime Cafe Portrait to Cyberpunk Neon Street
                   </h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Tested: Oct 2026</span>
+                <span className="text-xs text-slate-400 font-mono">Verified Benchmark • Oct 2026</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <figure className="space-y-1.5">
-                  <div className="aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/model_compare_demo.jpg"
-                      alt="Original portrait photo before editing"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="text-center text-[11px] text-slate-400 font-medium">
-                    [Before] Input Portrait: Original fabric texture and lighting
-                  </figcaption>
-                </figure>
-
-                <figure className="space-y-1.5">
-                  <div className="aspect-square rounded-xl overflow-hidden bg-slate-950 border border-indigo-500/40">
-                    <img
-                      src="/images/qwen_editor_demo.jpg"
-                      alt="Generative AI inpainting result after clothing replacement"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="text-center text-[11px] text-emerald-400 font-medium">
-                    [After] AI Inpainted Result: Black leather jacket with specular reflections
-                  </figcaption>
-                </figure>
-              </div>
+              <figure className="space-y-2">
+                <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-indigo-500/30 shadow-xl">
+                  <img
+                    src="/images/qwen_editor_demo.jpg"
+                    alt="Side-by-side benchmark: Original daytime cafe portrait on left vs AI edited cyberpunk scene on right"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <figcaption className="text-center text-[11px] text-slate-400 font-medium">
+                  <strong>Side-by-side test verification:</strong> Left displays the unedited daytime cafe portrait; right displays the inpaint result preserving facial identity while replacing the background and jacket with synchronized cyberpunk neon reflections.
+                </figcaption>
+              </figure>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
                 <div className="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
-                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Workflow):</span>
+                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Pixel Workflow):</span>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
-                    Requires manual lasso selection of garment contours, new layer creation, Color Dodge / Overlay blend mode tuning, and manual clone stamp brushing. Estimated execution time: <strong>12–15 minutes</strong>.
+                    Requires manual magnetic lasso cutout around hair and shoulders, manual background plate compositing, and manual color curve grading for neon ambient light. Estimated manual execution: <strong>15–20 minutes</strong>.
                   </p>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
-                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative AI):</span>
+                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative Diffusion):</span>
                   <p className="text-slate-200 leading-relaxed text-[11px]">
-                    Rough brush over the jacket area with natural-language prompt &ldquo;change jacket to black Italian leather&rdquo;. Diffusion model recalculates fold creases and ambient light in <strong>4.2 seconds</strong>.
+                    Natural language prompt &ldquo;transform background to cyberpunk neon Tokyo street, change jacket to iridescent metallic leather&rdquo;. Single-pass inference complete in <strong>4.2 seconds</strong>.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Test Case 2: Vintage Film Lighting & Artifact Cleanup */}
+            {/* Test Case 2: Commercial Magazine Poster & Typography Inpainting */}
             <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 not-prose">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 uppercase">
-                    Test Case #2: Cinematic Restoration
+                    Test Case #2: Commercial Typography &amp; Poster Layout
                   </span>
                   <h3 className="text-white font-bold text-base mt-1">
-                    35mm Film Grain Harmonization &amp; Relighting
+                    Standard AI Text Blurring vs. Qwen 2026 Typographic Coherence
                   </h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Tested: Oct 2026</span>
+                <span className="text-xs text-slate-400 font-mono">Verified Benchmark • Oct 2026</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <figure className="space-y-1.5">
-                  <div className="aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/rumpelstiltskin_vintage_demo.jpg"
-                      alt="Vintage film scene before AI harmonization"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="text-center text-[11px] text-slate-400 font-medium">
-                    [Before] Raw Scene: Uneven ambient exposure and color noise
-                  </figcaption>
-                </figure>
-
-                <figure className="space-y-1.5">
-                  <div className="aspect-video rounded-xl overflow-hidden bg-slate-950 border border-amber-500/40">
-                    <img
-                      src="/images/rumpelstiltskin_tuxedo_result.jpg"
-                      alt="AI relit scene with consistent film tone"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="text-center text-[11px] text-amber-300 font-medium">
-                    [After] AI Harmonized: Cohesive vintage color grading and specular edges
-                  </figcaption>
-                </figure>
-              </div>
+              <figure className="space-y-2">
+                <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 shadow-xl">
+                  <img
+                    src="/images/model_compare_demo.jpg"
+                    alt="Side-by-side typography benchmark: Standard diffusion text distortion on left vs Qwen 2026 crisp typography on right"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <figcaption className="text-center text-[11px] text-slate-400 font-medium">
+                  <strong>Side-by-side test verification:</strong> Left displays traditional diffusion font distortion (&ldquo;AI GEN: IWAGE&rdquo;); right displays Qwen 2026&rsquo;s crisp, legible magazine cover typography (&ldquo;QWEN IMAGE 2026 NEXT GEN EDITING&rdquo;).
+                </figcaption>
+              </figure>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
                 <div className="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
-                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Workflow):</span>
+                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Typography):</span>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
-                    Requires Curves adjustment layers, manual high-pass sharpening filters, and Gaussian blur masking. Ideal for editors wanting granular control over every RGB curve.
+                    Requires local system font installations (.ttf/.otf), manual text box formatting, and manual layer masking over raster backgrounds. Excellent for precise manual kerning.
                   </p>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
-                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative AI):</span>
+                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative Typography):</span>
                   <p className="text-slate-200 leading-relaxed text-[11px]">
-                    Neural inpainting automatically matches color temperature and preserves filmic grain structure without requiring manual LUT adjustments.
+                    Synthesizes vector-crisp English and Chinese character glyphs directly into the visual latent space, eliminating manual font licensing and raster clipping paths.
                   </p>
                 </div>
               </div>
