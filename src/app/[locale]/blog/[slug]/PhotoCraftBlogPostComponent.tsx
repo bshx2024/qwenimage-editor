@@ -104,7 +104,7 @@ export default function PhotoCraftBlogPostComponent({
   const faqData = [
     {
       q: "Can I use PhotoCraft online in a web browser?",
-      a: "PhotoCraft supports WebAssembly (WASM) browser builds. Users can self-host the published web build artifacts from official GitHub releases or try an independent third-party deployment (such as photocrafteditor.com). Before using an independently hosted instance for production or private artwork, verify the repository source and release version. For working with exceptionally large multi-layer PSD files, compiling the native desktop build in Rust provides unconstrained RAM and avoids browser sandbox memory limits."
+      a: "PhotoCraft supports WebAssembly (WASM) browser builds. Users can self-host the published web build artifacts from official GitHub releases or try an independent third-party deployment (such as photocrafteditor.com). Before using an independently hosted instance for production or private artwork, verify the repository source and release version. Native desktop builds typically access larger available system memory beyond browser tab limits, though actual memory headroom depends on device hardware, OS configuration, and application implementation."
     },
     {
       q: "Does PhotoCraft support prompt-based generative AI inpainting?",
@@ -305,7 +305,7 @@ export default function PhotoCraftBlogPostComponent({
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Core Architecture:</span>
-              <span className="text-white font-semibold">Rust, egui/eframe UI, wgpu GPU acceleration, and WebAssembly browser support</span>
+              <span className="text-white font-semibold">Rust, egui/eframe UI, wgpu rendering, and WebAssembly browser support</span>
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Generative AI Alternative:</span>
@@ -520,7 +520,7 @@ export default function PhotoCraftBlogPostComponent({
                 <strong>Independent Third-Party Web Deployments:</strong> Public community-hosted websites such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>. While these demonstrate the client-side WASM canvas, they are independent community instances rather than an official centralized SaaS service. Browser builds still require the application assets to load, and offline behavior should be verified for the specific deployment.
               </li>
               <li>
-                <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows, providing unconstrained system RAM access, native GPU rendering pipelines, and complete offline hardware execution.
+                <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows. Native desktop binaries typically access larger available system memory beyond browser tab limits (though actual memory headroom depends on device hardware, operating system, and application limits), provide native GPU rendering pipelines, and run directly on local hardware.
               </li>
             </ul>
           </section>
@@ -591,7 +591,7 @@ export default function PhotoCraftBlogPostComponent({
                     Requires manual magnetic lasso/pen path extraction around hair and shoulders, searching for background plate assets, perspective alignment, and manual color curve grading for neon ambient rim lighting.
                   </p>
                   <span className="text-amber-400 font-mono text-[11px] block">
-                    Manual Workflow Baseline (Illustrative Estimate): ~15–20 min based on standard design practice
+                    Workflow Focus: Precision manual asset sourcing, pen isolation, and custom curve balance
                   </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
@@ -641,7 +641,7 @@ export default function PhotoCraftBlogPostComponent({
                     Requires installing local font files (.ttf/.otf), defining text frame boundaries, manually kerning glyphs, and applying manual drop-shadow layers over raster backgrounds.
                   </p>
                   <span className="text-amber-400 font-mono text-[11px] block">
-                    Manual Workflow Baseline (Illustrative Estimate): ~5–10 min based on standard layout steps
+                    Workflow Focus: Precision font asset installation, vector kerning, and manual layer styling
                   </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
@@ -682,33 +682,39 @@ export default function PhotoCraftBlogPostComponent({
                     <td className="p-3 text-emerald-400 font-semibold">100% Web Browser Studio</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Core Tooling &amp; Layers</td>
-                    <td className="p-3">Layers, Masks, Vector Shapes, Adjustments</td>
-                    <td className="p-3">Full raster + Vector + Smart Objects</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Prompt-guided semantic regions &amp; inpainting</td>
+                    <td className="p-3 font-semibold text-white">Typography &amp; Vector Tools</td>
+                    <td className="p-3">Vector shapes, path tools &amp; text layers (Alpha stage)</td>
+                    <td className="p-3">Full vector Pen tool, OpenType engine &amp; shapes</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Generative bilingual AI typography synthesized directly in latent space</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
-                    <td className="p-3 font-semibold text-white">Photoshop PSD Support</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Layered PSD import &amp; export</td>
-                    <td className="p-3">Industry standard</td>
-                    <td className="p-3 text-emerald-400 font-semibold">High-res 2048px clean PNG/JPG export</td>
+                    <td className="p-3 font-semibold text-white">PSD / PSB Compatibility</td>
+                    <td className="p-3">Layered PSD reading &amp; saving (Alpha maturity; PSB planned)</td>
+                    <td className="p-3">Native industry standard for all layered PSD/PSB files</td>
+                    <td className="p-3 text-emerald-400 font-semibold">High-res 2048px clean PNG/JPG/WebP export</td>
+                  </tr>
+                  <tr className="hover:bg-slate-900/40">
+                    <td className="p-3 font-semibold text-white">Non-Destructive Adjustments</td>
+                    <td className="p-3">Curves, Levels, Color Balance, Brightness adjustment layers</td>
+                    <td className="p-3">Complete adjustment layers, Camera Raw, smart filters</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Conversational prompt-guided global style &amp; lighting re-harmonization</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3 font-semibold text-white">Generative AI Inpainting</td>
-                    <td className="p-3 text-slate-400">None (Pure manual editing focus)</td>
-                    <td className="p-3">Adobe Firefly cloud fill</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Bilingual multi-turn conversational inpainting</td>
+                    <td className="p-3 text-slate-400">None (Pure manual raster/vector editing focus)</td>
+                    <td className="p-3">Adobe Firefly cloud fill (requires subscription credits)</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Bilingual multi-turn conversational inpainting &amp; editing</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3 font-semibold text-white">Offline Privacy / Execution</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Local desktop (zero cloud dependencies)</td>
-                    <td className="p-3 text-amber-300">Requires Creative Cloud login &amp; telemetry</td>
+                    <td className="p-3 text-emerald-400 font-semibold">Local desktop (zero cloud API dependencies)</td>
+                    <td className="p-3 text-amber-300">Requires periodic Creative Cloud login &amp; telemetry</td>
                     <td className="p-3">Cloud GPU inference studio</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3 font-semibold text-white">Pricing &amp; Licensing</td>
                     <td className="p-3 text-emerald-400 font-semibold">100% Free Open Source (MIT/Apache)</td>
-                    <td className="p-3 text-rose-400">$22.99+/mo Subscription DRM</td>
+                    <td className="p-3 text-rose-400">$22.99 – $59.99/mo Subscription DRM</td>
                     <td className="p-3 text-emerald-400 font-semibold">1 Free Guest Credit + $4.99 Starter (100 credits)</td>
                   </tr>
                 </tbody>
@@ -789,12 +795,12 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4 pt-4 border-t border-slate-800">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <WrenchScrewdriverIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              8. Testing Methodology &amp; References
+              8. Evaluation Methodology &amp; References
             </h2>
             <div className="space-y-3 not-prose text-xs text-slate-300">
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
-                <strong className="text-white block mb-1">Evaluation Methodology &amp; Test Environment:</strong>
-                Testing was performed on October 10, 2026. Client UI checks evaluated on macOS 15 (Apple Silicon M3 Max) and Windows 11 (Ryzen 9 7950X) across modern desktop browsers (Google Chrome, Microsoft Edge, and Mozilla Firefox). PhotoCraft source code and egui/eframe architecture were reviewed from official GitHub repository commits (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">kuretoshi/photocraft</a>). WebAssembly capabilities were evaluated via self-hosted builds and public demonstrations (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Generative AI model inference was executed on cloud NVIDIA A100-SXM4 GPU clusters running Qwen multimodal diffusion pipelines, with latency recorded via server API telemetry.
+                <strong className="text-white block mb-1">Evaluation Methodology &amp; Scope Overview:</strong>
+                Review and architectural evaluation conducted in October 2026. UI workflows and browser interactions were inspected across macOS 15 and Windows 11 using modern desktop browsers (Google Chrome, Microsoft Edge, and Mozilla Firefox). PhotoCraft source code, dependencies, and egui/eframe architecture were reviewed from the official ArtCraft GitHub repository commits (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">kuretoshi/photocraft</a>). WebAssembly capabilities were inspected via community build releases and independent public deployments (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Generative AI inpainting examples illustrate standard cloud diffusion model workflows for semantic editing.
               </div>
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
                 <strong className="text-white block mb-1">References &amp; Project Links:</strong>
