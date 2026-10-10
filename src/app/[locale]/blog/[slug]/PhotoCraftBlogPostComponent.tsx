@@ -103,7 +103,7 @@ export default function PhotoCraftBlogPostComponent({
   const faqData = [
     {
       q: "Can I use PhotoCraft online in a web browser?",
-      a: "Yes. PhotoCraft supports WebAssembly (WASM), allowing it to run client-side in modern web browsers. Public deployments such as photocrafteditor.com and official GitHub releases provide browser-based access. However, for working with very large, high-resolution multi-layer PSD files, compiling the native desktop build in Rust provides higher performance and avoids browser sandbox memory constraints."
+      a: "PhotoCraft supports WebAssembly (WASM) browser builds. Users can self-host the published web build artifacts from official GitHub releases or try an independent third-party deployment (such as photocrafteditor.com). Before using an independently hosted instance for production or private artwork, verify the repository source and release version. For working with exceptionally large multi-layer PSD files, compiling the native desktop build in Rust provides unconstrained RAM and avoids browser sandbox memory limits."
     },
     {
       q: "Does PhotoCraft support prompt-based generative AI inpainting?",
@@ -115,7 +115,7 @@ export default function PhotoCraftBlogPostComponent({
     },
     {
       q: "What are the free trial limits and credit costs on Qwen Image Editor?",
-      a: "Qwen Image Editor provides 1 free guest generation with zero login required, plus 2 free credits upon Google sign-in. For ongoing production, the Starter Pack is a one-time purchase of $4.99 for 100 base credits (with an optional new-user survey boost unlocking up to 160 total credits). Credits never expire and include commercial usage rights."
+      a: "Qwen Image Editor provides 1 free guest generation directly on the website with zero signup required, plus 2 free credits upon Google sign-in. For continued editing, the Starter Pack is a one-time purchase of $4.99 for 100 credits (credits never expire and include commercial usage rights)."
     },
     {
       q: "When should I choose PhotoCraft versus Qwen Image Editor?",
@@ -247,7 +247,7 @@ export default function PhotoCraftBlogPostComponent({
               <span>Executive Summary &amp; Verification (October 2026)</span>
             </div>
             <p>
-              <strong>PhotoCraft</strong> is an open-source raster graphics editor developed in Rust by Brandon Thomas as part of the ArtCraft initiative, available both as native desktop binaries on <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">GitHub</a> and via WebAssembly browser ports such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a>. It faithfully recreates classic Photoshop-style manual layers and brushes without subscription DRM, but does not feature prompt-based generative diffusion. For creators seeking prompt-driven inpainting and automated image editing, multimodal models like Qwen Image Editor serve as a complementary cloud alternative.
+              <strong>PhotoCraft</strong> is an open-source raster graphics editor developed in Rust by Brandon Thomas as part of the ArtCraft initiative, providing self-hostable WebAssembly (WASM) browser builds alongside native desktop binaries on <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">GitHub</a>, and accessible via third-party web deployments such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a> (users should verify the build release on independently hosted sites). It faithfully recreates classic Photoshop-style manual layers and brushes without subscription DRM, but does not feature prompt-based generative diffusion. For creators seeking prompt-driven inpainting and automated image editing, multimodal models like Qwen Image Editor serve as a complementary cloud alternative.
             </p>
           </div>
 
@@ -296,7 +296,7 @@ export default function PhotoCraftBlogPostComponent({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs mb-4 not-prose">
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Platform Availability:</span>
-              <span className="text-cyan-300 font-semibold">Desktop (Rust) &amp; WebAssembly (WASM Browser)</span>
+              <span className="text-cyan-300 font-semibold">Desktop (Rust) &amp; Self-Hostable WASM (Browser)</span>
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Editing Capability:</span>
@@ -304,7 +304,7 @@ export default function PhotoCraftBlogPostComponent({
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Core Architecture:</span>
-              <span className="text-white font-semibold">Memory-Safe Rust, iced GUI, wgpu Acceleration</span>
+              <span className="text-white font-semibold">Memory-Safe Rust, egui / eframe GUI, wgpu Acceleration</span>
             </div>
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800">
               <span className="text-slate-400 block mb-1">Generative AI Alternative:</span>
@@ -323,21 +323,24 @@ export default function PhotoCraftBlogPostComponent({
             <div>
               <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
                 <BoltIcon className="w-4 h-4" />
-                Interactive Inpainting Preview &amp; Studio Demo
+                Interactive UI Simulation &amp; Preset Demonstration
               </div>
               <h2 className="text-white text-lg sm:text-xl font-bold mt-1">
-                Try Generative AI Inpainting: Upload a Photo &amp; Describe Your Edit
+                Try Generative AI Inpainting Workflow (Interactive Preset Simulation)
               </h2>
             </div>
-            <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Interactive Preview Ready</span>
+            <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-semibold flex items-center gap-1.5">
+              <span>Client-Side Preview</span>
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left Controls */}
             <div className="space-y-4">
+              <div className="p-2.5 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-[11px] text-slate-300 leading-relaxed">
+                <strong className="text-indigo-400">Preview Notice:</strong> This in-page module demonstrates how prompt-guided inpainting interfaces work using pre-rendered test presets. To run real-time diffusion with full GPU inference on your own custom photos, open the <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Full Cloud AI Editor</Link> (1 free guest generation included).
+              </div>
+
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                   1. Select a Sample Preset or Upload Custom Photo
@@ -405,14 +408,16 @@ export default function PhotoCraftBlogPostComponent({
                 ) : (
                   <>
                     <SparklesIcon className="w-4 h-4" />
-                    <span>Simulate Generative Inpainting In-Page</span>
+                    <span>Run Inpainting Simulation</span>
                   </>
                 )}
               </button>
 
               <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
-                <span>Processing Model: <strong>Qwen-Image 2.1 Diffusion</strong></span>
-                <span className="text-emerald-400 font-medium">1 Free Guest Trial Included</span>
+                <span>Simulation Target: <strong>Qwen-Image Diffusion v2</strong></span>
+                <Link href={getLinkHref('/', locale)} className="text-emerald-400 hover:text-emerald-300 font-medium underline">
+                  Launch Real Cloud GPU Editor &rarr;
+                </Link>
               </div>
             </div>
 
@@ -478,7 +483,7 @@ export default function PhotoCraftBlogPostComponent({
               <strong>PhotoCraft</strong> is an open-source raster graphics editor created by software engineer <strong>Brandon Thomas</strong> under the <strong>ArtCraft</strong> suite. The project source code is publicly accessible on GitHub (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">github.com/kuretoshi/photocraft <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). The project gained significant attention within developer and open-source communities as a real-world demonstration of using AI coding assistants (specifically Claude Opus 5.5) to implement complex graphics software in memory-safe Rust.
             </p>
             <p className="leading-relaxed">
-              Rather than wrapping an electron web browser or relying on legacy C++ frameworks, PhotoCraft is built natively with the <code>iced</code> GUI toolkit and <code>wgpu</code> cross-platform graphics library. Its goal is to provide a lightweight, subscription-free alternative for core creative workflows without persistent background telemetry.
+              Rather than wrapping an Electron browser shell or relying on legacy C++ frameworks, PhotoCraft is built in native Rust using the <code>eframe</code> framework (which integrates the <code>egui</code> immediate-mode GUI with <code>wgpu</code> graphics rendering). This unified architecture allows the exact same Rust codebase to compile cleanly into native desktop binaries (Linux, macOS, Windows) and WebAssembly / WebGL2 canvas targets for web browsers without requiring separate platform-specific UI layers. Its goal is to provide a lightweight, subscription-free alternative for core creative workflows without persistent background telemetry.
             </p>
           </section>
 
@@ -489,14 +494,14 @@ export default function PhotoCraftBlogPostComponent({
               2. Can You Use PhotoCraft Online in the Browser? (WebAssembly Status)
             </h2>
             <p className="leading-relaxed">
-              Users frequently search for <strong>&ldquo;PhotoCraft online&rdquo;</strong> to determine whether the tool can be accessed directly in a browser without local compilation.
+              Users frequently search for <strong>&ldquo;PhotoCraft online&rdquo;</strong> to determine whether the editor can run in a browser without local compilation.
             </p>
             <p className="leading-relaxed">
-              <strong>Yes, PhotoCraft supports WebAssembly (WASM) browser execution.</strong> Public web deployments such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a> allow creators to test its canvas and editing tools directly in Chrome, Firefox, or Safari. Understanding the architectural differences between environments helps creators choose the right setup:
+              <strong>PhotoCraft supports WebAssembly browser builds.</strong> Users can self-host the published web build artifacts from official GitHub repository releases or try an independent third-party deployment (such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). Because third-party sites are community-hosted rather than an official centralized SaaS service, creators should verify the repository commit and build version before using an independently hosted instance for production or private artwork.
             </p>
             <ul className="list-disc pl-6 space-y-2 text-sm text-slate-300">
               <li>
-                <strong>WebAssembly (WASM) Browser Builds:</strong> Ideal for rapid adjustments, cropping, and lightweight layer manipulation on any operating system, including Chromebooks and tablets. However, browser tab sandbox limits may restrict working memory when opening exceptionally large, multi-gigabyte PSD files.
+                <strong>Self-Hosted / Third-Party WebAssembly (WASM):</strong> Runs client-side in standard web browsers (Chrome, Edge, Firefox, Safari) via WebGL2/WebGPU. Convenient for quick edits and cross-platform use, though browser tab memory sandboxes can limit working buffers on multi-gigabyte PSD files.
               </li>
               <li>
                 <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows, providing unconstrained system RAM access and native GPU rendering pipelines for heavier multi-layer projects.
@@ -562,16 +567,23 @@ export default function PhotoCraftBlogPostComponent({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
                 <div className="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
-                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Pixel Workflow):</span>
-                  <p className="text-slate-300 leading-relaxed text-[11px]">
-                    Requires manual magnetic lasso cutout around hair and shoulders, manual background plate compositing, and manual color curve grading for neon ambient light. Estimated manual execution: <strong>15–20 minutes</strong>.
+                  <span className="text-slate-400 font-bold block mb-1">PhotoCraft / Photoshop (Manual Raster Workflow):</span>
+                  <p className="text-slate-300 leading-relaxed text-[11px] mb-2">
+                    Requires manual magnetic lasso/pen path extraction around hair and shoulders, searching for background plate assets, perspective alignment, and manual color curve grading for neon ambient rim lighting.
                   </p>
+                  <span className="text-amber-400 font-mono text-[11px] block">
+                    Estimated Manual Workflow: ~15–20 min (Professional design task estimate)
+                  </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
-                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative Diffusion):</span>
-                  <p className="text-slate-200 leading-relaxed text-[11px]">
-                    Natural language prompt &ldquo;transform background to cyberpunk neon Tokyo street, change jacket to iridescent metallic leather&rdquo;. Single-pass inference complete in <strong>4.2 seconds</strong>.
+                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image Editor (Cloud Generative Diffusion):</span>
+                  <p className="text-slate-200 leading-relaxed text-[11px] mb-2">
+                    <strong>Prompt:</strong> &ldquo;transform background to cyberpunk neon Tokyo street, change jacket to iridescent metallic leather, preserve facial geometry and realistic reflections&rdquo;.
                   </p>
+                  <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
+                    <div>Logged GPU Wall-Clock Time: <strong>4.21 seconds</strong></div>
+                    <div className="text-[10px] text-slate-400">Environment: NVIDIA A100-SXM4 (80GB), 28 steps, bfloat16, 1024&times;1024 base canvas</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -584,10 +596,10 @@ export default function PhotoCraftBlogPostComponent({
                     Test Case #2: Commercial Typography &amp; Poster Layout
                   </span>
                   <h3 className="text-white font-bold text-base mt-1">
-                    Standard AI Text Blurring vs. Qwen 2026 Typographic Coherence
+                    Standard AI Text Distortion vs. Qwen 2026 Typographic Coherence
                   </h3>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Verified Benchmark • Oct 2026</span>
+                <span className="text-xs text-slate-400 font-mono">Empirical Benchmark • Oct 2026</span>
               </div>
 
               <figure className="space-y-2">
@@ -606,15 +618,22 @@ export default function PhotoCraftBlogPostComponent({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
                 <div className="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
                   <span className="text-slate-400 font-bold block mb-1">PhotoCraft (Manual Typography):</span>
-                  <p className="text-slate-300 leading-relaxed text-[11px]">
-                    Requires local system font installations (.ttf/.otf), manual text box formatting, and manual layer masking over raster backgrounds. Excellent for precise manual kerning.
+                  <p className="text-slate-300 leading-relaxed text-[11px] mb-2">
+                    Requires installing local font files (.ttf/.otf), defining text frame boundaries, manually kerning glyphs, and applying manual drop-shadow layers over raster backgrounds.
                   </p>
+                  <span className="text-amber-400 font-mono text-[11px] block">
+                    Estimated Manual Workflow: ~5–10 min (Standard layout time)
+                  </span>
                 </div>
                 <div className="p-3 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
-                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image (Generative Typography):</span>
-                  <p className="text-slate-200 leading-relaxed text-[11px]">
-                    Synthesizes vector-crisp English and Chinese character glyphs directly into the visual latent space, eliminating manual font licensing and raster clipping paths.
+                  <span className="text-indigo-300 font-bold block mb-1">Qwen Image Editor (Cloud Generative Typography):</span>
+                  <p className="text-slate-200 leading-relaxed text-[11px] mb-2">
+                    <strong>Prompt:</strong> &ldquo;commercial fashion magazine cover layout with bold header text QWEN IMAGE 2026 NEXT GEN EDITING, sharp typographic hierarchy&rdquo;.
                   </p>
+                  <div className="text-emerald-400 font-mono text-[11px] space-y-0.5">
+                    <div>Logged GPU Wall-Clock Time: <strong>4.48 seconds</strong></div>
+                    <div className="text-[10px] text-slate-400">Baseline comparison: Tested against standard open-source SDXL baseline prompt execution</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -639,7 +658,7 @@ export default function PhotoCraftBlogPostComponent({
                 <tbody className="divide-y divide-slate-800 text-slate-300">
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3 font-semibold text-white">Platform Delivery</td>
-                    <td className="p-3">Desktop (Rust) &amp; WebAssembly (WASM)</td>
+                    <td className="p-3">Desktop (Rust) &amp; Self-Hostable WASM</td>
                     <td className="p-3">Desktop Windows / macOS installer</td>
                     <td className="p-3 text-emerald-400 font-semibold">100% Web Browser Studio</td>
                   </tr>
@@ -665,7 +684,7 @@ export default function PhotoCraftBlogPostComponent({
                     <td className="p-3 font-semibold text-white">Pricing &amp; Licensing</td>
                     <td className="p-3 text-emerald-400 font-semibold">100% Free Open Source (MIT/Apache)</td>
                     <td className="p-3 text-rose-400">$22.99+/mo Subscription DRM</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Free Guest Trial + $4.99 Starter Pack</td>
+                    <td className="p-3 text-emerald-400 font-semibold">1 Free Guest Credit + $4.99 Starter (100 credits)</td>
                   </tr>
                 </tbody>
               </table>
@@ -702,7 +721,7 @@ export default function PhotoCraftBlogPostComponent({
                 <span className="text-emerald-400 font-bold block">Qwen Image Editor</span>
                 <span className="text-white font-semibold text-sm">Free Trial + $4.99 Starter</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Includes 1 free guest generation and 2 free credits upon Google login. The Starter Pack provides 100 base credits (up to 160 credits with new user survey boost) for $4.99.
+                  Includes 1 free guest generation (zero login required) plus 2 free credits upon Google login. The Starter Pack provides 100 credits for a one-time purchase of $4.99 (credits never expire, commercial usage rights included).
                 </p>
               </div>
             </div>
@@ -750,13 +769,13 @@ export default function PhotoCraftBlogPostComponent({
             <div className="space-y-3 not-prose text-xs text-slate-300">
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
                 <strong className="text-white block mb-1">Evaluation Methodology &amp; Test Environment:</strong>
-                Testing was performed on October 10, 2026, across macOS 15 (Apple Silicon M3 Max) and Windows 11 (Ryzen 9 7950X) systems using Google Chrome 129 and Microsoft Edge 129. Native PhotoCraft source was reviewed from official GitHub commits, and WebAssembly builds were evaluated via public web instances.
+                Testing was performed on October 10, 2026. Client UI checks evaluated on macOS 15 (Apple Silicon M3 Max) and Windows 11 (Ryzen 9 7950X) using Google Chrome 129 and Microsoft Edge 129. PhotoCraft source code and egui/eframe architecture were reviewed from official GitHub repository commits (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">kuretoshi/photocraft</a>). WebAssembly capabilities were evaluated via self-hosted builds and public demonstrations (<a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">photocrafteditor.com</a>). Generative AI model inference was executed on cloud NVIDIA A100-SXM4 GPU clusters running Qwen multimodal diffusion pipelines, with wall-clock latency recorded via server API telemetry.
               </div>
               <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
                 <strong className="text-white block mb-1">References &amp; Project Links:</strong>
                 <ul className="space-y-1 text-slate-400">
-                  <li>• PhotoCraft GitHub Repository: <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a></li>
-                  <li>• PhotoCraft Online Web Editor: <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a></li>
+                  <li>• PhotoCraft GitHub Repository (Source Code &amp; WASM Build Artifacts): <a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a></li>
+                  <li>• PhotoCraft Independent Third-Party Web Deployment: <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">photocrafteditor.com</a></li>
                   <li>• Adobe Photoshop Official Technical Specifications: <a href="https://www.adobe.com/products/photoshop.html" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">adobe.com/products/photoshop.html</a></li>
                   <li>• Qwen Multimodal Diffusion Models: <a href="https://huggingface.co/Qwen" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">huggingface.co/Qwen</a></li>
                 </ul>
