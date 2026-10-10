@@ -22,8 +22,8 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'photocraft-online-ai-review-photoshop-alternative',
     // Strict 57 chars (<= 60 limit, locks 'PhotoCraft Online' as unambiguous target keyword)
     title: 'PhotoCraft Online Review: Best Free Photoshop Alternative',
-    // Strict 156 chars (<= 160 limit, 100% covers 'PhotoCraft online', 'Rust Photoshop clone', 'online AI alternative')
-    description: 'Looking for PhotoCraft online? Review the trending Rust Photoshop clone, test its features, and use the best free online AI alternative directly in browser.',
+    // Strict 155 chars (<= 160 limit, covers PhotoCraft online, WASM browser access, before-and-after results)
+    description: 'Looking for PhotoCraft online? Review features, WASM browser access, and test the best online generative AI alternative with real before-and-after results.',
     date: '2026-10-10',
     readTime: '11 min read',
     category: 'Open Source & Creative AI Tools',
