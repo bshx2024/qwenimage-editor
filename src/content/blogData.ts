@@ -20,10 +20,10 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'photocraft-online-ai-review-photoshop-alternative',
-    // User-recommended SEO Title
-    title: 'PhotoCraft Online Review: Features, Browser Access & Photoshop Alternatives',
-    // User-recommended Meta Description
-    description: 'Learn what PhotoCraft offers, how its browser-based and desktop options differ, which editing features are available, and when an AI image editor may be a better fit.',
+    // Strict 58 chars (<= 60 limit, locks 'PhotoCraft Online')
+    title: 'PhotoCraft Online Review: Features, Web Access & Free Tools',
+    // Strict 149 chars (<= 160 limit, 100% exact match for 'PhotoCraft online')
+    description: 'Review PhotoCraft online features, desktop vs WebAssembly browser access, and compare free editing workflows with modern AI generative alternatives.',
     date: '2026-10-10',
     readTime: '11 min read',
     category: 'Open Source & Creative AI Tools',

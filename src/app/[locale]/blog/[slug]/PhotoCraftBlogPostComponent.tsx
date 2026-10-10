@@ -103,24 +103,24 @@ export default function PhotoCraftBlogPostComponent({
 
   const faqData = [
     {
-      q: "Can I use PhotoCraft online in a web browser?",
-      a: "PhotoCraft supports WebAssembly (WASM) browser builds. Users can self-host the published web build artifacts from official GitHub releases or try an independent third-party deployment (such as photocrafteditor.com). Before using an independently hosted instance for production or private artwork, verify the repository source and release version. Native desktop builds can use system resources directly, subject to available memory, operating-system limits, and application constraints."
+      q: "Can I use PhotoCraft online free in a web browser?",
+      a: "Yes. PhotoCraft online supports WebAssembly (WASM) browser builds. Users can run PhotoCraft online free by self-hosting published web build artifacts from official GitHub releases or trying an independent community deployment (such as photocrafteditor.com). Native desktop builds can use system resources directly, subject to available memory, operating-system limits, and application constraints."
     },
     {
-      q: "Does PhotoCraft support prompt-based generative AI inpainting?",
-      a: "No. PhotoCraft is designed around classic manual raster editing tools (pencils, brushes, lasso selection, layer masks). While the project code was developed with AI assistance (Claude Opus 5.5), the application itself does not incorporate generative diffusion models or text-to-image fill. For automated prompt-based inpainting, creators use dedicated AI tools like Qwen Image Editor."
+      q: "Does PhotoCraft online support prompt-based generative AI inpainting?",
+      a: "No. PhotoCraft online is designed around classic manual raster editing tools (pencils, brushes, lasso selection, layer masks). While the project code was developed with AI assistance (Claude Opus 5.5), PhotoCraft online does not incorporate generative diffusion models or text-to-image fill. For automated prompt-based inpainting, creators use dedicated cloud AI tools like Qwen Image Editor."
     },
     {
-      q: "Where can I find the official PhotoCraft source code and releases?",
-      a: "The project source code is hosted on GitHub under repositories including github.com/kuretoshi/photocraft as part of Brandon Thomas's open-source ArtCraft initiative. Users can review the code, compile native binaries, or inspect the WebAssembly build pipeline directly from the repository."
+      q: "Where can I download PhotoCraft online source code and desktop releases?",
+      a: "The PhotoCraft online project source code is hosted on GitHub under repositories including github.com/kuretoshi/photocraft as part of Brandon Thomas's open-source ArtCraft initiative. Users can review the code, compile native binaries, or inspect the WebAssembly build pipeline directly from the repository."
     },
     {
       q: "What are the free trial limits and credit costs on Qwen Image Editor?",
       a: "Qwen Image Editor provides 1 free guest generation directly on the website with zero signup required, plus 2 free credits upon Google sign-in. For continued editing, the Starter Pack is a one-time purchase of $4.99 for 100 credits (credits never expire and include commercial usage rights)."
     },
     {
-      q: "When should I choose PhotoCraft versus Qwen Image Editor?",
-      a: "Choose PhotoCraft if you want an open-source, local-first Photoshop alternative designed for manual editing without cloud API dependencies and free of recurring subscription fees. Choose Qwen Image Editor if you want prompt-guided automation—such as replacing outfits, erasing unwanted objects, or generating bilingual commercial assets in seconds."
+      q: "When should I choose PhotoCraft online versus an AI image editor?",
+      a: "Choose PhotoCraft online if you want an open-source, local-first Photoshop alternative designed for manual editing without cloud API dependencies and free of recurring subscription fees. Choose Qwen Image Editor if you want prompt-guided automation—such as replacing outfits, erasing unwanted objects, or generating bilingual commercial assets in seconds."
     }
   ];
 
@@ -458,7 +458,11 @@ export default function PhotoCraftBlogPostComponent({
               <div className="relative aspect-video rounded-lg overflow-hidden bg-slate-900 border border-slate-800">
                 <img
                   src={hasResult ? editedImage : activeImage}
-                  alt="Generative inpainting showcase"
+                  alt="PhotoCraft online generative inpainting preset preview"
+                  width={1024}
+                  height={576}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-black/70 text-indigo-300 backdrop-blur-sm border border-white/10">
@@ -509,13 +513,10 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CpuChipIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              1. Quick Answer: What Is PhotoCraft and Who Is It For?
+              1. What Is PhotoCraft Online and Who Is It For?
             </h2>
             <p className="leading-relaxed">
-              <strong>PhotoCraft</strong> is an open-source raster graphics editor created by software engineer <strong>Brandon Thomas</strong> under the <strong>ArtCraft</strong> suite. The project source code is publicly accessible on GitHub (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">github.com/kuretoshi/photocraft <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). The project gained significant attention within developer and open-source communities as a real-world demonstration of using AI coding assistants (specifically Claude Opus 5.5) to implement complex graphics software in memory-safe Rust.
-            </p>
-            <p className="leading-relaxed">
-              Rather than wrapping an Electron browser shell or relying on legacy C++ frameworks, PhotoCraft is built in native Rust using the <code>eframe</code> framework (which integrates the <code>egui</code> immediate-mode GUI with <code>wgpu</code> graphics rendering). This unified architecture allows the exact same Rust codebase to compile cleanly into native desktop binaries (Linux, macOS, Windows) and WebAssembly / WebGL2 canvas targets for web browsers without requiring separate platform-specific UI layers. Its goal is to provide a lightweight, subscription-free alternative for core creative workflows without persistent background telemetry.
+              <strong>PhotoCraft online</strong> is an open-source raster graphics editor created by software engineer <strong>Brandon Thomas</strong> under the <strong>ArtCraft</strong> suite (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">github.com/kuretoshi/photocraft <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>). Built in native Rust using the <code>eframe</code> framework (integrating <code>egui</code> with <code>wgpu</code> hardware rendering), <strong>PhotoCraft online</strong> delivers a lightweight, subscription-free Photoshop alternative for manual layers, brushes, and color adjustments with zero background telemetry.
             </p>
           </section>
 
@@ -523,26 +524,23 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ServerStackIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              2. Official Source &amp; Online Access: GitHub, WASM, and Third-Party Sites
+              2. How to Use PhotoCraft Online Free: WebAssembly Browser Access &amp; Downloads
             </h2>
             <p className="leading-relaxed">
-              Users frequently search for <strong>&ldquo;PhotoCraft online&rdquo;</strong> to determine whether the editor can run in a browser without local compilation.
-            </p>
-            <p className="leading-relaxed">
-              <strong>PhotoCraft supports WebAssembly browser builds.</strong> To avoid confusion between project sources and web hosting, creators should distinguish among three execution environments:
+              Users searching for <strong>PhotoCraft online free</strong> can choose between in-browser WebAssembly canvas editing and native desktop downloads. Creators should distinguish among these deployment environments:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-sm text-slate-300">
               <li>
-                <strong>Official GitHub Repository &amp; Releases:</strong> Maintained under Brandon Thomas&rsquo;s ArtCraft project (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a>). Provides open source code, native desktop build scripts, and official WebAssembly build artifacts that creators can self-host.
+                <strong>Official GitHub Source &amp; Releases:</strong> Maintained under Brandon Thomas&rsquo;s ArtCraft repository (<a href="https://github.com/kuretoshi/photocraft" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300">github.com/kuretoshi/photocraft</a>). Offers open source code, native build scripts, and official WebAssembly build artifacts that creators can self-host.
               </li>
               <li>
-                <strong>Self-Hosted WebAssembly (WASM):</strong> Organizations or individuals can host the published web build artifacts on an internal static server or local web root, providing browser access without third-party external dependencies.
+                <strong>Self-Hosted WebAssembly (WASM):</strong> Organizations or developers can host published web build artifacts on an internal static server to run <strong>PhotoCraft online free</strong> without third-party dependencies.
               </li>
               <li>
-                <strong>Independent Third-Party Web Deployments:</strong> Public community-hosted websites such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a>. While these demonstrate the client-side WASM canvas, they are independent community instances rather than an official centralized SaaS service. Browser builds still require the application assets to load, and offline behavior should be verified for the specific deployment.
+                <strong>Independent Third-Party Web Deployments:</strong> Public community-hosted websites such as <a href="https://photocrafteditor.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline hover:text-indigo-300 inline-flex items-center gap-1">photocrafteditor.com <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 inline" /></a> demonstrate the client-side WASM canvas. Browser builds require application assets to load locally, and offline behavior depends on the specific hosting deployment.
               </li>
               <li>
-                <strong>Native Desktop Builds (Cargo / Rust):</strong> Compiled directly from source on Linux, macOS, or Windows. Native desktop builds can use system resources directly, subject to available memory, operating-system limits, and application constraints. They provide direct wgpu hardware pipeline access without browser tab sandbox restrictions.
+                <strong>Native Desktop Downloads (Cargo / Rust):</strong> Compiled directly on Windows, macOS, or Linux. Native desktop builds can use system resources directly, subject to available memory, operating-system limits, and application constraints.
               </li>
             </ul>
           </section>
@@ -551,10 +549,10 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <SparklesIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              3. Features, Limitations &amp; Compatibility (Verified Scope)
+              3. PhotoCraft Online Features, Compatibility &amp; Tool Limitations
             </h2>
             <p className="leading-relaxed">
-              As documented in the official ArtCraft repository, PhotoCraft provides an expanding suite of native graphics editing tools built on its egui and wgpu graphics pipeline:
+              As an open-source <strong>photo editor online free</strong> of recurring subscription fees, <strong>PhotoCraft online</strong> provides essential manual editing capabilities:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-sm text-slate-300">
               <li><strong>Layer Stack, Blending &amp; Styles:</strong> Multi-layer canvas with layer visibility toggles, opacity sliders, clipping masks, standard blend modes (Multiply, Screen, Overlay), and preliminary layer grouping and style effects (Alpha stage).</li>
@@ -562,10 +560,10 @@ export default function PhotoCraftBlogPostComponent({
               <li><strong>Selection &amp; Masking Suite:</strong> Rectangular and elliptical marquees, polygonal lasso, freehand magnetic lasso, and flood-fill wand selection tools.</li>
               <li><strong>Typography &amp; Vector Shapes:</strong> Vector geometric primitives (rectangles, ellipses, path drawing) alongside editable typography layers.</li>
               <li><strong>Color Management &amp; Brushes:</strong> Standard 8-bit sRGB color workflow, pressure-sensitive raster brushes, pencil, eraser, and smooth gradient fills.</li>
-              <li><strong>File Format Compatibility &amp; Boundaries:</strong> Layered Adobe Photoshop (.psd) reading and exporting alongside standard web formats (PNG, JPG, WebP). Complex proprietary PSB canvases and nested smart filters remain experimental in current Alpha releases.</li>
+              <li><strong>PSD File Compatibility &amp; Boundaries:</strong> Layered Adobe Photoshop (.psd) reading and exporting alongside standard web formats (PNG, JPG, WebP). Complex proprietary PSB canvases and nested smart filters remain experimental in current Alpha releases.</li>
             </ul>
             <p className="leading-relaxed">
-              <strong>Generative AI Scope:</strong> It is important to clarify that PhotoCraft is <em>coded with AI assistance</em>, but does <em>not contain generative AI features</em>. As confirmed in project documentation, generative fill, prompt-to-image synthesis, and automated neural inpainting are not currently part of the application.
+              <strong>Generative AI Scope:</strong> While <strong>PhotoCraft online</strong> was developed with AI coding assistance (Claude Opus 5.5), it does <em>not contain prompt-based generative AI features</em>. Generative fill and neural inpainting are not built into the application.
             </p>
           </section>
 
@@ -600,7 +598,11 @@ export default function PhotoCraftBlogPostComponent({
                 <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-indigo-500/30 shadow-xl">
                   <img
                     src="/images/qwen_editor_demo.jpg"
-                    alt="Side-by-side comparison: Original daytime cafe portrait on left vs AI edited cyberpunk scene on right"
+                    alt="PhotoCraft online inpainting workflow: Original cafe portrait on left vs AI edited cyberpunk scene on right"
+                    width={1280}
+                    height={720}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -650,7 +652,11 @@ export default function PhotoCraftBlogPostComponent({
                 <div className="aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 shadow-xl">
                   <img
                     src="/images/model_compare_demo.jpg"
-                    alt="Side-by-side typography comparison: Standard diffusion text distortion on left vs Qwen 2026 crisp typography on right"
+                    alt="PhotoCraft online typography comparison: Standard diffusion text distortion on left vs Qwen crisp typography on right"
+                    width={1280}
+                    height={720}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -687,19 +693,19 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <PhotoIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              5. Task-Based Decision Matrix: PhotoCraft vs. Adobe Photoshop vs. Qwen Image Editor
+              5. Task-Based Decision Matrix: PhotoCraft Online vs. Photoshop vs. AI Editors
             </h2>
             <p className="leading-relaxed text-sm text-slate-300">
-              Rather than declaring an absolute &ldquo;winner&rdquo;, compare how each application serves specific creative tasks and production constraints:
+              Rather than declaring an absolute &ldquo;winner&rdquo;, compare how <strong>PhotoCraft online</strong> and alternative editors serve specific creative tasks and production constraints:
             </p>
             <div className="overflow-x-auto not-prose my-4">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="border-b border-slate-700 bg-slate-900/80 text-slate-200">
                     <th className="p-3 font-semibold">User Creative Task</th>
-                    <th className="p-3 font-semibold text-indigo-300">PhotoCraft (ArtCraft)</th>
+                    <th className="p-3 font-semibold text-indigo-300">PhotoCraft Online (ArtCraft)</th>
                     <th className="p-3 font-semibold text-slate-400">Adobe Photoshop CC</th>
-                    <th className="p-3 font-semibold text-emerald-300">Qwen Image Editor</th>
+                    <th className="p-3 font-semibold text-emerald-300">Cloud AI Image Editor</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y border-b border-slate-800 divide-slate-800 text-slate-300">
@@ -745,7 +751,7 @@ export default function PhotoCraftBlogPostComponent({
 
             <div className="p-3 bg-slate-900/50 border border-slate-800 rounded-lg text-[11px] text-slate-400 leading-relaxed not-prose space-y-1">
               <div>
-                <strong className="text-slate-300">Decision Guidance:</strong> If your project requires pixel-level deterministic brushwork, vector paths, or offline PSD editing, PhotoCraft and Photoshop are the appropriate choices. If your goal is rapid prompt-guided iteration (such as e-commerce background cleanup or character outfit swaps), generative diffusion tools provide an automated alternative.
+                <strong className="text-slate-300">Decision Guidance:</strong> If your project requires pixel-level deterministic brushwork, vector paths, or offline PSD editing, <strong>PhotoCraft online</strong> and Photoshop are the appropriate choices. If your goal is rapid prompt-guided iteration (such as e-commerce background cleanup or character outfit swaps), generative diffusion tools provide an automated alternative.
               </div>
             </div>
           </section>
@@ -754,13 +760,13 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <CommandLineIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              6. Who Should Use Which Tool? (Tool Selection Guide)
+              6. Choosing Between PhotoCraft Online and Cloud AI Editors
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose my-4">
               <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
                 <div className="font-semibold text-indigo-300 text-sm flex items-center gap-2">
                   <CheckIcon className="w-4 h-4 text-emerald-400" />
-                  Choose PhotoCraft If:
+                  Choose PhotoCraft Online If:
                 </div>
                 <ul className="text-xs text-slate-300 space-y-2">
                   <li>• You need a subscription-free, open-source tool for classic raster painting and brushwork.</li>
@@ -797,7 +803,7 @@ export default function PhotoCraftBlogPostComponent({
           <section className="space-y-6 pt-4 border-t border-slate-800">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
               <ShieldCheckIcon className="w-7 h-7 text-indigo-400 inline-block" />
-              7. Frequently Asked Questions (FAQ) &amp; Verifiable Sources
+              7. PhotoCraft Online Frequently Asked Questions &amp; Sources
             </h2>
             
             {/* FAQ Cards */}
