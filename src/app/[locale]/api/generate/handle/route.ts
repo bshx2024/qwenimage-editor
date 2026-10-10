@@ -71,13 +71,13 @@ export async function POST(req: Request) {
         const forwarded = req.headers.get("x-forwarded-for");
         const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
         const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
-        const GUEST_TRIAL_MAX = 2;
+        const GUEST_TRIAL_MAX = 1;
         const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
         const guestUsedCount = Number(guestUsedCountStr || 0);
 
         if (guestUsedCount >= GUEST_TRIAL_MAX) {
           return Response.json({
-            msg: "You have used your free guest trials (2/2)! Sign in with Google to get daily free credits.",
+            msg: "You have used your free guest trial! Sign in with Google to unlock your Creator Welcome Pass.",
             status: 601,
             guestLimitReached: true,
           });

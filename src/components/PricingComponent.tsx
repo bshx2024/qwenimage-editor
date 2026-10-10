@@ -27,6 +27,14 @@ export default function Pricing({
       setPriceIdLoading(undefined);
       return;
     }
+
+    // Connect Starter Pack to Welcome Survey Boost offer (160 credits for $4.99)
+    if (price.id === 'price_starter' && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+      setPriceIdLoading(undefined);
+      return;
+    }
+
     const user_id = userData.user_id;
     const user_email = userData.email || '';
     try {
@@ -161,7 +169,7 @@ export default function Pricing({
                   </p>
 
                   {/* Features List */}
-                  <ul className="space-y-3 pt-4 border-t border-slate-800/80 mb-8 text-xs text-slate-300">
+                  <ul className="space-y-3 pt-4 border-t border-slate-800/80 mb-6 text-xs text-slate-300">
                     {plan.features.map((feat, fIdx) => (
                       <li key={fIdx} className="flex items-start gap-2.5">
                         <CheckIcon className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -169,6 +177,15 @@ export default function Pricing({
                       </li>
                     ))}
                   </ul>
+
+                  {isStarter && (
+                    <div className="mb-6 p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-cyan-500/10 to-indigo-500/15 border border-cyan-500/30 text-[11px] text-cyan-200">
+                      <span className="flex items-center gap-1.5 font-medium">
+                        <SparklesIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span><strong>15s Survey Bonus:</strong> Unlock <strong>160 Credits</strong> (+60 Free Bonus) for $4.99!</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* CTA Button */}
@@ -181,7 +198,7 @@ export default function Pricing({
                       ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white shadow-indigo-500/25'
                       : isMonthly
                       ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 hover:opacity-95 text-white shadow-cyan-500/20'
-                      : 'border border-slate-700 bg-slate-800 hover:bg-slate-700 text-white'
+                      : 'border border-slate-700 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white'
                   } disabled:opacity-50`}
                 >
                   {priceIdLoading === plan.id ? (
@@ -189,7 +206,7 @@ export default function Pricing({
                   ) : (
                     <>
                       <SparklesIcon className="w-4 h-4" />
-                      <span>{isStarter ? 'Buy 100 Credits ($4.99)' : isMonthly ? 'Subscribe Monthly ($19.90)' : 'Get Pro Yearly ($118.80)'}</span>
+                      <span>{isStarter ? 'Claim 160 Credits ($4.99)' : isMonthly ? 'Subscribe Monthly ($19.90)' : 'Get Pro Yearly ($118.80)'}</span>
                     </>
                   )}
                 </button>

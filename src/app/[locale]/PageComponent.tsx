@@ -65,6 +65,10 @@ export default function PageComponent({
   // High-Resolution Multi-Format Image Downloader (PNG / JPG / WebP)
   const handleDownloadWithFormat = async (imgUrl: string | null, format: 'png' | 'jpg' | 'webp' = downloadFormat) => {
     if (!imgUrl) return;
+    if (!userData && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0') {
+      setShowLoginModal(true);
+      return;
+    }
     setIsDownloading(true);
     setShowFormatDropdown(false);
     try {
