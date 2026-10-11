@@ -50,8 +50,12 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'users' | 'works' | 'subscriptions' | 'ai-engine' | 'sensitive' | 'config'
+    'overview' | 'users' | 'works' | 'subscriptions' | 'ai-engine' | 'sensitive' | 'config' | 'bot-monitor'
   >('overview');
+
+  // Bot & Visitor Monitor Data
+  const [monitorData, setMonitorData] = useState<{ botRows: any[]; visitorRows: any[] } | null>(null);
+  const [monitorLoading, setMonitorLoading] = useState<boolean>(false);
 
   // Overview Data
   const [stats, setStats] = useState<any>(null);
@@ -196,7 +200,23 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     if (activeTab === 'subscriptions') fetchSubscriptions();
     if (activeTab === 'ai-engine') fetchAISettings();
     if (activeTab === 'sensitive') fetchSensitiveWords();
+    if (activeTab === 'bot-monitor') loadMonitorData();
   }, [activeTab, isAuthenticated]);
+
+  const loadMonitorData = async () => {
+    setMonitorLoading(true);
+    try {
+      const res = await fetch('/api/admin/bot-monitor/stats');
+      const data = await res.json();
+      if (data.ok) {
+        setMonitorData(data.data);
+      }
+    } catch (err: any) {
+      console.warn('loadMonitorData error:', err);
+    } finally {
+      setMonitorLoading(false);
+    }
+  };
 
   // Login handler
   const handlePasswordLogin = async (e: React.FormEvent) => {
@@ -934,6 +954,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 { id: 'works', name: 'Works & Gallery', icon: PhotoIcon },
                 { id: 'subscriptions', name: 'Payment & Gateways', icon: CreditCardIcon },
                 { id: 'ai-engine', name: 'AI Models & Bailian', icon: SparklesIcon },
+                { id: 'bot-monitor', name: 'Crawlers & Visitors', icon: CpuChipIcon },
                 { id: 'sensitive', name: 'Sensitive Words', icon: ShieldCheckIcon },
                 { id: 'config', name: 'Environment', icon: Cog6ToothIcon },
               ].map((tab) => {
@@ -2457,6 +2478,131 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                   <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-950/20 text-xs text-indigo-200 leading-relaxed">
                     <strong className="text-indigo-300 block mb-1">Admin Security Tip:</strong>
                     You can change your master administrator password anytime by updating <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_PASSWORD</code> in your <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">.env.local</code> file and restarting your Node.js instance. To add multiple Google admin accounts, specify them comma-separated in <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded">ADMIN_EMAILS=&quot;email1@gmail.com,email2@gmail.com&quot;</code>.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Crawlers & Genuine Visitors Monitor Tab */}
+            {activeTab === 'bot-monitor' && (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <CpuChipIcon className="w-6 h-6 text-cyan-400" />
+                      爬虫与真实访客监控 (Bot &amp; Visitor Analytics)
+                    </h2>
+                    <p className="text-xs text-slate-400 mt-1">
+                      实时捕获主流搜索引擎与 AI 爬虫抓取足迹（只算 IP 逆向 DNS 验证为真的），并监控首批真人访问流量。
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={loadMonitorData}
+                    disabled={monitorLoading}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition-colors cursor-pointer"
+                  >
+                    <ArrowPathIcon className={`w-3.5 h-3.5 ${monitorLoading ? 'animate-spin' : ''}`} />
+                    <span>刷新监控数据</span>
+                  </button>
+                </div>
+
+                {/* Section 1: 爬虫什么时候来的（北京时间，只算 IP 验证为真的） */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      <span>爬虫什么时候来的（北京时间，只算 IP 验证为真的）</span>
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      反向 DNS 验证 • 包含 SearchGPT / Claude / Googlebot
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-slate-400 bg-slate-950/40">
+                          <th className="py-3 px-4 font-semibold">爬虫</th>
+                          <th className="py-3 px-4 font-semibold">第一次来</th>
+                          <th className="py-3 px-4 font-semibold">第一次抓页面</th>
+                          <th className="py-3 px-4 font-semibold">每天抓的页面数</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                        {monitorLoading && !monitorData ? (
+                          <tr>
+                            <td colSpan={4} className="py-8 text-center text-slate-500">
+                              正在加载爬虫日志...
+                            </td>
+                          </tr>
+                        ) : monitorData?.botRows && monitorData.botRows.length > 0 ? (
+                          monitorData.botRows.map((row, idx) => (
+                            <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                              <td className="py-3 px-4 font-medium text-white">{row.botName}</td>
+                              <td className="py-3 px-4 text-slate-300">{row.firstVisit}</td>
+                              <td className="py-3 px-4 font-semibold text-cyan-400">{row.firstPage}</td>
+                              <td className="py-3 px-4 text-slate-300 font-mono text-[11px]">{row.dailySummary}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4} className="py-8 text-center text-slate-500">
+                              暂无爬虫记录（爬虫访问时将自动在此呈现）
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-[11px] text-slate-500 pt-1">
+                    注意：爬虫记录已剔除伪造 User-Agent 的黑产爬虫，仅统计通过官方域名/反向 IP 校验的真蜘蛛。
+                  </p>
+                </div>
+
+                {/* Section 2: 什么时候带来真实访客（只算真人浏览器） */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white">
+                      什么时候带来真实访客（只算真人浏览器）
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      排除无头脚本 • 来源精准归因
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-slate-400 bg-slate-950/40">
+                          <th className="py-3 px-4 font-semibold">来源</th>
+                          <th className="py-3 px-4 font-semibold">第一个真实访客</th>
+                          <th className="py-3 px-4 font-semibold">每天访客数 (最近 7 天)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                        {monitorLoading && !monitorData ? (
+                          <tr>
+                            <td colSpan={3} className="py-8 text-center text-slate-500">
+                              正在加载访客日志...
+                            </td>
+                          </tr>
+                        ) : monitorData?.visitorRows && monitorData.visitorRows.length > 0 ? (
+                          monitorData.visitorRows.map((row, idx) => (
+                            <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                              <td className="py-3 px-4 font-medium text-white">{row.source}</td>
+                              <td className="py-3 px-4 text-emerald-400 font-semibold">{row.firstVisitor}</td>
+                              <td className="py-3 px-4 text-slate-300 font-mono text-[11px]">{row.dailySummary}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={3} className="py-8 text-center text-slate-500">
+                              暂无真人访客记录
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>

@@ -66,22 +66,23 @@ export async function POST(req: Request) {
     let checkSubscribeStatus = false;
 
     if (isGuest) {
-      // Guest Trial Enforcement: Allow up to 2 free test generations per IP without login
-      if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
-        const forwarded = req.headers.get("x-forwarded-for");
-        const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
-        const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
-        const GUEST_TRIAL_MAX = 1;
-        const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
-        const guestUsedCount = Number(guestUsedCountStr || 0);
+      // Strict Guest Trial Enforcement: Allow exactly 1 free test generation per IP without login
+      const forwarded =
+        req.headers.get("x-forwarded-for") ||
+        req.headers.get("x-real-ip") ||
+        req.headers.get("cf-connecting-ip");
+      const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+      const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
+      const GUEST_TRIAL_MAX = 1;
+      const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
+      const guestUsedCount = Number(guestUsedCountStr || 0);
 
-        if (guestUsedCount >= GUEST_TRIAL_MAX) {
-          return Response.json({
-            msg: "You have used your free guest trial! Sign in with Google to unlock your Creator Welcome Pass.",
-            status: 601,
-            guestLimitReached: true,
-          });
-        }
+      if (guestUsedCount >= GUEST_TRIAL_MAX) {
+        return Response.json({
+          msg: "You have used your 1 free guest trial! Sign in with Google to claim your free welcome credits & continue creating.",
+          status: 601,
+          guestLimitReached: true,
+        });
       }
     } else {
       // Authenticated User Verification
@@ -243,8 +244,11 @@ export async function POST(req: Request) {
     }
 
     // Track trial for guests or deduct credits for registered users
-    if (isGuest && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
-      const forwarded = req.headers.get("x-forwarded-for");
+    if (isGuest) {
+      const forwarded =
+        req.headers.get("x-forwarded-for") ||
+        req.headers.get("x-real-ip") ||
+        req.headers.get("cf-connecting-ip");
       const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
       const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
       const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");

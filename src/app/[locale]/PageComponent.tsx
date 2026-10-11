@@ -65,7 +65,7 @@ export default function PageComponent({
   // High-Resolution Multi-Format Image Downloader (PNG / JPG / WebP)
   const handleDownloadWithFormat = async (imgUrl: string | null, format: 'png' | 'jpg' | 'webp' = downloadFormat) => {
     if (!imgUrl) return;
-    if (!userData && process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0') {
+    if (!userData) {
       setShowLoginModal(true);
       return;
     }
@@ -224,8 +224,8 @@ export default function PageComponent({
     e.preventDefault();
     if (!textStr && activeTab === 'generate') return;
 
-    // Guest trial check: allow visitors to test generate up to GUEST_TRIAL_LIMIT times without login
-    if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN !== '0' && !userData) {
+    // Strict guest trial check: allow visitors to test generate exactly 1 time without login
+    if (!userData) {
       if (getGuestTrialsRemaining() <= 0) {
         setShowLoginModal(true);
         return;
@@ -844,21 +844,25 @@ export default function PageComponent({
 
                     {/* Guest Trial Prompt / Badge */}
                     {!userData && (
-                      <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs">
-                        <div className="flex items-center gap-1.5 text-purple-300 font-medium">
-                          <SparklesIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-xs transition-all ${
+                        getGuestTrialsRemaining() > 0
+                          ? 'bg-purple-950/40 border-purple-500/30'
+                          : 'bg-amber-950/40 border-amber-500/50 text-amber-200'
+                      }`}>
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <SparklesIcon className="w-4 h-4 text-amber-400 shrink-0" />
                           <span>
                             {getGuestTrialsRemaining() > 0
-                              ? `🎁 Free Guest Trial: ${getGuestTrialsRemaining()}/${GUEST_TRIAL_LIMIT} left (No login needed)`
-                              : `Guest trial limit reached. Sign in for daily free credits!`}
+                              ? `🎁 Free Guest Trial: 1/1 available (No login needed)`
+                              : `🔒 Free trial used. Sign in with Google to get free welcome credits!`}
                           </span>
                         </div>
                         <button
                           type="button"
                           onClick={() => setShowLoginModal(true)}
-                          className="text-purple-300 hover:text-white underline text-[11px] shrink-0 ml-2"
+                          className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
                         >
-                          Sign In
+                          {getGuestTrialsRemaining() > 0 ? 'Sign In' : 'Claim Free Credits'}
                         </button>
                       </div>
                     )}
@@ -897,13 +901,11 @@ export default function PageComponent({
                           <>
                             <SparklesIcon className="w-4 h-4" />
                             <span>
-                              {activeTab === 'edit'
-                                ? (!userData && getGuestTrialsRemaining() > 0
-                                    ? 'Apply Edit (Free Trial)'
-                                    : 'Apply Edit')
-                                : (!userData && getGuestTrialsRemaining() > 0
-                                    ? 'Generate (Free Trial)'
-                                    : 'Generate')}
+                              {!userData && getGuestTrialsRemaining() <= 0
+                                ? 'Sign In to Generate (Claim Free Credits)'
+                                : activeTab === 'edit'
+                                ? (!userData ? 'Apply Edit (1 Free Trial)' : 'Apply Edit')
+                                : (!userData ? 'Generate (1 Free Trial)' : 'Generate')}
                             </span>
                           </>
                         )}
