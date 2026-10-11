@@ -11,10 +11,10 @@ export default async function middleware(req: NextRequest) {
   let response;
   if (pathname === "/robots.txt" || pathname.includes("sitemap")) {
     response = undefined;
-  } else if (pathname === "/_stats" || pathname === "/en/_stats") {
-    // Rewrite _stats to stats page smoothly without 404
+  } else if (pathname === "/_stats" || pathname === "/stats" || pathname === "/en/_stats") {
+    // Rewrite _stats to [locale] stats page directly to pass locale validation
     const url = req.nextUrl.clone();
-    url.pathname = "/stats";
+    url.pathname = "/en/stats";
     response = NextResponse.rewrite(url);
   } else {
     response = handleI18n(req);

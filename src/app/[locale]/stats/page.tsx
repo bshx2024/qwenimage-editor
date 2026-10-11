@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import StatsDashboardComponent from '~/components/StatsDashboardComponent';
 
 export const metadata: Metadata = {
@@ -12,6 +13,12 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function StatsPage() {
+export default async function StatsPage({
+  params: { locale = 'en' },
+}: {
+  params: { locale: string };
+}) {
+  setRequestLocale(locale);
+
   return <StatsDashboardComponent />;
 }

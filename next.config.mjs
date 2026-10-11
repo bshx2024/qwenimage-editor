@@ -70,7 +70,8 @@ const nextConfig = {
     },
     async rewrites() {
         return [
-            { source: '/_stats', destination: '/stats' },
+            { source: '/_stats', destination: '/en/stats' },
+            { source: '/stats', destination: '/en/stats' },
             { source: '/:locale/_stats', destination: '/:locale/stats' },
         ];
     }
