@@ -23,8 +23,15 @@ const useOneTapSignin = (options?: OneTapSigninOptions & Pick<SignInOptions, "re
             callback: async (response: any) => {
               setShowLoadingModal(true);
               // Here we call our Provider with the token provided by google
+              let attrJson = '';
+              try {
+                const { getAttributionPayload } = await import('~/libs/attribution');
+                attrJson = JSON.stringify(getAttributionPayload() || {});
+              } catch {}
+
               await signIn("googleonetap", {
                 credential: response.credential,
+                attribution: attrJson,
                 redirect: true,
                 ...options,
               });

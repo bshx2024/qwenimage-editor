@@ -54,6 +54,24 @@ export const checkAndSaveUser = async (
         userCountry = await resolveCountryFromIp(ip);
       }
 
+      let firstSource = (attr?.first_source || 'direct').trim();
+      let firstLanding = (attr?.first_landing || '').trim();
+
+      // If source was direct, query genuine_visitor_logs for external referrer matching this IP
+      if (firstSource === 'direct' && ip && ip !== '127.0.0.1' && ip !== '--') {
+        try {
+          const visRes = await db.query(
+            'SELECT source, landing_path FROM genuine_visitor_logs WHERE ip = $1 AND source != $2 ORDER BY created_at DESC LIMIT 1',
+            [ip, '直接访问']
+          );
+          if (visRes.rows.length > 0) {
+            const row = visRes.rows[0];
+            if (row.source) firstSource = row.source.toLowerCase();
+            if (row.landing_path && !firstLanding) firstLanding = row.landing_path;
+          }
+        } catch {}
+      }
+
       // 尝试插入带全量归因字段的记录
       try {
         await db.query(
@@ -69,13 +87,13 @@ export const checkAndSaveUser = async (
             email,
             image,
             ip,
-            attr?.first_source || 'direct',
+            firstSource,
             attr?.first_medium || 'none',
             attr?.first_campaign || '',
             attr?.first_referrer || '',
-            attr?.first_landing || '',
+            firstLanding,
             attr?.first_touch_at || Math.floor(Date.now() / 1000),
-            attr?.last_source || 'direct',
+            attr?.last_source || firstSource,
             attr?.last_medium || 'none',
             attr?.last_campaign || '',
             userCountry,
@@ -105,7 +123,7 @@ export const checkAndSaveUser = async (
         name: name,
         email: email,
         image: image,
-        first_source: attr?.first_source || 'direct',
+        first_source: firstSource,
         register_country: userCountry,
       };
     } else {
@@ -117,10 +135,23 @@ export const checkAndSaveUser = async (
         existingCountry = await resolveCountryFromIp(ip);
       }
 
+      let upgradedSource = user.first_source || '';
+      if ((!upgradedSource || upgradedSource === 'direct') && ip && ip !== '127.0.0.1' && ip !== '--') {
+        try {
+          const visRes = await db.query(
+            'SELECT source FROM genuine_visitor_logs WHERE ip = $1 AND source != $2 ORDER BY created_at DESC LIMIT 1',
+            [ip, '直接访问']
+          );
+          if (visRes.rows.length > 0 && visRes.rows[0].source) {
+            upgradedSource = visRes.rows[0].source.toLowerCase();
+          }
+        } catch {}
+      }
+
       try {
         await db.query(
-          'UPDATE user_info SET name=$1, image=$2, last_login_ip=$3, register_country=coalesce(nullif(register_country,\'\'), $4), updated_at=now() WHERE id=$5',
-          [name || user.name, image || user.image, ip, existingCountry, user.id]
+          'UPDATE user_info SET name=$1, image=$2, last_login_ip=$3, register_country=coalesce(nullif(register_country,\'\'), $4), first_source=case when first_source in (\'\', \'direct\') and $5 != \'\' then $5 else first_source end, updated_at=now() WHERE id=$6',
+          [name || user.name, image || user.image, ip, existingCountry, upgradedSource, user.id]
         );
       } catch {
         await db.query(

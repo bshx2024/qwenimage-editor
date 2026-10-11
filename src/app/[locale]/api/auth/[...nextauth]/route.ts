@@ -29,9 +29,10 @@ const authOptions: NextAuthOptions = {
       // This means that the authentication will be done through a single credential called 'credential'
       credentials: {
         credential: { type: "text" },
+        attribution: { type: "text" },
       },
       // @ts-ignore
-      authorize: async (credentials) => {
+      authorize: async (credentials: any) => {
         // These next few lines are simply the recommended way to use the Google Auth Javascript API as seen in the Google Auth docs
         // What is going to happen is that t he Google One Tap UI will make an API call to Google and return a token associated with the user account
         // This token is then passed to the authorize function and used to retrieve the customer information (payload).
@@ -54,7 +55,21 @@ const authOptions: NextAuthOptions = {
         const user = {email, name, image}
         const headerAll = headers();
         const cookieStore = cookies();
-        const { attribution, clientEnv } = extractAttributionFromRequest(headerAll, (k) => cookieStore.get(k)?.value);
+        let { attribution, clientEnv } = extractAttributionFromRequest(headerAll, (k) => cookieStore.get(k)?.value);
+
+        if (credentials?.attribution) {
+          try {
+            const clientAttr = JSON.parse(credentials.attribution);
+            if (clientAttr && typeof clientAttr === 'object') {
+              attribution = {
+                ...attribution,
+                ...clientAttr,
+                first_source: (clientAttr.first_source && clientAttr.first_source !== 'direct') ? clientAttr.first_source : (attribution.first_source || 'direct'),
+              };
+            }
+          } catch {}
+        }
+
         await checkAndSaveUser(user.name, user.email, user.image, clientEnv.ip, { attribution, clientEnv });
         return user
       }

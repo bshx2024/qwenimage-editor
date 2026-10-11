@@ -283,12 +283,16 @@ export function initAttributionTracker(): void {
     const now = Math.floor(Date.now() / 1000);
     const landing = `${window.location.pathname}${window.location.search}`;
 
-    // 1. First Touch: persist if not already stored and we have a source
+    // 1. First Touch: persist if not already stored, or upgrade if previous touch was only 'direct' and current touch is external referral/search
     const existingFT = getStoredTouch(STORAGE_FT_KEY, COOKIE_FT_KEY);
-    if (!existingFT && traffic.source) {
+    const shouldUpgradeFT =
+      !existingFT ||
+      (existingFT.source === 'direct' && traffic.source && traffic.source !== 'direct');
+
+    if (shouldUpgradeFT && traffic.source) {
       const ft: TouchAttribution = {
         source: traffic.source,
-        medium: traffic.medium,
+        medium: traffic.medium || (traffic.source === 'direct' ? 'none' : 'referral'),
         campaign: traffic.campaign,
         term: traffic.term,
         content: traffic.content,
@@ -299,11 +303,11 @@ export function initAttributionTracker(): void {
       saveTouch(STORAGE_FT_KEY, COOKIE_FT_KEY, ft, FT_MAX_AGE);
     }
 
-    // 2. Last Touch: update whenever visitor comes with explicit marketing parameters
-    if (traffic.hasExplicitMarketing && traffic.source) {
+    // 2. Last Touch: update whenever visitor arrives via external source (marketing or organic referral)
+    if (traffic.source && traffic.source !== 'direct') {
       const lt: TouchAttribution = {
         source: traffic.source,
-        medium: traffic.medium,
+        medium: traffic.medium || 'referral',
         campaign: traffic.campaign,
         term: traffic.term,
         content: traffic.content,

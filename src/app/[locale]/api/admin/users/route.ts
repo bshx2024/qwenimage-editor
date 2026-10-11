@@ -101,6 +101,30 @@ export async function GET(request: Request) {
             ]).catch(() => {});
           }
         }
+
+        // Auto-recover external referral source from genuine_visitor_logs if source is direct
+        let source = (u.first_source || '').trim();
+        if ((!source || source === 'direct') && u.last_login_ip && u.last_login_ip !== '--' && !u.last_login_ip.startsWith('127.')) {
+          try {
+            const visRes = await db.query(
+              'SELECT source, landing_path FROM genuine_visitor_logs WHERE ip = $1 AND source != $2 ORDER BY created_at DESC LIMIT 1',
+              [u.last_login_ip, '直接访问']
+            );
+            if (visRes.rows.length > 0) {
+              const row = visRes.rows[0];
+              if (row.source) {
+                u.first_source = row.source.toLowerCase();
+                if (row.landing_path && !u.first_landing) {
+                  u.first_landing = row.landing_path;
+                }
+                db.query('UPDATE user_info SET first_source = $1 WHERE user_id = $2', [
+                  u.first_source,
+                  u.user_id,
+                ]).catch(() => {});
+              }
+            }
+          } catch {}
+        }
         return u;
       })
     );

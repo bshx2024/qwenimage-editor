@@ -118,6 +118,27 @@ export function extractAttributionFromRequest(
   let ft: TouchAttribution | null = null;
   let lt: TouchAttribution | null = null;
 
+  // Robust URL-decoding & JSON parsing helper
+  const safeJsonParse = (val: string | null | undefined): any => {
+    if (!val) return null;
+    let text = String(val).trim();
+    if (!text) return null;
+    try {
+      if (text.includes('%')) {
+        text = decodeURIComponent(text);
+      }
+    } catch {}
+    try {
+      return JSON.parse(text);
+    } catch {
+      try {
+        return JSON.parse(decodeURIComponent(text));
+      } catch {
+        return null;
+      }
+    }
+  };
+
   // Extract from cookie header if cookieGetter is not provided
   const cookieHeader = headerMap.get('cookie') || '';
   const getCookieVal = (name: string): string | null => {
@@ -126,26 +147,11 @@ export function extractAttributionFromRequest(
       if (v) return v;
     }
     const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
-    return match ? decodeURIComponent(match[1]) : null;
+    return match ? match[1] : null;
   };
 
-  const rawFt = getCookieVal('attr_ft');
-  if (rawFt) {
-    try {
-      ft = JSON.parse(rawFt);
-    } catch {
-      // ignore
-    }
-  }
-
-  const rawLt = getCookieVal('attr_lt');
-  if (rawLt) {
-    try {
-      lt = JSON.parse(rawLt);
-    } catch {
-      // ignore
-    }
-  }
+  ft = safeJsonParse(getCookieVal('attr_ft'));
+  lt = safeJsonParse(getCookieVal('attr_lt'));
 
   // Fallback: If no cookie stored yet, derive initial touch from Referer header
   if (!ft) {
