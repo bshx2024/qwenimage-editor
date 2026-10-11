@@ -49,7 +49,7 @@ export default function PageComponent({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
-  const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16'>('1:1');
+  const [aspectRatio, setAspectRatio] = useState<'auto' | '1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('auto');
   const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-i2i-turbo');
   const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('split');
   const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
@@ -174,6 +174,7 @@ export default function PageComponent({
       if (selectedModel === 'wanx2.1-i2i-turbo') setSelectedModel('wanx2.1-t2i-turbo');
       else if (selectedModel === 'wanx2.1-i2i-plus') setSelectedModel('wanx2.1-t2i-plus');
       else if (selectedModel === 'qwen-image-edit') setSelectedModel('wanx2.1-t2i-turbo');
+      if (aspectRatio === 'auto') setAspectRatio('1:1');
     }
   }, [activeTab]);
 
@@ -793,35 +794,164 @@ export default function PageComponent({
                       </div>
                     </div>
 
-                    {/* Aspect Ratio Selector (Text2Image Mode) */}
-                    {activeTab === 'generate' && (
-                      <div>
-                        <span className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                          Aspect Ratio
+                    {/* Aspect Ratio & Resolution Dimension Controls (Active for both Edit & Generate) */}
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="block text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                          <span>{activeTab === 'edit' ? '3. Aspect Ratio & Canvas (画幅比例与尺寸)' : '2. Aspect Ratio & Dimensions (画幅比例与尺寸)'}</span>
                         </span>
-                        <div className="grid grid-cols-3 gap-2.5">
-                          {[
-                            { id: '1:1', label: '1:1 Square', icon: '1024×1024' },
-                            { id: '16:9', label: '16:9 Landscape', icon: '1344×768' },
-                            { id: '9:16', label: '9:16 Portrait', icon: '768×1344' },
-                          ].map((ratio) => (
+                        <span className="text-[11px] text-cyan-400 font-mono font-medium">
+                          {aspectRatio === 'auto'
+                            ? '📐 Auto (Keep Original Ratio)'
+                            : `📐 ${
+                                aspectRatio === '9:16'
+                                  ? '768 × 1344 px (9:16 满屏竖屏)'
+                                  : aspectRatio === '16:9'
+                                  ? '1344 × 768 px (16:9 宽屏横版)'
+                                  : aspectRatio === '3:4'
+                                  ? '864 × 1152 px (3:4 人像摄影)'
+                                  : aspectRatio === '4:3'
+                                  ? '1152 × 864 px (4:3 经典风景)'
+                                  : '1024 × 1024 px (1:1 正方形)'
+                              }`}
+                        </span>
+                      </div>
+
+                      <div className={`grid gap-2 ${activeTab === 'edit' ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-3 sm:grid-cols-5'}`}>
+                        {(activeTab === 'edit'
+                          ? [
+                              {
+                                id: 'auto',
+                                label: 'Auto',
+                                name: 'Original',
+                                res: '自适应原图',
+                                scene: '保持原图不裁切',
+                                boxStyle: 'w-4 h-4 border-2 border-dashed rounded-sm',
+                              },
+                              {
+                                id: '1:1',
+                                label: '1:1',
+                                name: 'Square',
+                                res: '1024×1024',
+                                scene: 'Avatar / Instagram',
+                                boxStyle: 'w-4 h-4 border-2 rounded-sm',
+                              },
+                              {
+                                id: '9:16',
+                                label: '9:16',
+                                name: 'Portrait',
+                                res: '768×1344',
+                                scene: 'TikTok / 手机壁纸',
+                                boxStyle: 'w-2.5 h-4.5 border-2 rounded-sm',
+                              },
+                              {
+                                id: '16:9',
+                                label: '16:9',
+                                name: 'Landscape',
+                                res: '1344×768',
+                                scene: 'YouTube / 电脑壁纸',
+                                boxStyle: 'w-5 h-2.5 border-2 rounded-sm',
+                              },
+                              {
+                                id: '3:4',
+                                label: '3:4',
+                                name: 'Portrait',
+                                res: '864×1152',
+                                scene: '人像摄影 / 电商',
+                                boxStyle: 'w-3 h-4 border-2 rounded-sm',
+                              },
+                              {
+                                id: '4:3',
+                                label: '4:3',
+                                name: 'Landscape',
+                                res: '1152×864',
+                                scene: '经典画幅 / 博客横图',
+                                boxStyle: 'w-4 h-3 border-2 rounded-sm',
+                              },
+                            ]
+                          : [
+                              {
+                                id: '1:1',
+                                label: '1:1',
+                                name: 'Square',
+                                res: '1024×1024',
+                                scene: 'Avatar / Instagram',
+                                boxStyle: 'w-4 h-4 border-2 rounded-sm',
+                              },
+                              {
+                                id: '9:16',
+                                label: '9:16',
+                                name: 'Portrait',
+                                res: '768×1344',
+                                scene: 'TikTok / 手机壁纸',
+                                boxStyle: 'w-2.5 h-4.5 border-2 rounded-sm',
+                              },
+                              {
+                                id: '16:9',
+                                label: '16:9',
+                                name: 'Landscape',
+                                res: '1344×768',
+                                scene: 'YouTube / 电脑壁纸',
+                                boxStyle: 'w-5 h-2.5 border-2 rounded-sm',
+                              },
+                              {
+                                id: '3:4',
+                                label: '3:4',
+                                name: 'Portrait',
+                                res: '864×1152',
+                                scene: '人像摄影 / 电商',
+                                boxStyle: 'w-3 h-4 border-2 rounded-sm',
+                              },
+                              {
+                                id: '4:3',
+                                label: '4:3',
+                                name: 'Landscape',
+                                res: '1152×864',
+                                scene: '经典画幅 / 博客横图',
+                                boxStyle: 'w-4 h-3 border-2 rounded-sm',
+                              },
+                            ]
+                        ).map((item) => {
+                          const isSelected = aspectRatio === item.id;
+                          return (
                             <button
-                              key={ratio.id}
+                              key={item.id}
                               type="button"
-                              onClick={() => setAspectRatio(ratio.id as any)}
-                              className={`rounded-xl border p-2.5 text-left transition-all ${
-                                aspectRatio === ratio.id
-                                  ? 'border-indigo-500 bg-indigo-500/10 text-white shadow-md'
-                                  : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700'
+                              onClick={() => setAspectRatio(item.id as any)}
+                              className={`relative rounded-xl border p-2 flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'border-indigo-500 bg-gradient-to-b from-indigo-500/25 to-purple-600/15 text-white shadow-lg shadow-indigo-950/50 ring-1 ring-indigo-500/50'
+                                  : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:bg-slate-900/60 hover:text-slate-200'
                               }`}
                             >
-                              <div className="text-xs font-semibold">{ratio.label}</div>
-                              <div className="text-[10px] text-slate-500 mt-0.5">{ratio.icon}</div>
+                              {/* Visual Shape Icon */}
+                              <div className="h-6 flex items-center justify-center mb-1">
+                                <div
+                                  className={`${item.boxStyle} ${
+                                    isSelected
+                                      ? 'border-cyan-400 bg-cyan-400/25 shadow-sm shadow-cyan-400/40'
+                                      : 'border-slate-600'
+                                  } transition-all`}
+                                />
+                              </div>
+                              <div className="text-xs font-bold leading-tight text-slate-100 flex items-center gap-1">
+                                <span>{item.label}</span>
+                              </div>
+                              <div className="text-[10px] text-slate-500 font-mono mt-0.5 leading-none">
+                                {item.res}
+                              </div>
+                              <div
+                                className={`text-[9px] mt-1 px-1 rounded truncate max-w-full leading-tight ${
+                                  isSelected ? 'text-indigo-300 font-medium' : 'text-slate-500'
+                                }`}
+                              >
+                                {item.scene}
+                              </div>
                             </button>
-                          ))}
-                        </div>
+                          );
+                        })}
                       </div>
-                    )}
+                    </div>
 
                     {/* Quick Preset Prompts */}
                     <div>
@@ -1005,8 +1135,26 @@ export default function PageComponent({
 
                         {/* Action Bar with Multi-Format Downloader (PNG / JPG / WebP) */}
                         <div className="mt-5 w-full flex items-center justify-between pt-3 border-t border-slate-800/80">
-                          <div className="text-xs text-slate-400">
-                            Status: <span className="text-emerald-400 font-medium">Ready</span>
+                          <div className="text-xs text-slate-400 flex items-center gap-2">
+                            <span>Status: <span className="text-emerald-400 font-medium">Ready</span></span>
+                            <span className="text-slate-600 hidden sm:inline">•</span>
+                            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900 text-cyan-300 font-mono text-[11px] border border-slate-800">
+                              <span>
+                                {aspectRatio === 'auto'
+                                  ? 'Auto (Original)'
+                                  : `${aspectRatio} (${
+                                      aspectRatio === '9:16'
+                                        ? '768×1344'
+                                        : aspectRatio === '16:9'
+                                        ? '1344×768'
+                                        : aspectRatio === '3:4'
+                                        ? '864×1152'
+                                        : aspectRatio === '4:3'
+                                        ? '1152×864'
+                                        : '1024×1024'
+                                    })`}
+                              </span>
+                            </span>
                           </div>
 
                           <div className="relative inline-flex items-center rounded-xl shadow-lg">

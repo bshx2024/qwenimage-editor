@@ -22,12 +22,14 @@ export async function POST(req: Request) {
     const requestedModel = String(json.model || "");
     const aspectRatio = String(json.aspectRatio || "1:1");
 
-    // Compute target dimensions & size string for text-to-image
+    // Compute target dimensions & size string for text-to-image / image-edit
     let resolvedSize = "1024*1024";
     let width = 1024;
     let height = 1024;
 
-    if (aspectRatio === "16:9") {
+    if (aspectRatio === "auto") {
+      resolvedSize = imageUrl ? "auto" : "1024*1024";
+    } else if (aspectRatio === "16:9") {
       resolvedSize = "1344*768";
       width = 1344;
       height = 768;

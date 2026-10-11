@@ -128,7 +128,8 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
         base_image_url: finalImageUrl
       },
       parameters: {
-        n: 1
+        n: 1,
+        ...(finalSize && finalSize !== 'auto' ? { size: finalSize } : {})
       }
     };
   }
