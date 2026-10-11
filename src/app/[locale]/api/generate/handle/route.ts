@@ -6,7 +6,7 @@ import { getQwenEditInput, getQwenGeneratorInput } from "~/libs/replicate";
 import { getDb } from "~/libs/db";
 import { getLanguage } from "~/servers/language";
 import { checkSubscribe } from "~/servers/subscribe";
-import { checkSensitiveInputText } from "~/servers/checkInput";
+import { checkSensitiveInputText, inspectSensitiveInputText } from "~/servers/checkInput";
 import { getAISettings, getSetting, setSetting } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
 import { scanPromptSafety } from "~/servers/contentSafety";
@@ -112,13 +112,14 @@ export async function POST(req: Request) {
       }
     }
 
-    const checkSensitive = await checkSensitiveInputText(textStr);
-    if (!checkSensitive) {
-      if (!checkSubscribeStatus) {
-        return Response.json({ msg: "Pricing to continue.", status: 602 });
-      } else {
-        is_public = false;
-      }
+    const checkSensitive = await inspectSensitiveInputText(textStr);
+    if (!checkSensitive.isSafe) {
+      return Response.json({
+        msg: "Your prompt contains prohibited, NSFW, or sensitive content and cannot be processed.",
+        status: 400,
+        safetyBlock: true,
+        matchedReason: checkSensitive.reason,
+      });
     }
 
     // Waffo Content Safety Screening API check

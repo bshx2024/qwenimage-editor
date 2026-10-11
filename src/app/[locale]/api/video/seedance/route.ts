@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDb } from "~/libs/db";
 import { checkUserTimes, countDownUserTimes, refundUserTimes, markWorkFailedAndRefund } from "~/servers/manageUserTimes";
 import { checkSubscribe } from "~/servers/subscribe";
+import { inspectSensitiveInputText } from "~/servers/checkInput";
 
 /**
  * Dynamically resolves Ark API Key and configuration with multi-layer fallbacks
@@ -76,6 +77,20 @@ export async function POST(req: NextRequest) {
 
     if (!prompt) {
       return NextResponse.json({ error: "Missing required prompt" }, { status: 400 });
+    }
+
+    // Safety Guard: Check prohibited & NSFW sensitive words
+    const checkSensitive = await inspectSensitiveInputText(prompt);
+    if (!checkSensitive.isSafe) {
+      return NextResponse.json(
+        {
+          error: "RESTRICTED_CONTENT",
+          status: 400,
+          message: "Prompt contains prohibited or sensitive NSFW content and cannot be generated.",
+          matchedReason: checkSensitive.reason,
+        },
+        { status: 400 }
+      );
     }
 
     const durSec = Number(duration) === 10 ? 10 : 5;

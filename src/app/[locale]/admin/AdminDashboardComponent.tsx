@@ -1219,8 +1219,24 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                                 {u.available_times}
                               </span>
                             </td>
-                            <td className="px-5 py-3 text-slate-400 text-[11px]">
-                              {u.created_at ? new Date(u.created_at).toLocaleDateString() : '--'}
+                            <td className="px-5 py-3 text-slate-400 text-[11px] whitespace-nowrap">
+                              {u.created_at ? (
+                                <div title={new Date(u.created_at).toLocaleString()}>
+                                  <div className="text-slate-200 font-mono">
+                                    {new Date(u.created_at).toLocaleDateString()}
+                                  </div>
+                                  <div className="text-[10px] text-slate-500 font-mono">
+                                    {new Date(u.created_at).toLocaleTimeString([], {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                      second: '2-digit',
+                                      hour12: false,
+                                    })}
+                                  </div>
+                                </div>
+                              ) : (
+                                '--'
+                              )}
                             </td>
                             <td className="px-5 py-3 text-[11px]">
                               <div className="flex items-center gap-1.5 flex-wrap">
@@ -1472,7 +1488,11 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                             </p>
                             <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
                               <span>By: {w.user_email || 'Guest User'}</span>
-                              <span>{w.created_at ? new Date(w.created_at).toLocaleDateString() : ''}</span>
+                              <span>
+                                {w.created_at
+                                  ? `${new Date(w.created_at).toLocaleDateString()} ${new Date(w.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}`
+                                  : ''}
+                              </span>
                             </div>
                           </div>
 
