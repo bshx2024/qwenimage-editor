@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 
@@ -11,6 +11,11 @@ export default async function middleware(req: NextRequest) {
   let response;
   if (pathname === "/robots.txt" || pathname.includes("sitemap")) {
     response = undefined;
+  } else if (pathname === "/_stats" || pathname === "/en/_stats") {
+    // Rewrite _stats to stats page smoothly without 404
+    const url = req.nextUrl.clone();
+    url.pathname = "/stats";
+    response = NextResponse.rewrite(url);
   } else {
     response = handleI18n(req);
   }
@@ -20,6 +25,8 @@ export default async function middleware(req: NextRequest) {
   if (
     !pathname.startsWith("/_next") &&
     !pathname.startsWith("/api/admin/bot-monitor") &&
+    !pathname.startsWith("/_stats") &&
+    !pathname.startsWith("/stats") &&
     userAgent
   ) {
     const forwarded =

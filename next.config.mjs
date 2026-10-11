@@ -67,6 +67,12 @@ const nextConfig = {
             {source: '/:locale/stickers/1', destination: '/:locale/stickers', permanent: true},
             {source: '/:locale/stickers/0', destination: '/:locale/stickers', permanent: true},
         ];
+    },
+    async rewrites() {
+        return [
+            { source: '/_stats', destination: '/stats' },
+            { source: '/:locale/_stats', destination: '/:locale/stats' },
+        ];
     }
 };
 
