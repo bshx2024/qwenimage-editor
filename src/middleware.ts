@@ -47,6 +47,6 @@ export const config = {
     "/(en)/:path*",
     "/robots.txt",
     "/sitemap.xml",
-    "/((?!_next|_vercel|api/admin/bot-monitor|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js)).*)",
+    "/((?!_next|_vercel|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js)).*)",
   ],
 };
