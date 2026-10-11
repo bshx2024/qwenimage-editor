@@ -59,6 +59,7 @@ export default function PageComponent({
   const [downloadFormat, setDownloadFormat] = useState<'png' | 'jpg' | 'webp'>('png');
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [activePresetCategory, setActivePresetCategory] = useState<number>(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -269,6 +270,9 @@ export default function PageComponent({
         if (!userData) {
           setShowLoginModal(true);
         } else {
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+          }
           setShowPricingModal(true);
         }
         setIsProcessing(false);
@@ -326,14 +330,34 @@ export default function PageComponent({
     pollResult();
   }, intervalResultInfo);
 
-  // Quick preset tags
-  const promptPresets = [
-    'Change background to cyberpunk neon city',
-    'Add golden hour sunset lighting and warmth',
-    'Remove background and isolate main subject',
-    'Change jacket to black leather jacket',
-    'Transform into studio product photography',
-    'Add realistic glasses and smile',
+  // Quick preset categories (CRO optimized based on 24h visitor search logs)
+  const promptPresetCategories = [
+    {
+      name: '👗 AI Fashion & Outfits',
+      items: [
+        'Swap clothes to elegant red silk evening dress',
+        'Change outfit to fitted summer bikini swimwear',
+        'Change clothing to professional navy business suit',
+        'Swap jacket to vintage black leather jacket',
+        'Change dress pattern to pink floral motif',
+      ],
+    },
+    {
+      name: '🛍️ Studio & Lighting',
+      items: [
+        'Change background to luxury minimalist studio background',
+        'Add golden hour sunset lighting and warmth',
+        'Remove background and isolate main subject',
+        'Change background to cyberpunk neon city',
+      ],
+    },
+    {
+      name: '✨ Details & Retouch',
+      items: [
+        'Add realistic retro glasses and warm smile',
+        'Transform into high-end product photography',
+      ],
+    },
   ];
 
   // FAQ Items - Comprehensive coverage for search intent, citations, and LLM entity confidence
@@ -942,18 +966,37 @@ export default function PageComponent({
                       </div>
                     </div>
 
-                    {/* Quick Preset Prompts */}
-                    <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">
-                        Quick Ideas:
-                      </span>
+                    {/* Quick Preset Prompts by Category */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                          Quick Presets &amp; Templates:
+                        </span>
+                        <div className="flex gap-1">
+                          {promptPresetCategories.map((cat, cIdx) => (
+                            <button
+                              key={cIdx}
+                              type="button"
+                              onClick={() => setActivePresetCategory(cIdx)}
+                              className={`px-2 py-0.5 rounded-lg text-[10px] font-medium transition-colors cursor-pointer ${
+                                activePresetCategory === cIdx
+                                  ? 'bg-indigo-500/30 text-indigo-200 border border-indigo-500/40'
+                                  : 'text-slate-400 hover:text-slate-200 bg-slate-900/60'
+                              }`}
+                            >
+                              {cat.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       <div className="flex flex-wrap gap-1.5">
-                        {promptPresets.map((preset, idx) => (
+                        {promptPresetCategories[activePresetCategory]?.items.map((preset, idx) => (
                           <button
                             key={idx}
                             type="button"
                             onClick={() => setTextStr(preset)}
-                            className="rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-[11px] text-slate-300 hover:border-indigo-500/50 hover:text-white transition-colors"
+                            className="rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-[11px] text-slate-300 hover:border-indigo-500/50 hover:bg-slate-900 hover:text-white transition-all cursor-pointer text-left"
                           >
                             + {preset}
                           </button>
@@ -1226,6 +1269,100 @@ export default function PageComponent({
                         <p className="text-xs text-slate-600">Upload a photo and hit &quot;Apply Edit&quot; to begin</p>
                       </div>
                     )}
+                  </div>
+
+                  {/* High-Converting Pro Upgrade & Fast Refill Card */}
+                  <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-slate-900/90 via-indigo-950/40 to-purple-950/30 p-4 sm:p-5 backdrop-blur-xl shadow-xl space-y-3 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 -mr-6 -mt-6 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800/80">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1.5 rounded-xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30">
+                          <SparklesIcon className="w-4 h-4" />
+                        </span>
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-bold text-white tracking-tight flex items-center gap-2">
+                            <span>Unlock 4K Lossless &amp; Batch AI Fashion Swap</span>
+                            <span className="px-1.5 py-0.2 rounded-md bg-amber-500/20 border border-amber-500/40 text-[10px] font-bold text-amber-300">
+                              PRO
+                            </span>
+                          </h4>
+                          <p className="text-[11px] text-slate-400">
+                            Zero queue priority GPU inference · Commercial rights
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* User Balance Status */}
+                      <div className="text-right">
+                        {userData ? (
+                          <div className="text-[11px]">
+                            <span className="text-slate-400">Balance: </span>
+                            <strong className="text-cyan-300 font-mono font-bold">
+                              {userData.available_times ?? 0} Credits
+                            </strong>
+                            {(userData.available_times ?? 0) <= 1 && (
+                              <span className="block text-[10px] text-amber-400 font-semibold animate-pulse">
+                                ⚠️ Low Balance — Top up now
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-slate-400">
+                            Free Trial Active
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Pro Feature Bullets */}
+                    <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircleIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>4K Ultra-HD Upscale (4096px)</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircleIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>AI Clothes &amp; Bikini Swap</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircleIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>Dedicated Fast GPU Cloud</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircleIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>100% Commercial Usage Rights</span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="pt-1 flex flex-col sm:flex-row items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!userData) {
+                            setShowLoginModal(true);
+                          } else {
+                            if (typeof window !== 'undefined') {
+                              window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+                            }
+                            setShowPricingModal(true);
+                          }
+                        }}
+                        className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all cursor-pointer"
+                      >
+                        <BoltIcon className="w-3.5 h-3.5 text-amber-300" />
+                        <span>Get 160 Credits for $4.99 (Special Offer)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPricingModal(true)}
+                        className="w-full sm:w-auto px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-medium text-xs transition-colors cursor-pointer whitespace-nowrap"
+                      >
+                        <span>View All Plans</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

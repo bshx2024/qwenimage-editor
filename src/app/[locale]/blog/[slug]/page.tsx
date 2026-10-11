@@ -9,6 +9,7 @@ import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent
 import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
 import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent';
 import PhotoCraftBlogPostComponent from './PhotoCraftBlogPostComponent';
+import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
 
@@ -30,34 +31,30 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  let postComponent;
   if (slug === 'photocraft-online-ai-review-photoshop-alternative') {
-    return <PhotoCraftBlogPostComponent post={post} locale={locale} />;
+    postComponent = <PhotoCraftBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'rumpelstiltskin-ai-1987-movie-meme-workflow') {
+    postComponent = <RumpelstiltskinBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'ideogram-4-5-open-source-weights-alternatives') {
+    postComponent = <IdeogramBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'ai-font-generator-from-image-guide') {
+    postComponent = <AiFontGeneratorBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'higgsfield-genjutsu-workflow-guide-free-alternatives') {
+    postComponent = <HiggsfieldBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'minimax-h3-comfyui-guide-vram-workflow') {
+    postComponent = <MinimaxH3BlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'vidu-s2-realtime-interactive-video-guide') {
+    postComponent = <ViduS2BlogPostComponent post={post} locale={locale} />;
+  } else {
+    postComponent = <BlogPostComponent post={post} locale={locale} />;
   }
 
-  if (slug === 'rumpelstiltskin-ai-1987-movie-meme-workflow') {
-    return <RumpelstiltskinBlogPostComponent post={post} locale={locale} />;
-  }
-
-  if (slug === 'ideogram-4-5-open-source-weights-alternatives') {
-    return <IdeogramBlogPostComponent post={post} locale={locale} />;
-  }
-
-  if (slug === 'ai-font-generator-from-image-guide') {
-    return <AiFontGeneratorBlogPostComponent post={post} locale={locale} />;
-  }
-
-  if (slug === 'higgsfield-genjutsu-workflow-guide-free-alternatives') {
-    return <HiggsfieldBlogPostComponent post={post} locale={locale} />;
-  }
-
-  if (slug === 'minimax-h3-comfyui-guide-vram-workflow') {
-    return <MinimaxH3BlogPostComponent post={post} locale={locale} />;
-  }
-
-  if (slug === 'vidu-s2-realtime-interactive-video-guide') {
-    return <ViduS2BlogPostComponent post={post} locale={locale} />;
-  }
-
-  return <BlogPostComponent post={post} locale={locale} />;
+  return (
+    <>
+      <BlogCallToActionBanner locale={locale} slug={slug} postTitle={post.title} />
+      {postComponent}
+    </>
+  );
 }
 
