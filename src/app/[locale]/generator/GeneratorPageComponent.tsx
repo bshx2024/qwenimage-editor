@@ -360,19 +360,19 @@ export default function GeneratorPageComponent({
                     <div className="space-y-2 pt-1">
                       <div className="flex items-center justify-between">
                         <span className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                          Aspect Ratio &amp; Dimensions (画幅比例与尺寸)
+                          Aspect Ratio &amp; Dimensions
                         </span>
                         <span className="text-[11px] text-cyan-400 font-mono font-medium">
                           {`📐 ${
                             aspectRatio === '9:16'
-                              ? '768 × 1344 px (9:16 满屏竖屏)'
+                              ? '768 × 1344 px (9:16 Full Portrait)'
                               : aspectRatio === '16:9'
-                              ? '1344 × 768 px (16:9 宽屏横版)'
+                              ? '1344 × 768 px (16:9 Widescreen)'
                               : aspectRatio === '3:4'
-                              ? '864 × 1152 px (3:4 人像摄影)'
+                              ? '864 × 1152 px (3:4 Portrait)'
                               : aspectRatio === '4:3'
-                              ? '1152 × 864 px (4:3 经典风景)'
-                              : '1024 × 1024 px (1:1 正方形)'
+                              ? '1152 × 864 px (4:3 Standard)'
+                              : '1024 × 1024 px (1:1 Square)'
                           }`}
                         </span>
                       </div>
@@ -383,35 +383,35 @@ export default function GeneratorPageComponent({
                             id: '1:1',
                             label: '1:1',
                             res: '1024×1024',
-                            scene: 'Avatar / IG',
+                            scene: 'Avatar / Square',
                             boxStyle: 'w-4 h-4 border-2 rounded-sm',
                           },
                           {
                             id: '9:16',
                             label: '9:16',
                             res: '768×1344',
-                            scene: 'TikTok / 壁纸',
+                            scene: 'TikTok / Story',
                             boxStyle: 'w-2.5 h-4.5 border-2 rounded-sm',
                           },
                           {
                             id: '16:9',
                             label: '16:9',
                             res: '1344×768',
-                            scene: 'YouTube / 壁纸',
+                            scene: 'YouTube / Wide',
                             boxStyle: 'w-5 h-2.5 border-2 rounded-sm',
                           },
                           {
                             id: '3:4',
                             label: '3:4',
                             res: '864×1152',
-                            scene: '人像 / 电商',
+                            scene: 'Portrait / Feed',
                             boxStyle: 'w-3 h-4 border-2 rounded-sm',
                           },
                           {
                             id: '4:3',
                             label: '4:3',
                             res: '1152×864',
-                            scene: '经典画幅 / 横图',
+                            scene: 'Landscape / Art',
                             boxStyle: 'w-4 h-3 border-2 rounded-sm',
                           },
                         ].map((item) => {
