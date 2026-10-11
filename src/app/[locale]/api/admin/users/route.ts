@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyAdmin } from '~/libs/adminAuth';
 import { getDb } from '~/libs/db';
+import { resolveCountryFromIp } from '~/libs/geoip';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,9 +86,28 @@ export async function GET(request: Request) {
       listRes = await db.query(fallbackQuery, [...params, pageSize, offset]);
     }
 
+    const rawUsers = listRes.rows || [];
+    const users = await Promise.all(
+      rawUsers.map(async (u: any) => {
+        let country = (u.register_country || '').trim();
+        if (!country && u.last_login_ip && u.last_login_ip !== '--') {
+          const resolved = await resolveCountryFromIp(u.last_login_ip);
+          if (resolved) {
+            u.register_country = resolved;
+            // Best-effort async update to persist back to database
+            db.query('UPDATE user_info SET register_country = $1 WHERE user_id = $2', [
+              resolved,
+              u.user_id,
+            ]).catch(() => {});
+          }
+        }
+        return u;
+      })
+    );
+
     return NextResponse.json({
       success: true,
-      users: listRes.rows,
+      users,
       pagination: {
         page,
         pageSize,

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDb } from '~/libs/db';
 import { AttributionPayload } from '~/libs/attribution';
 import { ClientEnv, ServerAttribution } from '~/libs/attribution-server';
+import { resolveCountryFromIp } from '~/libs/geoip';
 
 export interface UserAttributionOptions {
   attribution?: AttributionPayload;
@@ -48,6 +49,11 @@ export const checkAndSaveUser = async (
 
       const freeTimes = grantBonus ? (Number(process.env.FREE_TIMES) || 2) : 0;
 
+      let userCountry = env?.country || '';
+      if (!userCountry && ip && ip !== '--') {
+        userCountry = await resolveCountryFromIp(ip);
+      }
+
       // 尝试插入带全量归因字段的记录
       try {
         await db.query(
@@ -72,7 +78,7 @@ export const checkAndSaveUser = async (
             attr?.last_source || 'direct',
             attr?.last_medium || 'none',
             attr?.last_campaign || '',
-            env?.country || '',
+            userCountry,
             env?.device || '',
             env?.os || '',
             env?.browser || '',
@@ -100,19 +106,33 @@ export const checkAndSaveUser = async (
         email: email,
         image: image,
         first_source: attr?.first_source || 'direct',
-        register_country: env?.country || '',
+        register_country: userCountry,
       };
     } else {
       // 2. 老用户更新登录状态
       const user = users[0];
       const ip = env?.ip || last_login_ip || user.last_login_ip;
+      let existingCountry = user.register_country || env?.country || '';
+      if (!existingCountry && ip && ip !== '--') {
+        existingCountry = await resolveCountryFromIp(ip);
+      }
 
-      await db.query(
-        'UPDATE user_info SET name=$1, image=$2, last_login_ip=$3, updated_at=now() WHERE id=$4',
-        [name || user.name, image || user.image, ip, user.id]
-      );
+      try {
+        await db.query(
+          'UPDATE user_info SET name=$1, image=$2, last_login_ip=$3, register_country=coalesce(nullif(register_country,\'\'), $4), updated_at=now() WHERE id=$5',
+          [name || user.name, image || user.image, ip, existingCountry, user.id]
+        );
+      } catch {
+        await db.query(
+          'UPDATE user_info SET name=$1, image=$2, last_login_ip=$3, updated_at=now() WHERE id=$4',
+          [name || user.name, image || user.image, ip, user.id]
+        );
+      }
 
-      return user;
+      return {
+        ...user,
+        register_country: existingCountry || user.register_country || '',
+      };
     }
   } catch (err: any) {
     console.warn("DB checkAndSaveUser warning, fallback gracefully:", err?.message);

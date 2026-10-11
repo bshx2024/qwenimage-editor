@@ -28,6 +28,7 @@ import {
   DocumentDuplicateIcon,
   LinkIcon,
 } from '@heroicons/react/24/outline';
+import { getCountryFlag } from '~/libs/geoip';
 
 interface AdminDashboardProps {
   locale?: string;
@@ -1240,17 +1241,25 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                             </td>
                             <td className="px-5 py-3 text-[11px]">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                                <span className="rounded px-2 py-0.5 text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700 capitalize">
                                   {u.first_source || 'direct'}
                                 </span>
-                                {u.register_country && (
-                                  <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold bg-blue-950/60 text-blue-300 border border-blue-800/60" title={`Device: ${u.register_device || 'pc'}`}>
-                                    {u.register_country}
+                                {u.register_country ? (
+                                  <span
+                                    className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-bold bg-blue-950/80 text-cyan-300 border border-cyan-800/60 shadow-sm"
+                                    title={`Country: ${u.register_country} | Device: ${u.register_device || 'pc'}`}
+                                  >
+                                    <span className="text-[12px]">{getCountryFlag(u.register_country)}</span>
+                                    <span>{u.register_country}</span>
+                                  </span>
+                                ) : (
+                                  <span className="rounded px-1.5 py-0.5 text-[10px] text-slate-500 bg-slate-900 border border-slate-800" title="Country not detected yet">
+                                    --
                                   </span>
                                 )}
                               </div>
                               {u.first_landing && (
-                                <div className="text-[10px] text-slate-500 truncate max-w-[130px]" title={u.first_landing}>
+                                <div className="text-[10px] text-slate-500 truncate max-w-[140px] mt-0.5" title={u.first_landing}>
                                   {u.first_landing}
                                 </div>
                               )}
