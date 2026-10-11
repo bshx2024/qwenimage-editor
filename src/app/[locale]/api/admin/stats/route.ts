@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { verifyAdmin } from '~/libs/adminAuth';
 import { getDb } from '~/libs/db';
 
+import { getArrayUrlResult } from '~/configs/buildLink';
+
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
@@ -49,13 +51,18 @@ export async function GET(request: Request) {
 
     // 5. Recent generated works
     const recentWorksRes = await db.query(
-      `SELECT w.id, w.uid, w.input_text, w.output_url, w.task_type, w.created_at, w.is_public, u.email as user_email
+      `SELECT w.id, w.uid, w.input_text, w.output_url, w.input_image_url, w.status, w.task_type, w.created_at, w.is_public, u.email as user_email
        FROM works w
        LEFT JOIN user_info u ON w.user_id = u.user_id
        WHERE w.is_delete = false
        ORDER BY w.created_at DESC
        LIMIT 6`
     );
+
+    const formattedRecentWorks = recentWorksRes.rows.map((row: any) => ({
+      ...row,
+      output_url: getArrayUrlResult(row.output_url),
+    }));
 
     // 6. System health checklist
     const systemHealth = {
@@ -90,7 +97,7 @@ export async function GET(request: Request) {
           totalCreditsPool: totalCredits,
         },
         systemHealth,
-        recentWorks: recentWorksRes.rows,
+        recentWorks: formattedRecentWorks,
       },
     });
   } catch (err: any) {

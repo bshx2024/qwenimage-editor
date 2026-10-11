@@ -1094,30 +1094,66 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                     </button>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {stats?.recentWorks?.map((w: any) => (
-                      <div
-                        key={w.uid}
-                        className="group relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square"
-                      >
-                        {w.output_url ? (
-                          <img
-                            src={Array.isArray(w.output_url) ? w.output_url[0] : w.output_url}
-                            alt={w.input_text || 'Work'}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xs text-slate-600">
-                            No Preview
+                    {stats?.recentWorks?.map((w: any) => {
+                      let outputImg = '';
+                      if (Array.isArray(w.output_url)) {
+                        outputImg = w.output_url[0] || '';
+                      } else if (typeof w.output_url === 'string') {
+                        try {
+                          const parsed = JSON.parse(w.output_url);
+                          outputImg = Array.isArray(parsed) ? (parsed[0] || '') : (parsed || '');
+                        } catch {
+                          outputImg = w.output_url;
+                        }
+                      }
+                      if (typeof outputImg === 'string' && (outputImg.startsWith('ark:') || outputImg.startsWith('bailian:'))) {
+                        outputImg = '';
+                      }
+                      const displayImg = outputImg || w.input_image_url || '';
+                      const isVideo = w.task_type?.startsWith('video_') || (typeof displayImg === 'string' && (displayImg.endsWith('.mp4') || displayImg.includes('.mp4?')));
+
+                      return (
+                        <div
+                          key={w.uid}
+                          className="group relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square cursor-pointer"
+                          onClick={() => displayImg && !isVideo && setPreviewImage(displayImg)}
+                        >
+                          {displayImg ? (
+                            isVideo ? (
+                              <video
+                                src={displayImg}
+                                className="w-full h-full object-cover"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                              />
+                            ) : (
+                              <img
+                                src={displayImg}
+                                alt={w.input_text || 'Work'}
+                                onError={(e) => {
+                                  if (w.input_image_url && e.currentTarget.src !== w.input_image_url) {
+                                    e.currentTarget.src = w.input_image_url;
+                                  }
+                                }}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                              />
+                            )
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-600">
+                              No Preview
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end">
+                            <p className="text-[10px] text-slate-200 line-clamp-2">{w.input_text}</p>
+                            <span className="text-[9px] text-cyan-400 font-medium mt-1">
+                              {w.task_type || 'image'}
+                            </span>
                           </div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end">
-                          <p className="text-[10px] text-slate-200 line-clamp-2">{w.input_text}</p>
-                          <span className="text-[9px] text-cyan-400 font-medium mt-1">
-                            {w.task_type || 'image'}
-                          </span>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
