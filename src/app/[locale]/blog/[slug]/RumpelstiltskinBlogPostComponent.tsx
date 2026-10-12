@@ -26,7 +26,9 @@ import {
   PhotoIcon,
   AdjustmentsHorizontalIcon,
   ArrowDownTrayIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  XMarkIcon,
+  LockClosedIcon
 } from "@heroicons/react/24/outline";
 
 export default function RumpelstiltskinBlogPostComponent({
@@ -65,6 +67,8 @@ export default function RumpelstiltskinBlogPostComponent({
   const [renderElapsedSeconds, setRenderElapsedSeconds] = useState<number>(0);
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>('/videos/user_seedance_generated_result.mp4');
   const [apiNotice, setApiNotice] = useState<string | null>(null);
+  const [showMemeUnlockModal, setShowMemeUnlockModal] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   const getActiveReferenceUrl = () => {
     const baseOrigin = typeof window !== 'undefined' && !window.location.origin.includes('localhost')
@@ -255,8 +259,8 @@ export default function RumpelstiltskinBlogPostComponent({
     const userCredits = Number(userData?.available_times || 0);
 
     if (!userData?.isPro && userCredits < requiredCredits) {
-      setShowPricingModal(true);
-      setApiNotice(`Rendering ${videoDuration}s ${videoResolution} ${isMimic ? 'motion mimic ' : ''}video requires ${requiredCredits} credits. You currently have ${userCredits} credits.`);
+      setShowMemeUnlockModal(true);
+      setApiNotice(`Rendering ${videoDuration}s ${videoResolution} ${isMimic ? 'motion mimic ' : ''}video requires ${requiredCredits} credits. Unlock your Creator Starter Kit below.`);
       return;
     }
 
@@ -379,13 +383,65 @@ export default function RumpelstiltskinBlogPostComponent({
 
   const handleDownloadVideo = () => {
     if (!generatedVideoUrl) return;
+
+    // 1. Authentication check
+    const userId = userData?.user_id;
+    if (!userId || userId === 'guest') {
+      setShowLoginModal(true);
+      setApiNotice('Please sign in with Google to download or export video.');
+      return;
+    }
+
+    // 2. Paid / Pro check (free users get the conversion unlock modal)
+    const isPaid = Boolean(userData?.isPro || (Number(userData?.available_times || 0) >= 50));
+    if (isPaid) {
+      executeDownload(generatedVideoUrl, false);
+    } else {
+      setShowMemeUnlockModal(true);
+    }
+  };
+
+  const executeDownload = (url: string, withWatermark: boolean) => {
     const a = document.createElement('a');
-    a.href = generatedVideoUrl;
-    a.download = `rumpelstiltskin_seedance_2_5_${videoResolution}_${Date.now()}.mp4`;
+    a.href = url;
+    a.download = withWatermark
+      ? `rumpelstiltskin_1987_watermarked_qwenimageeditor_${Date.now()}.mp4`
+      : `rumpelstiltskin_seedance_2_5_${videoResolution}_${Date.now()}.mp4`;
     a.target = '_blank';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  };
+
+  const handleDirectStarterCheckout = async () => {
+    const userId = userData?.user_id;
+    if (!userId || userId === 'guest') {
+      setShowLoginModal(true);
+      return;
+    }
+    setIsCheckoutLoading(true);
+    try {
+      const res = await fetch('/api/waffo/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planId: 'credits-pack-100',
+          userId: userId,
+          userEmail: userData?.email || '',
+          redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + window.location.pathname + '?payment_success=true'
+        })
+      });
+      const data = await res.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        setShowPricingModal(true);
+      }
+    } catch (e) {
+      setShowPricingModal(true);
+    } finally {
+      setIsCheckoutLoading(false);
+    }
   };
 
   const handleCopyVideoUrl = () => {
@@ -635,8 +691,35 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
         </header>
 
         {/* In-Page Multimodal Studio (Hero Tool - Above the Fold) */}
-          <section id="ai-studio" className="mb-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800">
+        <section id="ai-studio" className="mb-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
+          {/* Social Prank & Virality Callout Banner */}
+          <div className="bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-emerald-500/15 border border-amber-500/30 rounded-xl p-3 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-start sm:items-center gap-3">
+              <span className="text-2xl p-1.5 bg-amber-500/20 rounded-lg">🎭</span>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-amber-200 flex items-center gap-1.5">
+                  <span>Prank Your Friends or Go Viral on TikTok!</span>
+                  <span className="bg-rose-500 text-white text-[9px] font-black px-1.5 py-0.2 rounded uppercase animate-pulse">Trending</span>
+                </div>
+                <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
+                  Upload your own photo or your friend&apos;s face below to lock identity into this 1987 viral dance.
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedReferenceType('custom');
+                const el = document.getElementById('reference-upload-input');
+                if (el) el.click();
+              }}
+              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-bold text-xs rounded-lg shadow-md shrink-0 transition-all text-center"
+            >
+              Upload Your Face &rarr;
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800">
               <div>
                 <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
                   <BoltIcon className="w-4 h-4" />
@@ -1333,15 +1416,15 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       <button
                         type="button"
                         onClick={handleDownloadVideo}
-                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-bold transition-all shadow-md shadow-emerald-950/40"
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-[11px] font-bold transition-all shadow-md shadow-emerald-950/40"
                       >
                         <ArrowDownTrayIcon className="w-3.5 h-3.5" />
-                        <span>Download 35mm Master (MP4)</span>
+                        <span>Export &amp; Download MP4</span>
                       </button>
                       <button
                         type="button"
                         onClick={handleCopyVideoUrl}
-                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-[11px] font-semibold transition-all"
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-[11px] font-semibold transition-all"
                       >
                         <DocumentDuplicateIcon className="w-3.5 h-3.5 text-indigo-400" />
                         <span>{videoCopied ? 'Link Copied! ✓' : 'Copy Video URL'}</span>
@@ -1624,6 +1707,124 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           </div>
         </aside>
       </main>
+
+      {/* TikTok Meme Creator Kit Unlock & Export Modal */}
+      {showMemeUnlockModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-lg bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 sm:p-7 shadow-2xl overflow-hidden text-left">
+            {/* Background glow effects */}
+            <div className="pointer-events-none absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/15 rounded-full blur-3xl" />
+
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowMemeUnlockModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <XMarkIcon className="w-5 h-5" />
+            </button>
+
+            {/* Header Badge */}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="bg-gradient-to-r from-rose-500 to-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                <span>🔥 120M+ VIEWS ON TIKTOK</span>
+              </span>
+              <span className="text-emerald-400 text-xs font-semibold">1080p Export Ready</span>
+            </div>
+
+            <h3 className="text-lg sm:text-xl font-black text-white tracking-tight mb-2">
+              Export 1987 Rumpelstiltskin Video (TikTok &amp; Reels)
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed mb-5">
+              To support high-bitrate GPU server rendering and zero-compression video output, choose your export tier below:
+            </p>
+
+            {/* Main High-Converting Offer Card ($4.99 Starter Pack) */}
+            <div className="relative bg-gradient-to-br from-indigo-950/80 via-slate-850 to-slate-900 border-2 border-indigo-500/80 rounded-xl p-4 sm:p-5 mb-4 shadow-xl ring-1 ring-indigo-400/40">
+              <div className="absolute -top-3 right-4 bg-gradient-to-r from-indigo-500 to-emerald-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md">
+                Most Popular • One-Time
+              </div>
+
+              <div className="flex items-baseline justify-between mb-2">
+                <div>
+                  <div className="text-sm sm:text-base font-black text-white flex items-center gap-1.5">
+                    <span>👑 Viral Meme Creator Kit</span>
+                  </div>
+                  <div className="text-[11px] text-indigo-300">100 AI Credits • Never Expires</div>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-black text-white">$4.99</span>
+                  <span className="text-xs text-slate-400"> / once</span>
+                </div>
+              </div>
+
+              {/* Feature List */}
+              <div className="space-y-1.5 my-3.5 border-t border-b border-indigo-900/60 py-3">
+                <div className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span><strong>Full 1080p Ultra HD Video Render</strong> (ByteDance Seedance 2.5)</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span><strong>Zero Watermarks</strong> &amp; 9:16 Vertical Phone Display</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span><strong>45 Extra Qwen AI Generations</strong> (Face Edit &amp; Inpainting)</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span><strong>Full Commercial Usage License</strong> (TikTok, YouTube Shorts, Reels)</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Pre-synced 1987 Audio Master &amp; Prompt Parameters</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleDirectStarterCheckout}
+                disabled={isCheckoutLoading}
+                className="w-full py-3 bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-500 hover:from-indigo-400 hover:to-emerald-400 text-white font-black text-xs sm:text-sm rounded-lg shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]"
+              >
+                {isCheckoutLoading ? (
+                  <span className="animate-pulse">Connecting Secure Payment...</span>
+                ) : (
+                  <>
+                    <SparklesIcon className="w-4 h-4 text-amber-300" />
+                    <span>Unlock 1080p Master for $4.99 &rarr;</span>
+                  </>
+                )}
+              </button>
+              <div className="text-center text-[10px] text-slate-400 mt-1.5 flex items-center justify-center gap-3">
+                <span>🔒 Apple Pay / Google Pay / Card</span>
+                <span>•</span>
+                <span>Instant Activation</span>
+              </div>
+            </div>
+
+            {/* Free Watermarked Alternative */}
+            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
+              <div>
+                <div className="text-xs font-bold text-slate-300">Free Preview with Watermark</div>
+                <div className="text-[10px] text-slate-400">Includes qwenimage-editor.com watermark</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowMemeUnlockModal(false);
+                  executeDownload(generatedVideoUrl || '/videos/user_seedance_generated_result.mp4', true);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg border border-slate-700 transition-colors shrink-0"
+              >
+                Download Free (Watermarked)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <PricingModal locale={locale} page="" />
       <Footer />
