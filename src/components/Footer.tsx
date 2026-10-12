@@ -360,6 +360,10 @@ export default function Footer({
             <Link href={getLinkHref(locale, 'vs-nano-banana')} className="hover:text-indigo-400 transition-colors">
               Qwen vs Nano Banana Benchmark
             </Link>
+            <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/photocraft-online-ai-review-photoshop-alternative')} className="hover:text-indigo-400 transition-colors">
+              PhotoCraft Review &amp; AI Alternative
+            </Link>
           </div>
         </div>
       </div>
