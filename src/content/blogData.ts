@@ -20,12 +20,12 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'photocraft-online-ai-review-photoshop-alternative',
-    // Strict 57 chars (50-60 safety range, locks 'PhotoCraft Review', safe download & alpha verdict)
-    title: 'PhotoCraft Review 2026: Safe to Download or Overhyped Alpha?',
-    // Strict 152 chars (140-160 range, answers GitHub safety, Rust specs, Photoshop comparison & AI alternative)
-    description: 'Comprehensive PhotoCraft review & GitHub safety audit. Compare Rust performance vs Photoshop Generative Fill, and test free online AI editing alternatives.',
+    // Strict 57 chars (50-60 safety range, tightly aligned to PhotoCraft Review & Photoshop Alternative)
+    title: 'PhotoCraft Review: Rust Photoshop Alternative Safe to Try?',
+    // Strict 149 chars (140-160 range, answers safety, viral open-source Rust status, and AI alternative)
+    description: 'PhotoCraft review and safety test. Compare the viral open-source Rust Photoshop alternative against Generative Fill, and try free online AI editing.',
     date: '2026-10-12',
-    readTime: '12 min read',
+    readTime: '8 min read',
     category: 'Open Source & Creative AI Tools',
     author: {
       name: 'Alex Chen',
@@ -34,23 +34,18 @@ export const BLOG_POSTS: BlogPost[] = [
       bio: 'Former distributed graphics and WebAssembly systems researcher specializing in Rust toolchains, low-level GPU acceleration (wgpu/Vulkan), and scalable multimodal diffusion inference pipelines.',
     },
     keywords: [
-      'photocraft',
       'photocraft review',
       'photocraft reviews',
-      'photocraft github',
-      'github photocraft',
-      'photocraft download',
-      'photocraft app download',
-      'is photocraft safe',
-      'photocraft safe',
+      'photocraft',
       'photocraft vs photoshop',
-      'photocraft ai',
-      'ai photocraft',
-      'photocraft online',
-      'photo craft online',
-      'photocraft editor',
-      'photo craft - photo editor',
       'photocraft rust',
+      'photocraft github',
+      'photocraft download',
+      'is photocraft safe',
+      'photocraft ai',
+      'photocraft open source photoshop alternative',
+      'photocraft editor',
+      'photo craft online',
       'qwen image editor',
     ],
   },
