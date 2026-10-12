@@ -569,7 +569,7 @@ export default function PhotoCraftBlogPostComponent({
               </li>
             </ul>
             <p className="leading-relaxed text-sm">
-              If your workflow requires natural language modifications—such as swapping clothing or erasing objects automatically—cloud diffusion editors provide the necessary automation.
+              If your workflow requires natural language modifications—such as swapping clothing or erasing objects automatically—cloud diffusion editors provide the necessary automation. For offline open-source model evaluations, inspect our <Link href={getLinkHref('/blog/ideogram-4-5-open-source-weights-alternatives', locale)} className="text-indigo-400 underline hover:text-indigo-300">Ideogram 4.5 open-source weights guide</Link>.
             </p>
           </section>
 
@@ -681,7 +681,7 @@ export default function PhotoCraftBlogPostComponent({
                 <div className="p-2.5 bg-slate-950/70 rounded-lg border border-slate-800">
                   <span className="text-slate-400 font-bold block mb-0.5">PhotoCraft / Photoshop (Manual):</span>
                   <p className="text-slate-300 text-[11px] leading-relaxed">
-                    Requires manual lasso path selection around hair, finding a background plate, and painting adjustment curve masks. (~30 minutes).
+                    Requires manual lasso path selection around hair, finding a background plate, and painting adjustment curve masks. (~30 minutes). For automated zero-brush cutouts, test our <Link href={getLinkHref('/background-remover', locale)} className="text-emerald-400 underline hover:text-emerald-300">AI Background Remover</Link>.
                   </p>
                 </div>
                 <div className="p-2.5 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
@@ -729,7 +729,7 @@ export default function PhotoCraftBlogPostComponent({
                 <div className="p-2.5 bg-indigo-950/30 rounded-lg border border-indigo-500/30">
                   <span className="text-indigo-300 font-bold block mb-0.5">Multimodal Typography (AI):</span>
                   <p className="text-slate-200 text-[11px] leading-relaxed">
-                    Renders legible bilingual text directly on images without requiring font installation.
+                    Renders legible bilingual text directly on images without font installations. Learn more in our <Link href={getLinkHref('/blog/ai-font-generator-from-image-guide', locale)} className="text-indigo-400 underline hover:text-indigo-300">AI Font Generator guide</Link>.
                   </p>
                 </div>
               </div>
@@ -808,6 +808,101 @@ export default function PhotoCraftBlogPostComponent({
           </section>
 
         </article>
+
+        {/* Topic Cluster & Related Engineering Guides (Silo Architecture) */}
+        <section className="mt-12 not-prose border-t border-slate-800/80 pt-8">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                Topic Cluster &amp; Related Benchmarks
+              </div>
+              <div className="text-lg font-bold text-white mt-0.5">
+                Explore Related AI &amp; Graphics Guides
+              </div>
+            </div>
+            <Link
+              href={getLinkHref('/blog', locale)}
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 transition-colors"
+            >
+              <span>All Guides</span>
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Card 1: Ideogram 4.5 Open Source Weights */}
+            <Link
+              href={getLinkHref('/blog/ideogram-4-5-open-source-weights-alternatives', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                  Open Source AI
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors line-clamp-2">
+                  Ideogram 4.5: Open Source Weights &amp; Alternatives
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  Technical audit of diffusion weights, ComfyUI nodes, and free alternatives.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>11 min read</span>
+                <span className="text-indigo-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Read &rarr;
+                </span>
+              </div>
+            </Link>
+
+            {/* Card 2: AI Font Generator from Image */}
+            <Link
+              href={getLinkHref('/blog/ai-font-generator-from-image-guide', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                  Typography Engine
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors line-clamp-2">
+                  AI Font Generator from Image: TTF vs Visual AI
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  Compare installable TTF vector fonts with visual diffusion typography models.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>10 min read</span>
+                <span className="text-indigo-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Read &rarr;
+                </span>
+              </div>
+            </Link>
+
+            {/* Card 3: AI Background Remover & Changer Tool Page */}
+            <Link
+              href={getLinkHref('/background-remover', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                  Dedicated Tool
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors line-clamp-2">
+                  AI Background Remover &amp; Cutout Studio
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  Skip manual lasso tracing with one-click alpha transparency cutouts.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>Free Tool</span>
+                <span className="text-emerald-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Try &rarr;
+                </span>
+              </div>
+            </Link>
+          </div>
+        </section>
 
         {/* Bottom CTA Banner */}
         <section className="mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-indigo-900/60 via-slate-900 to-indigo-950/60 border border-indigo-500/40 shadow-xl text-center space-y-3">

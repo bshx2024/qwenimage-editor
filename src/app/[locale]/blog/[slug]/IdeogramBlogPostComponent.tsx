@@ -634,7 +634,7 @@ print(f"[Qwen Inpainting Complete - Turn {turnCount}]: {output}")`;
             Architectural Summary &amp; Recommended Inpainting Workflow
           </div>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
-            While Ideogram 4.5 advances multi-turn editing precision, open foundation models like Qwen-Image 2.1 provide an accessible alternative with zero credit burn and full bilingual typography support. You can explore the full model matrix on our <Link href={getLinkHref('/', locale)} className="text-indigo-400 hover:underline font-semibold">Qwen Image Editor Home</Link> or review our <Link href={getLinkHref('/blog/ai-font-generator-from-image-guide', locale)} className="text-indigo-400 hover:underline font-semibold">AI Font Generation Guide</Link>.
+            While Ideogram 4.5 advances multi-turn editing precision, open foundation models like Qwen-Image 2.1 provide an accessible alternative with zero credit burn and full bilingual typography support. You can explore the full model matrix on our <Link href={getLinkHref('/', locale)} className="text-indigo-400 hover:underline font-semibold">Qwen Image Editor Home</Link>, read our <Link href={getLinkHref('/blog/photocraft-online-ai-review-photoshop-alternative', locale)} className="text-indigo-400 hover:underline font-semibold">PhotoCraft Review</Link>, or review our <Link href={getLinkHref('/blog/ai-font-generator-from-image-guide', locale)} className="text-indigo-400 hover:underline font-semibold">AI Font Generation Guide</Link>.
           </p>
         </div>
 
