@@ -1393,15 +1393,20 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                           src={generatedVideoUrl || "/videos/user_seedance_generated_result.mp4"}
                           controls
                           autoPlay
+                          muted
                           loop
                           playsInline
+                          preload="auto"
                           poster="/images/rumpelstiltskin_green_screen.png"
                           className={
                             videoAspectRatio === '9:16'
                               ? 'h-full aspect-[9/16] object-contain rounded-lg shadow-[0_0_25px_rgba(0,0,0,0.9)] border border-slate-800'
                               : 'w-full h-full object-cover'
                           }
-                        />
+                        >
+                          <source src={generatedVideoUrl || "/videos/user_seedance_generated_result.mp4"} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/85 text-[10px] text-amber-300 font-mono border border-amber-500/40 flex items-center gap-1.5 pointer-events-none">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span>SEEDANCE 2.5 • {videoAspectRatio === '9:16' ? '9:16 VERTICAL (TIKTOK/REELS)' : '16:9 CINEMATIC'} • {videoResolution.toUpperCase()}</span>

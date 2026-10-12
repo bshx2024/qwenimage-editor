@@ -7,10 +7,18 @@ const handleI18n = createMiddleware(routing);
 export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // Let robots.txt and sitemap pass through without i18n redirect
+  // Let robots.txt, sitemaps, and static media pass through without i18n redirect
   let response;
-  if (pathname === "/robots.txt" || pathname.includes("sitemap")) {
-    response = undefined;
+  if (
+    pathname === "/robots.txt" ||
+    pathname.includes("sitemap") ||
+    pathname.startsWith("/videos/") ||
+    pathname.startsWith("/images/") ||
+    pathname.endsWith(".mp4") ||
+    pathname.endsWith(".webm") ||
+    pathname.endsWith(".mov")
+  ) {
+    return NextResponse.next();
   } else if (pathname === "/_stats" || pathname === "/stats" || pathname === "/en/_stats") {
     // Rewrite _stats to [locale] stats page directly to pass locale validation
     const url = req.nextUrl.clone();
@@ -27,6 +35,7 @@ export default async function middleware(req: NextRequest) {
     !pathname.startsWith("/api/admin/bot-monitor") &&
     !pathname.startsWith("/_stats") &&
     !pathname.startsWith("/stats") &&
+    !pathname.startsWith("/videos/") &&
     userAgent
   ) {
     const forwarded =
@@ -54,6 +63,6 @@ export const config = {
     "/(en)/:path*",
     "/robots.txt",
     "/sitemap.xml",
-    "/((?!_next|_vercel|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js)).*)",
+    "/((?!_next|_vercel|videos|images|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|mp4|webm|mov|mp3|ogg|wav)).*)",
   ],
 };
