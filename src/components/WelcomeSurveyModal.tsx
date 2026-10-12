@@ -64,11 +64,41 @@ export function WelcomeSurveyModal() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const sendSurveyUpdate = (selectedUseCase: string, selectedPriority: string) => {
+    if (!userData?.user_id) return;
+    try {
+      fetch('/api/user/survey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: userData.user_id,
+          userEmail: userData.email || '',
+          useCase: selectedUseCase,
+          priority: selectedPriority || '',
+          source: 'welcome_modal',
+        }),
+      }).catch(() => {});
+    } catch {}
+  };
+
+  const handleSelectUseCase = (id: string) => {
+    setUseCase(id);
+    sendSurveyUpdate(id, priority);
+  };
+
+  const handleSelectPriority = (id: string) => {
+    setPriority(id);
+    sendSurveyUpdate(useCase, id);
+  };
+
   const handleCompleteSurvey = () => {
-    if (!useCase || !priority) return;
+    if (!useCase) return;
+    const finalPriority = priority || 'speed';
+    if (!priority) setPriority('speed');
     if (userData?.user_id) {
-      localStorage.setItem(`${SURVEY_DONE_KEY}_${userData.user_id}`, JSON.stringify({ useCase, priority, at: Date.now() }));
+      localStorage.setItem(`${SURVEY_DONE_KEY}_${userData.user_id}`, JSON.stringify({ useCase, priority: finalPriority, at: Date.now() }));
     }
+    sendSurveyUpdate(useCase, finalPriority);
     setStep(2);
   };
 
@@ -165,7 +195,7 @@ export function WelcomeSurveyModal() {
           <div className="space-y-6">
             <div className="space-y-2 text-center">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                <SparklesIcon className="w-3.5 h-3.5" /> Fast Setup · 15 Seconds
+                <SparklesIcon className="w-3.5 h-3.5" /> Fast Setup · 10 Seconds
               </span>
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                 Customize Your AI Workspace
@@ -177,28 +207,31 @@ export function WelcomeSurveyModal() {
 
             {/* Question 1 */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300">
-                1. What is your primary creation goal?
+              <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+                <span>1. What is your primary creation goal?</span>
+                <span className="text-[10px] text-cyan-400 font-normal">Click to auto-save</span>
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {[
+                  { id: 'fashion', icon: '👗', label: 'AI Fashion & Clothes' },
                   { id: 'ecommerce', icon: '🛍️', label: 'E-commerce Photos' },
+                  { id: 'portrait', icon: '✨', label: 'Portrait & Face Edit' },
+                  { id: 'background', icon: '🏞️', label: 'Background Swap' },
                   { id: 'social', icon: '🎨', label: 'Social & Visual Art' },
-                  { id: 'stickers', icon: '🏷️', label: 'Stickers & Merch' },
                   { id: 'design', icon: '💼', label: 'Graphic Design' },
                 ].map((item) => (
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setUseCase(item.id)}
-                    className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-medium text-left transition-all ${
+                    onClick={() => handleSelectUseCase(item.id)}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-medium text-left transition-all cursor-pointer ${
                       useCase === item.id
-                        ? 'border-cyan-400 bg-cyan-500/15 text-white ring-1 ring-cyan-400 shadow-sm'
+                        ? 'border-cyan-400 bg-cyan-500/20 text-white ring-1 ring-cyan-400 shadow-sm'
                         : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:bg-slate-800/50'
                     }`}
                   >
                     <span className="text-base">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <span className="truncate">{item.label}</span>
                   </button>
                 ))}
               </div>
@@ -212,16 +245,16 @@ export function WelcomeSurveyModal() {
               <div className="grid grid-cols-1 gap-2">
                 {[
                   { id: 'speed', icon: '⚡', label: 'Ultra-fast Dedicated GPU Queue (No Wait)' },
-                  { id: 'quality', icon: '🔍', label: '4K Ultra-HD & Flawless Text Rendering' },
+                  { id: 'quality', icon: '🔍', label: '4K Ultra-HD & Flawless Consistency' },
                   { id: 'license', icon: '🏢', label: 'Commercial Usage License & Never-Expiring Vault' },
                 ].map((item) => (
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setPriority(item.id)}
-                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-xs font-medium text-left transition-all ${
+                    onClick={() => handleSelectPriority(item.id)}
+                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-xs font-medium text-left transition-all cursor-pointer ${
                       priority === item.id
-                        ? 'border-cyan-400 bg-cyan-500/15 text-white ring-1 ring-cyan-400 shadow-sm'
+                        ? 'border-cyan-400 bg-cyan-500/20 text-white ring-1 ring-cyan-400 shadow-sm'
                         : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:bg-slate-800/50'
                     }`}
                   >
@@ -236,7 +269,7 @@ export function WelcomeSurveyModal() {
             <div className="pt-2">
               <button
                 type="button"
-                disabled={!useCase || !priority}
+                disabled={!useCase}
                 onClick={handleCompleteSurvey}
                 className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 transition-all shadow-lg shadow-cyan-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
               >

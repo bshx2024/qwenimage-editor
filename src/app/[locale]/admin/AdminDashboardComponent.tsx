@@ -51,12 +51,16 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'users' | 'works' | 'subscriptions' | 'ai-engine' | 'sensitive' | 'config' | 'bot-monitor'
+    'overview' | 'users' | 'works' | 'subscriptions' | 'ai-engine' | 'sensitive' | 'config' | 'bot-monitor' | 'survey'
   >('overview');
 
   // Bot & Visitor Monitor Data
   const [monitorData, setMonitorData] = useState<{ botRows: any[]; visitorRows: any[] } | null>(null);
   const [monitorLoading, setMonitorLoading] = useState<boolean>(false);
+
+  // User Surveys Data
+  const [surveyData, setSurveyData] = useState<any>(null);
+  const [surveyLoading, setSurveyLoading] = useState<boolean>(false);
 
   // Overview Data
   const [stats, setStats] = useState<any>(null);
@@ -202,7 +206,23 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     if (activeTab === 'ai-engine') fetchAISettings();
     if (activeTab === 'sensitive') fetchSensitiveWords();
     if (activeTab === 'bot-monitor') loadMonitorData();
+    if (activeTab === 'survey') fetchSurveyData();
   }, [activeTab, isAuthenticated]);
+
+  const fetchSurveyData = async () => {
+    setSurveyLoading(true);
+    try {
+      const res = await fetch('/api/admin/survey');
+      const data = await res.json();
+      if (data.ok && data.data) {
+        setSurveyData(data.data);
+      }
+    } catch (err: any) {
+      console.warn('fetchSurveyData error:', err);
+    } finally {
+      setSurveyLoading(false);
+    }
+  };
 
   const loadMonitorData = async () => {
     setMonitorLoading(true);
@@ -956,6 +976,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 { id: 'subscriptions', name: 'Payment & Gateways', icon: CreditCardIcon },
                 { id: 'ai-engine', name: 'AI Models & Bailian', icon: SparklesIcon },
                 { id: 'bot-monitor', name: 'Crawlers & Visitors', icon: CpuChipIcon },
+                { id: 'survey', name: 'User Surveys', icon: ClipboardDocumentCheckIcon },
                 { id: 'sensitive', name: 'Sensitive Words', icon: ShieldCheckIcon },
                 { id: 'config', name: 'Environment', icon: Cog6ToothIcon },
               ].map((tab) => {
@@ -2663,6 +2684,250 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                           <tr>
                             <td colSpan={3} className="py-8 text-center text-slate-500">
                               暂无真人访客记录
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB: USER SURVEYS & INTENT DATA */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'survey' && (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <ClipboardDocumentCheckIcon className="w-6 h-6 text-cyan-400" />
+                      <span>用户诉求问卷分析 (User Surveys &amp; Intents)</span>
+                    </h2>
+                    <p className="text-xs text-slate-400 mt-1">
+                      实时追踪注册用户填写的创作意图、业务场景偏好与首要诉求（数据直接入库保存）。
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={fetchSurveyData}
+                    disabled={surveyLoading}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition-colors cursor-pointer"
+                  >
+                    <ArrowPathIcon className={`w-3.5 h-3.5 ${surveyLoading ? 'animate-spin' : ''}`} />
+                    <span>刷新问卷数据</span>
+                  </button>
+                </div>
+
+                {/* 3 Metric Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 backdrop-blur-md">
+                    <span className="text-xs text-slate-400 block mb-1">已收集有效问卷</span>
+                    <strong className="text-2xl sm:text-3xl font-extrabold text-white">
+                      {surveyLoading ? '...' : (surveyData?.total || 0)}
+                    </strong>
+                    <span className="text-[11px] text-slate-500 block mt-1">包含首步点击即自动入库数据</span>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 backdrop-blur-md">
+                    <span className="text-xs text-slate-400 block mb-1">最核心创作诉求</span>
+                    <strong className="text-lg sm:text-xl font-bold text-cyan-300 truncate block">
+                      {surveyLoading
+                        ? '...'
+                        : (surveyData?.useCaseDistribution?.[0]?.useCase || '暂无数据')}
+                    </strong>
+                    <span className="text-[11px] text-slate-500 block mt-1">
+                      {surveyData?.useCaseDistribution?.[0]
+                        ? `占比 ${surveyData.useCaseDistribution[0].percentage}% (${surveyData.useCaseDistribution[0].count} 人)`
+                        : '等待用户选择'}
+                    </span>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 backdrop-blur-md">
+                    <span className="text-xs text-slate-400 block mb-1">用户最看重的特质</span>
+                    <strong className="text-lg sm:text-xl font-bold text-emerald-300 truncate block">
+                      {surveyLoading
+                        ? '...'
+                        : (surveyData?.priorityDistribution?.[0]?.priority || '暂无数据')}
+                    </strong>
+                    <span className="text-[11px] text-slate-500 block mt-1">
+                      {surveyData?.priorityDistribution?.[0]
+                        ? `首选需求 (${surveyData.priorityDistribution[0].count} 人)`
+                        : '等待用户选择'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Visual Distribution Breakdown */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Use Case Distribution Card */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
+                    <h3 className="text-sm font-bold text-white flex items-center justify-between">
+                      <span>用户使用场景分布 (Primary Goals)</span>
+                      <span className="text-xs text-slate-400 font-normal font-mono">
+                        Total: {surveyData?.total || 0}
+                      </span>
+                    </h3>
+                    <div className="space-y-2.5 pt-1">
+                      {surveyData?.useCaseDistribution && surveyData.useCaseDistribution.length > 0 ? (
+                        surveyData.useCaseDistribution.map((item: any, idx: number) => (
+                          <div key={idx} className="space-y-1">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-slate-300 font-medium">
+                                {item.useCase === 'fashion'
+                                  ? '👗 AI 服装与试衣换装 (Fashion & Clothes)'
+                                  : item.useCase === 'ecommerce'
+                                  ? '🛍️ 电商模特与商品图 (E-commerce Photos)'
+                                  : item.useCase === 'portrait'
+                                  ? '✨ 人像头像精修 (Portrait & Face Edit)'
+                                  : item.useCase === 'background'
+                                  ? '🏞️ 背景替换与局部重绘 (Background Swap)'
+                                  : item.useCase === 'social'
+                                  ? '🎨 社交视觉艺术 (Social & Visual Art)'
+                                  : item.useCase === 'design'
+                                  ? '💼 平面创意设计 (Graphic Design)'
+                                  : item.useCase}
+                              </span>
+                              <span className="text-cyan-400 font-mono text-[11px]">
+                                {item.count} 人 ({item.percentage}%)
+                              </span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-500"
+                                style={{ width: `${Math.max(5, item.percentage)}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="py-6 text-center text-xs text-slate-500">
+                          暂无诉求分布数据（新用户填写后将实时呈现在此）
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Priority / Concern Distribution Card */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
+                    <h3 className="text-sm font-bold text-white flex items-center justify-between">
+                      <span>首要关注特质分布 (Key Priorities)</span>
+                    </h3>
+                    <div className="space-y-2.5 pt-1">
+                      {surveyData?.priorityDistribution && surveyData.priorityDistribution.length > 0 ? (
+                        surveyData.priorityDistribution.map((item: any, idx: number) => {
+                          const pct = surveyData.total > 0 ? Math.round((item.count / surveyData.total) * 100) : 0;
+                          return (
+                            <div key={idx} className="space-y-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-slate-300 font-medium">
+                                  {item.priority === 'speed'
+                                    ? '⚡ 极速 GPU 通道免排队 (Ultra-fast Queue)'
+                                    : item.priority === 'quality'
+                                    ? '🔍 4K 超清画质与高保真 (4K Ultra-HD)'
+                                    : item.priority === 'license'
+                                    ? '🏢 商用授权与资产永久保存 (Commercial License)'
+                                    : item.priority}
+                                </span>
+                                <span className="text-emerald-400 font-mono text-[11px]">
+                                  {item.count} 人 ({pct}%)
+                                </span>
+                              </div>
+                              <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-500"
+                                  style={{ width: `${Math.max(5, pct)}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="py-6 text-center text-xs text-slate-500">
+                          暂无特质分布数据
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submissions Table */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-white">
+                      问卷提交明细清单 (Recent Submissions)
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      支持用户 ID、邮箱与注册归因关联
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-slate-400 bg-slate-950/40">
+                          <th className="py-3 px-4 font-semibold">用户 / 邮箱</th>
+                          <th className="py-3 px-4 font-semibold">国籍</th>
+                          <th className="py-3 px-4 font-semibold">主要意图场景</th>
+                          <th className="py-3 px-4 font-semibold">核心关注特质</th>
+                          <th className="py-3 px-4 font-semibold">来源渠道</th>
+                          <th className="py-3 px-4 font-semibold">填写时间</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                        {surveyLoading && !surveyData ? (
+                          <tr>
+                            <td colSpan={6} className="py-8 text-center text-slate-500">
+                              正在加载问卷数据...
+                            </td>
+                          </tr>
+                        ) : surveyData?.recentResponses && surveyData.recentResponses.length > 0 ? (
+                          surveyData.recentResponses.map((row: any, idx: number) => (
+                            <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                              <td className="py-3 px-4 font-medium text-white">
+                                {row.user_email || (row.user_id ? row.user_id.slice(0, 8) + '...' : 'Guest')}
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="inline-flex items-center gap-1">
+                                  <span>{getCountryFlag(row.register_country || '')}</span>
+                                  <span className="text-slate-400">{row.register_country || '--'}</span>
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-cyan-300 font-semibold">
+                                {row.use_case === 'fashion'
+                                  ? '👗 AI 服装与试衣换装'
+                                  : row.use_case === 'ecommerce'
+                                  ? '🛍️ 电商商品图'
+                                  : row.use_case === 'portrait'
+                                  ? '✨ 人像精修'
+                                  : row.use_case === 'background'
+                                  ? '🏞️ 背景替换'
+                                  : row.use_case === 'social'
+                                  ? '🎨 视觉创意'
+                                  : row.use_case}
+                              </td>
+                              <td className="py-3 px-4 text-emerald-300">
+                                {row.priority === 'speed'
+                                  ? '⚡ 极速通道'
+                                  : row.priority === 'quality'
+                                  ? '🔍 4K 高画质'
+                                  : row.priority === 'license'
+                                  ? '🏢 商用授权'
+                                  : row.priority || '--'}
+                              </td>
+                              <td className="py-3 px-4 text-slate-400">
+                                {row.first_source || row.source || 'web'}
+                              </td>
+                              <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">
+                                {row.created_at ? new Date(row.created_at).toLocaleString() : '--'}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={6} className="py-8 text-center text-slate-500">
+                              暂无问卷提交记录（用户在弹窗中选择后将自动在此呈现）
                             </td>
                           </tr>
                         )}
