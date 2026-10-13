@@ -28,7 +28,8 @@ import {
   ArrowDownTrayIcon,
   DocumentDuplicateIcon,
   XMarkIcon,
-  LockClosedIcon
+  LockClosedIcon,
+  ArrowRightIcon
 } from "@heroicons/react/24/outline";
 
 export default function RumpelstiltskinBlogPostComponent({
@@ -693,30 +694,33 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
         {/* In-Page Multimodal Studio (Hero Tool - Above the Fold) */}
         <section id="ai-studio" className="mb-10 not-prose bg-gradient-to-br from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl">
           {/* Social Prank & Virality Callout Banner */}
-          <div className="bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-emerald-500/15 border border-amber-500/30 rounded-xl p-3 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+          <div className="bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-emerald-500/15 border border-amber-500/30 rounded-xl p-3.5 sm:p-4 mb-5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
             <div className="flex items-start sm:items-center gap-3">
               <span className="text-2xl p-1.5 bg-amber-500/20 rounded-lg">🎭</span>
               <div>
                 <div className="text-xs sm:text-sm font-bold text-amber-200 flex items-center gap-1.5">
-                  <span>Prank Your Friends or Go Viral on TikTok!</span>
+                  <span>Prank Your Friends with the Viral 1987 Meme!</span>
                   <span className="bg-rose-500 text-white text-[9px] font-black px-1.5 py-0.2 rounded uppercase animate-pulse">Trending</span>
                 </div>
                 <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
-                  Upload your own photo or your friend&apos;s face below to lock identity into this 1987 viral dance.
+                  Watch the ByteDance Seedance 2.5 HD master reel below, or remix the meme right now with our free AI tools:
                 </div>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedReferenceType('custom');
-                const el = document.getElementById('reference-upload-input');
-                if (el) el.click();
-              }}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-bold text-xs rounded-lg shadow-md shrink-0 transition-all text-center"
-            >
-              Upload Your Face &rarr;
-            </button>
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
+              <Link
+                href={getLinkHref('/background-remover', locale)}
+                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow-md transition-all flex items-center gap-1"
+              >
+                <span>🟢 Cutout Meme (Free)</span>
+              </Link>
+              <Link
+                href={getLinkHref('/qwen-image-2-1', locale)}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg shadow-md transition-all flex items-center gap-1"
+              >
+                <span>✨ AI Face Swap &rarr;</span>
+              </Link>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800">
@@ -1483,6 +1487,126 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
               </div>
             </div>
           </section>
+ 
+        {/* Instant Meme Creator Toolbox & Traffic Bridge (High-Value SEO Authority Passing) */}
+        <section className="mb-10 not-prose bg-slate-900/90 border border-indigo-500/30 rounded-2xl p-6 sm:p-7 shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-800">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <SparklesIcon className="w-4 h-4" />
+                <span>Instant Meme Creator Toolkit</span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-white mt-1">
+                Remix the 1987 Rumpelstiltskin Meme with Free &amp; Low-Cost AI Tools
+              </h2>
+            </div>
+            <span className="text-[11px] text-slate-400 font-medium">
+              Zero coding • No complex setup
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Tool 1: AI Background Remover */}
+            <Link
+              href={getLinkHref('/background-remover', locale)}
+              className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-emerald-500/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-emerald-950/30"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                    🟢 1-Click Cutout
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-semibold">Free Tool</span>
+                </div>
+                <div className="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors">
+                  AI Background &amp; Chroma Remover
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Extract the green-screen dancing gnome or remove video backgrounds with zero green halo edges.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-bold text-emerald-400 group-hover:translate-x-0.5 transition-transform">
+                <span>Extract Meme Cutout</span>
+                <span>&rarr;</span>
+              </div>
+            </Link>
+
+            {/* Tool 2: Qwen 2.1 Inpainting / Face Swap */}
+            <Link
+              href={getLinkHref('/qwen-image-2-1', locale)}
+              className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-indigo-500/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-indigo-950/30"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/30">
+                    ✨ AI Inpainting
+                  </span>
+                  <span className="text-[10px] text-indigo-400 font-semibold">Free Tier</span>
+                </div>
+                <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors">
+                  Qwen 2.1 AI Face Swap &amp; Inpaint
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Swap your friend&apos;s face onto the tuxedo gnome or change backgrounds using natural language prompts.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-bold text-indigo-400 group-hover:translate-x-0.5 transition-transform">
+                <span>Prank Face Swap</span>
+                <span>&rarr;</span>
+              </div>
+            </Link>
+
+            {/* Tool 3: Sticker Maker */}
+            <Link
+              href={getLinkHref('/stickers', locale)}
+              className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-amber-950/30"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    🔥 Meme Stickers
+                  </span>
+                  <span className="text-[10px] text-amber-400 font-semibold">Instant Export</span>
+                </div>
+                <div className="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">
+                  AI Viral Meme Sticker Studio
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Turn dancing Rumpelstiltskin into transparent PNG stickers for Discord, iMessage, and WhatsApp.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-bold text-amber-400 group-hover:translate-x-0.5 transition-transform">
+                <span>Create Stickers</span>
+                <span>&rarr;</span>
+              </div>
+            </Link>
+
+            {/* Tool 4: Product Photo & Relighting Studio */}
+            <Link
+              href={getLinkHref('/product-photo-editor', locale)}
+              className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-rose-500/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-rose-950/30"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/10 text-rose-300 border border-rose-500/30">
+                    🎬 1978 Relighting
+                  </span>
+                  <span className="text-[10px] text-rose-400 font-semibold">Pro Grade</span>
+                </div>
+                <div className="font-bold text-white text-sm group-hover:text-rose-300 transition-colors">
+                  AI Scene Lighting &amp; Relighter
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Seamlessly harmonize subjects into 35mm candlelit tavern sets with realistic shadows and film grain.
+                </p>
+              </div>
+              <div className="mt-4 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-bold text-rose-400 group-hover:translate-x-0.5 transition-transform">
+                <span>Try Relighting Studio</span>
+                <span>&rarr;</span>
+              </div>
+            </Link>
+          </div>
+        </section>
 
 
         {/* BLUF: Disambiguation Truth Table (GEO Fact Anchor) */}
@@ -1676,6 +1800,101 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
           </section>
 
         </article>
+
+        {/* Topic Cluster & Related Engineering Guides (Silo Architecture) */}
+        <section className="mt-12 not-prose border-t border-slate-800/80 pt-8">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                Topic Cluster &amp; Creative Tools
+              </div>
+              <div className="text-lg font-bold text-white mt-0.5">
+                Explore Related AI Workflows &amp; Benchmarks
+              </div>
+            </div>
+            <Link
+              href={getLinkHref('/blog', locale)}
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 transition-colors"
+            >
+              <span>All Guides</span>
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Card 1: PhotoCraft Review & Photoshop Alternative */}
+            <Link
+              href={getLinkHref('/blog/photocraft-online-ai-review-photoshop-alternative', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                  Open Source Creative AI
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors line-clamp-2">
+                  PhotoCraft Review: Rust Photoshop Alternative Safe to Try?
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  Compare the viral open-source Rust photo editor with AI Generative Fill workflows.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>8 min read</span>
+                <span className="text-indigo-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Read Guide &rarr;
+                </span>
+              </div>
+            </Link>
+
+            {/* Card 2: AI Background Remover Dedicated Tool */}
+            <Link
+              href={getLinkHref('/background-remover', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                  Featured Tool
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors line-clamp-2">
+                  AI Background Remover &amp; Chroma Cutout
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  One-click green-screen and background removal with zero halos for viral video creators.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>Free Tool</span>
+                <span className="text-emerald-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Try Tool &rarr;
+                </span>
+              </div>
+            </Link>
+
+            {/* Card 3: Ideogram 4.5 Open Source Weights */}
+            <Link
+              href={getLinkHref('/blog/ideogram-4-5-open-source-weights-alternatives', locale)}
+              className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition-all flex flex-col justify-between group"
+            >
+              <div className="space-y-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                  Model Benchmark
+                </span>
+                <div className="font-bold text-white text-sm group-hover:text-indigo-300 transition-colors line-clamp-2">
+                  Ideogram 4.5: Guide, Open Source Status &amp; Weights
+                </div>
+                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                  Audit open-source weights, ComfyUI setups, and censorship boundaries.
+                </p>
+              </div>
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                <span>11 min read</span>
+                <span className="text-indigo-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  Read Guide &rarr;
+                </span>
+              </div>
+            </Link>
+          </div>
+        </section>
 
         {/* Informational Context Summary (Natural internal references, zero doorway penalty) */}
         <div className="my-12 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 text-center shadow-xl">
