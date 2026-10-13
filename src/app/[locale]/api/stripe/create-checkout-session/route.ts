@@ -22,19 +22,21 @@ export async function POST(req: Request) {
       const userInfo = userInfoRow[0];
       const userEmail = userInfo.email;
 
-      // Check if user already has an active subscription to prevent duplicate billing
-      const activeSubRes = await db.query(
-        "select * from stripe_subscriptions where user_id = $1 and status in ('active', 'trialing') limit 1",
-        [user_id]
-      );
-      if (activeSubRes.rows.length > 0) {
-        return new Response(
-          JSON.stringify({
-            message: "User already has an active subscription. Please manage via customer portal.",
-            alreadySubscribed: true,
-          }),
-          { status: 400 }
+      // Check if user already has an active subscription to prevent duplicate recurring billing
+      if (price.type === 'recurring') {
+        const activeSubRes = await db.query(
+          "select * from stripe_subscriptions where user_id = $1 and status in ('active', 'trialing') limit 1",
+          [user_id]
         );
+        if (activeSubRes.rows.length > 0) {
+          return new Response(
+            JSON.stringify({
+              message: "User already has an active subscription. Please manage via customer portal.",
+              alreadySubscribed: true,
+            }),
+            { status: 400 }
+          );
+        }
       }
 
       // 3. Retrieve or create the customer in Stripe
@@ -53,6 +55,7 @@ export async function POST(req: Request) {
         ...(metadata || {}),
         user_id: user_id,
         user_email: userEmail,
+        credits: String(price.credits || 100),
         first_source: userInfo.first_source || '',
         first_medium: userInfo.first_medium || '',
         first_campaign: userInfo.first_campaign || '',

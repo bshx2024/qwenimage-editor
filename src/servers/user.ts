@@ -47,7 +47,7 @@ export const checkAndSaveUser = async (
         // Fallback gracefully on query error
       }
 
-      const freeTimes = grantBonus ? (Number(process.env.FREE_TIMES) || 2) : 0;
+      const freeTimes = grantBonus ? (Number(process.env.FREE_TIMES) || 0) : 0;
 
       let userCountry = env?.country || '';
       if (!userCountry && ip && ip !== '--') {

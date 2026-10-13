@@ -124,11 +124,11 @@ export function WelcomeSurveyModal() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            planId: 'credits-pack-100',
+            planId: 'pack-starter',
             userId: userData.user_id,
             userEmail: userData.email || '',
-            bonusCredits: 160,
-            redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + '/pricing?payment_success=true&welcome_bonus=160&provider=waffo',
+            bonusCredits: 150,
+            redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + '/pricing?payment_success=true&welcome_bonus=150&provider=waffo',
           }),
         });
         const res = await response.json();
@@ -139,8 +139,8 @@ export function WelcomeSurveyModal() {
           alert('Checkout notice: ' + res.error);
         }
       } else {
-        // Stripe flow for $4.99 Starter Pack + 60 Bonus Credits
-        const starterPrice = priceList.find((p) => p.id === 'price_starter') || priceList[0];
+        // Stripe flow for $9.90 Starter Pack + 50 Bonus Credits
+        const starterPrice = priceList.find((p) => p.id === 'pack_starter') || priceList[0];
         const response = await fetch('/api/stripe/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -148,9 +148,9 @@ export function WelcomeSurveyModal() {
             price: starterPrice,
             quantity: 1,
             user_id: userData.user_id,
-            redirectUrl: '/pricing?payment_success=true&welcome_bonus=160',
+            redirectUrl: '/pricing?payment_success=true&welcome_bonus=150',
             metadata: {
-              credits: '160',
+              credits: '150',
               is_welcome_bonus: 'true',
               survey_use_case: useCase,
               survey_priority: priority,
@@ -310,22 +310,22 @@ export function WelcomeSurveyModal() {
                     Full AI Power
                   </div>
                   <div className="text-3xl font-black text-white flex items-baseline gap-2">
-                    160 <span className="text-base font-bold text-slate-300">AI Credits</span>
+                    150 <span className="text-base font-bold text-slate-300">AI Credits</span>
                   </div>
                   <div className="text-[11px] text-amber-300 font-semibold mt-0.5">
-                    ✨ 100 Base + 60 Extra Bonus Credits Free!
+                    ✨ 100 Base + 50 Extra Bonus Credits Free!
                   </div>
                 </div>
 
                 <div className="text-right">
                   <div className="text-xs text-slate-400 line-through">
-                    Total Value $7.99
+                    Total Value $14.99
                   </div>
                   <div className="text-2xl font-black text-cyan-300">
-                    $4.99
+                    $9.90
                   </div>
                   <div className="text-[10px] font-bold text-emerald-400 uppercase">
-                    Save 38% Instantly
+                    Save 34% Instantly
                   </div>
                 </div>
               </div>

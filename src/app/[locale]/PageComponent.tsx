@@ -226,12 +226,10 @@ export default function PageComponent({
     e.preventDefault();
     if (!textStr && activeTab === 'generate') return;
 
-    // Strict guest trial check: allow visitors to test generate exactly 1 time without login
+    // Require login to generate or edit images
     if (!userData) {
-      if (getGuestTrialsRemaining() <= 0) {
-        setShowLoginModal(true);
-        return;
-      }
+      setShowLoginModal(true);
+      return;
     }
 
     setIsProcessing(true);
@@ -1004,27 +1002,19 @@ export default function PageComponent({
                       </div>
                     </div>
 
-                    {/* Guest Trial Prompt / Badge */}
+                    {/* Guest Sign-in Prompt */}
                     {!userData && (
-                      <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-xs transition-all ${
-                        getGuestTrialsRemaining() > 0
-                          ? 'bg-purple-950/40 border-purple-500/30'
-                          : 'bg-amber-950/40 border-amber-500/50 text-amber-200'
-                      }`}>
+                      <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl border bg-slate-900/80 border-indigo-500/30 text-slate-200 text-xs">
                         <div className="flex items-center gap-1.5 font-medium">
-                          <SparklesIcon className="w-4 h-4 text-amber-400 shrink-0" />
-                          <span>
-                            {getGuestTrialsRemaining() > 0
-                              ? `🎁 Free Guest Trial: 1/1 available (No login needed)`
-                              : `🔒 Free trial used. Sign in with Google to get free welcome credits!`}
-                          </span>
+                          <SparklesIcon className="w-4 h-4 text-indigo-400 shrink-0" />
+                          <span>Sign in with Google to create &amp; edit images with official Qwen models</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => setShowLoginModal(true)}
-                          className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
+                          className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
                         >
-                          {getGuestTrialsRemaining() > 0 ? 'Sign In' : 'Claim Free Credits'}
+                          Sign In
                         </button>
                       </div>
                     )}
@@ -1063,11 +1053,11 @@ export default function PageComponent({
                           <>
                             <SparklesIcon className="w-4 h-4" />
                             <span>
-                              {!userData && getGuestTrialsRemaining() <= 0
-                                ? 'Sign In to Generate (Claim Free Credits)'
+                              {!userData
+                                ? 'Sign In to Generate'
                                 : activeTab === 'edit'
-                                ? (!userData ? 'Apply Edit (1 Free Trial)' : 'Apply Edit')
-                                : (!userData ? 'Generate (1 Free Trial)' : 'Generate')}
+                                ? 'Apply Edit'
+                                : 'Generate'}
                             </span>
                           </>
                         )}

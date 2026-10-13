@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useCommonContext } from "~/context/common-context";
 import LoadingDots from "./LoadingDots";
-import { priceList, PriceItem } from "~/configs/stripeConfig";
+import { oneTimePriceList, subscriptionPriceList, PriceItem } from "~/configs/stripeConfig";
 import { getStripe } from '~/libs/stripeClient';
 import { CheckIcon, SparklesIcon, BoltIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -13,58 +13,18 @@ export default function Pricing({
   redirectUrl?: string;
   isPricing?: boolean;
 }) {
+  const [billingMode, setBillingMode] = useState<'onetime' | 'subscription'>('onetime');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
-  const [trafficSource, setTrafficSource] = useState<'search' | 'chatgpt' | 'ai_engine' | 'blog' | 'direct' | 'default'>('default');
   const {
     setShowLoginModal,
     userData,
     pricingText
   } = useCommonContext();
 
-  // Dynamic traffic source detection (CRO optimization)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      let storedSource = sessionStorage.getItem('qwen_traffic_source') as any;
-      if (!storedSource) {
-        const ref = (document.referrer || '').toLowerCase();
-        const urlParams = new URLSearchParams(window.location.search);
-        const utmSource = (urlParams.get('utm_source') || urlParams.get('source') || '').toLowerCase();
-
-        if (utmSource.includes('chatgpt') || ref.includes('chatgpt.com') || ref.includes('openai.com')) {
-          storedSource = 'chatgpt';
-        } else if (utmSource.includes('perplexity') || ref.includes('perplexity.ai') || ref.includes('claude.ai')) {
-          storedSource = 'ai_engine';
-        } else if (
-          utmSource.includes('google') ||
-          utmSource.includes('bing') ||
-          ref.includes('google.') ||
-          ref.includes('bing.') ||
-          ref.includes('duckduckgo.')
-        ) {
-          storedSource = 'search';
-        } else if (window.location.pathname.includes('/blog') || ref.includes('/blog/')) {
-          storedSource = 'blog';
-        } else {
-          storedSource = 'direct';
-        }
-        sessionStorage.setItem('qwen_traffic_source', storedSource);
-      }
-      setTrafficSource(storedSource);
-    } catch {}
-  }, []);
-
   const handleCheckout = async (price: PriceItem) => {
     setPriceIdLoading(price.id);
     if (!userData || !userData.user_id) {
       setShowLoginModal(true);
-      setPriceIdLoading(undefined);
-      return;
-    }
-
-    // Connect Starter Pack to Welcome Survey Boost offer (160 credits for $4.99)
-    if (price.id === 'price_starter' && typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('open-welcome-offer'));
       setPriceIdLoading(undefined);
       return;
     }
@@ -75,11 +35,17 @@ export default function Pricing({
       const paymentProvider = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || 'waffo';
 
       if (paymentProvider === 'waffo') {
-        let planId = 'credits-pack-100';
-        if (price.unit_amount > 5000) {
-          planId = 'pro-yearly';
-        } else if (price.unit_amount > 1000) {
+        let planId = 'pack-standard';
+        if (price.id === 'pack_starter' || price.id === 'price_starter' || price.id === 'credits-pack-100') {
+          planId = 'pack-starter';
+        } else if (price.id === 'pack_standard') {
+          planId = 'pack-standard';
+        } else if (price.id === 'pack_pro') {
+          planId = 'pack-pro';
+        } else if (price.id === 'sub_monthly' || price.id === 'price_monthly' || price.id === 'pro-monthly') {
           planId = 'pro-monthly';
+        } else if (price.id === 'sub_yearly' || price.id === 'price_yearly' || price.id === 'pro-yearly') {
+          planId = 'pro-yearly';
         }
 
         const response = await fetch('/api/waffo/create-checkout-session', {
@@ -97,7 +63,7 @@ export default function Pricing({
           window.location.href = res.checkoutUrl;
           return;
         } else if (res.error) {
-          alert('Waffo Checkout Notice: ' + res.error);
+          alert('Checkout Notice: ' + res.error);
           return;
         }
       }
@@ -114,6 +80,10 @@ export default function Pricing({
         body: JSON.stringify(data)
       });
       const res = await response.json();
+      if (res.alreadySubscribed) {
+        alert(res.message);
+        return;
+      }
       const sessionId = res.sessionId;
       const stripe = await getStripe();
       stripe?.redirectToCheckout({ sessionId });
@@ -124,99 +94,93 @@ export default function Pricing({
     }
   };
 
-  const isSearchOrBlog = trafficSource === 'search' || trafficSource === 'blog';
-  const isAIReferral = trafficSource === 'chatgpt' || trafficSource === 'ai_engine';
-
-  // Highlight hero plan based on source intent (Search/Blog -> Starter $4.99; AI -> Yearly/Trio)
-  const heroPlanId = isSearchOrBlog
-    ? 'price_starter'
-    : isAIReferral
-    ? 'price_yearly'
-    : 'price_yearly';
-
-  // Dynamic ordering of plans based on source
-  let displayPlans = priceList;
-  if (isSearchOrBlog) {
-    displayPlans = [
-      priceList.find((p) => p.id === 'price_starter')!,
-      priceList.find((p) => p.id === 'price_monthly')!,
-      priceList.find((p) => p.id === 'price_yearly')!,
-    ].filter(Boolean);
-  } else if (isAIReferral) {
-    displayPlans = [
-      priceList.find((p) => p.id === 'price_yearly')!,
-      priceList.find((p) => p.id === 'price_monthly')!,
-      priceList.find((p) => p.id === 'price_starter')!,
-    ].filter(Boolean);
-  }
+  const displayedPlans = billingMode === 'onetime' ? oneTimePriceList : subscriptionPriceList;
 
   return (
     <section id="pricing-plans" className={`w-full py-12 md:py-16 text-white ${isPricing ? "" : "background-div"}`}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-10 md:mb-14">
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-8 md:mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-semibold text-indigo-300 backdrop-blur-md">
             <SparklesIcon className="w-4 h-4 text-indigo-400" />
-            <span>Transparent &amp; Flexible AI Pricing</span>
+            <span>Pay As You Go — Flexible AI Pricing</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            {pricingText?.h1Text || 'Choose Your Creative Plan'}
+            {pricingText?.h1Text || 'Simple & Transparent Pricing'}
           </h2>
 
-          <p className="text-base text-slate-300 leading-relaxed">
-            Generate high-resolution AI visuals with official Qwen Image &amp; Wanx 2.1 models. Upgrade or cancel anytime.
+          <p className="text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
+            Purchase credits on demand for high-resolution Qwen &amp; Wanx 2.1 AI image generation and editing. Zero subscription commitment required.
           </p>
 
-          {/* Dynamic Source Highlight Banner */}
-          <div className="inline-flex items-center gap-2 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-200">
-            <BoltIcon className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>
-              {isSearchOrBlog ? (
-                <>🎯 <strong>Creator Welcome Pass:</strong> 160 AI Credits for only <strong>$4.99</strong> — Instant Access, Never Expires!</>
-              ) : isAIReferral ? (
-                <>⚡ <strong>AI Power User Tier:</strong> Priority GPU Queue, Unlimited Inpainting &amp; Maximum Resolution!</>
-              ) : (
-                <>🎁 New users get 2 Free Credits on Google sign in to try all features!</>
-              )}
-            </span>
+          {/* Highlight Banner */}
+          <div className="inline-flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-200">
+            <BoltIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>⚡ <strong>One-Time Payment:</strong> Credits never expire. Use whenever you need without monthly auto-renewals!</span>
+          </div>
+
+          {/* Billing Switcher (One-Time vs Subscriptions) */}
+          <div className="pt-4 flex items-center justify-center">
+            <div className="inline-flex p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl">
+              <button
+                type="button"
+                onClick={() => setBillingMode('onetime')}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  billingMode === 'onetime'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <BoltIcon className="w-4 h-4" />
+                <span>One-Time Packs (Pay As You Go)</span>
+                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
+                  Recommended
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setBillingMode('subscription')}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  billingMode === 'subscription'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>Recurring Subscriptions</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* 3 Pricing Cards Grid (Dynamic Ordering by Traffic Source) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
-          {displayPlans.map((plan) => {
-            const isYearly = plan.id === 'price_yearly';
-            const isMonthly = plan.id === 'price_monthly';
-            const isStarter = plan.id === 'price_starter';
-            const isHero = plan.id === heroPlanId;
-
+        {/* Pricing Cards Grid */}
+        <div className={`grid grid-cols-1 ${billingMode === 'onetime' ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl'} gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto`}>
+          {displayedPlans.map((plan) => {
+            const isPopular = plan.isPopular;
             const priceFormatted = (plan.unit_amount / 100).toFixed(2);
+            const isOneTime = plan.type === 'one_time';
+            const costPerCredit = (plan.unit_amount / 100 / plan.credits).toFixed(3);
 
             return (
               <div
                 key={plan.id}
                 className={`relative flex flex-col justify-between rounded-3xl p-7 transition-all duration-300 backdrop-blur-xl ${
-                  isHero
+                  isPopular
                     ? 'border-2 border-indigo-500 bg-slate-900/95 shadow-2xl shadow-indigo-500/25 md:-translate-y-2'
                     : 'border border-slate-800 bg-slate-900/60 shadow-xl hover:border-slate-700'
                 }`}
               >
                 {/* Popular Pill / Badge */}
-                {(plan.badge || isHero) && (
+                {plan.badge && (
                   <div className="mb-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                        isHero
+                        isPopular
                           ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-md'
                           : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
                       }`}
                     >
-                      {isSearchOrBlog && isStarter
-                        ? '🎯 Top Choice for New Users'
-                        : isAIReferral && isYearly
-                        ? '👑 Recommended by AI Assistants — Save 50%'
-                        : plan.badge}
+                      {plan.badge}
                     </span>
                   </div>
                 )}
@@ -229,7 +193,7 @@ export default function Pricing({
                       ${priceFormatted}
                     </span>
                     <span className="text-xs text-slate-400">
-                      {isYearly ? '/ year' : isMonthly ? '/ month' : ' one-time'}
+                      {isOneTime ? ' one-time' : plan.id.includes('yearly') ? '/ year' : '/ month'}
                     </span>
                   </div>
 
@@ -237,7 +201,7 @@ export default function Pricing({
                     <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
                     <span>
                       {plan.credits.toLocaleString()} AI Credits
-                      {isYearly ? ' ($9.90/mo billed annually)' : isMonthly ? ' ($0.04/credit)' : ' (Never expires)'}
+                      {isOneTime ? ` ($${costPerCredit}/credit · Never expires)` : ' refreshed each period'}
                     </span>
                   </p>
 
@@ -250,15 +214,6 @@ export default function Pricing({
                       </li>
                     ))}
                   </ul>
-
-                  {isStarter && (
-                    <div className="mb-6 p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-cyan-500/10 to-indigo-500/15 border border-cyan-500/30 text-[11px] text-cyan-200">
-                      <span className="flex items-center gap-1.5 font-medium">
-                        <SparklesIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span><strong>15s Survey Bonus:</strong> Unlock <strong>160 Credits</strong> (+60 Free Bonus) for $4.99!</span>
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 {/* CTA Button */}
@@ -267,10 +222,8 @@ export default function Pricing({
                   disabled={priceIdLoading === plan.id}
                   onClick={() => handleCheckout(plan)}
                   className={`w-full py-3.5 px-6 rounded-2xl text-xs font-extrabold transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 ${
-                    isHero
+                    isPopular
                       ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white shadow-indigo-500/30 ring-2 ring-indigo-400/40'
-                      : isMonthly
-                      ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 hover:opacity-95 text-white shadow-cyan-500/20'
                       : 'border border-slate-700 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white'
                   } disabled:opacity-50`}
                 >
@@ -279,7 +232,11 @@ export default function Pricing({
                   ) : (
                     <>
                       <SparklesIcon className="w-4 h-4" />
-                      <span>{isStarter ? 'Claim 160 Credits ($4.99)' : isMonthly ? 'Subscribe Monthly ($19.90)' : 'Get Pro Yearly ($118.80)'}</span>
+                      <span>
+                        {isOneTime
+                          ? `Get ${plan.credits} Credits ($${priceFormatted})`
+                          : `Subscribe ($${priceFormatted})`}
+                      </span>
                     </>
                   )}
                 </button>
@@ -303,7 +260,7 @@ export default function Pricing({
             </span>
           </div>
           <p className="text-[11px] text-slate-400 leading-relaxed">
-            All payments and subscriptions are handled securely by our Merchant of Record, <strong className="text-slate-200">Waffo Pancake</strong> (Waffo.com Limited), under strict PCI-DSS Level 1 compliance. Subscriptions can be cancelled anytime with a single click in account settings.
+            All payments are processed securely under strict PCI-DSS Level 1 compliance. One-time credits never expire and require no recurring commitment.
           </p>
           <div className="text-[11px] text-slate-500 flex items-center justify-center gap-4 pt-1">
             <span>By proceeding to checkout, you agree to our</span>

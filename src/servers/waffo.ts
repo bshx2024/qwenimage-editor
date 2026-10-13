@@ -77,7 +77,7 @@ export async function handleWaffoOrderCompleted(payload: any): Promise<{ success
   // Determine credits from metadata or plan config
   let credits = Number(order?.metadata?.credits);
   if (!credits || isNaN(credits)) {
-    credits = WAFFO_PLANS[planId]?.credits || 500;
+    credits = WAFFO_PLANS[planId]?.credits || 100;
   }
 
   try {

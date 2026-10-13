@@ -1,4 +1,4 @@
-export const GUEST_TRIAL_LIMIT = 1;
+export const GUEST_TRIAL_LIMIT = 0;
 
 /**
  * Returns how many guest trial generations have been used on this device

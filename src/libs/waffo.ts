@@ -73,9 +73,9 @@ export async function createWaffoCheckoutSession({
 
   // 1. If merchant configured direct Waffo hosted checkout link in DB or env, use it
   let directCheckoutUrl = plan.checkoutUrl;
-  if (planId === 'credits-pack-100' && settings.waffoStarterLink) directCheckoutUrl = settings.waffoStarterLink;
-  if (planId === 'pro-monthly' && settings.waffoProLink) directCheckoutUrl = settings.waffoProLink;
-  if (planId === 'pro-yearly' && settings.waffoMegaLink) directCheckoutUrl = settings.waffoMegaLink;
+  if ((planId === 'credits-pack-100' || planId === 'pack-starter') && settings.waffoStarterLink) directCheckoutUrl = settings.waffoStarterLink;
+  if ((planId === 'pack-standard' || planId === 'pro-monthly') && settings.waffoProLink) directCheckoutUrl = settings.waffoProLink;
+  if ((planId === 'pack-pro' || planId === 'pro-yearly') && settings.waffoMegaLink) directCheckoutUrl = settings.waffoMegaLink;
 
   if (directCheckoutUrl) {
     try {
@@ -93,9 +93,9 @@ export async function createWaffoCheckoutSession({
 
   // 2. Try official SDK authenticated checkout session
   let productId = plan.productId;
-  if (planId === 'credits-pack-100' && settings.waffoProductStarter) productId = settings.waffoProductStarter;
-  if (planId === 'pro-monthly' && settings.waffoProductMonthly) productId = settings.waffoProductMonthly;
-  if (planId === 'pro-yearly' && settings.waffoProductYearly) productId = settings.waffoProductYearly;
+  if ((planId === 'credits-pack-100' || planId === 'pack-starter') && settings.waffoProductStarter) productId = settings.waffoProductStarter;
+  if ((planId === 'pack-standard' || planId === 'pro-monthly') && settings.waffoProductMonthly) productId = settings.waffoProductMonthly;
+  if ((planId === 'pack-pro' || planId === 'pro-yearly') && settings.waffoProductYearly) productId = settings.waffoProductYearly;
 
   const client = await getWaffoClientAsync();
   if (client && productId) {
