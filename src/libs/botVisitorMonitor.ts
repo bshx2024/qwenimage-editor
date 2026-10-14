@@ -108,38 +108,56 @@ export function detectVisitorSource(referer: string): string {
   return '其他外部引荐';
 }
 
+// In-memory cache flag to prevent sending 4 DDL queries on every single request
+let monitorTablesEnsured = false;
+let monitorTablesPromise: Promise<void> | null = null;
+
 /**
  * Ensure database schema exists
  */
 export async function ensureMonitorTablesExist(): Promise<void> {
-  const db = getDb();
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS bot_crawl_logs (
-      id SERIAL PRIMARY KEY,
-      bot_type VARCHAR(64) NOT NULL,
-      ip VARCHAR(64) NOT NULL,
-      path TEXT NOT NULL,
-      user_agent TEXT,
-      is_verified BOOLEAN DEFAULT FALSE,
-      is_content_page BOOLEAN DEFAULT FALSE,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    );
+  if (monitorTablesEnsured) return;
+  if (monitorTablesPromise) return monitorTablesPromise;
 
-    CREATE INDEX IF NOT EXISTS idx_bot_crawl_type_date ON bot_crawl_logs(bot_type, created_at);
+  monitorTablesPromise = (async () => {
+    try {
+      const db = getDb();
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS bot_crawl_logs (
+          id SERIAL PRIMARY KEY,
+          bot_type VARCHAR(64) NOT NULL,
+          ip VARCHAR(64) NOT NULL,
+          path TEXT NOT NULL,
+          user_agent TEXT,
+          is_verified BOOLEAN DEFAULT FALSE,
+          is_content_page BOOLEAN DEFAULT FALSE,
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        );
 
-    CREATE TABLE IF NOT EXISTS genuine_visitor_logs (
-      id SERIAL PRIMARY KEY,
-      source VARCHAR(64) NOT NULL,
-      ip VARCHAR(64) NOT NULL,
-      country VARCHAR(64) DEFAULT 'Unknown',
-      landing_path TEXT NOT NULL,
-      referer TEXT,
-      user_agent TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    );
+        CREATE INDEX IF NOT EXISTS idx_bot_crawl_type_date ON bot_crawl_logs(bot_type, created_at);
 
-    CREATE INDEX IF NOT EXISTS idx_genuine_visitor_source_date ON genuine_visitor_logs(source, created_at);
-  `);
+        CREATE TABLE IF NOT EXISTS genuine_visitor_logs (
+          id SERIAL PRIMARY KEY,
+          source VARCHAR(64) NOT NULL,
+          ip VARCHAR(64) NOT NULL,
+          country VARCHAR(64) DEFAULT 'Unknown',
+          landing_path TEXT NOT NULL,
+          referer TEXT,
+          user_agent TEXT,
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_genuine_visitor_source_date ON genuine_visitor_logs(source, created_at);
+      `);
+      monitorTablesEnsured = true;
+    } catch (err) {
+      console.warn('ensureMonitorTablesExist error:', err);
+    } finally {
+      monitorTablesPromise = null;
+    }
+  })();
+
+  return monitorTablesPromise;
 }
 
 /**

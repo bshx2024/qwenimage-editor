@@ -317,9 +317,12 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       const data = await res.json();
       if (data.success) {
         setStats(data.data);
+      } else if (data.error) {
+        showToast(`Overview Stats: ${data.error}`, 'error');
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      showToast(`Stats request failed: ${e?.message}`, 'error');
     } finally {
       setStatsLoading(false);
     }
@@ -340,9 +343,12 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
         setUsers(data.users);
         setUserPage(data.pagination.page);
         setUserTotalPages(data.pagination.totalPages);
+      } else if (data.error) {
+        showToast(`Users: ${data.error}`, 'error');
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      showToast(`Users request failed: ${e?.message}`, 'error');
     } finally {
       setUsersLoading(false);
     }
@@ -399,9 +405,12 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
         setWorks(data.works);
         setWorkPage(data.pagination.page);
         setWorkTotalPages(data.pagination.totalPages);
+      } else if (data.error) {
+        showToast(`Works: ${data.error}`, 'error');
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      showToast(`Works request failed: ${e?.message}`, 'error');
     } finally {
       setWorksLoading(false);
     }

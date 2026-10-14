@@ -32,10 +32,11 @@ export default async function middleware(req: NextRequest) {
   const userAgent = req.headers.get("user-agent") || "";
   if (
     !pathname.startsWith("/_next") &&
-    !pathname.startsWith("/api/admin/bot-monitor") &&
+    !pathname.startsWith("/api") &&
     !pathname.startsWith("/_stats") &&
     !pathname.startsWith("/stats") &&
     !pathname.startsWith("/videos/") &&
+    !pathname.startsWith("/images/") &&
     userAgent
   ) {
     const forwarded =

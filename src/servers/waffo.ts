@@ -1,10 +1,13 @@
 import { getDb } from '~/libs/db';
 import { WAFFO_PLANS } from '~/configs/waffoConfig';
 
+let paymentOrdersTableEnsured = false;
+
 /**
  * Automatically ensures the payment_orders table exists in Neon PostgreSQL
  */
 export async function ensurePaymentOrdersTable(): Promise<void> {
+  if (paymentOrdersTableEnsured) return;
   try {
     const db = getDb();
     await db.query(`
@@ -25,6 +28,7 @@ export async function ensurePaymentOrdersTable(): Promise<void> {
       );
       CREATE INDEX IF NOT EXISTS idx_payment_orders_user ON payment_orders(user_id);
     `);
+    paymentOrdersTableEnsured = true;
   } catch (err: any) {
     console.warn('DB ensurePaymentOrdersTable warning:', err?.message);
   }

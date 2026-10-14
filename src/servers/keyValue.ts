@@ -1,6 +1,9 @@
 import { getDb } from '~/libs/db';
 
+let keyValueTableEnsured = false;
+
 export async function ensureKeyValueTable(): Promise<void> {
+  if (keyValueTableEnsured) return;
   try {
     const db = getDb();
     await db.query(`
@@ -9,6 +12,7 @@ export async function ensureKeyValueTable(): Promise<void> {
         value TEXT
       );
     `);
+    keyValueTableEnsured = true;
   } catch (err: any) {
     console.warn('DB ensureKeyValueTable warning:', err?.message);
   }

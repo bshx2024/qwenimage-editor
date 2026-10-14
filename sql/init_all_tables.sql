@@ -115,6 +115,58 @@ CREATE TABLE IF NOT EXISTS sensitive_words (
     level VARCHAR DEFAULT '1'
 );
 
+-- 9. Bot Crawl Logs Table
+CREATE TABLE IF NOT EXISTS bot_crawl_logs (
+    id SERIAL PRIMARY KEY,
+    bot_type VARCHAR(64) NOT NULL,
+    ip VARCHAR(64) NOT NULL,
+    path TEXT NOT NULL,
+    user_agent TEXT,
+    is_verified BOOLEAN DEFAULT FALSE,
+    is_content_page BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 10. Genuine Visitor Logs Table
+CREATE TABLE IF NOT EXISTS genuine_visitor_logs (
+    id SERIAL PRIMARY KEY,
+    source VARCHAR(64) NOT NULL,
+    ip VARCHAR(64) NOT NULL,
+    country VARCHAR(64) DEFAULT 'Unknown',
+    landing_path TEXT NOT NULL,
+    referer TEXT,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 11. User Survey Logs Table
+CREATE TABLE IF NOT EXISTS user_survey_logs (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(128) NOT NULL,
+    user_email VARCHAR(255),
+    use_case VARCHAR(128) NOT NULL,
+    priority VARCHAR(128),
+    source VARCHAR(64) DEFAULT 'web',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 12. Payment Orders Table
+CREATE TABLE IF NOT EXISTS payment_orders (
+    id SERIAL PRIMARY KEY,
+    order_id VARCHAR(128) UNIQUE NOT NULL,
+    provider VARCHAR(32) NOT NULL DEFAULT 'waffo',
+    user_id VARCHAR(128) NOT NULL,
+    user_email VARCHAR(255),
+    amount NUMERIC(10, 2),
+    currency VARCHAR(16) DEFAULT 'USD',
+    status VARCHAR(32) NOT NULL,
+    plan_id VARCHAR(128),
+    credits_added INTEGER DEFAULT 0,
+    raw_payload JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create Indexes for Optimal Performance
 CREATE INDEX IF NOT EXISTS idx_works_uid ON works(uid);
 CREATE INDEX IF NOT EXISTS idx_works_user_id ON works(user_id);
@@ -122,3 +174,8 @@ CREATE INDEX IF NOT EXISTS idx_works_created_at ON works(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_user_info_user_id ON user_info(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_info_email ON user_info(email);
 CREATE INDEX IF NOT EXISTS idx_user_available_user_id ON user_available(user_id);
+CREATE INDEX IF NOT EXISTS idx_bot_crawl_type_date ON bot_crawl_logs(bot_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_genuine_visitor_source_date ON genuine_visitor_logs(source, created_at);
+CREATE INDEX IF NOT EXISTS idx_user_survey_user_id ON user_survey_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_payment_orders_user ON payment_orders(user_id);
+
