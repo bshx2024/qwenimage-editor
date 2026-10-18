@@ -5,8 +5,9 @@ let globalPool: Pool
 export function getDb() {
   if (!globalPool) {
     const connectionString =
-      process.env.POSTGRES_URL ||
+      process.env.SUPABASE_DATABASE_URL ||
       process.env.DATABASE_URL ||
+      process.env.POSTGRES_URL ||
       process.env.STORAGE_URL ||
       process.env.NEON_DATABASE_URL;
 
