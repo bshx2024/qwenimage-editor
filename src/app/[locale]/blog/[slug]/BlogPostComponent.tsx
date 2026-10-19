@@ -352,7 +352,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               What is Strata Qwen and Why is It Trending?
             </h2>
             <p>
-              The open-source AI community recently experienced a major shift following Alibaba&apos;s release of <strong>Qwen 3.8 Flash Next</strong> (frequently searched as <em>Qwen 3.8 Next</em> and <em>Qwen Flash Next</em>). This foundation model features 125B total parameters in a Mixture-of-Experts (MoE) configuration, sparsely activating approximately 6B parameters per token across 262k to 512k context windows, following the footsteps of Alibaba&apos;s multimodal visual family such as <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:text-indigo-300 underline font-medium">Qwen Image 2.1</Link>.
+              The open-source AI community recently experienced a major shift following Alibaba&apos;s release of <strong>Qwen 3.8 Flash Next</strong> (frequently searched as <em>Qwen 3.8 Next</em> and <em>Qwen Flash Next</em>). This foundation model features 125B total parameters in a Mixture-of-Experts (MoE) configuration, sparsely activating approximately 6B parameters per token across 262k to 512k context windows, following the footsteps of Alibaba&apos;s multimodal visual family such as <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:text-indigo-300 underline font-medium">Qwen Image 2.1</Link>. (For an in-depth analysis on open weights vs proprietary API models, explore our <Link href={getLinkHref(locale, 'blog/ideogram-4-5-open-source-weights-alternatives')} className="text-indigo-400 hover:text-indigo-300 underline font-medium">Ideogram 4.5 open source weights &amp; local alternatives guide</Link>).
             </p>
             <p>
               While Qwen 3.8 achieves state-of-the-art coding and reasoning scores on benchmarks like SWE-bench Pro, local execution on 125B architectures previously required enterprise dual-A100 or H100 clusters costing upwards of $20,000.
@@ -420,7 +420,16 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               Strata Qwen GitHub Repository &amp; Step-by-Step Setup Guide
             </h2>
             <p>
-              Deploying Strata Qwen (StrataLLM) locally from the GitHub repository requires configuring your build environment properly to prevent runtime MSVC compilation errors and CUDA driver mismatches.
+              Deploying Strata Qwen (StrataLLM) locally from the{' '}
+              <a
+                href="https://github.com/strata-engine/strata-qwen"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+              >
+                official GitHub repository (strata-engine/strata-qwen)
+              </a>{' '}
+              requires configuring your build environment properly to prevent runtime MSVC compilation errors and CUDA driver mismatches.
             </p>
 
             <h3 className="text-lg font-semibold text-indigo-300">
@@ -460,7 +469,14 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                 --kv-cache-type q4_0 --max-context 65536
               </p>
               <p className="text-slate-400">
-                Enabling 4-bit KV Cache compression reduces memory footprint by <strong>65%</strong> with zero measurable syntax errors or code generation hallucinations.
+                Enabling 4-bit KV Cache compression reduces memory footprint by <strong>65%</strong> with zero measurable syntax errors or code generation hallucinations. (If you also run generative video pipelines on consumer GPUs, see our technical breakdown on{' '}
+                <Link
+                  href={getLinkHref(locale, 'blog/minimax-h3-comfyui-guide-vram-workflow')}
+                  className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+                >
+                  solving ComfyUI VRAM OOM on 24GB GPUs for MiniMax H3 with SageAttention
+                </Link>
+                ).
               </p>
             </div>
 
@@ -563,7 +579,16 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   Where can I find the Strata Qwen GitHub repository and setup scripts?
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  The Strata Qwen setup scripts and repository are open-sourced on GitHub at <code className="text-indigo-400 bg-slate-800 px-1.5 py-0.5 rounded font-mono text-[11px]">strata-engine/strata-qwen</code>. You can also use our interactive CLI configurator at the top of this guide to generate customized one-click batch scripts for 12GB–24GB GPUs without OOM errors.
+                  The Strata Qwen setup scripts and repository are open-sourced on GitHub at{' '}
+                  <a
+                    href="https://github.com/strata-engine/strata-qwen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-400 hover:text-indigo-300 underline font-mono text-[11px]"
+                  >
+                    strata-engine/strata-qwen
+                  </a>
+                  . You can also use our interactive CLI configurator at the top of this guide to generate customized one-click batch scripts for 12GB–24GB GPUs without OOM errors.
                 </p>
               </div>
 
@@ -626,14 +651,14 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   </p>
                 </Link>
                 <Link
-                  href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')}
-                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-pink-500/50 transition-all text-left block"
+                  href={getLinkHref(locale, 'blog/ideogram-4-5-open-source-weights-alternatives')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-emerald-500/50 transition-all text-left block"
                 >
-                  <span className="text-xs font-bold text-pink-300 group-hover:text-pink-200 block mb-1">
-                    Higgsfield Genjutsu Guide &rarr;
+                  <span className="text-xs font-bold text-emerald-300 group-hover:text-emerald-200 block mb-1">
+                    Ideogram 4.5 Open Weights &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Master Vid2Vid motion transfer, trend recreation, and ecommerce asset prep.
+                    Verify HuggingFace open weights, local ComfyUI workflows &amp; alternatives.
                   </p>
                 </Link>
                 <Link
