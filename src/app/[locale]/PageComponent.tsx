@@ -25,6 +25,7 @@ import {
   CpuChipIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
+import { exportImageWithTier } from "~/libs/imageExport";
 
 export default function PageComponent({
   locale = 'en',
@@ -63,99 +64,39 @@ export default function PageComponent({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // High-Resolution Multi-Format Image Downloader (PNG / JPG / WebP)
-  const handleDownloadWithFormat = async (imgUrl: string | null, format: 'png' | 'jpg' | 'webp' = downloadFormat) => {
+  // High-Resolution Multi-Format Image Downloader with HD vs Preview Tiering
+  const handleDownloadWithFormat = async (
+    imgUrl: string | null,
+    format: 'png' | 'jpg' | 'webp' = downloadFormat,
+    tier: 'preview' | 'hd' = 'hd'
+  ) => {
     if (!imgUrl) return;
-    if (!userData) {
+    if (!userData || !userData.user_id) {
       setShowLoginModal(true);
       return;
     }
+
+    // HD / Lossless download requires active Pro or triggers Welcome Offer
+    if (tier === 'hd' && !userData.isPro) {
+      setShowFormatDropdown(false);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+      }
+      setShowPricingModal(true);
+      return;
+    }
+
     setIsDownloading(true);
     setShowFormatDropdown(false);
     try {
-      const res = await fetch(imgUrl);
-      const blob = await res.blob();
-
-      // If source is already requested PNG, trigger direct stream download
-      if (format === 'png' && (blob.type === 'image/png' || imgUrl.endsWith('.png'))) {
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = `qwen-image-${Date.now()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
-        setIsDownloading(false);
-        return;
-      }
-
-      // Convert format via in-browser HTML5 Canvas
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      const objectUrl = URL.createObjectURL(blob);
-
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth || img.width;
-          canvas.height = img.naturalHeight || img.height;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) throw new Error('Canvas 2D context unavailable');
-
-          if (format === 'jpg') {
-            // Fill clean white background for non-alpha JPEG
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
-          ctx.drawImage(img, 0, 0);
-
-          const mimeType = format === 'jpg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png';
-          canvas.toBlob(
-            (convertedBlob) => {
-              if (convertedBlob) {
-                const downloadUrl = URL.createObjectURL(convertedBlob);
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = `qwen-image-${Date.now()}.${format}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(downloadUrl);
-              }
-              URL.revokeObjectURL(objectUrl);
-              setIsDownloading(false);
-            },
-            mimeType,
-            0.95
-          );
-        } catch (canvasErr) {
-          const a = document.createElement('a');
-          a.href = objectUrl;
-          a.download = `qwen-image-${Date.now()}.${format}`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(objectUrl);
-          setIsDownloading(false);
-        }
-      };
-
-      img.onerror = () => {
-        const a = document.createElement('a');
-        a.href = imgUrl;
-        a.download = `qwen-image-${Date.now()}.${format}`;
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(objectUrl);
-        setIsDownloading(false);
-      };
-
-      img.src = objectUrl;
+      await exportImageWithTier({
+        imgUrl,
+        format,
+        tier,
+        filenamePrefix: 'qwen-image',
+      });
     } catch (err) {
-      console.warn('Download conversion fallback:', err);
+      console.warn('Download fallback:', err);
       const a = document.createElement('a');
       a.href = imgUrl;
       a.download = `qwen-image-${Date.now()}.${format}`;
@@ -163,6 +104,7 @@ export default function PageComponent({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    } finally {
       setIsDownloading(false);
     }
   };
@@ -1180,73 +1122,103 @@ export default function PageComponent({
                           </div>
 
                           <div className="relative inline-flex items-center rounded-xl shadow-lg">
-                            <button
-                              type="button"
-                              disabled={isDownloading || !currentResultImage}
-                              onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat)}
-                              className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-all disabled:opacity-50"
-                            >
-                              <ArrowDownTrayIcon className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
-                              <span>{isDownloading ? 'Preparing...' : `Download (${downloadFormat.toUpperCase()})`}</span>
-                            </button>
+                            {userData?.isPro ? (
+                              <button
+                                type="button"
+                                disabled={isDownloading || !currentResultImage}
+                                onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
+                                className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all disabled:opacity-50"
+                              >
+                                <ArrowDownTrayIcon className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
+                                <span>{isDownloading ? 'Preparing...' : `Download HD (${downloadFormat.toUpperCase()})`}</span>
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                disabled={isDownloading || !currentResultImage}
+                                onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
+                                className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-amber-500 via-indigo-600 to-purple-600 hover:from-amber-400 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all shadow-md hover:shadow-indigo-500/25 disabled:opacity-50"
+                                title="Unlock HD 2048px Lossless Export"
+                              >
+                                <SparklesIcon className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
+                                <span>Download HD</span>
+                                <span className="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">PRO</span>
+                              </button>
+                            )}
 
                             <button
                               type="button"
                               onClick={() => setShowFormatDropdown(!showFormatDropdown)}
-                              className="inline-flex items-center justify-center rounded-r-xl border-l border-indigo-500/40 bg-indigo-700 hover:bg-indigo-600 px-2 py-1.5 text-xs font-semibold text-white transition-colors"
-                              title="Choose Download Format"
+                              className="inline-flex items-center justify-center rounded-r-xl border-l border-indigo-500/40 bg-indigo-700 hover:bg-indigo-600 px-2.5 py-1.5 text-xs font-semibold text-white transition-colors"
+                              title="Choose Resolution & Export Options"
                             >
                               <ChevronDownIcon className="w-3.5 h-3.5" />
                             </button>
 
-                            {/* Format Dropdown Menu */}
+                            {/* Format & Quality Dropdown Menu */}
                             {showFormatDropdown && (
-                              <div className="absolute right-0 bottom-full mb-2 w-48 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md p-1.5 shadow-2xl z-30 space-y-1">
+                              <div className="absolute right-0 bottom-full mb-2 w-64 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md p-2 shadow-2xl z-30 space-y-1.5">
                                 <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                                  Select Export Format
+                                  Resolution &amp; Quality
                                 </div>
+
+                                {/* HD Option */}
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    setDownloadFormat('png');
-                                    handleDownloadWithFormat(currentResultImage, 'png');
+                                    handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd');
                                   }}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
+                                  className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-gradient-to-r from-amber-500/10 to-indigo-500/10 hover:from-amber-500/20 hover:to-indigo-500/20 border border-amber-500/30 text-slate-200 flex items-center justify-between transition-colors"
                                 >
                                   <div>
-                                    <span className="font-semibold text-white">PNG (Lossless)</span>
-                                    <span className="text-[10px] text-slate-400 block">Best for edits &amp; transparency</span>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="font-bold text-amber-300">HD 2048px Lossless</span>
+                                      <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-bold border border-amber-500/40">PRO</span>
+                                    </div>
+                                    <span className="text-[10px] text-slate-400 block mt-0.5">Crystal clear, zero watermark</span>
                                   </div>
-                                  {downloadFormat === 'png' && <span className="text-indigo-400 font-bold">✓</span>}
+                                  <SparklesIcon className="w-4 h-4 text-amber-400 flex-shrink-0" />
                                 </button>
+
+                                {/* Free Preview Option */}
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    setDownloadFormat('jpg');
-                                    handleDownloadWithFormat(currentResultImage, 'jpg');
+                                    handleDownloadWithFormat(currentResultImage, downloadFormat, 'preview');
                                   }}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
+                                  className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-200 flex items-center justify-between transition-colors"
                                 >
                                   <div>
-                                    <span className="font-semibold text-white">JPG (High Quality)</span>
-                                    <span className="text-[10px] text-slate-400 block">Compact for social &amp; stores</span>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="font-semibold text-emerald-400">Standard 512px Preview</span>
+                                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1 py-0.5 rounded font-bold border border-emerald-500/40">FREE</span>
+                                    </div>
+                                    <span className="text-[10px] text-slate-400 block mt-0.5">Sample size with subtle watermark</span>
                                   </div>
-                                  {downloadFormat === 'jpg' && <span className="text-indigo-400 font-bold">✓</span>}
+                                  <ArrowDownTrayIcon className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                                 </button>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setDownloadFormat('webp');
-                                    handleDownloadWithFormat(currentResultImage, 'webp');
-                                  }}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-200 hover:bg-indigo-600/30 hover:text-indigo-300 flex items-center justify-between transition-colors"
-                                >
-                                  <div>
-                                    <span className="font-semibold text-white">WebP (Fast Web)</span>
-                                    <span className="text-[10px] text-slate-400 block">Ultra-small file size</span>
+
+                                <div className="pt-1.5 border-t border-slate-800">
+                                  <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                    Format (Default: {downloadFormat.toUpperCase()})
                                   </div>
-                                  {downloadFormat === 'webp' && <span className="text-indigo-400 font-bold">✓</span>}
-                                </button>
+                                  <div className="grid grid-cols-3 gap-1 pt-1">
+                                    {(['png', 'jpg', 'webp'] as const).map((fmt) => (
+                                      <button
+                                        key={fmt}
+                                        type="button"
+                                        onClick={() => setDownloadFormat(fmt)}
+                                        className={`py-1 text-center rounded-lg text-xs font-semibold transition-all ${
+                                          downloadFormat === fmt
+                                            ? 'bg-indigo-600 text-white shadow-sm'
+                                            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                        }`}
+                                      >
+                                        {fmt.toUpperCase()}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
                               </div>
                             )}
                           </div>

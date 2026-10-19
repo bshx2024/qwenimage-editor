@@ -20,6 +20,7 @@ import {
   CpuChipIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
+import { exportImageWithTier } from "~/libs/imageExport";
 
 export default function GeneratorPageComponent({
   locale = 'en',
@@ -561,25 +562,56 @@ export default function GeneratorPageComponent({
                           >
                             Edit this in Qwen Image Editor →
                           </Link>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (!userData) {
-                                setShowLoginModal(true);
-                                return;
-                              }
-                              const a = document.createElement('a');
-                              a.href = resultImage;
-                              a.download = 'qwen-generated-image.png';
-                              document.body.appendChild(a);
-                              a.click();
-                              document.body.removeChild(a);
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer"
-                          >
-                            <ArrowDownTrayIcon className="w-4 h-4" />
-                            Download High-Res
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (!userData) {
+                                  setShowLoginModal(true);
+                                  return;
+                                }
+                                exportImageWithTier({
+                                  imgUrl: resultImage,
+                                  format: 'png',
+                                  tier: 'preview',
+                                  filenamePrefix: 'qwen-generated',
+                                });
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-colors cursor-pointer"
+                              title="Download free watermarked 512px preview"
+                            >
+                              <ArrowDownTrayIcon className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Preview (512px)</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (!userData) {
+                                  setShowLoginModal(true);
+                                  return;
+                                }
+                                if (!userData.isPro) {
+                                  if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+                                  }
+                                  setShowPricingModal(true);
+                                  return;
+                                }
+                                exportImageWithTier({
+                                  imgUrl: resultImage,
+                                  format: 'png',
+                                  tier: 'hd',
+                                  filenamePrefix: 'qwen-generated',
+                                });
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 via-indigo-600 to-indigo-700 hover:from-amber-400 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all cursor-pointer"
+                            >
+                              <SparklesIcon className="w-4 h-4 text-amber-200" />
+                              <span>Download HD</span>
+                              <span className="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">PRO</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ) : (

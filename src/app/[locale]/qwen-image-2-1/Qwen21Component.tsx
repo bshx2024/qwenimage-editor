@@ -24,6 +24,7 @@ import {
   ScissorsIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
+import { exportImageWithTier } from "~/libs/imageExport";
 
 export default function Qwen21Component({ locale = 'en' }: { locale?: string }) {
   const {
@@ -544,25 +545,56 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
 
                 {resultImage && (
                   <div className="w-full flex items-center justify-between pt-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!userData) {
-                          setShowLoginModal(true);
-                          return;
-                        }
-                        const a = document.createElement('a');
-                        a.href = resultImage;
-                        a.download = 'qwen-image-2.1-asset.png';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                      }}
-                      className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors cursor-pointer"
-                    >
-                      <ArrowDownTrayIcon className="w-3.5 h-3.5" />
-                      <span>Download Full Asset</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!userData) {
+                            setShowLoginModal(true);
+                            return;
+                          }
+                          exportImageWithTier({
+                            imgUrl: resultImage,
+                            format: 'png',
+                            tier: 'preview',
+                            filenamePrefix: 'qwen-2.1',
+                          });
+                        }}
+                        className="inline-flex items-center gap-1 text-xs text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                        title="Download free watermarked 512px preview"
+                      >
+                        <ArrowDownTrayIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Preview (512px)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!userData) {
+                            setShowLoginModal(true);
+                            return;
+                          }
+                          if (!userData.isPro) {
+                            if (typeof window !== 'undefined') {
+                              window.dispatchEvent(new CustomEvent('open-welcome-offer'));
+                            }
+                            setShowPricingModal(true);
+                            return;
+                          }
+                          exportImageWithTier({
+                            imgUrl: resultImage,
+                            format: 'png',
+                            tier: 'hd',
+                            filenamePrefix: 'qwen-2.1',
+                          });
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs text-white bg-gradient-to-r from-amber-500 via-indigo-600 to-indigo-700 hover:from-amber-400 hover:to-indigo-600 font-semibold px-3 py-1 rounded-lg shadow-sm transition-all cursor-pointer"
+                      >
+                        <SparklesIcon className="w-3.5 h-3.5 text-amber-200" />
+                        <span>Download HD</span>
+                        <span className="text-[9px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">PRO</span>
+                      </button>
+                    </div>
                     <Link
                       href={getLinkHref(locale, '')}
                       className="text-xs text-slate-400 hover:text-slate-200 transition-colors"

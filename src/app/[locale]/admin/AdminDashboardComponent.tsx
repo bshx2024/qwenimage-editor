@@ -2566,7 +2566,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
                     <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-950">
                       <span className="text-slate-400 block mb-1">Default Free Credits Per User:</span>
-                      <strong className="text-amber-300">{process.env.FREE_TIMES || '2'} Free Generations</strong>
+                      <strong className="text-amber-300">{process.env.FREE_TIMES || '1'} Free Generation</strong>
                     </div>
                   </div>
 
