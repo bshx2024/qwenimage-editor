@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
     if (search) {
       params.push(`%${search}%`);
-      conditions.push(`(w.input_text ILIKE $${params.length} OR w.uid ILIKE $${params.length})`);
+      conditions.push(`(w.input_text ILIKE $${params.length} OR w.uid ILIKE $${params.length} OR u.email ILIKE $${params.length} OR u.name ILIKE $${params.length})`);
     }
 
     if (taskType !== 'all') {
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
 
     const whereClause = `WHERE ${conditions.join(' AND ')}`;
 
-    const countQuery = `SELECT count(*) as total FROM works w ${whereClause}`;
+    const countQuery = `SELECT count(*) as total FROM works w LEFT JOIN user_info u ON w.user_id = u.user_id ${whereClause}`;
     const countRes = await db.query(countQuery, params);
     const total = parseInt(countRes.rows[0]?.total || '0', 10);
 

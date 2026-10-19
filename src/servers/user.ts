@@ -164,6 +164,43 @@ export const checkAndSaveUser = async (
         );
       }
 
+      // 补偿机制：若老用户当前积分为 0、且从未生成过任何图片作品(0 works)、且无付费订阅，自动补发新人体验点数
+      try {
+        const configuredBonus = process.env.FREE_TIMES !== undefined && process.env.FREE_TIMES !== ''
+          ? Number(process.env.FREE_TIMES)
+          : 1;
+        if (configuredBonus > 0 && user.user_id) {
+          const availRes = await db.query(
+            'SELECT available_times FROM user_available WHERE user_id = $1 LIMIT 1',
+            [user.user_id]
+          );
+          const currentTimes = availRes.rows.length > 0 ? Number(availRes.rows[0].available_times || 0) : 0;
+          if (currentTimes === 0) {
+            const worksCountRes = await db.query(
+              'SELECT count(*) as count FROM works WHERE user_id = $1',
+              [user.user_id]
+            );
+            const worksCount = parseInt(worksCountRes.rows[0]?.count || '0', 10);
+            if (worksCount === 0) {
+              if (availRes.rows.length > 0) {
+                await db.query(
+                  'UPDATE user_available SET available_times = $1, updated_at = now() WHERE user_id = $2',
+                  [configuredBonus, user.user_id]
+                );
+              } else {
+                await db.query(
+                  'INSERT INTO user_available (user_id, stripe_customer_id, available_times, created_at, updated_at) VALUES ($1, $2, $3, now(), now())',
+                  [user.user_id, '', configuredBonus]
+                );
+              }
+              console.log(`[Bonus Auto-Repair] Auto-granted ${configuredBonus} trial credit(s) to user without works: ${user.email}`);
+            }
+          }
+        }
+      } catch (repairErr: any) {
+        console.warn("[Bonus Auto-Repair] Check error:", repairErr?.message);
+      }
+
       return {
         ...user,
         register_country: existingCountry || user.register_country || '',

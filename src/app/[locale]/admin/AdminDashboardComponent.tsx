@@ -76,6 +76,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [creditAmount, setCreditAmount] = useState<number>(10);
   const [creditMode, setCreditMode] = useState<'add' | 'set'>('add');
   const [isUpdatingCredit, setIsUpdatingCredit] = useState<boolean>(false);
+  const [isCompensating, setIsCompensating] = useState<boolean>(false);
 
   // Works Data
   const [works, setWorks] = useState<any[]>([]);
@@ -380,6 +381,34 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       showToast(err?.message || 'Error updating credits', 'error');
     } finally {
       setIsUpdatingCredit(false);
+    }
+  };
+
+  const handleCompensateZeroUsers = async () => {
+    if (!window.confirm('Are you sure you want to grant 1 trial credit to all registered users who currently have 0 credits and 0 generated works?')) {
+      return;
+    }
+    setIsCompensating(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'compensate_zero_credit_users',
+          amount: 1,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message || 'Trial credits granted successfully!');
+        fetchUsers();
+      } else {
+        showToast(data.error || 'Failed to compensate users', 'error');
+      }
+    } catch (e: any) {
+      showToast(e?.message || 'Compensation request failed', 'error');
+    } finally {
+      setIsCompensating(false);
     }
   };
 
@@ -1196,7 +1225,19 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
             {activeTab === 'users' && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <h2 className="text-xl font-bold text-white tracking-tight">User Accounts & Credits</h2>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h2 className="text-xl font-bold text-white tracking-tight">User Accounts & Credits</h2>
+                    <button
+                      type="button"
+                      onClick={handleCompensateZeroUsers}
+                      disabled={isCompensating}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all disabled:opacity-50"
+                      title="Grant 1 trial credit to all registered users who currently have 0 credits and haven't generated any works yet"
+                    >
+                      <SparklesIcon className={`w-3.5 h-3.5 ${isCompensating ? 'animate-spin' : ''}`} />
+                      <span>{isCompensating ? 'Compensating...' : '🎁 One-Click Grant 1 Free Credit to 0-Work Users'}</span>
+                    </button>
+                  </div>
                   <div className="relative w-full sm:w-64">
                     <input
                       type="text"
@@ -1392,13 +1433,13 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
                     <input
                       type="text"
-                      placeholder="Search prompt..."
+                      placeholder="Search prompt, email..."
                       value={workSearch}
                       onChange={(e) => {
                         setWorkSearch(e.target.value);
                         fetchWorks(1, e.target.value, workTaskType, workPublicFilter);
                       }}
-                      className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 text-xs text-slate-200 placeholder-slate-500 w-44 focus:outline-none"
+                      className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 text-xs text-slate-200 placeholder-slate-500 w-48 focus:outline-none"
                     />
                   </div>
                 </div>

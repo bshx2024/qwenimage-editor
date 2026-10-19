@@ -183,6 +183,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'User credits updated successfully.' });
     }
 
+    if (action === 'compensate_zero_credit_users') {
+      const grantAmount = typeof amount === 'number' && amount > 0 ? amount : 1;
+
+      // 1. Insert missing user_available rows for users with 0 works
+      await db.query(`
+        INSERT INTO user_available (user_id, stripe_customer_id, available_times, created_at, updated_at)
+        SELECT u.user_id, '', $1, now(), now()
+        FROM user_info u
+        LEFT JOIN user_available a ON u.user_id = a.user_id
+        WHERE a.user_id IS NULL
+          AND u.user_id NOT IN (SELECT DISTINCT user_id FROM works WHERE user_id IS NOT NULL)
+        ON CONFLICT (user_id) DO NOTHING
+      `, [grantAmount]);
+
+      // 2. Update existing user_available rows where available_times = 0 and 0 works
+      const updateRes = await db.query(`
+        UPDATE user_available
+        SET available_times = $1, updated_at = now()
+        WHERE available_times = 0
+          AND user_id NOT IN (SELECT DISTINCT user_id FROM works WHERE user_id IS NOT NULL)
+      `, [grantAmount]);
+
+      const compensatedCount = updateRes.rowCount || 0;
+      return NextResponse.json({
+        success: true,
+        message: `Successfully compensated ${compensatedCount} user(s) with ${grantAmount} trial credit.`,
+        count: compensatedCount,
+      });
+    }
+
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
   } catch (err: any) {
     console.error('Admin adjust credits error:', err);
