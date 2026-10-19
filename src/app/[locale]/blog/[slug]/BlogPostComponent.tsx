@@ -135,6 +135,22 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               "@type": "Answer",
               "text": "Qwen 3.8 Flash Next provides significantly faster generation speed (40–120 TPS) and lower VRAM requirements through Strata's MoE tiering, whereas running DeepSeek R1 671B requires multi-node clustering."
             }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between Qwen 3.8 Flash and Qwen Next Flash in the Strata model?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Qwen 3.8 Flash is optimized for lightweight single-GPU latency with high token throughput (up to 120 TPS), while Qwen Next Flash introduces expanded multi-head latent attention (MLA) and deeper sparse MoE routing for long-context 256k repository indexing without memory bloat."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I fix CUDA out-of-memory (OOM) errors in the Strata GitHub repository?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Specify the --kv-cache-type q4_0 flag and allocate an explicit --vram-budget limit during startup. Enabling 4-bit KV Cache compression reduces memory footprint by 65% with zero measurable loss in code generation accuracy."
+            }
           }
         ]
       }
@@ -415,6 +431,55 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </table>
             </div>
 
+            {/* Section 2.5: StrataLLM vs Qwen 3.8 Flash & Next Flash Architecture */}
+            <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
+              StrataLLM vs Qwen 3.8 Flash &amp; Next Flash: Architecture &amp; Benchmarks
+            </h2>
+            <p>
+              Developers frequently compare the <strong>Strata Model</strong> engine against official Alibaba releases like <strong>Qwen 3.8 Flash</strong> and <strong>Qwen Next Flash</strong>. While standard HuggingFace checkpoints require distributed multi-GPU clusters to infer 125B parameters, StrataLLM implements hardware-aware dynamic expert streaming tailored for consumer hardware.
+            </p>
+
+            <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/40">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-800 bg-slate-900/80 text-slate-300 font-semibold">
+                    <th className="p-3.5">Model Variant</th>
+                    <th className="p-3.5">Active / Total Params</th>
+                    <th className="p-3.5">Attention Routing</th>
+                    <th className="p-3.5">Min VRAM Needed</th>
+                    <th className="p-3.5 text-indigo-400">Strata Optimization</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/80 text-xs">
+                  <tr>
+                    <td className="p-3.5 font-semibold text-white">Qwen 3.8 Flash (Vanilla)</td>
+                    <td className="p-3.5">14B / 125B MoE</td>
+                    <td className="p-3.5 text-slate-300">Standard GQA + RoPE</td>
+                    <td className="p-3.5 text-rose-400">48GB (Dual 3090)</td>
+                    <td className="p-3.5 text-slate-400">Baseline unquantized weights; heavy KV footprint</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3.5 font-semibold text-white">Qwen Next Flash</td>
+                    <td className="p-3.5">14B / 125B MoE</td>
+                    <td className="p-3.5 text-indigo-300">Multi-Head Latent (MLA)</td>
+                    <td className="p-3.5 text-amber-400">32GB – 40GB</td>
+                    <td className="p-3.5 text-slate-400">Native 256k long context with 40% smaller KV cache</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3.5 font-semibold text-indigo-300">Strata Qwen 3.8 (StrataLLM)</td>
+                    <td className="p-3.5">14B / 125B (Dynamic)</td>
+                    <td className="p-3.5 text-emerald-300">Sparse Kernel Offloading</td>
+                    <td className="p-3.5 text-emerald-400 font-bold">12GB – 16GB VRAM</td>
+                    <td className="p-3.5 text-slate-200">IQ3_S quantization + tiered PCIe RAM streaming at 50+ TPS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="text-xs text-slate-400 leading-relaxed">
+              In summary, if you need low-latency interactive code completions with Cursor or Claude Code, running <strong>Qwen Next Flash under StrataLLM</strong> provides the highest throughput per watt without purchasing enterprise A100 or H100 cloud instances.
+            </p>
+
             {/* Section 3: Installation & Common Fixes */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
               Strata Qwen GitHub Repository &amp; Step-by-Step Setup Guide
@@ -518,7 +583,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Link
-                  href={getLinkHref(locale, 'qwen-image-2-1')}
+                  href={getLinkHref(locale, '')}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shadow-lg transition-all"
                 >
                   <BoltIcon className="w-4 h-4" />
@@ -629,14 +694,14 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 <Link
-                  href={getLinkHref(locale, 'qwen-image-2-1')}
+                  href={getLinkHref(locale, '')}
                   className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-indigo-500/50 transition-all text-left block"
                 >
                   <span className="text-xs font-bold text-indigo-300 group-hover:text-indigo-200 block mb-1">
-                    Qwen Image 2.1 Online &rarr;
+                    Free Online Qwen Image Edit &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    In-browser generative studio with conversational inpainting and 2048px exports.
+                    Browser-based AI photo editor with conversational inpainting and character consistency.
                   </p>
                 </Link>
                 <Link

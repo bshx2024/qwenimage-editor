@@ -94,7 +94,7 @@
 | 冲刺批次 | 核心目标 | 包含内容 | 状态 |
 | :--- | :--- | :--- | :--- |
 | **Sprint 1 (Day 1)** | **P0 事实核验与主题收敛** | 模型版本去伪存真、清除过度绝对化声明、Footer视频外链治理、AI爬虫规则核验 | **[x] 已交付** |
-| **Sprint 2 (Day 2–5)** | **P1 高意图场景任务页** | `/edit-text-in-image`（图片文字编辑）、`/background-remover`（背景替换）、`/product-photo-editor`（电商图） | **[ ] 进行中** |
+| **Sprint 2 (Day 2–5)** | **P1 高意图场景任务页** | `/edit-text-in-image`（图片文字编辑）、`/background-remover`（背景替换）、`/product-photo-editor`（电商图） | **[x] 已交付 (2026-10-19)** |
 | **Sprint 3 (Day 6–8)** | **P1 原创实测基准引用库** | `/blog/qwen-image-edit-text-test`（中英文文字编辑实测对比与失败用例复盘） | **[ ] 待启动** |
 | **Sprint 4 (Day 9–10)** | **P2 GEO 专属追踪与漏斗转化** | `utm_source=chatgpt.com` 流量归因分析看板、游客试用到付费转化链路追踪 | **[ ] 待启动** |
 
@@ -137,16 +137,17 @@ npm run build
 
 ---
 
-## 六、 明日（Day 2）接力执行卡
+## 六、 任务交付与接力执行卡
 
 - **冲刺阶段**：Sprint 2（P1 高意图任务落地页矩阵）
-- **明日首个任务**：开发上线 `/edit-text-in-image`（图片文字编辑与中英文招牌替换专用落地页）
-  - [ ] 页面路由：`src/app/[locale]/edit-text-in-image/page.tsx`
-  - [ ] 组件实现：`EditTextInImageComponent.tsx`
-  - [ ] 页面核心要素：
+- **核心任务**：开发上线 `/edit-text-in-image`（图片文字编辑与中英文招牌替换专用落地页）
+  - [x] 页面路由：`src/app/[locale]/edit-text-in-image/page.tsx`
+  - [x] 组件实现：`EditTextInImageComponent.tsx`
+  - [x] 页面核心要素：
     1. 首屏 Direct Answer（精准对齐 SearchGPT / Perplexity 的文字修改问答）；
     2. 真实中英文排印对比用例（Before / After 原图、提示词、修改结果）；
     3. 嵌入式即用修图器（直接携带文字编辑预设提示词，支持游客 2 次免登录试用）；
     4. 专用 FAQ 问答与 `SoftwareApplication` + `FAQPage` 结构化数据；
-  - [ ] 站点地图更新：将 `/edit-text-in-image` 加入 [public/sitemap.xml](file:///e:/kaifa/qwenimage-editor/public/sitemap.xml) 并配置对应内链。
+  - [x] 站点地图更新：将 `/edit-text-in-image` 加入 [public/sitemap.xml](file:///e:/kaifa/qwenimage-editor/public/sitemap.xml) 并配置对应 Footer / Header 内链。
+- **下一阶段待启动**：Sprint 3（P1 原创实测基准引用库：`/blog/qwen-image-edit-text-test`）
 

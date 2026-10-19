@@ -40,6 +40,14 @@
         <priority>1.0</priority>
     </url>
 
+    <!-- Task Hub: AI Edit Text in Image -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/edit-text-in-image</loc>
+        <lastmod>2026-10-19</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
     <!-- Blog Hub -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog</loc>

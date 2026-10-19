@@ -139,6 +139,15 @@ export default function Footer({
               </li>
               <li>
                 <Link
+                  href={getLinkHref(locale, 'edit-text-in-image')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('edit-text-in-image')}
+                >
+                  Edit Text in Image
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLinkHref(locale, 'blog')}
                   className="text-xs hover:text-indigo-400 transition-colors"
                   onClick={() => checkPageAndLoading('blog')}
