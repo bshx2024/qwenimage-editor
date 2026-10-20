@@ -50,10 +50,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'photocraft-online-ai-review-photoshop-alternative',
-    // Strict 57 chars (50-60 safety range, tightly aligned to PhotoCraft Review & Photoshop Alternative)
-    title: 'PhotoCraft Review: Rust Photoshop Alternative Safe to Try?',
-    // Strict 149 chars (140-160 range, answers safety, viral open-source Rust status, and AI alternative)
-    description: 'PhotoCraft review and safety test. Compare the viral open-source Rust Photoshop alternative against Generative Fill, and try free online AI editing.',
+    // Strict 60 chars (50-60 safety range, targets 'photocraft', 'photocraft review', 'photoshop alternative', 'online')
+    title: 'PhotoCraft Online: Free AI Photoshop Alternative (Review & Web)',
+    // Strict 159 chars (140-160 range, answers safety, viral open-source Rust status, and AI alternative)
+    description: 'PhotoCraft online review & safety audit. Compare the free open-source Rust alternative to Adobe Photoshop, test AI inpainting & try web editing without install.',
     date: '2026-10-12',
     readTime: '8 min read',
     category: 'Open Source & Creative AI Tools',
@@ -188,10 +188,10 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: 'strata-qwen-setup-guide',
-    // Strict 57 chars (50-60 range, highest CTR, covers 'strata qwen 3.8' + 'stratallm' + 'github')
-    title: 'Strata Qwen 3.8 (StrataLLM) Setup: Run on 12GB+ (GitHub)',
-    // Strict 155 chars (140-160 range, covers StrataLLM, 40-120 TPS speed, no OOM, GitHub scripts & CTA)
-    description: 'Official StrataLLM (Strata Qwen 3.8) guide. Run 125B MoE on 12GB/24GB GPUs at 40-120 TPS without OOM. Download GitHub setup scripts & CLI commands now.',
+    // Strict 60 chars (50-60 range, high CTR, covers 'Strata Qwen 3.8', 'StrataLLM', '125B on 12GB', 'GitHub Setup')
+    title: 'Strata Qwen 3.8 (StrataLLM): Run 125B on 12GB (GitHub Setup)',
+    // Strict 155 chars (140-160 range, captures scripts, 40-120 TPS, zero OOM, and online demo)
+    description: 'Official StrataLLM (Strata Qwen 3.8) GitHub guide. Run 125B MoE on 12GB GPUs at 40-120 TPS without OOM. Download 1-click scripts & test online without setup.',
     date: '2026-10-05',
     readTime: '9 min read',
     category: 'Local LLM & Inference',

@@ -257,7 +257,7 @@ export default function PhotoCraftBlogPostComponent({
             </p>
 
             <p>
-              <strong>Can it replace Photoshop?</strong> PhotoCraft delivers classic manual brushes and layer blending without subscriptions. However, <em>it contains no generative AI or Generative Fill</em>. For prompt-driven inpainting and clothing changes, creators pair it with cloud tools like <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Qwen Image Editor</Link>.
+              <strong>Can it replace Photoshop?</strong> PhotoCraft delivers classic manual brushes and layer blending without subscriptions. However, <em>it contains no generative AI or Generative Fill</em>. For prompt-driven inpainting and clothing changes, creators pair it with cloud tools like <Link href={getLinkHref('/', locale)} className="text-emerald-400 font-semibold underline hover:text-emerald-300">Qwen Image Editor</Link> or the <Link href={getLinkHref('/generator', locale)} className="text-indigo-400 font-semibold underline hover:text-indigo-300">Free AI Generator</Link>.
             </p>
           </div>
 
@@ -434,13 +434,22 @@ export default function PhotoCraftBlogPostComponent({
                   )}
                 </button>
 
-                <Link
-                  href={getLinkHref('/', locale)}
-                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center justify-center gap-2 text-center"
-                >
-                  <SparklesIcon className="w-4 h-4" />
-                  <span>Launch Cloud AI Studio (1 Free Credit)</span>
-                </Link>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <Link
+                    href={getLinkHref('/generator', locale)}
+                    className="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center justify-center gap-1.5 text-center"
+                  >
+                    <SparklesIcon className="w-4 h-4 text-cyan-300" />
+                    <span>Free AI Generator</span>
+                  </Link>
+                  <Link
+                    href={getLinkHref('/qwen-image-2-1', locale)}
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow flex items-center justify-center gap-1.5 text-center"
+                  >
+                    <BoltIcon className="w-4 h-4" />
+                    <span>Qwen 2.1 Studio</span>
+                  </Link>
+                </div>
               </div>
             </div>
 

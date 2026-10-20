@@ -281,13 +281,22 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   <span className="text-slate-400 block sm:inline">Try cloud photo editing and inpainting with zero GPU setup.</span>
                 </div>
               </div>
-              <Link
-                href={getLinkHref(locale, 'qwen-image-2-1')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shrink-0 shadow transition-all"
-              >
-                <BoltIcon className="w-3.5 h-3.5" />
-                <span>Launch Qwen Image Edit (Free) &rarr;</span>
-              </Link>
+              <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                <Link
+                  href={getLinkHref(locale, 'qwen-image-2-1')}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shadow transition-all"
+                >
+                  <BoltIcon className="w-3.5 h-3.5" />
+                  <span>Qwen 2.1 Studio &rarr;</span>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'generator')}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/40 bg-slate-900/80 hover:bg-slate-800 text-indigo-200 text-xs font-semibold shadow transition-all"
+                >
+                  <SparklesIcon className="w-3.5 h-3.5 text-cyan-300" />
+                  <span>AI Generator</span>
+                </Link>
+              </div>
             </div>
 
             {/* In-Article Interactive Live Configurator (Solves -4.5pts P0 Doorway penalty) */}
@@ -583,11 +592,18 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Link
-                  href={getLinkHref(locale, '')}
+                  href={getLinkHref(locale, 'qwen-image-2-1')}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 text-white text-xs font-semibold shadow-lg transition-all"
                 >
                   <BoltIcon className="w-4 h-4" />
-                  <span>Try Qwen Image Edit &amp; Inpainting Online (Free)</span>
+                  <span>Launch Qwen Image 2.1 Online (Free)</span>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, 'generator')}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/40 text-cyan-300 text-xs font-semibold transition-colors"
+                >
+                  <SparklesIcon className="w-4 h-4" />
+                  <span>Free AI Generator Studio &rarr;</span>
                 </Link>
                 <Link
                   href={getLinkHref(locale, 'background-remover')}
