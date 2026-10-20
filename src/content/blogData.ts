@@ -22,8 +22,8 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'qwen-4-release-date-27b-specs-roadmap',
     // Strict 57 chars (50-60 safety range, locks 'Qwen 4 Release Date', '27B', 'Reddit Leaks')
     title: 'Qwen 4 Release Date & 27B: Reddit Leaks, Specs & Roadmap',
-    // Strict 153 chars (140-160 range, answers Polymarket, 27B specs, Flash-Next, and latest status)
-    description: 'Wondering about the Qwen 4 release date? Explore Reddit leaks, Polymarket odds, 27B local model specs, Flash-Next architecture, and latest version status.',
+    // Strict 154 chars (140-160 range, answers Polymarket, 27B specs, VRAM calculator & free editing tools)
+    description: 'Wondering about the Qwen 4 release date? Explore Reddit leaks, Polymarket odds, 27B model specs, VRAM calculator, and free online Qwen image editing tools.',
     date: '2026-10-20',
     readTime: '11 min read',
     category: 'Foundation Models & Architecture',

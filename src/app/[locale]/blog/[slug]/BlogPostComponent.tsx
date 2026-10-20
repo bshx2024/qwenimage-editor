@@ -680,7 +680,14 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   How does Qwen 3.8 Flash Next compare to DeepSeek R1 for local coding?
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Qwen 3.8 Flash Next provides significantly faster generation speed (40–120 TPS) and lower VRAM requirements through Strata&apos;s MoE tiering, whereas running DeepSeek R1 671B requires multi-node clustering.
+                  Qwen 3.8 Flash Next provides significantly faster generation speed (40–120 TPS) and lower VRAM requirements through Strata&apos;s MoE tiering, whereas running DeepSeek R1 671B requires multi-node clustering. To explore how this precursor architecture leads into Alibaba&apos;s upcoming next-gen foundation release, read our in-depth analysis on the{' '}
+                  <Link
+                    href={getLinkHref(locale, 'blog/qwen-4-release-date-27b-specs-roadmap')}
+                    className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+                  >
+                    Qwen 4 Release Date &amp; 27B Roadmap
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
@@ -694,10 +701,21 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 <Link
-                  href={getLinkHref(locale, '')}
+                  href={getLinkHref(locale, 'blog/qwen-4-release-date-27b-specs-roadmap')}
                   className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-indigo-500/50 transition-all text-left block"
                 >
                   <span className="text-xs font-bold text-indigo-300 group-hover:text-indigo-200 block mb-1">
+                    Qwen 4 Release Date &amp; 27B &rarr;
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Track Alibaba&apos;s next-gen foundation model roadmap, Reddit leaks, and 24GB VRAM hardware limits.
+                  </p>
+                </Link>
+                <Link
+                  href={getLinkHref(locale, '')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-emerald-500/50 transition-all text-left block"
+                >
+                  <span className="text-xs font-bold text-emerald-300 group-hover:text-emerald-200 block mb-1">
                     Free Online Qwen Image Edit &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -713,17 +731,6 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
                     Master SageAttention VRAM tuning, ComfyUI nodes, and clean asset prep.
-                  </p>
-                </Link>
-                <Link
-                  href={getLinkHref(locale, 'blog/ideogram-4-5-open-source-weights-alternatives')}
-                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-emerald-500/50 transition-all text-left block"
-                >
-                  <span className="text-xs font-bold text-emerald-300 group-hover:text-emerald-200 block mb-1">
-                    Ideogram 4.5 Open Weights &rarr;
-                  </span>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Verify HuggingFace open weights, local ComfyUI workflows &amp; alternatives.
                   </p>
                 </Link>
                 <Link

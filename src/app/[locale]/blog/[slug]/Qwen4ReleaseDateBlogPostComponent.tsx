@@ -314,7 +314,7 @@ cmake -B build -DGGML_CUDA=ON && cmake --build build --config Release
             <ul className="list-disc list-inside space-y-2 text-slate-300 text-sm sm:text-base pl-2">
               <li><strong className="text-white">Active Pre-Training Status:</strong> The core foundation architecture for Qwen 4 is undergoing scalable distributed pre-training across high-density GPU clusters.</li>
               <li><strong className="text-white">Generational Horizon:</strong> Alibaba previewed continuous development milestones leading toward Qwen 4.5 and Qwen 5, signaling long-term institutional commitment to open-weight models.</li>
-              <li><strong className="text-white">Structural Precursors:</strong> Early architectural testbeds, such as <em className="text-indigo-300">Qwen 3.8 Flash-Next</em>, were released to test real-world speculative decoding throughput and dynamic KV-cache compression algorithms ahead of the Qwen 4 rollout.</li>
+              <li><strong className="text-white">Structural Precursors:</strong> Early architectural testbeds, such as <Link href={getLinkHref(locale, 'blog/strata-qwen-setup-guide')} className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 font-medium">Qwen 3.8 Flash-Next local architectures</Link>, were released to test real-world speculative decoding throughput and dynamic KV-cache compression algorithms ahead of the Qwen 4 rollout.</li>
             </ul>
           </section>
 
@@ -550,7 +550,7 @@ cmake -B build -DGGML_CUDA=ON && cmake --build build --config Release
               <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-2">
                 <div className="font-bold text-white text-sm">Alibaba Qwen Ecosystem</div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong>Core Strength:</strong> Unequaled multimodal versatility. Qwen features world-class native visual understanding, state-of-the-art Chinese-English bilingual typography generation, and versatile parameter scales (from 0.5B to 72B and upcoming 27B/Flash-Next).
+                  <strong>Core Strength:</strong> Unequaled multimodal versatility. Qwen features <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 font-medium">world-class native visual understanding</Link>, state-of-the-art <Link href={getLinkHref(locale, 'generator')} className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 font-medium">bilingual Chinese-English typography generation</Link>, and versatile parameter scales (from 0.5B to 72B and upcoming 27B/Flash-Next).
                 </p>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-2">
@@ -583,7 +583,7 @@ cmake -B build -DGGML_CUDA=ON && cmake --build build --config Release
             <ul className="list-disc list-inside space-y-1.5 text-slate-300 text-sm sm:text-base pl-2">
               <li>High-resolution diffusion backbones consume upwards of 16GB–24GB of dedicated VRAM purely for latent caching.</li>
               <li>ComfyUI custom nodes and PyTorch CUDA dependency conflicts often require hours of manual environment troubleshooting.</li>
-              <li>Text-guided conversational inpainting requires fine-tuned multi-stage adapters that standard local text runners cannot execute.</li>
+              <li><Link href={getLinkHref(locale, '')} className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 font-medium">Text-guided conversational inpainting</Link> requires fine-tuned multi-stage adapters that standard local text runners cannot execute.</li>
             </ul>
 
             {/* In-Article Conversion Card */}
