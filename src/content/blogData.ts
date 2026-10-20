@@ -19,6 +19,36 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'qwen-4-release-date-27b-specs-roadmap',
+    // Strict 57 chars (50-60 safety range, locks 'Qwen 4 Release Date', '27B', 'Reddit Leaks')
+    title: 'Qwen 4 Release Date & 27B: Reddit Leaks, Specs & Roadmap',
+    // Strict 153 chars (140-160 range, answers Polymarket, 27B specs, Flash-Next, and latest status)
+    description: 'Wondering about the Qwen 4 release date? Explore Reddit leaks, Polymarket odds, 27B local model specs, Flash-Next architecture, and latest version status.',
+    date: '2026-10-20',
+    readTime: '11 min read',
+    category: 'Foundation Models & Architecture',
+    author: {
+      name: 'Dr. Sarah Lin',
+      role: 'Staff Multimodal AI & Foundation Model Systems Architect',
+      avatar: '/images/author-sarah.jpg',
+      bio: 'Former frontier foundation model systems researcher specializing in speculative decoding, distributed MoE architectures, and cross-modal vision alignment pipelines across enterprise GPU clusters.',
+    },
+    keywords: [
+      'qwen 4 release date',
+      'qwen 4 27b release date',
+      'qwen 4 release date reddit',
+      'qwen 4 27b',
+      'qwen 4 flash-next',
+      'qwen 4 max',
+      'qwen 4 release date polymarket',
+      'which is the latest version of qwen',
+      'is qwen better than deepseek',
+      'qwen 4 huggingface',
+      'qwen 3.8 27b',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'photocraft-online-ai-review-photoshop-alternative',
     // Strict 57 chars (50-60 safety range, tightly aligned to PhotoCraft Review & Photoshop Alternative)
     title: 'PhotoCraft Review: Rust Photoshop Alternative Safe to Try?',

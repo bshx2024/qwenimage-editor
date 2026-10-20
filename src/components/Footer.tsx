@@ -370,6 +370,10 @@ export default function Footer({
               Qwen vs Nano Banana Benchmark
             </Link>
             <span className="text-slate-700">•</span>
+            <Link href={getLinkHref(locale, 'blog/qwen-4-release-date-27b-specs-roadmap')} className="hover:text-indigo-400 transition-colors">
+              Qwen 4 Release Date &amp; 27B Roadmap
+            </Link>
+            <span className="text-slate-700">•</span>
             <Link href={getLinkHref(locale, 'blog/photocraft-online-ai-review-photoshop-alternative')} className="hover:text-indigo-400 transition-colors">
               PhotoCraft Review &amp; AI Alternative
             </Link>

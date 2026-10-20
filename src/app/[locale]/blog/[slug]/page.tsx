@@ -9,6 +9,7 @@ import AiFontGeneratorBlogPostComponent from './AiFontGeneratorBlogPostComponent
 import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
 import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent';
 import PhotoCraftBlogPostComponent from './PhotoCraftBlogPostComponent';
+import Qwen4ReleaseDateBlogPostComponent from './Qwen4ReleaseDateBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -32,7 +33,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'photocraft-online-ai-review-photoshop-alternative') {
+  if (slug === 'qwen-4-release-date-27b-specs-roadmap') {
+    postComponent = <Qwen4ReleaseDateBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'photocraft-online-ai-review-photoshop-alternative') {
     postComponent = <PhotoCraftBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'rumpelstiltskin-ai-1987-movie-meme-workflow') {
     postComponent = <RumpelstiltskinBlogPostComponent post={post} locale={locale} />;

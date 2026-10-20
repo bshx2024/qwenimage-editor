@@ -51,7 +51,15 @@
     <!-- Blog Hub -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog</loc>
-        <lastmod>2026-10-05</lastmod>
+        <lastmod>2026-10-20</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Article: Qwen 4 Release Date & 27B Specs -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/qwen-4-release-date-27b-specs-roadmap</loc>
+        <lastmod>2026-10-20</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
