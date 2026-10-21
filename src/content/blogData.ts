@@ -20,12 +20,12 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'moss-image-guide-comfyui-workflow-prompting-edit',
-    // Strict 59 chars (50-60 safety range, targets 'MOSS Image Guide', 'ComfyUI Workflow', 'Prompting', 'Online Edit')
-    title: 'MOSS Image Guide: ComfyUI Workflow, Prompting & Online Edit',
-    // Strict 154 chars (140-160 range, answers workflows, bilingual text prompting, base vs sft, and online edit)
-    description: 'Complete MOSS-Image AI guide. Set up ComfyUI workflows, master bilingual text prompting, compare Base vs SFT models, and edit MOSS creations online free.',
+    // Strict 57 chars (50-60 safety range, targets 'MOSS Image Guide', 'ComfyUI Workflow', 'Prompting', 'Edit')
+    title: 'MOSS Image Guide: ComfyUI Workflow, Prompting & Edit',
+    // Strict 153 chars (140-160 range, answers workflows, bilingual text prompting, base vs sft, and online edit)
+    description: 'Complete MOSS Image AI guide. Set up ComfyUI workflows, master bilingual text prompting, compare Base vs SFT models, and edit MOSS Image creations online.',
     date: '2026-10-21',
-    readTime: '11 min read',
+    readTime: '10 min read',
     category: 'Open Source AI & Visual Workflows',
     author: {
       name: 'Elena Rostova',

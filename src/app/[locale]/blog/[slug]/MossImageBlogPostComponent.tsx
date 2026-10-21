@@ -31,8 +31,7 @@ export default function MossImageBlogPostComponent({
   post: BlogPost;
   locale?: string;
 }) {
-  // Live In-Page Interactive MOSS-Image Prompt & JSON Bounding-Box Layout Builder (Anti-Doorway P0 Guard)
-  const [taskCategory, setTaskCategory] = useState<'poster' | 'ecommerce' | 'editorial'>('poster');
+  // Live In-Page Interactive MOSS Image Prompt & JSON Bounding-Box Layout Builder (Anti-Doorway P0 Guard)
   const [modelVariant, setModelVariant] = useState<'sft' | 'base'>('sft');
   const [headlineText, setHeadlineText] = useState('FUTURE OF VISION 2026');
   const [subText, setSubText] = useState('下一代智能多模态视觉');
@@ -54,27 +53,24 @@ export default function MossImageBlogPostComponent({
       quant: 'INT8 ConvRot / GGUF Q4_K_M',
       recommendedVram: '10GB - 12GB (RTX 3060 / 4060)',
       turboSteps: '8-12 Steps (DMD Accelerated)',
-      vaeNote: 'Must use official MOSS-Image compact Decoder (prevents FLUX VAE color spotting)',
-      risk: 'Minor stroke nuance softening on complex kanji/cursive typography.'
+      vaeNote: 'Must use official MOSS Image compact Decoder to prevent color spotting',
     },
     '16gb': {
       quant: 'BF16 Backbone with Quantized Text Encoder',
       recommendedVram: '16GB (RTX 4070 Ti Super / 4080)',
-      turboSteps: '16-24 Steps (Euler / Flow-Match)',
+      turboSteps: '16-24 Steps (Flow-Match)',
       vaeNote: 'Native FP16 VAE pipeline running fully uncompressed',
-      risk: 'Optimal balance of speed and prompt fidelity.'
     },
     '24gb': {
-      quant: 'Full Uncompressed BF16 + Native Qwen Text Encoder',
+      quant: 'Full Uncompressed BF16 + Native Text Encoder',
       recommendedVram: '24GB (RTX 3090 / 4090 / A100)',
       turboSteps: '28-36 Steps (Maximum Precision)',
       vaeNote: 'Full unquantized latent precision with zero gradient clipping',
-      risk: 'Zero quantization loss; perfect text typography stroke continuity.'
     }
   };
 
   const generatedPromptJson = `{
-  "prompt": "Commercial promotional poster for AI visual conference. Bold typography reading \\"${headlineText}\\" and Chinese bilingual typography \\"${subText}\\". Clean graphic layout, sleek architectural aesthetics, volumetric cinematic lighting, photorealistic 8k render.",
+  "prompt": "Commercial promotional poster. Bold typography reading \\"${headlineText}\\" and Chinese bilingual typography \\"${subText}\\". Clean graphic layout, volumetric cinematic lighting, photorealistic 8k render.",
   "model_target": "OpenMOSS/MOSS-Image-${modelVariant.toUpperCase()}",
   "layout_control": {
     "enabled": ${modelVariant === 'sft'},
@@ -93,16 +89,16 @@ export default function MossImageBlogPostComponent({
   }
 }`;
 
-  const generatedComfyUiSnippet = `# ComfyUI MOSS-Image Custom Pipeline Node
+  const generatedComfyUiSnippet = `# ComfyUI MOSS Image Custom Pipeline Node
 from comfy_moss import MossImageLoader, MossLayoutControl, CompactVaeDecoder
 
-# Load official OpenMOSS weights (Base or SFT)
+# Load official MOSS Image weights (Base or SFT)
 model = MossImageLoader.load_checkpoint(
     variant="MOSS-Image-${modelVariant.toUpperCase()}",
     precision="${vramTier === '10gb' ? 'int8_convrot' : 'bf16'}"
 )
 
-# Avoid FLUX VAE artifact collision: load native compact decoder
+# Connect native compact MOSS Image VAE decoder to prevent spotting
 vae = CompactVaeDecoder.load_decoder("moss-compact-vae.safetensors")
 
 # Inject structured bounding box coordinates
@@ -128,31 +124,31 @@ layout = MossLayoutControl.create_region(
     setTimeout(() => {
       setIsSimulating(false);
       setSimOutput(
-        `[MOSS-Image Simulation Validated] Target: ${modelVariant.toUpperCase()} | Layout: ${boxCoordinates[layoutBox].label} | VRAM Footprint: ~${vramTier.toUpperCase()} | Render Estimated Time: ${vramTier === '10gb' ? '6.8s (Turbo)' : '18.4s'}. Ready for ComfyUI execution or instant in-browser online editing.`
+        `[MOSS Image Validated] Target: ${modelVariant.toUpperCase()} | Layout: ${boxCoordinates[layoutBox].label} | VRAM: ~${vramTier.toUpperCase()} | Render Time: ${vramTier === '10gb' ? '6.8s (Turbo)' : '18.4s'}. Ready for ComfyUI or in-browser online editing.`
       );
-    }, 600);
+    }, 500);
   };
 
   const faqData = [
     {
-      q: "What is MOSS-Image and is it open source on HuggingFace?",
-      a: "MOSS-Image is a 5-billion parameter open-weights Diffusion Transformer (DiT) text-to-image foundation model developed by the OpenMOSS Team (Fudan University and Shanghai Innovation Institute). Released under the permissive Apache 2.0 license, both model checkpoints (MOSS-Image-Base and MOSS-Image-SFT) are officially available for free download on HuggingFace and ModelScope."
+      q: "What is MOSS Image and is it open source on HuggingFace?",
+      a: "MOSS Image is a 5-billion parameter open-weights Diffusion Transformer (DiT) text-to-image foundation model developed by the OpenMOSS Team (Fudan University and Shanghai Innovation Institute). Released under the Apache 2.0 license, both MOSS Image Base and MOSS Image SFT checkpoints are available on HuggingFace and ModelScope."
     },
     {
-      q: "What is the difference between MOSS-Image Base and MOSS-Image SFT?",
-      a: "MOSS-Image-Base is the raw foundation checkpoint trained on comprehensive image-text pairs, making it ideal for downstream research, fine-tuning, and creating custom community LoRAs. MOSS-Image-SFT is the Supervised Fine-Tuned instruction model optimized for prompt adherence, dual-language typography rendering, and native JSON bounding-box layout control."
+      q: "What is the difference between MOSS Image Base and MOSS Image SFT?",
+      a: "MOSS Image Base is the foundation model trained on broad visual-text corpora, making it ideal for downstream research, fine-tuning, and creating custom community LoRAs. MOSS Image SFT is the Supervised Fine-Tuned instruction model optimized for prompt adherence, dual-language typography rendering, and native JSON layout control."
     },
     {
-      q: "How to fix the VAE spotting and artifact bug in ComfyUI for MOSS-Image?",
-      a: "A common error occurs when ComfyUI workflows default to using standard FLUX.1 VAE decoders with MOSS-Image, causing severe color splotches, magenta artifacts, and blurred edges. To resolve this, install the official 'comfyui/moss-image' manager package and verify your workflow connects to the specialized compact MOSS VAE decoder checkpoint rather than third-party VAE nodes."
+      q: "How to fix the VAE spotting and artifact bug in ComfyUI for MOSS Image?",
+      a: "A common bug occurs when ComfyUI workflows default to using FLUX.1 VAE decoders with MOSS Image, causing color splotches and magenta artifacts. To resolve this, install the official 'comfyui/moss-image' package and connect your workflow to the specialized compact MOSS Image VAE decoder checkpoint."
     },
     {
-      q: "Can I run MOSS-Image with low VRAM on 10GB or 12GB consumer graphics cards?",
-      a: "Yes. While native uncompressed BF16 requires 24GB of VRAM, the open-source community provides INT8 ConvRot and GGUF quantizations (such as ComfyUI-MOSS-GGUF). Paired with an 8-to-12 step DMD Turbo acceleration node, peak VRAM consumption is reduced to approximately 9.7GB–10GB, allowing smooth local generation on consumer cards like the RTX 3060 (12GB) or RTX 4060."
+      q: "Can I run MOSS Image with low VRAM on 10GB or 12GB consumer graphics cards?",
+      a: "Yes. While uncompressed BF16 requires 24GB VRAM, the community provides INT8 ConvRot and GGUF quantizations. Paired with an 8-step DMD Turbo acceleration node, peak MOSS Image VRAM consumption drops to approximately 9.7GB–10GB, running smoothly on consumer cards like the RTX 3060 (12GB) or RTX 4060."
     },
     {
-      q: "How can I edit text or fix mistakes in MOSS-Image creations online without GPU hardware?",
-      a: "MOSS-Image specializes in text-to-image generation but lacks native interactive inpainting, multi-turn conversational editing, and localized text correction. If an image has a typo or needs background replacement, you can use Qwen Image Editor (qwenimage-editor.com). It runs 100% in your browser with zero local VRAM requirements, allowing conversational localized inpainting and typo correction powered by Qwen foundation vision models."
+      q: "How can I edit text or fix mistakes in MOSS Image creations online without GPU hardware?",
+      a: "MOSS Image specializes in text-to-image generation but lacks native interactive inpainting, multi-turn conversational editing, and localized text correction. If your MOSS Image generation has a typo or needs background replacement, you can use Qwen Image Editor (qwenimage-editor.com) directly in your browser with zero local VRAM requirements."
     }
   ];
 
@@ -190,7 +186,7 @@ layout = MossLayoutControl.create_region(
         "about": [
           {
             "@type": "SoftwareApplication",
-            "name": "MOSS-Image",
+            "name": "MOSS Image",
             "sameAs": "https://github.com/OpenMOSS/MOSS-Image"
           },
           {
@@ -263,7 +259,7 @@ layout = MossLayoutControl.create_region(
           <span className="mx-2 text-neutral-600">/</span>
           <Link href={getLinkHref("/blog", locale)} className="hover:text-neutral-200 transition-colors">Blog</Link>
           <span className="mx-2 text-neutral-600">/</span>
-          <span className="text-neutral-300 truncate">MOSS-Image Guide & Workflows</span>
+          <span className="text-neutral-300 truncate">MOSS Image Guide & Workflows</span>
         </div>
 
         {/* Article Header Container */}
@@ -280,7 +276,7 @@ layout = MossLayoutControl.create_region(
             </h1>
 
             <p className="text-lg leading-relaxed text-neutral-300">
-              Master the OpenMOSS 5B Diffusion Transformer: ComfyUI low-VRAM setups, dual-language typography prompts, Base vs SFT selection, and in-browser localized image editing.
+              Master the OpenMOSS 5B Diffusion Transformer: ComfyUI low-VRAM setups, MOSS Image typography prompts, Base vs SFT selection, and in-browser localized image editing.
             </p>
 
             {/* Author Attribution Meta Bar with Verified Headshot */}
@@ -326,30 +322,30 @@ layout = MossLayoutControl.create_region(
               Bottom Line Up Front (BLUF) Overview
             </div>
             <p className="text-sm leading-relaxed text-neutral-200">
-              <strong>MOSS-Image</strong> is an open-weights, 5-billion parameter Diffusion Transformer (DiT) model developed by the OpenMOSS Team (Fudan University & Shanghai Innovation Institute) under Apache 2.0. Operating on a Qwen-family text encoder, it excels at English and Chinese typography rendering and structured JSON layout control. While local ComfyUI inference requires 10GB–24GB VRAM and specialized VAE configs, creators seeking zero-install visual inpainting, conversational text editing, and instant refinement can utilize <Link href={getLinkHref("/generator", locale)} className="text-brand-400 underline hover:text-brand-300 font-semibold">Qwen Image Editor</Link> directly in any modern browser without local setup.
+              <strong>MOSS Image</strong> is an open-weights, 5-billion parameter Diffusion Transformer (DiT) model developed by the OpenMOSS Team (Fudan University & Shanghai Innovation Institute) under Apache 2.0. Operating on an advanced multilingual text encoder, MOSS Image excels at English and Chinese typography rendering and structured JSON layout control. While local ComfyUI inference requires 10GB–24GB VRAM, creators seeking zero-install visual inpainting, conversational text editing, and instant refinement can utilize <Link href={getLinkHref("/generator", locale)} className="text-brand-400 underline hover:text-brand-300 font-semibold">Qwen Image Editor</Link> directly in any modern browser without local setup.
             </p>
           </div>
 
           {/* SECTION 1: Architectural Foundation & HuggingFace Models */}
           <section className="mb-12 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              What is MOSS-Image? Base vs SFT Models Explained
+              What is MOSS Image? Base vs SFT Models Explained
             </h2>
             <p className="text-base leading-relaxed text-neutral-300">
-              The generative AI landscape has witnessed massive strides with models like FLUX.1, Midjourney v6, and Ideogram. However, high-fidelity bilingual typography—specifically the ability to render both Latin and intricate Chinese Hanzi characters with correct radical strokes—has remained an elusive bottleneck. <strong>MOSS-Image</strong> directly tackles this challenge through a unified 5B Diffusion Transformer backbone coupled with an advanced Qwen multilingual text encoder.
+              While models like FLUX.1 and Midjourney v6 generate striking visuals, rendering legible bilingual typography has remained a challenge. <strong>MOSS Image</strong> tackles this bottleneck through a unified 5B Diffusion Transformer backbone with deep multilingual character modeling.
             </p>
             <p className="text-base leading-relaxed text-neutral-300">
-              When accessing the official repository on HuggingFace (<code className="rounded bg-neutral-800 px-1.5 py-0.5 text-xs text-brand-300">OpenMOSS-Team/MOSS-Image</code>), creators encounter two distinct model weights:
+              When accessing MOSS Image on HuggingFace (<code className="rounded bg-neutral-800 px-1.5 py-0.5 text-xs text-brand-300">OpenMOSS-Team/MOSS-Image</code>), creators encounter two primary checkpoints:
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 pt-2">
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5">
                 <div className="flex items-center gap-2 font-bold text-white mb-2">
                   <CpuChipIcon className="h-5 w-5 text-sky-400" />
-                  MOSS-Image-Base
+                  MOSS Image Base
                 </div>
                 <p className="text-xs text-neutral-300 leading-relaxed mb-3">
-                  Pre-trained on broad-scale visual-text corpora. Preserves maximum artistic style entropy and raw conceptual richness. Ideal for researchers, community developers training LoRAs, or building custom visual fine-tunes on Civitai.
+                  Pre-trained on broad-scale visual corpora. Preserves artistic style entropy and raw conceptual richness. Ideal for researchers training LoRAs or building custom fine-tunes on Civitai.
                 </p>
                 <div className="text-[11px] font-mono text-neutral-400 border-t border-neutral-800 pt-2">
                   Best For: LoRA training, style distillation, custom architectural backbones.
@@ -359,7 +355,7 @@ layout = MossLayoutControl.create_region(
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5">
                 <div className="flex items-center gap-2 font-bold text-white mb-2">
                   <SparklesIcon className="h-5 w-5 text-emerald-400" />
-                  MOSS-Image-SFT
+                  MOSS Image SFT
                 </div>
                 <p className="text-xs text-neutral-300 leading-relaxed mb-3">
                   Supervised Fine-Tuned on curated instructional datasets. Drastically improves prompt adherence, spatial reasoning, bilingual text clarity, and native JSON coordinate layout alignment.
@@ -371,16 +367,16 @@ layout = MossLayoutControl.create_region(
             </div>
           </section>
 
-          {/* INTERACTIVE COMPONENT: In-Page MOSS-Image Prompt & Layout Studio */}
+          {/* INTERACTIVE COMPONENT: In-Page MOSS Image Prompt & Layout Studio */}
           <section className="mb-14 rounded-2xl border border-neutral-800 bg-neutral-900/80 p-6 shadow-2xl">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-800 pb-4 mb-6">
               <div>
                 <div className="font-bold text-lg text-white flex items-center gap-2">
                   <CommandLineIcon className="h-5 w-5 text-brand-400" />
-                  Interactive MOSS-Image Prompt & Bounding-Box Generator
+                  Interactive MOSS Image Prompt & Bounding-Box Generator
                 </div>
                 <p className="text-xs text-neutral-400 mt-1">
-                  Configure bilingual typography copy, preview coordinate bounding boxes, and generate ComfyUI-ready JSON inputs.
+                  Configure bilingual typography copy, preview coordinate bounding boxes, and generate ComfyUI-ready MOSS Image JSON inputs.
                 </p>
               </div>
               <span className="rounded bg-brand-500/10 px-2.5 py-1 text-[11px] font-semibold text-brand-400 border border-brand-500/20">
@@ -405,7 +401,7 @@ layout = MossLayoutControl.create_region(
                           : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                       }`}
                     >
-                      MOSS-Image-SFT (Recommended)
+                      MOSS Image SFT (Recommended)
                     </button>
                     <button
                       type="button"
@@ -416,7 +412,7 @@ layout = MossLayoutControl.create_region(
                           : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                       }`}
                     >
-                      MOSS-Image-Base (Raw)
+                      MOSS Image Base (Raw)
                     </button>
                   </div>
                 </div>
@@ -510,7 +506,7 @@ layout = MossLayoutControl.create_region(
                   <div className="flex items-center justify-between pb-2 mb-2 border-b border-neutral-800 text-xs">
                     <span className="font-mono text-neutral-400 flex items-center gap-1.5">
                       <CodeBracketIcon className="h-3.5 w-3.5 text-brand-400" />
-                      MOSS-Image Layout Payload (JSON)
+                      MOSS Image Layout Payload (JSON)
                     </span>
                     <button
                       type="button"
@@ -551,10 +547,10 @@ layout = MossLayoutControl.create_region(
           {/* SECTION 2: Prompting Guide & Typography Skills */}
           <section className="mb-12 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              MOSS-Image Prompting Guide: How to Render Flawless Bilingual Typography
+              MOSS Image Prompting Guide: Bilingual Text & Layout Control
             </h2>
             <p className="text-base leading-relaxed text-neutral-300">
-              Generating clean typography in diffusion models requires structuring prompts to prevent the latent space from distorting letters into unreadable glyphs. Drawing from empirical testing across the community and developer documentation, here are the core prompting principles:
+              Generating clean typography in MOSS Image requires structuring prompts properly to prevent letter distortion. Drawing from community testing, here are the core MOSS Image prompting principles:
             </p>
 
             <div className="space-y-4 pt-2">
@@ -564,7 +560,7 @@ layout = MossLayoutControl.create_region(
                   Explicit Quotation Framing for Text Entities
                 </div>
                 <p className="text-sm text-neutral-300 leading-relaxed">
-                  Always encapsulate target text in straight quotation marks (<code className="rounded bg-neutral-800 px-1 text-xs text-white">&quot;...&quot;</code>) preceded by explicit design directives such as <code className="text-xs text-brand-300">typography reading &quot;...&quot;</code>, <code className="text-xs text-brand-300">neon signage with the word &quot;...&quot;</code>, or <code className="text-xs text-brand-300">embossed billboard lettering &quot;...&quot;</code>.
+                  Encapsulate target text in straight quotation marks (<code className="rounded bg-neutral-800 px-1 text-xs text-white">&quot;...&quot;</code>) preceded by explicit design directives such as <code className="text-xs text-brand-300">typography reading &quot;...&quot;</code>, <code className="text-xs text-brand-300">signage with the word &quot;...&quot;</code>, or <code className="text-xs text-brand-300">billboard lettering &quot;...&quot;</code>.
                 </p>
               </div>
 
@@ -574,10 +570,10 @@ layout = MossLayoutControl.create_region(
                   Chinese-English Dual Hierarchy Styling
                 </div>
                 <p className="text-sm text-neutral-300 leading-relaxed">
-                  When designing bilingual posters, specify stylistic hierarchies to guide the Qwen text encoder. Define whether the Latin title serves as the primary visual hook and Chinese text serves as the descriptive seal, or vice versa.
+                  When designing bilingual posters in MOSS Image, specify stylistic hierarchies. Define whether the Latin title serves as the primary hook and Chinese text serves as the descriptive seal, or vice versa.
                 </p>
                 <div className="mt-2 rounded bg-neutral-950 p-3 font-mono text-xs text-neutral-300 border border-neutral-800">
-                  <span className="text-neutral-500">Prompt Template:</span> &quot;Minimalist cosmetics tube, primary bold English font reading <span className="text-emerald-400">&quot;PURE BOTANICS&quot;</span>, centered Chinese subtitle calligraphy reading <span className="text-sky-400">&quot;植萃精华&quot;</span>, matte paper texture, studio softbox lighting.&quot;
+                  <span className="text-neutral-500">Prompt Template:</span> &quot;Cosmetics tube, primary bold English font reading <span className="text-emerald-400">&quot;PURE BOTANICS&quot;</span>, centered Chinese subtitle calligraphy reading <span className="text-sky-400">&quot;植萃精华&quot;</span>, matte paper texture, studio softbox lighting.&quot;
                 </div>
               </div>
 
@@ -587,7 +583,7 @@ layout = MossLayoutControl.create_region(
                   Bounding-Box Coordinate Formulation (SFT Model Only)
                 </div>
                 <p className="text-sm text-neutral-300 leading-relaxed">
-                  The SFT model natively recognizes normalized coordinates <code className="text-xs text-brand-300">[ymin, xmin, ymax, xmax]</code> between 0.0 and 1.0. Defining a bounding box anchors the generative latent distribution, preventing text from floating unpredictably across visual subjects.
+                  MOSS Image SFT natively recognizes normalized coordinates <code className="text-xs text-brand-300">[ymin, xmin, ymax, xmax]</code> between 0.0 and 1.0. Defining a bounding box anchors the generative latent distribution, preventing text from floating unpredictably across visual subjects.
                 </p>
               </div>
             </div>
@@ -596,10 +592,10 @@ layout = MossLayoutControl.create_region(
           {/* SECTION 3: ComfyUI Workflows & Low VRAM Workarounds */}
           <section className="mb-12 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              ComfyUI Setup, Workflows & Low-VRAM Optimization
+              MOSS Image ComfyUI Setup, Workflows & Low-VRAM Optimization
             </h2>
             <p className="text-base leading-relaxed text-neutral-300">
-              For local creators, running MOSS-Image inside ComfyUI provides granular node control. However, community discussions on Reddit and GitHub highlight two critical stumbling blocks:
+              For local creators, running MOSS Image inside ComfyUI provides granular node control. However, community discussions on Reddit and GitHub highlight critical setup details:
             </p>
 
             <div className="rounded-xl border border-amber-500/30 bg-amber-950/20 p-5 space-y-3">
@@ -608,14 +604,14 @@ layout = MossLayoutControl.create_region(
                 Critical Bug Alert: VAE Spotting & Decoding Artifacts
               </div>
               <p className="text-xs text-neutral-200 leading-relaxed">
-                Many users attempting to run MOSS-Image with standard FLUX or SDXL VAE decoders encounter massive color banding, severe noise artifacts, or solid magenta patches. <strong>MOSS-Image relies on a specialized compact decoder.</strong> Ensure you load the official <code className="rounded bg-neutral-900 px-1 py-0.5 text-amber-300 font-mono">moss-compact-vae.safetensors</code> node inside your ComfyUI loader chain.
+                Many users attempting to run MOSS Image with standard FLUX or SDXL VAE decoders encounter color banding and magenta artifacts. <strong>MOSS Image relies on a specialized compact decoder.</strong> Ensure you load the official <code className="rounded bg-neutral-900 px-1 py-0.5 text-amber-300 font-mono">moss-compact-vae.safetensors</code> node inside your ComfyUI loader chain.
               </p>
             </div>
 
             <div className="space-y-3 pt-2">
               <div className="flex items-center justify-between">
                 <div className="font-semibold text-sm text-neutral-200">
-                  Recommended ComfyUI Node Script Snippet
+                  Recommended MOSS Image ComfyUI Node Script Snippet
                 </div>
                 <button
                   type="button"
@@ -643,50 +639,50 @@ layout = MossLayoutControl.create_region(
             <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5 space-y-3">
               <div className="font-bold text-sm text-white flex items-center gap-2">
                 <CpuChipIcon className="h-5 w-5 text-brand-400" />
-                How to Run MOSS-Image on 10GB–12GB VRAM (INT8 & GGUF)
+                How to Run MOSS Image on 10GB–12GB VRAM (INT8 & GGUF)
               </div>
               <ul className="space-y-2 text-xs text-neutral-300 list-disc list-inside leading-relaxed">
                 <li>
-                  <strong className="text-neutral-100">INT8 ConvRot Quantization:</strong> Squeezes model weights down to approximately 9.7GB VRAM, allowing execution on standard RTX 3060 (12GB) setups.
+                  <strong className="text-neutral-100">INT8 ConvRot Quantization:</strong> Squeezes MOSS Image model weights to ~9.7GB VRAM for smooth RTX 3060 (12GB) execution.
                 </li>
                 <li>
-                  <strong className="text-neutral-100">DMD 8-Step Turbo Acceleration:</strong> By pairing an 8-step distillation LoRA, inference step latency drops from 28 steps (35+ seconds) to under 8 seconds per generation.
+                  <strong className="text-neutral-100">DMD 8-Step Turbo Acceleration:</strong> Drops MOSS Image inference latency from 28 steps (35s) to under 8 seconds per generation.
                 </li>
                 <li>
-                  <strong className="text-neutral-100">Offloading Text Encoder:</strong> Offload the Qwen text encoder to system CPU RAM after prompt tokenization to free up an additional 2.5GB of dedicated VRAM for diffusion attention passes.
+                  <strong className="text-neutral-100">Offloading Text Encoder:</strong> Offload text encoder to system CPU RAM after prompt tokenization to free up 2.5GB VRAM for diffusion attention passes.
                 </li>
               </ul>
             </div>
           </section>
 
-          {/* SECTION 4: The Downstream Bottleneck: Why MOSS-Image Needs Inpainting & Editing */}
+          {/* SECTION 4: The Downstream Bottleneck: Why MOSS Image Needs Inpainting & Editing */}
           <section className="mb-12 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              The Post-Generation Dilemma: Why MOSS-Image Needs an Online Editor
+              Why MOSS Image Needs an Online Editor for Inpainting & Text Edits
             </h2>
             <p className="text-base leading-relaxed text-neutral-300">
-              While MOSS-Image represents a milestone for text-to-image synthesis, creative production rarely ends with a single text prompt generation. Real-world commercial workflows encounter inevitable downstream friction points:
+              While MOSS Image represents a breakthrough in text-to-image synthesis, production work requires post-generation refinement. Creators face three common hurdles:
             </p>
 
             <div className="grid gap-4 sm:grid-cols-3 pt-2">
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4">
                 <div className="font-bold text-sm text-rose-400 mb-1">Typo in an Otherwise Perfect Image</div>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  If MOSS generates a visually stunning billboard but misplaces one Chinese radical or English vowel, re-running the entire prompt burns GPU compute and risks altering the entire composition.
+                  If MOSS Image generates a stunning visual but misplaces a letter, re-running the prompt burns GPU compute and alters the entire image composition.
                 </p>
               </div>
 
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4">
                 <div className="font-bold text-sm text-amber-400 mb-1">Lack of Native Conversational Inpainting</div>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  MOSS-Image is strictly a forward text-to-image generator. It does not provide localized multi-turn conversation masks to swap a model&apos;s outfit or extend canvas aspect ratios.
+                  MOSS Image is strictly a text-to-image generator. It does not provide localized multi-turn conversation masks to swap a model&apos;s outfit or extend canvas aspect ratios.
                 </p>
               </div>
 
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4">
                 <div className="font-bold text-sm text-sky-400 mb-1">Hardware & Setup Fatigue</div>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Marketers, designers, and non-technical creators do not want to manage Python virtual environments, Git pulls, CUDA out-of-memory crashes, or pay $0.20 per API call on cloud instances.
+                  Creators often prefer to avoid Python environments, Git pulls, CUDA out-of-memory crashes, or expensive cloud instance fees.
                 </p>
               </div>
             </div>
@@ -697,13 +693,13 @@ layout = MossLayoutControl.create_region(
                 <div className="space-y-1.5">
                   <div className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-400">
                     <PaintBrushIcon className="h-4 w-4" />
-                    The Ideal Pairing: MOSS-Image + Qwen Image Editor
+                    The Ideal Solution: Pair MOSS Image with Online Editing
                   </div>
                   <div className="text-lg font-bold text-white">
-                    Edit, Inpaint & Refine Any AI Image Directly in Your Browser
+                    Edit, Inpaint & Refine MOSS Image Creations in Your Browser
                   </div>
                   <p className="text-xs text-neutral-300 max-w-xl leading-relaxed">
-                    Take your MOSS-Image generations and refine them with zero VRAM hardware requirements. Use conversational inpainting to replace text, modify visual elements, or isolate product backgrounds with professional precision.
+                    Take your MOSS Image generations and refine them with zero VRAM hardware requirements. Use conversational inpainting to replace text, modify visual elements, or isolate product backgrounds with professional precision.
                   </p>
                 </div>
                 <Link
@@ -720,10 +716,10 @@ layout = MossLayoutControl.create_region(
           {/* SECTION 5: Comprehensive Benchmark Comparison Table */}
           <section className="mb-12 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              Model Benchmark Matrix: MOSS-Image vs Qwen-Image vs FLUX.1
+              MOSS Image Benchmark Matrix: MOSS Image vs Qwen Image vs FLUX.1
             </h2>
             <p className="text-base leading-relaxed text-neutral-300">
-              To assist AI researchers and visual creators in selecting the right foundation system, we have compiled an objective technical capability matrix:
+              To assist visual creators in selecting the right foundation system, we have compiled an objective MOSS Image benchmark matrix:
             </p>
 
             <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-950">
@@ -731,8 +727,8 @@ layout = MossLayoutControl.create_region(
                 <thead className="border-b border-neutral-800 bg-neutral-900/80 font-mono uppercase text-neutral-400">
                   <tr>
                     <th className="p-3.5">Evaluation Dimension</th>
-                    <th className="p-3.5 text-brand-400">MOSS-Image (5B DiT)</th>
-                    <th className="p-3.5 text-emerald-400">Qwen-Image 2.1 (Online)</th>
+                    <th className="p-3.5 text-brand-400">MOSS Image (5B DiT)</th>
+                    <th className="p-3.5 text-emerald-400">Qwen Image (Online)</th>
                     <th className="p-3.5 text-neutral-400">FLUX.1 (Dev/Schnell)</th>
                   </tr>
                 </thead>
@@ -752,7 +748,7 @@ layout = MossLayoutControl.create_region(
                   <tr>
                     <td className="p-3.5 font-semibold text-white">Chinese (Hanzi) Typography</td>
                     <td className="p-3.5 text-brand-300">Outstanding (Precise strokes)</td>
-                    <td className="p-3.5 text-emerald-300">World-Class (Native Qwen VLM)</td>
+                    <td className="p-3.5 text-emerald-300">World-Class (Native VLM encoder)</td>
                     <td className="p-3.5 text-rose-400">Poor / Unsupported natively</td>
                   </tr>
                   <tr>
@@ -781,7 +777,7 @@ layout = MossLayoutControl.create_region(
           {/* SECTION 6: FAQ Section with Structured FAQ Schema */}
           <section className="mb-14 space-y-4">
             <h2 className="text-2xl font-bold tracking-tight text-white border-b border-neutral-800 pb-2">
-              Frequently Asked Questions (FAQ)
+              MOSS Image Frequently Asked Questions (FAQ)
             </h2>
             <div className="space-y-4 pt-2">
               {faqData.map((item, index) => (
@@ -827,7 +823,7 @@ layout = MossLayoutControl.create_region(
           {/* CLOSING CONVERSION CTA BANNER */}
           <section className="rounded-2xl border border-brand-500/30 bg-gradient-to-r from-brand-950/60 via-neutral-900 to-neutral-950 p-8 text-center shadow-2xl">
             <h2 className="text-2xl font-extrabold text-white sm:text-3xl mb-3">
-              Ready to Edit & Refine Your AI Visuals Online?
+              Ready to Edit & Refine MOSS Image Visuals Online?
             </h2>
             <p className="mx-auto max-w-xl text-sm leading-relaxed text-neutral-300 mb-6">
               Skip local hardware barriers, VAE errors, and 24GB VRAM requirements. Upload your designs and experience seamless conversational AI image editing and bilingual typography in your browser today.
