@@ -19,6 +19,37 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'moss-image-guide-comfyui-workflow-prompting-edit',
+    // Strict 59 chars (50-60 safety range, targets 'MOSS Image Guide', 'ComfyUI Workflow', 'Prompting', 'Online Edit')
+    title: 'MOSS Image Guide: ComfyUI Workflow, Prompting & Online Edit',
+    // Strict 154 chars (140-160 range, answers workflows, bilingual text prompting, base vs sft, and online edit)
+    description: 'Complete MOSS-Image AI guide. Set up ComfyUI workflows, master bilingual text prompting, compare Base vs SFT models, and edit MOSS creations online free.',
+    date: '2026-10-21',
+    readTime: '11 min read',
+    category: 'Open Source AI & Visual Workflows',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Lead Visual AI & Generative Media Specialist',
+      avatar: '/images/author-elena.jpg',
+      bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual inpainting workflows.',
+    },
+    keywords: [
+      'moss image',
+      'moss image ai',
+      'moss image comfyui',
+      'moss image workflow',
+      'moss image prompting guide',
+      'moss image skill',
+      'moss image sft',
+      'moss image base',
+      'moss image model',
+      'moss image edit',
+      'moss image civitai',
+      'moss image huggingface',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'qwen-4-release-date-27b-specs-roadmap',
     // Strict 57 chars (50-60 safety range, locks 'Qwen 4 Release Date', '27B', 'Reddit Leaks')
     title: 'Qwen 4 Release Date & 27B: Reddit Leaks, Specs & Roadmap',

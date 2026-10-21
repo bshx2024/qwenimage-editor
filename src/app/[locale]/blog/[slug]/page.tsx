@@ -10,6 +10,7 @@ import IdeogramBlogPostComponent from './IdeogramBlogPostComponent';
 import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent';
 import PhotoCraftBlogPostComponent from './PhotoCraftBlogPostComponent';
 import Qwen4ReleaseDateBlogPostComponent from './Qwen4ReleaseDateBlogPostComponent';
+import MossImageBlogPostComponent from './MossImageBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -33,7 +34,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'qwen-4-release-date-27b-specs-roadmap') {
+  if (slug === 'moss-image-guide-comfyui-workflow-prompting-edit') {
+    postComponent = <MossImageBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'qwen-4-release-date-27b-specs-roadmap') {
     postComponent = <Qwen4ReleaseDateBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'photocraft-online-ai-review-photoshop-alternative') {
     postComponent = <PhotoCraftBlogPostComponent post={post} locale={locale} />;
