@@ -226,7 +226,7 @@ const PageComponent = ({
                   </tr>
                   <tr>
                     <td className="py-3.5 px-4 font-medium text-white">Commercial Rights</td>
-                    <td className="py-3.5 px-4 text-emerald-400 font-medium">100% Commercial rights (all tiers)</td>
+                    <td className="py-3.5 px-4 text-emerald-400 font-medium">Commercial usage permitted (per Terms &amp; API licenses)</td>
                     <td className="py-3.5 px-4 text-slate-400">Active paying members only</td>
                     <td className="py-3.5 px-4 text-slate-400">Dev model requires expensive enterprise license</td>
                   </tr>

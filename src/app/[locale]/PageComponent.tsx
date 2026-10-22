@@ -526,7 +526,7 @@ export default function PageComponent({
     },
     {
       q: 'Are the AI-generated images commercial-use friendly and private?',
-      a: 'Yes, all images generated and edited on Qwen Image Editor are 100% commercial-use friendly and private by default. Users retain complete commercial exploitation rights to monetize visual outputs across paid advertisements, client projects, and print merchandise without royalty obligations. Image uploads and generated outputs are transmitted via 256-bit SSL encryption. Paid subscribers can toggle private mode to ensure inputs and outputs remain completely confidential and are never stored for model training purposes.',
+      a: 'Yes, images generated and edited on Qwen Image Editor carry commercial usage permissions in accordance with our Terms of Service and upstream Alibaba Cloud DashScope foundation model commercial licensing terms. Users retain exploitation rights to use visual outputs across commercial campaigns, client projects, and marketing collateral without royalty obligations. Image uploads and generated outputs are transmitted via 256-bit SSL encryption. Paid subscribers can toggle private mode to ensure inputs and outputs remain completely confidential.',
     },
     {
       q: 'Which model checkpoints and APIs are supported?',
@@ -794,14 +794,14 @@ export default function PageComponent({
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <span className="text-slate-400 font-medium">
-                          {locale?.startsWith('zh') ? '今日剩余:' : 'Remaining:'}
+                          {locale?.startsWith('zh') ? '今日可用:' : 'Available:'}
                         </span>
                         <span className="font-bold text-cyan-300 font-mono text-xs">
                           {userData.available_times ?? 0} Credits
                         </span>
                       </div>
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 text-[11px] font-mono">
-                        <span>⏱ {locale?.startsWith('zh') ? '重置:' : 'Reset:'}</span>
+                        <span>⏱ {locale?.startsWith('zh') ? '每日额度刷新:' : 'Daily Reset:'}</span>
                         <strong className="text-white font-bold">{resetCountdown}</strong>
                       </span>
                     </div>
@@ -810,12 +810,13 @@ export default function PageComponent({
                       type="button"
                       onClick={() => setShowLoginModal(true)}
                       className="inline-flex items-center gap-2 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer text-xs group shadow-sm"
+                      title="1 free credit granted every 24 hours upon sign-in. Resets daily at 00:00 UTC."
                     >
                       <span className="px-1.5 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                        {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial: 1/1 Credit'}
+                        {locale?.startsWith('zh') ? '每日免费额度: 1 积分' : 'Daily Free Quota: 1 Credit'}
                       </span>
                       <span className="group-hover:translate-x-0.5 transition-transform text-slate-300">
-                        {locale?.startsWith('zh') ? '(登录即领) →' : '(Sign in to claim) →'}
+                        {locale?.startsWith('zh') ? '(登录即领 · 每日刷新) →' : '(Sign in to claim · Resets daily) →'}
                       </span>
                     </button>
                   )}
@@ -1779,7 +1780,7 @@ export default function PageComponent({
                       </div>
                       <div className="flex items-center gap-1.5">
                         <CheckCircleIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                        <span>100% Commercial Usage Rights</span>
+                        <span>Commercial Usage License (Terms apply)</span>
                       </div>
                     </div>
 
@@ -1908,7 +1909,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture&quot;
@@ -1997,7 +1998,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression&quot;
@@ -2086,7 +2087,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic&quot;
@@ -2175,7 +2176,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Inpaint poster headline to crisp typography &apos;AUTUMN ICED COFFEE&apos;, fix typos, update bottom promo to &apos;SPECIAL OFFERS 2026 FRESH BREWED DAILY&apos;, preserve illustration layout and color style&quot;
@@ -2214,7 +2215,7 @@ export default function PageComponent({
                         Isolated Product on Floor ➔ Sunlit Nordic Cafe Table
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        100% lock item geometry, vintage leather patina, stitching, and brass buckles while completely swapping the environment to a sunlit Scandinavian cafe.
+                        Designed to preserve item geometry, vintage leather patina, stitching, and brass buckles while naturally adapting the environment to a sunlit Scandinavian cafe.
                       </p>
                     </div>
                   </div>
@@ -2255,7 +2256,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-amber-950/80 border border-amber-500/40 backdrop-blur-md text-[10px] text-amber-200 font-medium truncate">
-                          100% Bag Details Locked &amp; Relocated
+                          Subject Retention &amp; Staging
                         </div>
                       </div>
                     </div>
@@ -2264,10 +2265,10 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Keep the vintage tan leather bag 100% identical with all buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
+                      &quot;Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
                     </p>
                   </div>
                 </div>
@@ -2277,7 +2278,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_lock_before.jpg',
-                      'Keep the vintage tan leather bag 100% identical with all buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh',
+                      'Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh',
                       '/images/showcase_lock_after.jpg'
                     )
                   }
@@ -2353,7 +2354,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh&quot;
