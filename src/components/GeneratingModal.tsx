@@ -37,7 +37,7 @@ const TIPS: GeneratingTip[] = [
     tag: 'Fast-Track',
     tagColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
     title: 'Tired of waiting in queue?',
-    desc: 'Pro members get dedicated GPU fast-track priority (avg. 3.5s per image).',
+    desc: 'Pro members get dedicated fast GPU priority queue with reduced wait times during peak traffic.',
     ctaText: 'Get Fast-Track',
     ctaHref: '/pricing',
   },

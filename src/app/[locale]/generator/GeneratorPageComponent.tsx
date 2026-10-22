@@ -279,13 +279,13 @@ export default function GeneratorPageComponent({
               </h1>
               {/* Conclusion First: Objective Definition for Direct AI Extraction */}
               <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
-                <strong>Qwen Image Generator</strong> is an online text-to-image synthesis engine built on Wanx 2.1 and Qwen vision foundation architectures, delivering 1024×1024 to 2048×2048 photorealistic imagery in 2.2–3.5 seconds across 1:1, 16:9, and 9:16 aspect ratios.
+                <strong>Qwen Image Generator</strong> is an online text-to-image synthesis engine built on Wanx 2.1 and Qwen vision foundation architectures, delivering 1024×1024 to 2048×2048 photorealistic imagery with fast cloud inference across 1:1, 16:9, and 9:16 aspect ratios.
               </p>
               {/* Feature-Bullet Chunking Bar */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
                 <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                   <span className="font-semibold text-purple-300 block">Text-to-Image Synthesis</span>
-                  <span className="text-slate-400 text-[11px]">Wanx 2.1 & Qwen multimodal backbone, 2.2s latency</span>
+                  <span className="text-slate-400 text-[11px]">Wanx 2.1 & Qwen multimodal backbone, cloud GPU</span>
                 </div>
                 <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                   <span className="font-semibold text-indigo-300 block">Bilingual Signage</span>
@@ -1001,7 +1001,7 @@ export default function GeneratorPageComponent({
                 </div>
                 <h3 className="text-base font-bold text-white">Step 3: Generate & Export in HD</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Click Generate to execute inference in 2.2–3.5s, preview in split-view, and download full-resolution PNG or WebP assets.
+                  Click Generate to execute inference on cloud GPUs, preview in split-view, and download full-resolution PNG or WebP assets.
                 </p>
               </div>
             </div>
@@ -1043,7 +1043,7 @@ export default function GeneratorPageComponent({
                     </tr>
                     <tr>
                       <td className="py-3.5 px-4 font-medium text-white">Generation Latency</td>
-                      <td className="py-3.5 px-4 text-emerald-400 font-medium">2.2s – 3.5s per image (Cloud GPU)</td>
+                      <td className="py-3.5 px-4 text-emerald-400 font-medium">Fast cloud inference (~5s–15s depending on queue)</td>
                       <td className="py-3.5 px-4 text-slate-400">30s – 50s standard (15s Fast mode)</td>
                       <td className="py-3.5 px-4 text-slate-400">8s – 15s per image (28-step diffusion)</td>
                     </tr>

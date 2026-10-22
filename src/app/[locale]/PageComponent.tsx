@@ -514,11 +514,11 @@ export default function PageComponent({
     },
     {
       q: 'Can I use Qwen Image Editor for AI clothes changing and virtual try-on?',
-      a: 'Yes. Qwen Image Editor excels at virtual apparel try-on, dress swapping, and ecommerce fashion modeling. By leveraging deep visual grounding, it recognizes body silhouettes and replaces tops, suits, evening dresses, or casual streetwear while preserving the model’s face, hairstyle, skin tone, and natural posture. The cloud inference pipeline renders authentic fabric draping, seams, and lighting in under 4 seconds.',
+      a: 'Yes. Qwen Image Editor excels at virtual apparel try-on, dress swapping, and ecommerce fashion modeling. By leveraging deep visual grounding, it recognizes body silhouettes and replaces tops, suits, evening dresses, or casual streetwear while helping preserve the model’s face, hairstyle, skin tone, and natural posture. Processing time varies with image resolution and queue load, typically completing in ~8–15s on standard queue (or faster on priority queues).',
     },
     {
       q: 'How to edit or inpaint photos using text prompts?',
-      a: 'You can edit and inpaint any photo through a three-step conversational workflow directly in your web browser. First, upload a source JPG, PNG, or WebP photo up to 20MB. Second, enter natural language instructions specifying your target change, such as modifying garments or replacing backgrounds. Third, click generate to trigger neural inference, delivering 2048×2048 high-resolution downloads within 3 seconds. The underlying vision model automatically locates regions without brush tools, maintaining 68+ facial consistency points.',
+      a: 'You can edit and inpaint any photo through a three-step conversational workflow directly in your web browser. First, upload a source JPG, PNG, or WebP photo up to 20MB. Second, enter natural language instructions specifying your target change, such as modifying garments or replacing backgrounds. Third, click generate to trigger neural inference. Processing typically completes in ~8–15s depending on model complexity, image resolution, and queue demand, with outputs downloadable in high resolution.',
     },
     {
       q: 'How does Qwen Image Editor compare to Midjourney and Flux?',
@@ -777,7 +777,7 @@ export default function PageComponent({
                 <span className="hidden sm:inline text-slate-700">•</span>
                 <span>🔤 Helps improve typography rendering</span>
                 <span className="hidden sm:inline text-slate-700">•</span>
-                <span>⏱️ Typical processing ~8–15s (varies with server demand)</span>
+                <span>⏱️ Typical processing ~8–15s (varies with model, size &amp; server load)</span>
               </div>
             </div>
 
@@ -2634,7 +2634,7 @@ export default function PageComponent({
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">Open Ecosystem Checkpoints</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Continuous cross-benchmarking against community revisions (including 2511 and 2512 checkpoints) to ensure our browser workspace delivers parity with local 24GB VRAM setups.
+                    Continuous cross-benchmarking against community ComfyUI workflows and Hugging Face releases to ensure our cloud workspace delivers parity with local 24GB VRAM workstation environments.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
