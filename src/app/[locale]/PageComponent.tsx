@@ -23,9 +23,10 @@ import {
   BoltIcon,
   ShieldCheckIcon,
   CpuChipIcon,
+  ShareIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
-import { exportImageWithTier } from "~/libs/imageExport";
+import { exportImageWithTier, exportComparisonCard } from "~/libs/imageExport";
 
 export default function PageComponent({
   locale = 'en',
@@ -67,6 +68,10 @@ export default function PageComponent({
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [resetCountdown, setResetCountdown] = useState<string>('00:00');
+  const [isExportingCard, setIsExportingCard] = useState<boolean>(false);
+  const [copiedShare, setCopiedShare] = useState<boolean>(false);
+  const [isMobileHoldingOriginal, setIsMobileHoldingOriginal] = useState<boolean>(false);
+  const [demoActiveNotice, setDemoActiveNotice] = useState<string | null>(null);
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -594,10 +599,12 @@ export default function PageComponent({
         description:
           'Professional online AI image editing tool powered by Alibaba Cloud Bailian and Qwen-Image 2.1 models. Features conversational inpainting, background removal, bilingual typography rendering, and high-fidelity text-to-image synthesis directly in browser without ComfyUI.',
         featureList: [
-          'AI Inpainting: Conversational instruction-guided photo modifications',
-          'Text-guided Photo Editing: Targeted adjustments designed to maintain subject consistency',
-          'Background Removal & Replacement: Subject isolation and scene re-lighting',
-          'Text to Image: High-fidelity generation with crisp bilingual typography',
+          'AI Fashion Virtual Try-On: Swap clothing, dresses, and suits while preserving face identity and body proportions',
+          'AI Inpainting: Conversational instruction-guided photo modifications without manual brush masking',
+          'Background Removal & Replacement: Subject isolation, cyberpunk relighting, and studio backdrop swap',
+          'Bilingual Typography Rendering: Crisp English and Chinese typography embedded in images without distorted pseudo-glyphs',
+          'Ecommerce Product Photo Enhancer: Studio lighting, podium placement, and commercial asset rendering',
+          'Text to Image: High-fidelity generation across 1:1, 16:9, 9:16, 3:4, and 4:3 aspect ratios',
         ],
         aggregateRating: {
           '@type': 'AggregateRating',
@@ -980,6 +987,139 @@ export default function PageComponent({
                           </div>
                         )}
                       </div>
+
+                      {/* One-Click Demo Presets for Instant Testing (Zero Upload Barrier) */}
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                            <SparklesIcon className="w-3.5 h-3.5 text-amber-400" />
+                            <span>{locale?.startsWith('zh') ? '或直接点击示例立即体验（无需找图）:' : 'Or Click a Demo to Test Immediately (Zero Upload Needed):'}</span>
+                          </span>
+                          <span className="text-[10px] text-emerald-400 font-mono font-semibold">
+                            {locale?.startsWith('zh') ? '免费体验 1 次' : '100% Free Trial'}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 overflow-x-auto snap-x scrollbar-none pb-1">
+                          {[
+                            {
+                              id: 'fashion_dress',
+                              label: 'AI Fashion Try-On',
+                              tag: '👗 Gala Dress',
+                              before: '/images/showcase_dress_before.jpg',
+                              after: '/images/showcase_dress_after.jpg',
+                              prompt: 'Swap clothes to elegant emerald green silk gala evening dress, high slit',
+                            },
+                            {
+                              id: 'velvet_tuxedo',
+                              label: 'Bespoke Tuxedo',
+                              tag: '🤵 Velvet Suit',
+                              before: '/images/showcase_man_suit_before.jpg',
+                              after: '/images/showcase_man_suit_after.jpg',
+                              prompt: 'Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting',
+                            },
+                            {
+                              id: 'cyberpunk_city',
+                              label: 'Cyberpunk Scene',
+                              tag: '🌆 Tokyo Neon',
+                              before: '/images/showcase_cafe_before.jpg',
+                              after: '/images/showcase_cyberpunk_after.jpg',
+                              prompt: 'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
+                            },
+                            {
+                              id: 'bilingual_typo',
+                              label: 'Typography Inpaint',
+                              tag: '🔤 Clean Text',
+                              before: '/images/showcase_typography_before.jpg',
+                              after: '/images/showcase_typography_after.jpg',
+                              prompt: 'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout',
+                            },
+                          ].map((demo) => {
+                            const isSelected = sourceImage === demo.before;
+                            return (
+                              <button
+                                key={demo.id}
+                                type="button"
+                                onClick={() => {
+                                  setSourceImage(demo.before);
+                                  setCurrentResultImage(demo.after);
+                                  setTextStr(demo.prompt);
+                                  setActiveTab('edit');
+                                  setDemoActiveNotice(demo.label);
+                                  setTimeout(() => {
+                                    const inputEl = document.getElementById('promptInput');
+                                    inputEl?.focus();
+                                  }, 50);
+                                }}
+                                className={`relative rounded-xl border p-2 flex flex-col items-center text-center transition-all cursor-pointer group/card snap-start ${
+                                  isSelected
+                                    ? 'border-indigo-400 bg-gradient-to-b from-indigo-950/90 to-purple-950/70 shadow-md shadow-indigo-500/20 ring-1 ring-indigo-400/50'
+                                    : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900/60'
+                                }`}
+                              >
+                                <div className="w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-900 mb-1.5 relative">
+                                  <img
+                                    src={demo.before}
+                                    alt={demo.label}
+                                    className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-200"
+                                  />
+                                  <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-sm text-[9px] font-bold text-amber-300">
+                                    {demo.tag}
+                                  </span>
+                                </div>
+                                <span className="text-[11px] font-bold text-white leading-tight truncate w-full">
+                                  {demo.label}
+                                </span>
+                                <span className="text-[9px] text-cyan-300/90 font-medium mt-0.5">
+                                  {locale?.startsWith('zh') ? '点击载入试玩' : 'Click to Load & Try'}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Demo Active Notice & Welcome Credit Banner */}
+                  {demoActiveNotice && (
+                    <div className="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-indigo-500/15 border border-amber-500/30 text-xs shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1 rounded-lg bg-amber-500/20 text-amber-300">✨</span>
+                        <span className="text-slate-200 text-[11px]">
+                          <strong>{locale?.startsWith('zh') ? `已载入示例（${demoActiveNotice}）` : `Demo Loaded (${demoActiveNotice})`}</strong>: {locale?.startsWith('zh') ? '点击下方「立即生成」即可测试！' : 'Click Apply Edit below to run your free test!'}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setDemoActiveNotice(null)}
+                        className="text-slate-400 hover:text-white text-xs px-1"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+
+                  {Boolean(userData && userData.user_id) && (
+                    <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-indigo-500/15 border border-emerald-500/30 text-xs shadow-sm">
+                      <div className="flex items-center gap-2.5">
+                        <span className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 shrink-0">
+                          <SparklesIcon className="w-4 h-4" />
+                        </span>
+                        <div>
+                          <span className="font-bold text-white block">
+                            {locale?.startsWith('zh') ? '欢迎使用！您已有 1 次免费测试额度就绪' : 'Welcome! You have 1 Free Credit ready to test'}
+                          </span>
+                          <span className="text-slate-300 text-[11px]">
+                            {locale?.startsWith('zh')
+                              ? '点击上方示例卡片或上传本地照片，点击「立即生成 (免费 1 次)」即可出图。'
+                              : 'Select any demo preset above or upload a photo, then hit Apply Edit to generate in seconds.'}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs shrink-0 border border-emerald-500/40">
+                        1 Credit Free
+                      </span>
                     </div>
                   )}
 
@@ -1013,6 +1153,47 @@ export default function PageComponent({
                           }
                           className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none pb-1"
                         />
+
+                        {/* Multilingual Prompts Helper for International Users */}
+                        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 pb-1.5 px-0.5 text-[11px] text-slate-400 gap-2 flex-wrap">
+                          <div className="flex items-center gap-1.5 text-slate-300">
+                            <span className="text-amber-400">💡</span>
+                            <span className="font-semibold text-slate-300">
+                              {locale?.startsWith('zh') ? '多语言原生支持:' : 'Multilingual Native Support:'}
+                            </span>
+                            <span className="text-slate-400 hidden sm:inline">
+                              {locale?.startsWith('zh') ? '可用西语、印尼语、中文等输入指令' : 'Type freely in Spanish, Indonesian, Chinese, French, or English'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-[10px] flex-wrap">
+                            <span className="text-slate-500 hidden sm:inline">Starters:</span>
+                            <button
+                              type="button"
+                              onClick={() => setTextStr('Cambiar ropa a vestido elegante de noche en seda esmeralda, escote pronunciado')}
+                              className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors"
+                              title="Spanish prompt example"
+                            >
+                              🇪🇸 Español
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setTextStr('Ubah pakaian menjadi gaun sutra hijau zamrud yang elegan')}
+                              className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors"
+                              title="Indonesian prompt example"
+                            >
+                              🇮🇩 Bahasa
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setTextStr('把衣服换成祖母绿高开叉丝绸晚礼服裙，保留面部真实五官与肤色')}
+                              className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors"
+                              title="Chinese prompt example"
+                            >
+                              🇨🇳 中文
+                            </button>
+                          </div>
+                        </div>
+
                         <div className="flex items-center justify-between border-t border-slate-800/80 pt-2.5 text-xs text-slate-400 gap-2 flex-wrap sm:flex-nowrap">
                           {/* Left: Model Selector */}
                           <div className="flex items-center gap-2 min-w-0">
@@ -1080,10 +1261,10 @@ export default function PageComponent({
                                   <SparklesIcon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
                                   <span>
                                     {!userData
-                                      ? 'Sign In'
+                                      ? (locale?.startsWith('zh') ? '登录领 1 次免费额度' : 'Sign In (Claim 1 Free Credit)')
                                       : activeTab === 'edit'
-                                      ? 'Apply Edit'
-                                      : 'Generate'}
+                                      ? ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生成 (免费 1 次)' : 'Apply Edit (1 Free Credit)') : (locale?.startsWith('zh') ? '立即生成' : 'Apply Edit'))
+                                      : ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生图 (免费 1 次)' : 'Generate (1 Free Credit)') : (locale?.startsWith('zh') ? '立即生图' : 'Generate'))}
                                   </span>
                                   <span className="hidden sm:inline-block px-1 py-0.5 rounded text-[10px] bg-white/20 text-white/90 font-mono font-normal">
                                     ↵
@@ -1560,8 +1741,8 @@ export default function PageComponent({
                         ) : (
                           <div className="w-full relative group/result">
                             <img
-                              key={currentResultImage}
-                              src={currentResultImage}
+                              key={isMobileHoldingOriginal && sourceImage ? sourceImage : currentResultImage}
+                              src={isMobileHoldingOriginal && sourceImage ? sourceImage : currentResultImage}
                               alt="Generated Visual Output from Qwen Image Edit"
                               width={768}
                               height={440}
@@ -1570,13 +1751,28 @@ export default function PageComponent({
                             />
                             <div className="absolute top-2 right-2 px-2.5 py-1 rounded-md bg-emerald-500/90 text-white text-xs font-bold shadow-md pointer-events-none flex items-center gap-1.5">
                               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                              <span>✨ AI Generated Output</span>
+                              <span>{isMobileHoldingOriginal ? '📷 Original Photo' : '✨ AI Generated Output'}</span>
                             </div>
+
+                            {/* Mobile Tap-to-Hold Compare Button */}
+                            {sourceImage && (
+                              <button
+                                type="button"
+                                onTouchStart={() => setIsMobileHoldingOriginal(true)}
+                                onTouchEnd={() => setIsMobileHoldingOriginal(false)}
+                                onMouseDown={() => setIsMobileHoldingOriginal(true)}
+                                onMouseUp={() => setIsMobileHoldingOriginal(false)}
+                                className="sm:hidden absolute bottom-2.5 left-2.5 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-white text-[11px] font-semibold backdrop-blur-md shadow-lg active:bg-indigo-600 transition-colors z-20 flex items-center gap-1.5 select-none"
+                              >
+                                <EyeIcon className="w-3.5 h-3.5 text-cyan-400" />
+                                <span>{isMobileHoldingOriginal ? 'Showing Original' : 'Hold to View Original'}</span>
+                              </button>
+                            )}
                           </div>
                         )}
 
-                        {/* Action Bar with Multi-Format Downloader (PNG / JPG / WebP) */}
-                        <div className="mt-5 w-full flex items-center justify-between pt-3 border-t border-slate-800/80">
+                        {/* Action Bar with Multi-Format Downloader (PNG / JPG / WebP) + Comparison Card Export + Social Share */}
+                        <div className="mt-5 w-full flex items-center justify-between pt-3 border-t border-slate-800/80 gap-2 flex-wrap">
                           <div className="text-xs text-slate-400 flex items-center gap-2">
                             <span>Status: <span className="text-emerald-400 font-medium">Ready</span></span>
                             <span className="text-slate-600 hidden sm:inline">•</span>
@@ -1599,106 +1795,167 @@ export default function PageComponent({
                             </span>
                           </div>
 
-                          <div className="relative inline-flex items-center rounded-xl shadow-lg">
-                            {userData?.isPro ? (
+                          <div className="flex items-center gap-2 flex-wrap ml-auto">
+                            {/* Comparison Card Viral Export Button */}
+                            {sourceImage && currentResultImage && (
                               <button
                                 type="button"
-                                disabled={isDownloading || !currentResultImage}
-                                onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
-                                className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all disabled:opacity-50"
+                                disabled={isExportingCard}
+                                onClick={async () => {
+                                  setIsExportingCard(true);
+                                  try {
+                                    await exportComparisonCard({
+                                      beforeUrl: sourceImage,
+                                      afterUrl: currentResultImage,
+                                      title: 'Qwen Image Editor — Before / After Comparison',
+                                    });
+                                  } catch (err) {
+                                    console.error('Export card failed:', err);
+                                  } finally {
+                                    setIsExportingCard(false);
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:text-white transition-all shadow-sm cursor-pointer"
+                                title="Export 1200x630 Before/After comparison card for social sharing"
                               >
-                                <ArrowDownTrayIcon className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
-                                <span>{isDownloading ? 'Preparing...' : `Download HD (${downloadFormat.toUpperCase()})`}</span>
-                              </button>
-                            ) : (
-                              <button
-                                type="button"
-                                disabled={isDownloading || !currentResultImage}
-                                onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
-                                className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-amber-500 via-indigo-600 to-purple-600 hover:from-amber-400 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all shadow-md hover:shadow-indigo-500/25 disabled:opacity-50"
-                                title="Unlock HD 2048px Lossless Export"
-                              >
-                                <SparklesIcon className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
-                                <span>Download HD</span>
-                                <span className="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">PRO</span>
+                                <PhotoIcon className={`w-3.5 h-3.5 ${isExportingCard ? 'animate-spin text-amber-300' : 'text-indigo-400'}`} />
+                                <span>{isExportingCard ? 'Exporting...' : 'Comparison Card'}</span>
                               </button>
                             )}
 
+                            {/* Social Share Button */}
                             <button
                               type="button"
-                              onClick={() => setShowFormatDropdown(!showFormatDropdown)}
-                              className="inline-flex items-center justify-center rounded-r-xl border-l border-indigo-500/40 bg-indigo-700 hover:bg-indigo-600 px-2.5 py-1.5 text-xs font-semibold text-white transition-colors"
-                              title="Choose Resolution & Export Options"
+                              onClick={() => {
+                                if (typeof navigator !== 'undefined' && navigator.share) {
+                                  navigator.share({
+                                    title: 'Qwen Image Editor — Free Online AI Image Editor',
+                                    text: 'Edit and inpaint photos with natural language prompts using Qwen AI:',
+                                    url: window.location.href,
+                                  }).catch(() => {});
+                                } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                                  navigator.clipboard.writeText(window.location.origin);
+                                  setCopiedShare(true);
+                                  setTimeout(() => setCopiedShare(false), 2000);
+                                }
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/90 hover:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-all shadow-sm cursor-pointer"
+                              title="Share tool link with friends"
                             >
-                              <ChevronDownIcon className="w-3.5 h-3.5" />
+                              {copiedShare ? (
+                                <>
+                                  <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-400" />
+                                  <span className="text-emerald-300 font-semibold">Link Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <ShareIcon className="w-3.5 h-3.5 text-slate-400" />
+                                  <span>Share</span>
+                                </>
+                              )}
                             </button>
 
-                            {/* Format & Quality Dropdown Menu */}
-                            {showFormatDropdown && (
-                              <div className="absolute right-0 bottom-full mb-2 w-64 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md p-2 shadow-2xl z-30 space-y-1.5">
-                                <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                                  Resolution &amp; Quality
-                                </div>
-
-                                {/* HD Option */}
+                            <div className="relative inline-flex items-center rounded-xl shadow-lg">
+                              {userData?.isPro ? (
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd');
-                                  }}
-                                  className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-gradient-to-r from-amber-500/10 to-indigo-500/10 hover:from-amber-500/20 hover:to-indigo-500/20 border border-amber-500/30 text-slate-200 flex items-center justify-between transition-colors"
+                                  disabled={isDownloading || !currentResultImage}
+                                  onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
+                                  className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all disabled:opacity-50"
                                 >
-                                  <div>
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="font-bold text-amber-300">HD 2048px Lossless</span>
-                                      <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-bold border border-amber-500/40">PRO</span>
-                                    </div>
-                                    <span className="text-[10px] text-slate-400 block mt-0.5">Crystal clear, zero watermark</span>
-                                  </div>
-                                  <SparklesIcon className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                                  <ArrowDownTrayIcon className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
+                                  <span>{isDownloading ? 'Preparing...' : `Download HD (${downloadFormat.toUpperCase()})`}</span>
                                 </button>
-
-                                {/* Free Preview Option */}
+                              ) : (
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    handleDownloadWithFormat(currentResultImage, downloadFormat, 'preview');
-                                  }}
-                                  className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-200 flex items-center justify-between transition-colors"
+                                  disabled={isDownloading || !currentResultImage}
+                                  onClick={() => handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd')}
+                                  className="inline-flex items-center gap-1.5 rounded-l-xl bg-gradient-to-r from-amber-500 via-indigo-600 to-purple-600 hover:from-amber-400 hover:to-indigo-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-all shadow-md hover:shadow-indigo-500/25 disabled:opacity-50"
+                                  title="Unlock HD 2048px Lossless Export"
                                 >
-                                  <div>
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="font-semibold text-emerald-400">Standard 512px Preview</span>
-                                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1 py-0.5 rounded font-bold border border-emerald-500/40">FREE</span>
-                                    </div>
-                                    <span className="text-[10px] text-slate-400 block mt-0.5">Sample size with subtle watermark</span>
-                                  </div>
-                                  <ArrowDownTrayIcon className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                  <SparklesIcon className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
+                                  <span>Download HD</span>
+                                  <span className="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 rounded font-bold">PRO</span>
                                 </button>
+                              )}
 
-                                <div className="pt-1.5 border-t border-slate-800">
+                              <button
+                                type="button"
+                                onClick={() => setShowFormatDropdown(!showFormatDropdown)}
+                                className="inline-flex items-center justify-center rounded-r-xl border-l border-indigo-500/40 bg-indigo-700 hover:bg-indigo-600 px-2.5 py-1.5 text-xs font-semibold text-white transition-colors"
+                                title="Choose Resolution & Export Options"
+                              >
+                                <ChevronDownIcon className="w-3.5 h-3.5" />
+                              </button>
+
+                              {/* Format & Quality Dropdown Menu */}
+                              {showFormatDropdown && (
+                                <div className="absolute right-0 bottom-full mb-2 w-64 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md p-2 shadow-2xl z-30 space-y-1.5">
                                   <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                                    Format (Default: {downloadFormat.toUpperCase()})
+                                    Resolution &amp; Quality
                                   </div>
-                                  <div className="grid grid-cols-3 gap-1 pt-1">
-                                    {(['png', 'jpg', 'webp'] as const).map((fmt) => (
-                                      <button
-                                        key={fmt}
-                                        type="button"
-                                        onClick={() => setDownloadFormat(fmt)}
-                                        className={`py-1 text-center rounded-lg text-xs font-semibold transition-all ${
-                                          downloadFormat === fmt
-                                            ? 'bg-indigo-600 text-white shadow-sm'
-                                            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                        }`}
-                                      >
-                                        {fmt.toUpperCase()}
-                                      </button>
-                                    ))}
+
+                                  {/* HD Option */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      handleDownloadWithFormat(currentResultImage, downloadFormat, 'hd');
+                                    }}
+                                    className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-gradient-to-r from-amber-500/10 to-indigo-500/10 hover:from-amber-500/20 hover:to-indigo-500/20 border border-amber-500/30 text-slate-200 flex items-center justify-between transition-colors"
+                                  >
+                                    <div>
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-bold text-amber-300">HD 2048px Lossless</span>
+                                        <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-bold border border-amber-500/40">PRO</span>
+                                      </div>
+                                      <span className="text-[10px] text-slate-400 block mt-0.5">Crystal clear, zero watermark</span>
+                                    </div>
+                                    <SparklesIcon className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                                  </button>
+
+                                  {/* Free Preview Option */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      handleDownloadWithFormat(currentResultImage, downloadFormat, 'preview');
+                                    }}
+                                    className="w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-200 flex items-center justify-between transition-colors"
+                                  >
+                                    <div>
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-semibold text-emerald-400">Standard 512px Preview</span>
+                                        <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1 py-0.5 rounded font-bold border border-emerald-500/40">FREE</span>
+                                      </div>
+                                      <span className="text-[10px] text-slate-400 block mt-0.5">Sample size with subtle watermark</span>
+                                    </div>
+                                    <ArrowDownTrayIcon className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                  </button>
+
+                                  <div className="pt-1.5 border-t border-slate-800">
+                                    <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                      Format (Default: {downloadFormat.toUpperCase()})
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-1 pt-1">
+                                      {(['png', 'jpg', 'webp'] as const).map((fmt) => (
+                                        <button
+                                          key={fmt}
+                                          type="button"
+                                          onClick={() => setDownloadFormat(fmt)}
+                                          className={`py-1 text-center rounded-lg text-xs font-semibold transition-all ${
+                                            downloadFormat === fmt
+                                              ? 'bg-indigo-600 text-white shadow-sm'
+                                              : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                          }`}
+                                        >
+                                          {fmt.toUpperCase()}
+                                        </button>
+                                      ))}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
