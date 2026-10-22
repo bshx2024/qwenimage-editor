@@ -317,14 +317,14 @@ export function WelcomeSurveyModal() {
                 </div>
 
                 <div className="text-right">
-                  <div className="text-xs text-slate-400 line-through">
-                    Regular $9.90
+                  <div className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
+                    One-Time Offer
                   </div>
-                  <div className="text-2xl font-black text-cyan-300">
+                  <div className="text-3xl font-black text-cyan-300">
                     $4.99
                   </div>
-                  <div className="text-[10px] font-bold text-emerald-400 uppercase">
-                    Save 50% Instantly
+                  <div className="text-[10px] text-slate-400">
+                    $0.05 / credit
                   </div>
                 </div>
               </div>

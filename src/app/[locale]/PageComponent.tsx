@@ -529,28 +529,28 @@ export default function PageComponent({
       a: 'Yes, all images generated and edited on Qwen Image Editor are 100% commercial-use friendly and private by default. Users retain complete commercial exploitation rights to monetize visual outputs across paid advertisements, client projects, and print merchandise without royalty obligations. Image uploads and generated outputs are transmitted via 256-bit SSL encryption. Paid subscribers can toggle private mode to ensure inputs and outputs remain completely confidential and are never stored for model training purposes.',
     },
     {
-      q: 'Which model checkpoints are supported (Qwen Image Edit 2511 vs 2512 vs 2509)?',
-      a: 'Our cloud platform runs production-grade checkpoints from Alibaba Cloud and HuggingFace, including Qwen-Image-Edit 2511 and 2512 alongside Wanx 2.1. Checkpoint 2511 delivers higher semantic adherence for complex localized inpainting and prompt constraints, whereas 2512 offers enhanced multi-angle perspective handling and lighting balancing. Checkpoint 2509 is deployed on low-latency serverless GPU endpoints for rapid exploratory edits.',
+      q: 'Which model checkpoints and APIs are supported?',
+      a: 'Our cloud platform connects directly to production Alibaba Cloud Bailian (DashScope) APIs, utilizing Wanx 2.1 Image Edit (wanx2.1-imageedit) for description-based inpainting and Wanx 2.1 Turbo/Plus for text-to-image synthesis. We also track open-weights Qwen-Image family releases for ongoing workflow compatibility.',
     },
     {
-      q: 'Can I use this online editor for free without ComfyUI or a high-end GPU?',
-      a: 'Yes, completely free. Running Qwen-Image-Edit locally via ComfyUI, GGUF quants, or Diffusers pipelines demands at least 16GB–24GB of dedicated VRAM (e.g., NVIDIA RTX 3090, 4090, or A100) and custom Python node dependencies. Our cloud service executes all neural inference on high-performance GPU clusters, enabling instant editing in any modern browser on Windows, macOS, or mobile devices with zero local installation.',
+      q: 'Can I try this online editor for free without ComfyUI or a high-end GPU?',
+      a: 'Yes. Every user receives a daily trial quota upon signing in to test image editing and text-to-image directly in their browser—no 24GB VRAM GPU or ComfyUI setup required. For larger production batches and zero-wait GPU queues, non-expiring credit packs start at $4.99 for 100 credits ($0.05 per edit).',
     },
     {
-      q: 'How does Qwen Image Edit solve the face distortion issue ("cant get the faces correct")?',
-      a: 'Legacy inpainting tools often cause facial distortion or identity drift due to random diffusion noise re-sampling. Qwen Image Edit pairs deep multimodal visual tokens with spatial cross-attention layers. This locks 68+ facial landmark points, gaze orientation, and natural skin texture while applying edits exclusively to requested regions such as clothing, hair color, glasses, or background surroundings.',
+      q: 'How does Qwen Image Edit help maintain face and character consistency?',
+      a: 'Qwen Image Edit pairs deep multimodal visual tokens with spatial cross-attention layers. This architecture is designed to preserve primary facial landmark points, gaze orientation, and skin texture while applying modifications strictly to requested regions such as clothing, hairstyle, or background.',
     },
     {
       q: 'Is Qwen Image Edit censored, and what are the content policies?',
-      a: 'Qwen Image Edit incorporates safety filters designed to block harmful, hateful, and illegal material while providing maximum creative freedom for portrait editing, design mockups, art direction, and digital marketing. Safe artistic expressions, photorealistic portraits, and creative styling are fully supported.',
+      a: 'Qwen Image Edit incorporates safety filters designed to block harmful, hateful, and illegal material while providing creative freedom for portrait editing, design mockups, art direction, and digital marketing. Safe artistic expressions, photorealistic portraits, and creative styling are fully supported.',
     },
     {
       q: 'Can Qwen Image render clean English and bilingual text inside images?',
-      a: 'Yes. Bilingual typographic rendering is a core architectural strength of the Qwen visual model. Thanks to its multimodal vocabulary tokenizer, Qwen correctly spells English words, brand typography, and Chinese calligraphy on street signage, product packaging, and posters without the distorted glyphs typical of older diffusion models.',
+      a: 'Yes. Thanks to its multimodal vocabulary tokenizer, Qwen significantly improves typography rendering across English words, brand typography, and Chinese characters on street signage, packaging, and posters, helping reduce the distorted pseudo-glyphs typical of older diffusion engines.',
     },
     {
       q: 'What resolutions and export formats are supported for download?',
-      a: 'Users can preview in real-time and export full-resolution images in lossless PNG or optimized WebP format up to 4K Ultra-HD resolution with sharp edge fidelity and zero color compression.',
+      a: 'Users can preview in real-time in the browser and export full-resolution images in PNG or optimized WebP format with sharp edge fidelity and clean details.',
     },
   ];
 
@@ -724,69 +724,60 @@ export default function PageComponent({
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-600/10 blur-[130px] pointer-events-none rounded-full" />
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-            {/* Header Titles */}
-            <div className="text-center max-w-4xl mx-auto space-y-4 mb-8">
-              {/* Badges Bar: Feature + Independent Third-Party Compliance */}
-              <div className="flex flex-wrap items-center justify-center gap-2.5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-medium text-indigo-300 backdrop-blur-md">
-                  <SparklesIcon className="w-4 h-4 text-indigo-400 animate-pulse" />
-                  <span>Next-Gen Vision Foundation AI</span>
-                </div>
+            {/* Header Titles - Streamlined & Action-First */}
+            <div className="text-center max-w-3xl mx-auto space-y-3.5 mb-7">
+              {/* Compliance & API Access Badge */}
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 <Link
                   href={getLinkHref(locale, 'disclaimer')}
                   className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300 backdrop-blur-md hover:bg-amber-500/20 transition-colors"
                 >
-                  <ShieldCheckIcon className="w-3.5 h-3.5 text-amber-400" />
+                  <ShieldCheckIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>
                     {locale?.startsWith('zh')
-                      ? '独立第三方服务 • 官方API合规接入 • 与阿里巴巴官方无关联'
-                      : 'Independent Third-Party Service • Official API Access'}
+                      ? '独立第三方工具 • 官方合规API调用 • 与阿里巴巴无官方关联'
+                      : 'Independent Third-Party Tool • Official Cloud API Access'}
                   </span>
                 </Link>
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+                  <SparklesIcon className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Qwen-Image &amp; Wanx 2.1 Engine</span>
+                </div>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                {indexText?.h1Text || "Qwen AI Image Editor & Precision Inpainting"}
+              {/* Main H1 - ChatGPT Recommended Focus */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Qwen Image Editor Online
               </h1>
 
-              {/* Prominent Third-Party Notice */}
-              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-2 text-center text-xs text-amber-200/90 max-w-2xl mx-auto backdrop-blur-md">
-                <span>
-                  {locale?.startsWith('zh')
-                    ? '⚠️ 声明：本平台为独立第三方服务工具，通过官方合规API调用相关模型，与阿里巴巴/通义千问官方无关联或授权关系。'
-                    : 'Notice: This platform is an independent third-party tool accessing AI models via compliant official APIs. We are not affiliated with or endorsed by Alibaba Group or Qwen.'}
+              {/* Core Value Proposition - Clean & Direct */}
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto">
+                Edit images with natural language. Upload a photo, describe the changes you want, and preview high-resolution results in your browser.
+              </p>
+
+              {/* Core Workflow Tags */}
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1 pb-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-indigo-300 shadow-sm">
+                  ✨ Image Editing
                 </span>
-                {' '}
-                <Link
-                  href={getLinkHref(locale, 'disclaimer')}
-                  className="underline underline-offset-2 text-amber-300 hover:text-white font-medium ml-1"
-                >
-                  {locale?.startsWith('zh') ? '查看免责声明' : 'Learn More'}
-                </Link>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-purple-300 shadow-sm">
+                  🖼️ Background Replacement
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-cyan-300 shadow-sm">
+                  🔤 Text Editing
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-medium text-emerald-300 shadow-sm">
+                  🛍️ Product Photos
+                </span>
               </div>
 
-              {/* Conclusion First: Objective Definition for Direct AI Extraction */}
-              <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
-                <strong>Qwen Image Editor</strong> is a browser-based multimodal AI inpainting and photo-editing platform powered by Alibaba Cloud Qwen-Image 2.1 foundation models, processing 1024×1024 to 2048×2048 images in 2.5–4.5 seconds with zero local GPU setup.
-              </p>
-              {/* Feature-Bullet Chunking Bar */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
-                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-                  <span className="font-semibold text-indigo-300 block">AI Inpainting</span>
-                  <span className="text-slate-400 text-[11px]">Natural language maskless edit, 2.5s turnaround</span>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-                  <span className="font-semibold text-purple-300 block">Bilingual Typography</span>
-                  <span className="text-slate-400 text-[11px]">English & Chinese rendering, 0 glyph corruption</span>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-                  <span className="font-semibold text-pink-300 block">Background Swap</span>
-                  <span className="text-slate-400 text-[11px]">Semantic isolation, JPG/PNG/WebP up to 20MB</span>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-                  <span className="font-semibold text-cyan-300 block">Character Consistency</span>
-                  <span className="text-slate-400 text-[11px]">68+ facial landmarks preserved, 0 identity drift</span>
-                </div>
+              {/* Grounded & Realistic Performance Indicators (No Hyperbole) */}
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-slate-400 pt-0.5">
+                <span>🎯 Designed to preserve subject identity</span>
+                <span className="hidden sm:inline text-slate-700">•</span>
+                <span>🔤 Helps improve typography rendering</span>
+                <span className="hidden sm:inline text-slate-700">•</span>
+                <span>⏱️ Typical processing ~8–15s (varies with server demand)</span>
               </div>
             </div>
 
@@ -821,9 +812,9 @@ export default function PageComponent({
                       className="inline-flex items-center gap-2 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer text-xs group shadow-sm"
                     >
                       <span className="px-1.5 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                        {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial Quota: 1/1'}
+                        {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial: 1/1 Credit'}
                       </span>
-                      <span className="group-hover:translate-x-0.5 transition-transform">
+                      <span className="group-hover:translate-x-0.5 transition-transform text-slate-300">
                         {locale?.startsWith('zh') ? '(登录即领) →' : '(Sign in to claim) →'}
                       </span>
                     </button>
@@ -833,7 +824,7 @@ export default function PageComponent({
                 <div className="flex items-center gap-3 text-slate-400 text-[11px] flex-wrap">
                   <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
                     <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Cost: <strong>1 Credit</strong>/edit (2 Pro)</span>
+                    <span>Cost: <strong>1 Credit</strong> / edit • No hidden charges</span>
                   </div>
                   <span className="hidden sm:inline text-slate-800">|</span>
                   <button
@@ -842,7 +833,7 @@ export default function PageComponent({
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-500/15 via-teal-500/15 to-cyan-500/15 hover:from-emerald-500/25 hover:to-cyan-500/25 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-300 font-semibold text-xs transition-all cursor-pointer shadow-sm group ml-auto sm:ml-0"
                   >
                     <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Starter: <strong>$4.99 / 100 Credits</strong></span>
+                    <span>Starter Pack: <strong>$4.99 / 100 Credits</strong></span>
                     <span className="text-cyan-400 group-hover:translate-x-0.5 transition-transform">→</span>
                   </button>
                 </div>
@@ -2566,13 +2557,13 @@ export default function PageComponent({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-14">
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
-                Model Evolution & Architecture
+                Model Architecture & Cloud Endpoints
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
-                Supported Qwen-Image-Edit Checkpoints
+                Supported Foundation Models &amp; APIs
               </h2>
               <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
-                The Qwen-Image foundation family bridges visual multimodal understanding and generative diffusion. Our online editor integrates the official open-source weights optimized for high-fidelity execution.
+                Our platform accesses official Alibaba Cloud Bailian (DashScope) production endpoints and benchmarks against open-source Qwen-Image family releases for maximum fidelity and reliability.
               </p>
             </div>
 
@@ -2580,27 +2571,27 @@ export default function PageComponent({
               <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                      Checkpoint 2511
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
+                      wanx2.1-imageedit
                     </span>
-                    <span className="text-[11px] text-slate-400">High Adherence SOTA</span>
+                    <span className="text-[11px] text-emerald-400 font-medium">Official Cloud API</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2511</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Wanx 2.1 Image Edit</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    The acclaimed flagship revision for instruction-guided inpainting. Checkpoint 2511 excels at fine-grained edits, complex subject preservation, and photo-level material realism with minimal hallucination.
+                    The official multimodal inpainting endpoint on Alibaba Cloud DashScope. Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Best for multi-object replacement & background swaps</span>
+                      <span>Mode: <code>description_edit</code> instruction inpainting</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Sub-pixel edge blending and natural shadow cast</span>
+                      <span>Facial identity &amp; posture preservation</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Exceptional portrait feature retention</span>
+                      <span>Resolution support up to 2048×2048</span>
                     </li>
                   </ul>
                 </div>
@@ -2609,27 +2600,27 @@ export default function PageComponent({
               <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-b from-purple-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                      Checkpoint 2512
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
+                      wanx2.1-t2i-turbo / plus
                     </span>
-                    <span className="text-[11px] text-slate-400">Semantic & Spatial Control</span>
+                    <span className="text-[11px] text-purple-400 font-medium">Text-to-Image</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2512</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Wanx 2.1 Generation</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Engineered for nuanced prompt comprehension, spatial camera transformations, and multi-turn modifications. Checkpoint 2512 accurately interprets conversational constraints and stylistic nuances.
+                    High-performance text-to-image foundation models. Turbo provides sub-second rapid prototyping, while Plus synthesizes high-density textures and crisp bilingual typography.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Camera perspective & angle adjustment</span>
+                      <span>Bilingual English &amp; Chinese typography</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Advanced aesthetic color grading & mood shifts</span>
+                      <span>Multiple aspect ratios (1:1, 16:9, 9:16, 4:3)</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Enhanced bilingual typography & packaging design</span>
+                      <span>Commercial-grade photorealism &amp; product shots</span>
                     </li>
                   </ul>
                 </div>
@@ -2638,27 +2629,27 @@ export default function PageComponent({
               <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-b from-cyan-950/30 to-slate-900/60 p-7 relative flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                      Checkpoint 2509
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">
+                      Qwen-Image Open Hub
                     </span>
-                    <span className="text-[11px] text-slate-400">Fast Inpainting</span>
+                    <span className="text-[11px] text-cyan-400 font-medium">Hugging Face &amp; ComfyUI</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">Qwen-Image-Edit 2509</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Open Ecosystem Checkpoints</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    The baseline architecture renowned for lightweight inference and rapid previewing. Provides dependable object removal, background clearing, and quick conceptual prototyping.
+                    Continuous cross-benchmarking against community revisions (including 2511 and 2512 checkpoints) to ensure our browser workspace delivers parity with local 24GB VRAM setups.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>Fast turnaround for rapid iterations</span>
+                      <span>Zero local Python, CUDA, or ComfyUI dependencies</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>Efficient object erasure & clean inpainting</span>
+                      <span>Cloud GPU clustering with automatic failover</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>Stable baseline for standard resolution outputs</span>
+                      <span>Compatible with prompt recipes across community nodes</span>
                     </li>
                   </ul>
                 </div>

@@ -526,6 +526,12 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
                 </tbody>
               </table>
             </div>
+
+            {/* Benchmark Methodology & Conditions Note */}
+            <div className="mt-4 rounded-xl border border-slate-800/80 bg-slate-900/30 p-4 text-xs text-slate-400">
+              <span className="font-semibold text-slate-300">Benchmark Note & Testing Environment: </span>
+              Hardware and latency benchmarks were recorded on cloud NVIDIA L4/A10G and consumer RTX 4090 GPUs running FP8/BF16 configurations. Metrics reflect typical community test suites (Flux.1 Dev 28 steps vs Qwen Wanx/image-edit API endpoints) and may vary with custom sampling parameters.
+            </div>
           </div>
         </section>
 

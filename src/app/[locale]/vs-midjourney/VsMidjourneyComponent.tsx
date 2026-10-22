@@ -453,6 +453,12 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
                 </tbody>
               </table>
             </div>
+
+            {/* Benchmark Methodology & Conditions Note */}
+            <div className="mt-4 rounded-xl border border-slate-800/80 bg-slate-900/30 p-4 text-xs text-slate-400">
+              <span className="font-semibold text-slate-300">Benchmark Note & Methodology: </span>
+              Metrics are derived from comparative evaluation sets across prompt adherence, inpainting accuracy, and typography coherence (tested on Midjourney v6 web/Discord vs Qwen DashScope / ComfyUI open weights). Output quality can vary depending on prompt nuance, seed, and resolution.
+            </div>
           </div>
         </section>
 
