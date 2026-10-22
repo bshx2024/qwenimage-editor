@@ -2,6 +2,7 @@ import {getDb} from "~/libs/db";
 import {getArrayUrlResult} from "~/configs/buildLink";
 import {getAISettings, getSetting, countSticker} from "~/servers/keyValue";
 import {queryBailianTask} from "~/libs/bailian";
+import {queryKieTask} from "~/libs/kieai";
 import {R2, r2Bucket, storageURL} from "~/libs/R2";
 import {v4 as uuidv4} from "uuid";
 
@@ -42,7 +43,70 @@ export const GET = async (req: Request) => {
 
   const data = resultData[0];
 
-  // If work is still pending, poll Bailian task on-demand (essential for serverless runtimes)
+  // If work is still pending, poll KIE AI task on-demand (Primary)
+  if (data.status === 0 && uid) {
+    try {
+      let kieTaskId = '';
+      if (typeof data.output_url === 'string' && data.output_url.startsWith('kie:')) {
+        kieTaskId = data.output_url.replace('kie:', '').trim();
+      } else {
+        kieTaskId = await getSetting(`kie_task_${uid}`).catch(() => '');
+      }
+
+      if (kieTaskId) {
+        const aiSettings = await getAISettings();
+        if (aiSettings.kieApiKey) {
+          const taskData = await queryKieTask(
+            kieTaskId,
+            aiSettings.kieApiKey,
+            aiSettings.kieBaseUrl
+          );
+
+          if (taskData.status === 'success' && taskData.outputUrl) {
+            let finalUrl = taskData.outputUrl;
+            if (r2Bucket && process.env.R2_ACCOUNT_ID) {
+              try {
+                const fileContent = await fetch(taskData.outputUrl)
+                  .then((v) => v.arrayBuffer())
+                  .then(Buffer.from);
+                const currentKey = `generated/${uuidv4()}.png`;
+                await R2.upload({
+                  Bucket: r2Bucket,
+                  Key: currentKey,
+                  Body: fileContent,
+                  ContentType: 'image/png',
+                }).promise();
+                finalUrl = `${storageURL}/${currentKey}`;
+              } catch (r2Err) {
+                console.warn('[KIE AI] R2 upload error, keeping source URL:', r2Err);
+              }
+            }
+
+            if (data.is_public) {
+              await countSticker('countSticker', 1).catch(() => {});
+            }
+
+            await db.query(
+              'UPDATE works SET output_url = $1, status = 1, updated_at = NOW() WHERE uid = $2',
+              [JSON.stringify([finalUrl]), uid]
+            );
+            data.status = 1;
+            data.output_url = JSON.stringify([finalUrl]);
+          } else if (taskData.status === 'fail') {
+            const errorMsg = taskData.message || 'KIE AI generation failed';
+            const { markWorkFailedAndRefund } = await import('~/servers/manageUserTimes');
+            await markWorkFailedAndRefund(uid, errorMsg);
+            data.status = 2;
+            data.message = errorMsg;
+          }
+        }
+      }
+    } catch (pollErr: any) {
+      console.warn('[KIE AI Poll] Error querying task status:', pollErr?.message);
+    }
+  }
+
+  // If work is still pending, poll Bailian task on-demand (Fallback / Standby)
   if (data.status === 0 && uid) {
     try {
       let bailianTaskId = '';
@@ -54,7 +118,7 @@ export const GET = async (req: Request) => {
 
       if (bailianTaskId) {
         const aiSettings = await getAISettings();
-        if (aiSettings.provider === 'bailian' && aiSettings.bailianApiKey) {
+        if ((aiSettings.provider === 'bailian' || aiSettings.provider === 'kie') && aiSettings.bailianApiKey) {
           const taskData = await queryBailianTask(
             bailianTaskId,
             aiSettings.bailianApiKey,

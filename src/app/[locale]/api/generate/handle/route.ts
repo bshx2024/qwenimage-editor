@@ -9,6 +9,7 @@ import { checkSubscribe } from "~/servers/subscribe";
 import { checkSensitiveInputText, inspectSensitiveInputText } from "~/servers/checkInput";
 import { getAISettings, getSetting, setSetting } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
+import { submitKieTask } from "~/libs/kieai";
 import { scanPromptSafety } from "~/servers/contentSafety";
 
 export async function POST(req: Request) {
@@ -130,8 +131,38 @@ export async function POST(req: Request) {
     let revisedText = textStr;
 
     let initialOutputUrl = "";
-    if (activeProvider === 'bailian' && aiSettings.bailianApiKey) {
-      // 1. Dispatch to Alibaba Cloud Bailian (DashScope)
+    let dispatched = false;
+
+    // 1. Primary Route: KIE AI (Qwen-Image-2.1 @ $0.02/image) with Bailian Standby Failover
+    if (activeProvider === 'kie' && aiSettings.kieApiKey) {
+      try {
+        const kieTask = await submitKieTask({
+          uid,
+          prompt: textStr,
+          imageUrl: imageUrl || undefined,
+          taskType: imageUrl ? "image_edit" : "text2image",
+          model: requestedModel || "qwen2-1/text-to-image",
+          apiKey: aiSettings.kieApiKey,
+          baseUrl: aiSettings.kieBaseUrl,
+          aspectRatio,
+          size: resolvedSize,
+        });
+
+        if (kieTask?.taskId) {
+          initialOutputUrl = `kie:${kieTask.taskId}`;
+          await setSetting(`kie_task_${uid}`, kieTask.taskId).catch(() => {});
+          dispatched = true;
+        }
+      } catch (kieErr: any) {
+        console.warn('[KIE AI] Task dispatch failed, checking Bailian fallback:', kieErr?.message);
+        if (!aiSettings.bailianApiKey) {
+          throw kieErr;
+        }
+      }
+    }
+
+    // 2. Bailian Route (Primary if provider === 'bailian', or Fallback for KIE AI)
+    if (!dispatched && aiSettings.bailianApiKey && (activeProvider === 'bailian' || activeProvider === 'kie')) {
       const bailianTask = await submitBailianTask({
         uid,
         prompt: textStr,
@@ -147,18 +178,18 @@ export async function POST(req: Request) {
         initialOutputUrl = `bailian:${bailianTask.taskId}`;
       }
 
-      // Save Bailian task ID so serverless getResultInfo can query it reliably
       await setSetting(`bailian_task_${uid}`, bailianTask.taskId).catch(() => {});
-
-      // Poll in background (best-effort if runtime allows)
       processBailianTaskInBackground(
         uid,
         bailianTask.taskId,
         aiSettings.bailianApiKey,
         aiSettings.bailianBaseUrl
       );
-    } else {
-      // 2. Dispatch to Replicate
+      dispatched = true;
+    }
+
+    // 3. Fallback Route: Replicate (Legacy)
+    if (!dispatched) {
       const replicateClient = getReplicateClient(aiSettings.replicateToken);
       let input: any;
       let predictionParams: any = {
@@ -167,7 +198,6 @@ export async function POST(req: Request) {
       };
 
       if (imageUrl) {
-        // Qwen Image Edit
         input = await getQwenEditInput(imageUrl, textStr, checkSubscribeStatus);
         if (process.env.REPLICATE_EDIT_VERSION) {
           predictionParams.version = process.env.REPLICATE_EDIT_VERSION;
@@ -175,19 +205,18 @@ export async function POST(req: Request) {
           predictionParams.model = "qwen/qwen-image-edit";
         }
       } else {
-        // Qwen Image Generator
         input = await getQwenGeneratorInput(textStr, checkSubscribeStatus, { width, height });
         if (process.env.REPLICATE_API_VERSION) {
           predictionParams.version = process.env.REPLICATE_API_VERSION;
         } else {
-          predictionParams.model = "qwen/qwen-image";
+          predictionParams.model = "qwen/qwen-image-2.1";
         }
       }
+
       predictionParams.input = input;
       revisedText = input?.prompt || textStr;
-
-      // Call Replicate API
-      await replicateClient.predictions.create(predictionParams);
+      const prediction = await replicateClient.predictions.create(predictionParams);
+      initialOutputUrl = prediction.id;
     }
 
     // Save record to database with fallback if new columns aren't migrated yet

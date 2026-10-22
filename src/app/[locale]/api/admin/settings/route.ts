@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { verifyAdmin } from '~/libs/adminAuth';
 import { getAISettings, saveAISettings, getPaymentSettings, savePaymentSettings } from '~/servers/keyValue';
 import { testBailianKey } from '~/libs/bailian';
+import { testKieKey } from '~/libs/kieai';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,7 +37,15 @@ export async function POST(request: Request) {
     const body = await request.json();
     const action = body.action || 'save';
 
-    // 1. Test Bailian Connection
+    // 1. Test KIE AI Connection
+    if (action === 'test_kie') {
+      const apiKey = body.apiKey;
+      const baseUrl = body.baseUrl || 'https://api.kie.ai';
+      const testResult = await testKieKey(apiKey, baseUrl);
+      return NextResponse.json(testResult);
+    }
+
+    // 2. Test Bailian Connection
     if (action === 'test_bailian') {
       const apiKey = body.apiKey;
       const baseUrl = body.baseUrl || 'https://dashscope.aliyuncs.com';
@@ -44,10 +53,12 @@ export async function POST(request: Request) {
       return NextResponse.json(testResult);
     }
 
-    // 2. Save AI Settings
+    // 3. Save AI Settings
     if (action === 'save') {
       await saveAISettings({
         provider: body.provider,
+        kieApiKey: body.kieApiKey,
+        kieBaseUrl: body.kieBaseUrl,
         bailianApiKey: body.bailianApiKey,
         bailianBaseUrl: body.bailianBaseUrl,
         bailianModel: body.bailianModel,

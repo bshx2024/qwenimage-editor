@@ -96,7 +96,9 @@ export const getCountSticker = async (): Promise<string> => {
 };
 
 export interface AISettings {
-  provider: 'bailian' | 'replicate';
+  provider: 'kie' | 'bailian' | 'replicate';
+  kieApiKey: string;
+  kieBaseUrl: string;
   bailianApiKey: string;
   bailianBaseUrl: string;
   bailianModel: string;
@@ -104,19 +106,23 @@ export interface AISettings {
 }
 
 export async function getAISettings(): Promise<AISettings> {
-  const [provider, bailianApiKey, bailianBaseUrl, bailianModel, replicateToken] = await Promise.all([
+  const [provider, kieApiKey, kieBaseUrl, bailianApiKey, bailianBaseUrl, bailianModel, replicateToken] = await Promise.all([
     getSetting('AI_PROVIDER', 'AI_PROVIDER'),
+    getSetting('KIE_API_KEY', 'KIE_API_KEY'),
+    getSetting('KIE_BASE_URL', 'KIE_BASE_URL'),
     getSetting('BAILIAN_API_KEY', 'BAILIAN_API_KEY'),
     getSetting('BAILIAN_BASE_URL', 'BAILIAN_BASE_URL'),
     getSetting('BAILIAN_MODEL', 'BAILIAN_MODEL'),
     getSetting('REPLICATE_API_TOKEN', 'REPLICATE_API_TOKEN'),
   ]);
 
-  const defaultProvider = process.env.AI_PROVIDER === 'replicate' ? 'replicate' : 'bailian';
-  const effectiveProvider = provider === 'replicate' || provider === 'bailian' ? provider : defaultProvider;
+  const defaultProvider = (process.env.AI_PROVIDER as any) || 'kie';
+  const effectiveProvider = (provider === 'kie' || provider === 'bailian' || provider === 'replicate') ? provider : defaultProvider;
 
   return {
     provider: effectiveProvider,
+    kieApiKey: kieApiKey || process.env.KIE_API_KEY || '',
+    kieBaseUrl: kieBaseUrl || process.env.KIE_BASE_URL || 'https://api.kie.ai',
     bailianApiKey: bailianApiKey || process.env.DASHSCOPE_API_KEY || '',
     bailianBaseUrl: bailianBaseUrl || 'https://dashscope.aliyuncs.com',
     bailianModel: bailianModel || 'wanx2.1-t2i-turbo',
@@ -127,6 +133,12 @@ export async function getAISettings(): Promise<AISettings> {
 export async function saveAISettings(settings: Partial<AISettings>): Promise<void> {
   if (settings.provider !== undefined) {
     await setSetting('AI_PROVIDER', settings.provider);
+  }
+  if (settings.kieApiKey !== undefined) {
+    await setSetting('KIE_API_KEY', settings.kieApiKey);
+  }
+  if (settings.kieBaseUrl !== undefined) {
+    await setSetting('KIE_BASE_URL', settings.kieBaseUrl);
   }
   if (settings.bailianApiKey !== undefined) {
     await setSetting('BAILIAN_API_KEY', settings.bailianApiKey);

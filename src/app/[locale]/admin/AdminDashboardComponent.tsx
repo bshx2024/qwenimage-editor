@@ -139,15 +139,19 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [showStripeKey, setShowStripeKey] = useState<boolean>(false);
   const [copiedWebhook, setCopiedWebhook] = useState<boolean>(false);
 
-  // AI Provider & Bailian Settings State
+  // AI Provider & Multi-Channel Settings State
   const [aiSettings, setAiSettings] = useState<{
-    provider: 'bailian' | 'replicate';
+    provider: 'kie' | 'bailian' | 'replicate';
+    kieApiKey: string;
+    kieBaseUrl: string;
     bailianApiKey: string;
     bailianBaseUrl: string;
     bailianModel: string;
     replicateToken: string;
   }>({
-    provider: 'bailian',
+    provider: 'kie',
+    kieApiKey: '',
+    kieBaseUrl: 'https://api.kie.ai',
     bailianApiKey: '',
     bailianBaseUrl: 'https://dashscope.aliyuncs.com',
     bailianModel: 'wanx2.1-t2i-turbo',
@@ -155,6 +159,9 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   });
   const [aiSettingsLoading, setAiSettingsLoading] = useState<boolean>(false);
   const [isSavingAI, setIsSavingAI] = useState<boolean>(false);
+  const [isTestingKie, setIsTestingKie] = useState<boolean>(false);
+  const [kieTestStatus, setKieTestStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [showKieApiKey, setShowKieApiKey] = useState<boolean>(false);
   const [isTestingBailian, setIsTestingBailian] = useState<boolean>(false);
   const [bailianTestStatus, setBailianTestStatus] = useState<{ success: boolean; message: string } | null>(null);
   const [showApiKey, setShowApiKey] = useState<boolean>(false);
@@ -688,6 +695,37 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       showToast(e?.message || 'Network error saving settings', 'error');
     } finally {
       setIsSavingAI(false);
+    }
+  };
+
+  const handleTestKie = async () => {
+    if (!aiSettings.kieApiKey?.trim()) {
+      showToast('Please enter a KIE AI API Key first to test.', 'error');
+      return;
+    }
+    setIsTestingKie(true);
+    setKieTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'test_kie',
+          apiKey: aiSettings.kieApiKey,
+          baseUrl: aiSettings.kieBaseUrl,
+        }),
+      });
+      const data = await res.json();
+      setKieTestStatus(data);
+      if (data.success) {
+        showToast('KIE AI API Key verified! Connection healthy.');
+      } else {
+        showToast(data.message || 'KIE AI Verification failed.', 'error');
+      }
+    } catch (e: any) {
+      setKieTestStatus({ success: false, message: e?.message || 'Connection test failed' });
+    } finally {
+      setIsTestingKie(false);
     }
   };
 
@@ -2325,8 +2363,30 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                       <span>Active Image Generation Provider</span>
                     </h3>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Bailian Radio Option */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {/* KIE AI Radio Option (Primary - $0.02) */}
+                      <div
+                        onClick={() => setAiSettings((prev) => ({ ...prev, provider: 'kie' }))}
+                        className={`cursor-pointer p-4 rounded-xl border transition-all ${
+                          aiSettings.provider === 'kie'
+                            ? 'border-emerald-500/50 bg-emerald-950/25 shadow-md shadow-emerald-500/10'
+                            : 'border-slate-800 bg-slate-950 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-semibold text-white flex items-center gap-1.5">
+                            <span>KIE AI (Qwen 2.1)</span>
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            $0.02/img · Primary
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          Lowest API cost ($0.02/1K). Auto-failover to Alibaba Bailian standby enabled.
+                        </p>
+                      </div>
+
+                      {/* Bailian Radio Option (Standby / Direct) */}
                       <div
                         onClick={() => setAiSettings((prev) => ({ ...prev, provider: 'bailian' }))}
                         className={`cursor-pointer p-4 rounded-xl border transition-all ${
@@ -2337,18 +2397,18 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-semibold text-white flex items-center gap-2">
-                            <span>Alibaba Cloud Bailian (阿里云百炼)</span>
+                            <span>Alibaba Bailian (百炼)</span>
                           </span>
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                            Recommended
+                            Official SLA · Standby
                           </span>
                         </div>
                         <p className="text-xs text-slate-400 leading-relaxed">
-                          Official DashScope API powering Wanx 2.1 (通义万相) and Qwen Image Edit. Lightning-fast response and cost-effective.
+                          Official DashScope API. Zero middleman, direct Alibaba cloud datacenter.
                         </p>
                       </div>
 
-                      {/* Replicate Radio Option */}
+                      {/* Replicate Radio Option (Legacy) */}
                       <div
                         onClick={() => setAiSettings((prev) => ({ ...prev, provider: 'replicate' }))}
                         className={`cursor-pointer p-4 rounded-xl border transition-all ${
@@ -2359,14 +2419,92 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-semibold text-white">Replicate API</span>
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                            Fallback
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">
+                            Legacy
                           </span>
                         </div>
                         <p className="text-xs text-slate-400 leading-relaxed">
-                          Open-source cloud hosting for image models via replicate.com token.
+                          Per-second GPU billing on Replicate. Kept for backwards compatibility.
                         </p>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* KIE AI Detailed Settings Card */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md space-y-5">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div className="flex items-center gap-2">
+                        <KeyIcon className="w-4 h-4 text-emerald-400" />
+                        <h3 className="text-sm font-bold text-white">
+                          KIE AI (Primary Channel · $0.02/img) Configuration
+                        </h3>
+                      </div>
+                      <a
+                        href="https://kie.ai/api-keys"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 font-medium"
+                      >
+                        <span>Open KIE AI Keys</span>
+                        <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+
+                    {/* KIE API Key */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-semibold text-slate-300">
+                        KIE AI API Key (Bearer Token)
+                      </label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <input
+                            type={showKieApiKey ? 'text' : 'password'}
+                            value={aiSettings.kieApiKey || ''}
+                            onChange={(e) =>
+                              setAiSettings((prev) => ({ ...prev, kieApiKey: e.target.value.trim() }))
+                            }
+                            placeholder="Enter KIE AI API Key from kie.ai/api-keys"
+                            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 font-mono tracking-wide"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowKieApiKey(!showKieApiKey)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                          >
+                            {showKieApiKey ? (
+                              <EyeSlashIcon className="w-4 h-4" />
+                            ) : (
+                              <EyeIcon className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleTestKie}
+                          disabled={isTestingKie || !aiSettings.kieApiKey}
+                          className="shrink-0 px-4 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          <ArrowPathIcon className={`w-3.5 h-3.5 ${isTestingKie ? 'animate-spin' : ''}`} />
+                          <span>{isTestingKie ? 'Testing...' : 'Test Connection'}</span>
+                        </button>
+                      </div>
+                      <p className="text-[11px] text-slate-400">
+                        Copy your API Key from <span className="text-emerald-300 font-mono">kie.ai/api-keys</span>. All requests will be routed to Qwen-Image-2.1 with automatic Bailian fallback.
+                      </p>
+
+                      {/* Connection Test Feedback Banner */}
+                      {kieTestStatus && (
+                        <div
+                          className={`mt-2 p-3 rounded-xl border text-xs flex items-center gap-2.5 ${
+                            kieTestStatus.success
+                              ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                              : 'bg-rose-950/30 border-rose-500/40 text-rose-300'
+                          }`}
+                        >
+                          <span>{kieTestStatus.success ? '✅' : '❌'}</span>
+                          <span>{kieTestStatus.message}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
