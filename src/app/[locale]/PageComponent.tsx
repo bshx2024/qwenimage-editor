@@ -44,16 +44,18 @@ export default function PageComponent({
     refreshUserCredits,
   } = useCommonContext();
 
-  const [textStr, setTextStr] = useState('');
-  const [sourceImage, setSourceImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
+  const [textStr, setTextStr] = useState(
+    'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
+  );
+  const [sourceImage, setSourceImage] = useState<string | null>('/images/showcase_dress_before.jpg');
   const [isUploading, setIsUploading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
   const [aspectRatio, setAspectRatio] = useState<'auto' | '1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('auto');
   const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-i2i-turbo');
-  const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('split');
-  const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/qwen_editor_demo.jpg');
+  const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('result');
+  const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/showcase_dress_after.jpg');
   const [uid, setUid] = useState('');
   const [intervalResultInfo, setIntervalResultInfo] = useState<number | undefined>(undefined);
   const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true });
@@ -159,18 +161,24 @@ export default function PageComponent({
     }
   };
 
-  const handleSampleSelect = (url: string, defaultPrompt?: string) => {
-    setSourceImage(url);
+  const handleSampleSelect = (beforeUrl: string, defaultPrompt?: string, afterUrl?: string) => {
+    setSourceImage(beforeUrl);
     setActiveTab('edit');
     if (defaultPrompt) {
       setTextStr(defaultPrompt);
     }
+    if (afterUrl) {
+      setCurrentResultImage(afterUrl);
+    }
   };
 
-  const handleLoadShowcase = (url: string, defaultPrompt: string) => {
-    setSourceImage(url);
+  const handleLoadShowcase = (beforeUrl: string, defaultPrompt: string, afterUrl?: string) => {
+    setSourceImage(beforeUrl);
     setActiveTab('edit');
     setTextStr(defaultPrompt);
+    if (afterUrl) {
+      setCurrentResultImage(afterUrl);
+    }
     if (typeof window !== 'undefined') {
       const el = document.getElementById('editor-card');
       if (el) {
@@ -706,7 +714,8 @@ export default function PageComponent({
                       onClick={() =>
                         handleSampleSelect(
                           '/images/showcase_dress_before.jpg',
-                          'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
+                          'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency',
+                          '/images/showcase_dress_after.jpg'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/40 hover:border-pink-400 text-pink-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
@@ -718,7 +727,8 @@ export default function PageComponent({
                       onClick={() =>
                         handleSampleSelect(
                           '/images/showcase_cafe_before.jpg',
-                          'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity'
+                          'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
+                          '/images/showcase_cyberpunk_after.jpg'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-purple-500/20 border border-purple-500/40 hover:border-purple-400 text-purple-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
@@ -730,7 +740,8 @@ export default function PageComponent({
                       onClick={() =>
                         handleSampleSelect(
                           '/images/showcase_typography_before.jpg',
-                          'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout'
+                          'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout',
+                          '/images/showcase_typography_after.jpg'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400 text-cyan-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
@@ -742,7 +753,8 @@ export default function PageComponent({
                       onClick={() =>
                         handleSampleSelect(
                           '/images/rumpelstiltskin_vintage_demo.jpg',
-                          'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere'
+                          'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere',
+                          '/images/rumpelstiltskin_tuxedo_result.jpg'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-amber-500/20 border border-amber-500/40 hover:border-amber-400 text-amber-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
@@ -1228,23 +1240,45 @@ export default function PageComponent({
                       </div>
                     ) : currentResultImage ? (
                       <div className="w-full flex flex-col items-center">
-                        {comparisonMode === 'split' && activeTab === 'edit' ? (
-                          <div className="w-full">
-                            <img
-                              src={currentResultImage}
-                              alt="Qwen Image Editor Output Result"
-                              width={768}
-                              height={440}
-                              loading="lazy"
-                              className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
-                            />
-                            <div className="mt-3 flex items-center justify-between text-xs text-slate-400 px-2">
-                              <span>Left: Original photo</span>
-                              <span className="text-indigo-400 font-medium">Right: Qwen AI Edited result</span>
+                        {comparisonMode === 'split' && activeTab === 'edit' && sourceImage ? (
+                          <div className="w-full space-y-2.5">
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3 relative rounded-xl overflow-hidden bg-slate-900/60 p-2 border border-slate-800">
+                              {/* Source input */}
+                              <div className="relative rounded-lg overflow-hidden aspect-square bg-slate-950 group/img">
+                                <img
+                                  src={sourceImage}
+                                  alt="Original source input"
+                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                />
+                                <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-[10px] font-bold text-slate-300 border border-white/10">
+                                  INPUT
+                                </span>
+                              </div>
+
+                              {/* Floating Arrow */}
+                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-indigo-600 border-2 border-slate-900 flex items-center justify-center text-white text-[10px] font-black shadow-lg shadow-indigo-500/50 pointer-events-none">
+                                ➔
+                              </div>
+
+                              {/* AI Inpainted Result */}
+                              <div className="relative rounded-lg overflow-hidden aspect-square bg-slate-950 group/img">
+                                <img
+                                  src={currentResultImage}
+                                  alt="AI Inpainted output result"
+                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                />
+                                <span className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-emerald-500/90 text-[10px] font-extrabold text-white shadow-sm">
+                                  ✨ OUTPUT
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+                              <span>Left: Original source</span>
+                              <span className="text-emerald-400 font-semibold">Right: Qwen AI Inpainted</span>
                             </div>
                           </div>
                         ) : (
-                          <div className="w-full">
+                          <div className="w-full relative group/result">
                             <img
                               src={currentResultImage}
                               alt="Generated Visual Output from Qwen Image Edit"
@@ -1253,6 +1287,9 @@ export default function PageComponent({
                               loading="lazy"
                               className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
                             />
+                            <div className="absolute top-2 right-2 px-2.5 py-1 rounded-md bg-emerald-500/90 text-white text-xs font-bold shadow-md pointer-events-none">
+                              ✨ AI Generated Output
+                            </div>
                           </div>
                         )}
 
@@ -1598,7 +1635,8 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_dress_before.jpg',
-                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
+                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency',
+                      '/images/showcase_dress_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-pink-500/20 active:scale-[0.98] cursor-pointer"
@@ -1690,7 +1728,8 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_cafe_before.jpg',
-                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity'
+                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
+                      '/images/showcase_cyberpunk_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-cyan-500 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
@@ -1782,7 +1821,8 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_typography_before.jpg',
-                      'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout'
+                      'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout',
+                      '/images/showcase_typography_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] cursor-pointer"
@@ -1874,7 +1914,8 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/rumpelstiltskin_vintage_demo.jpg',
-                      'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere'
+                      'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere',
+                      '/images/rumpelstiltskin_tuxedo_result.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
