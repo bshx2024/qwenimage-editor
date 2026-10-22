@@ -279,20 +279,20 @@ export function WelcomeSurveyModal() {
             </div>
           </div>
         ) : (
-          /* STEP 2: Value-Add Welcome Boost Offer ($4.99 for $7.99 Value / 160 Credits) */
+          /* STEP 2: Value-Add Welcome Boost Offer ($4.99 for 100 Credits) */
           <div className="space-y-5 text-center">
             {/* Header Badge & Urgency */}
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                  🎁 Profile Configured · Exclusive Privilege Unlocked
+                  🎁 Welcome Privilege · Special Starter Offer
                 </span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Starter Boost Pack
+                Starter Credits Pack
               </h3>
               <p className="text-xs text-slate-400">
-                Special bonus awarded for completing your creator setup.
+                Non-expiring AI inference credits for high-resolution editing and inpainting.
               </p>
             </div>
 
@@ -310,22 +310,22 @@ export function WelcomeSurveyModal() {
                     Full AI Power
                   </div>
                   <div className="text-3xl font-black text-white flex items-baseline gap-2">
-                    150 <span className="text-base font-bold text-slate-300">AI Credits</span>
+                    100 <span className="text-base font-bold text-slate-300">AI Credits</span>
                   </div>
                   <div className="text-[11px] text-amber-300 font-semibold mt-0.5">
-                    ✨ 100 Base + 50 Extra Bonus Credits Free!
+                    ✨ Single One-Time Payment · Credits Never Expire
                   </div>
                 </div>
 
                 <div className="text-right">
                   <div className="text-xs text-slate-400 line-through">
-                    Total Value $14.99
+                    Regular $9.90
                   </div>
                   <div className="text-2xl font-black text-cyan-300">
-                    $9.90
+                    $4.99
                   </div>
                   <div className="text-[10px] font-bold text-emerald-400 uppercase">
-                    Save 34% Instantly
+                    Save 50% Instantly
                   </div>
                 </div>
               </div>
@@ -363,7 +363,7 @@ export function WelcomeSurveyModal() {
                   <span>Connecting to secure checkout...</span>
                 ) : (
                   <>
-                    <span>Claim 160 Credits for $4.99</span>
+                    <span>Get 100 Credits for $4.99</span>
                     <span>→</span>
                   </>
                 )}

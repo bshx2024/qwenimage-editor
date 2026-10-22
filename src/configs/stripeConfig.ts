@@ -17,9 +17,9 @@ export const oneTimePriceList: PriceItem[] = [
     name: "Starter Pack",
     currency: "usd",
     type: "one_time",
-    unit_amount: 990, // $9.90
+    unit_amount: 499, // $4.99
     credits: 100,
-    badge: "Quick Start",
+    badge: "Special Offer",
     features: [
       "100 AI Edit & Generation Credits",
       "One-time payment, Credits Never Expire",

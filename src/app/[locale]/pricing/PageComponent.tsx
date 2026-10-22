@@ -127,8 +127,8 @@ const PageComponent = ({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-              <span className="font-semibold text-emerald-300 block">Free Daily Tier</span>
-              <span className="text-slate-400 text-[11px]">$0.00, daily renewal, 1024×1024 resolution</span>
+              <span className="font-semibold text-emerald-300 block">Trial Credit</span>
+              <span className="text-slate-400 text-[11px]">$0.00, sign-in bonus, 1024×1024 resolution</span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
               <span className="font-semibold text-indigo-300 block">Starter Pack</span>

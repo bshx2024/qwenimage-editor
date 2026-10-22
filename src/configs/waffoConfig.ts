@@ -13,7 +13,7 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
   'pack-starter': {
     id: 'pack-starter',
     name: 'Starter Credits Pack',
-    price: 9.90,
+    price: 4.99,
     period: 'onetime',
     credits: 100,
     productId: process.env.WAFFO_PRODUCT_CREDITS_100 || 'PROD_4Ggdu4ZQ0RICi3tCNI4iEe',
@@ -29,7 +29,7 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
   'credits-pack-100': {
     id: 'credits-pack-100',
     name: 'Starter Credits Pack',
-    price: 9.90,
+    price: 4.99,
     period: 'onetime',
     credits: 100,
     productId: process.env.WAFFO_PRODUCT_CREDITS_100 || 'PROD_4Ggdu4ZQ0RICi3tCNI4iEe',

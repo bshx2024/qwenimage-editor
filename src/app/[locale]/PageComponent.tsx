@@ -167,6 +167,18 @@ export default function PageComponent({
     }
   };
 
+  const handleLoadShowcase = (url: string, defaultPrompt: string) => {
+    setSourceImage(url);
+    setActiveTab('edit');
+    setTextStr(defaultPrompt);
+    if (typeof window !== 'undefined') {
+      const el = document.getElementById('editor-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   // Submit generate / edit task
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -526,8 +538,8 @@ export default function PageComponent({
       <HeadInfo
         locale={locale}
         page=""
-        title={indexText?.title || "Qwen Image Editor — Free Online AI Photo & Image Edit"}
-        description={indexText?.description || "Use Qwen Image Editor online for free. Powered by Qwen-Image-Edit 2511 & 2512 models for AI inpainting, character consistency, and photo edits without ComfyUI."}
+        title={indexText?.title || "Qwen Image Editor — AI Photo Editor & Conversational Inpainting"}
+        description={indexText?.description || "High-precision AI photo editor powered by Qwen-Image 2.1 foundation models. Inpaint, change clothing, swap backgrounds, and modify text without ComfyUI."}
         image="/images/og-image.jpg"
         schemaData={schemaData}
       />
@@ -564,7 +576,7 @@ export default function PageComponent({
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                {indexText?.h1Text || "Free Online Qwen Image Editor & AI Photo Edit"}
+                {indexText?.h1Text || "Qwen AI Image Editor & Precision Inpainting"}
               </h1>
 
               {/* Prominent Third-Party Notice */}
@@ -609,7 +621,53 @@ export default function PageComponent({
             </div>
 
             {/* Main Interactive Editor Card */}
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-7 shadow-2xl shadow-indigo-950/40">
+            <div id="editor-card" className="rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-7 shadow-2xl shadow-indigo-950/40">
+              {/* Credit Status & Usage Rules Header */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 mb-6 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-2.5 w-2.5 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400">Account Balance:</span>
+                    {userData ? (
+                      <span className="font-bold text-cyan-300 font-mono text-sm">
+                        {userData.available_times ?? 0} Credits
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginModal(true)}
+                        className="inline-flex items-center gap-1 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-0.5 rounded-md transition-colors cursor-pointer"
+                      >
+                        <span>Sign In with Google to get 1 Free Credit</span>
+                        <span>→</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-slate-400 text-[11px] flex-wrap">
+                  <span className="flex items-center gap-1">
+                    <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Cost: <strong>1 Credit</strong> / standard edit</span>
+                  </span>
+                  <span className="hidden sm:inline text-slate-700">|</span>
+                  <span className="flex items-center gap-1">
+                    <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Starter Pack: <strong>$4.99 / 100 Credits</strong></span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowPricingModal(true)}
+                    className="ml-auto text-indigo-400 hover:text-indigo-300 font-bold underline underline-offset-2 cursor-pointer"
+                  >
+                    Get Credits →
+                  </button>
+                </div>
+              </div>
+
               {/* Tab Switcher: Image Edit vs Text to Image */}
               <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6 flex-wrap gap-3">
                 <div className="flex items-center gap-2 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
@@ -1403,7 +1461,7 @@ export default function PageComponent({
                         className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all cursor-pointer"
                       >
                         <BoltIcon className="w-3.5 h-3.5 text-amber-300" />
-                        <span>Get 160 Credits for $4.99 (Special Offer)</span>
+                        <span>Get 100 Credits for $4.99 (Starter Pack)</span>
                       </button>
 
                       <button
@@ -1416,6 +1474,234 @@ export default function PageComponent({
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Real Inpainting Showcase & Interactive Prompt Gallery */}
+        <section className="py-14 border-t border-slate-900 bg-slate-950/80 relative">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-300 mb-3">
+                  <SparklesIcon className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Interactive Real-World Showcase</span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                  Real Inpainting Results &amp; Original Prompts
+                </h2>
+                <p className="text-sm text-slate-400 mt-2 max-w-2xl">
+                  Inspect genuine visual transformations powered by Qwen-Image 2.1. Click <strong>&quot;Try This Example&quot;</strong> on any card to load its source image and prompt directly into the editor above.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>4 Production-Ready Recipes</span>
+              </div>
+            </div>
+
+            {/* Showcase Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Showcase 1: Fashion Swap */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/90 transition-all group">
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
+                    <img
+                      src="/images/qwen_editor_demo.jpg"
+                      alt="Fashion Try-On and Outfit Swap Demo with Qwen Image"
+                      width={400}
+                      height={500}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-pink-500/90 text-white font-bold text-[10px] shadow-sm">
+                      👗 Fashion Swap
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-pink-300 transition-colors">
+                      Silk Evening Dress Try-On
+                    </h3>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      Replaces casual clothing with an emerald silk dress, maintaining original lighting and body posture.
+                    </p>
+                  </div>
+
+                  {/* Prompt Box */}
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
+                    <div className="text-[10px] uppercase font-semibold text-pink-400 mb-1">Original Prompt:</div>
+                    <span className="line-clamp-3">
+                      &quot;Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic folds&quot;
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/qwen_editor_demo.jpg',
+                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic folds'
+                    )
+                  }
+                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/40 text-pink-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                >
+                  <BoltIcon className="w-3.5 h-3.5 text-pink-400" />
+                  <span>Try This Example ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 2: Typography / Text Inpainting */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/90 transition-all group">
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
+                    <img
+                      src="/images/model_compare_demo.jpg"
+                      alt="Typography Text Inpainting Demo with Qwen Image Editor"
+                      width={400}
+                      height={500}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-bold text-[10px] shadow-sm">
+                      🔤 Text Inpainting
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                      Poster Headline Redesign
+                    </h3>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      Replaces existing headline text with zero glyph artifacting, adhering strictly to editorial formatting.
+                    </p>
+                  </div>
+
+                  {/* Prompt Box */}
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
+                    <div className="text-[10px] uppercase font-semibold text-cyan-400 mb-1">Original Prompt:</div>
+                    <span className="line-clamp-3">
+                      &quot;Change the title text to &apos;NEW ARRIVAL FASHION 2026&apos;, maintain high-contrast editorial typography&quot;
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/model_compare_demo.jpg',
+                      'Change the title text to "NEW ARRIVAL FASHION 2026", maintain high-contrast editorial typography'
+                    )
+                  }
+                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                >
+                  <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Try This Example ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 3: Tuxedo & Character Consistency */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/90 transition-all group">
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
+                    <img
+                      src="/images/rumpelstiltskin_tuxedo_result.jpg"
+                      alt="Bespoke Tuxedo Suit Modification and Identity Consistency Demo"
+                      width={400}
+                      height={500}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-amber-500/90 text-white font-bold text-[10px] shadow-sm">
+                      🤵 Suit Transformation
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
+                      Bespoke Tuxedo &amp; Consistency
+                    </h3>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      Replaces character clothing with satin lapel tuxedo while strictly locking facial geometry and eye line.
+                    </p>
+                  </div>
+
+                  {/* Prompt Box */}
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
+                    <div className="text-[10px] uppercase font-semibold text-amber-400 mb-1">Original Prompt:</div>
+                    <span className="line-clamp-3">
+                      &quot;Change outfit to a sharp bespoke black tuxedo suit with satin peak lapels, preserve facial features&quot;
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/rumpelstiltskin_vintage_demo.jpg',
+                      'Change outfit to a sharp bespoke black tuxedo suit with satin peak lapels, preserve facial features'
+                    )
+                  }
+                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                >
+                  <BoltIcon className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Try This Example ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 4: Background Swap */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/90 transition-all group">
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
+                    <img
+                      src="/images/og-image.jpg"
+                      alt="Cyberpunk Tokyo Background Swap Demo with Qwen Image"
+                      width={400}
+                      height={500}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-purple-500/90 text-white font-bold text-[10px] shadow-sm">
+                      🌆 Background Swap
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
+                      Cyberpunk Tokyo Street Swap
+                    </h3>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      Separates subject automatically and blends natural neon reflections and rainy asphalt ambiance.
+                    </p>
+                  </div>
+
+                  {/* Prompt Box */}
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
+                    <div className="text-[10px] uppercase font-semibold text-purple-400 mb-1">Original Prompt:</div>
+                    <span className="line-clamp-3">
+                      &quot;Replace background with a neon-lit cyberpunk Tokyo street at night with wet asphalt reflections&quot;
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/og-image.jpg',
+                      'Replace background with a neon-lit cyberpunk Tokyo street at night with wet asphalt reflections'
+                    )
+                  }
+                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                >
+                  <BoltIcon className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Try This Example ⚡</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1937,7 +2223,7 @@ export default function PageComponent({
                     </tr>
                     <tr>
                       <td className="py-3.5 px-4 font-medium text-white">Pricing & Entry Cost</td>
-                      <td className="py-3.5 px-4 text-indigo-300 font-medium">Free daily tier + $4.99 starter pack</td>
+                      <td className="py-3.5 px-4 text-indigo-300 font-medium">Trial credit + $4.99 starter pack (100 credits)</td>
                       <td className="py-3.5 px-4 text-slate-400">$10/month recurring minimum</td>
                       <td className="py-3.5 px-4 text-slate-400">Requires 24GB VRAM GPU ($1500+)</td>
                     </tr>

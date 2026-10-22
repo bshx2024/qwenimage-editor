@@ -5,10 +5,10 @@
     "languageInChineseSimple": "简体中文"
   },
   "IndexPageText": {
-    "title": "Qwen Image Editor — 免费在线 AI 图像编辑与生成工具",
-    "description": "基于 Qwen-Image-Edit 2511/2512 模型的在线 AI 图像编辑器。支持精准指令局部重绘、人像一致性保持、风格迁移与文本生成，无需部署 ComfyUI 即可在浏览器免费使用。",
-    "h1Text": "免费在线 Qwen Image Editor 与 AI 图像编辑",
-    "descriptionBelowH1Text": "利用通义万相 Qwen-Image-Edit 核心视觉模型，直接在浏览器中进行高质量图像编辑与重绘，无需显卡，免安装 ComfyUI。"
+    "title": "Qwen Image Editor — 高精度 AI 图像编辑与指令局部重绘",
+    "description": "基于通义万相 Qwen-Image-Edit 核心视觉模型。支持精准指令局部重绘、人像服装替换、风格迁移与排版字生成，无需部署 ComfyUI 即可在浏览器直接使用。",
+    "h1Text": "Qwen AI 图像编辑器与高精度局部重绘",
+    "descriptionBelowH1Text": "利用 Qwen-Image 2.1 基础模型，直接在浏览器中进行高质量图像编辑与重绘，无需本地显卡，免安装 ComfyUI。"
   },
   "CommonText": {
     "loadingText": "加载中...",

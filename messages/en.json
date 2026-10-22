@@ -5,10 +5,10 @@
     "languageInChineseSimple": "English"
   },
   "IndexPageText": {
-    "title": "Qwen Image Edit: Free Online AI Photo Editor & Inpainting",
-    "description": "Use Qwen Image Edit online for free. Inpaint, modify photos, and retain character consistency with Qwen-Image-Edit 2512. Try in-browser without ComfyUI.",
-    "h1Text": "Free Online Qwen Image Edit & AI Photo Editor",
-    "descriptionBelowH1Text": "Transform, inpaint, and edit photos directly in your browser with Qwen Image Edit 2511 & 2512. No ComfyUI, no local setup, and zero GPU requirements."
+    "title": "Qwen Image Edit: AI Photo Editor & Conversational Inpainting",
+    "description": "Edit photos, swap outfits, inpaint objects, and retain character consistency with Qwen Image Edit 2.1. Fast in-browser workflow with zero local GPU setup.",
+    "h1Text": "Qwen AI Image Editor & Precision Inpainting",
+    "descriptionBelowH1Text": "Transform, inpaint, and edit photos directly in your browser with Qwen Image 2.1 foundation models. No ComfyUI, no local setup, and zero GPU requirements."
   },
   "CommonText": {
     "loadingText": "Loading...",
