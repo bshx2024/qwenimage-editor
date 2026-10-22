@@ -1854,22 +1854,22 @@ export default function PageComponent({
 
             {/* 6 High-Conversion Split-View Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Showcase 1: 保留经典换装案例 (AI Virtual Try-On) */}
+              {/* Showcase 1: Flagship Virtual Try-On */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[11px] font-bold">
-                          👗 保留换装案例 · 虚拟试衣
+                          👗 AI Virtual Try-On
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen AI virtual try-on</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-pink-300 transition-colors">
-                        白 T 恤日常肖像 ➔ 高定墨绿丝绸晚礼服
+                        Casual White Tee ➔ Emerald Silk Evening Gown
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        精准替换棉质 T 恤为具有真实丝绸垂坠与缎面光泽的高定晚礼服，面部五官与肢体姿态 100% 锁定。
+                        Precision AI clothing replacement with realistic fabric drape and satin sheen, while keeping facial identity, posture, and lighting 100% locked.
                       </p>
                     </div>
                   </div>
@@ -1889,7 +1889,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          日常白棉 T 恤便装
+                          Everyday White Cotton Tee
                         </div>
                       </div>
 
@@ -1910,7 +1910,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
-                          高定墨绿丝绸晚礼服
+                          Luxury Emerald Silk Gown
                         </div>
                       </div>
                     </div>
@@ -1922,7 +1922,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;把衣服换成优雅的墨绿色丝绸晚礼服，带有自然的丝绸垂坠感和缎面褶皱反光，保持原本的面部神态、身姿和环境光影不变&quot;
+                      &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original facial identity and posture&quot;
                     </p>
                   </div>
                 </div>
@@ -1932,7 +1932,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_dress_before.jpg',
-                      '把衣服换成优雅的墨绿色丝绸晚礼服，带有自然的丝绸垂坠感和缎面褶皱反光，保持原本的面部神态、身姿和环境光影不变',
+                      'Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original facial identity and posture',
                       '/images/showcase_dress_after.jpg'
                     )
                   }
@@ -1943,22 +1943,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 2: ① 修改照片 (深蓝西装 + 办公室背景 + 自然光线) */}
+              {/* Showcase 2: ① Photo Edit & Background Swap */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-blue-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[11px] font-bold">
-                          📸 ① 修改照片 · 换背景换装去杂物
+                          📸 ① AI Photo Edit &amp; Retouch
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen AI photo editor online</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-blue-300 transition-colors">
-                        杂乱走廊旧卫衣 ➔ 深蓝西装 + 现代办公室 (自然光线)
+                        Messy Hallway Hoodie ➔ Navy Blazer &amp; Executive Office
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        一句话完成“外套换深蓝西装 + 背景换采光办公室 + 光线更自然”，自动消除走廊杂物，五官笑容 100% 锁定。
+                        One prompt achieves &quot;swap hoodie to tailored navy blazer, change background to sunlit office, make lighting natural&quot;, removing clutter while locking face identity.
                       </p>
                     </div>
                   </div>
@@ -1978,7 +1978,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          杂乱走廊 · 抓拍旧卫衣
+                          Messy Hallway · Casual Hoodie
                         </div>
                       </div>
 
@@ -1999,7 +1999,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-blue-950/80 border border-blue-500/40 backdrop-blur-md text-[10px] text-blue-200 font-medium truncate">
-                          深蓝西装 · 现代办公室自然光
+                          Tailored Navy Blazer · Sunlit Office
                         </div>
                       </div>
                     </div>
@@ -2011,7 +2011,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;把我的外套换成深蓝色西装，内搭白色衬衫，把背景换成带落地窗的现代采光明亮高管办公室，让光线更自然柔和，保持人物面部和微笑一致&quot;
+                      &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, keep facial identity and smile identical&quot;
                     </p>
                   </div>
                 </div>
@@ -2021,7 +2021,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_photo_before.jpg',
-                      '把我的外套换成深蓝色西装，内搭白色衬衫，把背景换成带落地窗的现代采光明亮高管办公室，让光线更自然柔和，保持人物面部和微笑一致',
+                      'Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, keep facial identity and smile identical',
                       '/images/showcase_photo_after.jpg'
                     )
                   }
@@ -2032,22 +2032,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 3: ② 制作电商产品图 (手机随拍 -> 4K大理石商业展台) */}
+              {/* Showcase 3: ② E-Commerce Product Studio */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
-                          🛍️ ② 制作电商商品图 · 商业主图
+                          🛍️ ② E-Commerce Product Studio
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit product photo</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-emerald-300 transition-colors">
-                        普通手机随手随拍 ➔ 4K 商业大理石展台主图
+                        Raw Smartphone Snapshot ➔ 4K Marble Studio Hero Shot
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        低成本将普通商品照片转换为白底主图、高端大理石商业场景图，无需昂贵摄影棚与人工抠图。
+                        Turn ordinary tabletop product snapshots into high-converting commercial hero shots on Italian white marble with organic botanical shadows.
                       </p>
                     </div>
                   </div>
@@ -2067,7 +2067,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          杂乱桌面 · 手机随手随拍
+                          Raw Tabletop Phone Snapshot
                         </div>
                       </div>
 
@@ -2088,7 +2088,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
-                          4K 商业大理石展台主图
+                          4K Commercial Marble Studio Hero
                         </div>
                       </div>
                     </div>
@@ -2100,7 +2100,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;将香水瓶放置在圆柱形白色大理石商业展台，搭配清晨柔和侧光与热带绿植阴影，4K超清电商高品质广告海报&quot;
+                      &quot;Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic&quot;
                     </p>
                   </div>
                 </div>
@@ -2110,7 +2110,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_product_before.jpg',
-                      '将香水瓶放置在圆柱形白色大理石商业展台，搭配清晨柔和侧光与热带绿植阴影，4K超清电商高品质广告海报',
+                      'Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic',
                       '/images/showcase_product_after.jpg'
                     )
                   }
@@ -2121,22 +2121,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 4: ③ 修改图片中的文字 (修正海报错字、替换广告文案、保留原排版) */}
+              {/* Showcase 4: ③ In-Image Text & Typography Editing */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
-                          🔤 ③ 修改图片文字 · 修正错字换文案
+                          🔤 ③ In-Image Text &amp; Typography
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit text in image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-cyan-300 transition-colors">
-                        错字与过期海报 ➔ 完美修正中英文字体与新排版
+                        Fix Typo &amp; Outdated Copy ➔ Clean Editorial Typography
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        智能纠正海报/包装/菜单错别字，替换活动文案与中英文字体，保留原图插画构图与排版设计。
+                        Correct spelling mistakes (SUMMR ➔ AUTUMN, SPECAIL ➔ SPECIAL) and update promotional copy while seamlessly preserving the original illustration and design layout.
                       </p>
                     </div>
                   </div>
@@ -2153,10 +2153,10 @@ export default function PageComponent({
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-rose-300 font-bold text-[10px] tracking-wider border border-rose-500/20 shadow-sm">
-                          ❌ 错字与旧文案
+                          ❌ TYPOS &amp; OUTDATED
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-rose-300 truncate">
-                          错别字 SUMMR / SPECAIL
+                          Misspelled SUMMR / SPECAIL
                         </div>
                       </div>
 
@@ -2174,10 +2174,10 @@ export default function PageComponent({
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
-                          ✨ 完美修正
+                          ✨ PERFECT INPAINT
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-cyan-950/80 border border-cyan-500/40 backdrop-blur-md text-[10px] text-cyan-200 font-medium truncate">
-                          新排版 AUTUMN · SPECIAL 2026
+                          Clean AUTUMN · SPECIAL 2026
                         </div>
                       </div>
                     </div>
@@ -2189,7 +2189,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;修改海报顶部标题为&apos;AUTUMN ICED COFFEE&apos;，修正错字，底部文案修改为&apos;SPECIAL OFFERS 2026&apos;，保留原有插画色彩与排版设计&quot;
+                      &quot;Inpaint poster headline to crisp typography &apos;AUTUMN ICED COFFEE&apos;, fix typos, update bottom promo to &apos;SPECIAL OFFERS 2026 FRESH BREWED DAILY&apos;, preserve illustration layout and color style&quot;
                     </p>
                   </div>
                 </div>
@@ -2199,7 +2199,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_text_before.jpg',
-                      '修改海报顶部标题为"AUTUMN ICED COFFEE"，修正错字，底部文案修改为"SPECIAL OFFERS 2026"，保留原有插画色彩与排版设计',
+                      "Inpaint poster headline to crisp typography 'AUTUMN ICED COFFEE', fix typos, update bottom promo to 'SPECIAL OFFERS 2026 FRESH BREWED DAILY', preserve illustration layout and color style",
                       '/images/showcase_text_after.jpg'
                     )
                   }
@@ -2210,22 +2210,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 5: ④ 保持主体不变，只改变局部或场景 (商品细节100%锁定置换场景) */}
+              {/* Showcase 5: ④ Subject Lock & Scene Relocation */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
-                          🔒 ④ 保持主体不变 · 改变场景
+                          🔒 ④ Subject Lock &amp; Scene Relocation
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit keep original image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-amber-300 transition-colors">
-                        地面粗糙随拍商品 ➔ 北欧暖阳咖啡厅实木桌面
+                        Isolated Product on Floor ➔ Sunlit Nordic Cafe Table
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        100% 锁定商品外形、颜色、皮革纹理与金属搭扣，仅改变光线、摆放环境与氛围构图。
+                        100% lock item geometry, vintage leather patina, stitching, and brass buckles while completely swapping the environment to a sunlit Scandinavian cafe.
                       </p>
                     </div>
                   </div>
@@ -2245,7 +2245,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          地面粗糙抓拍 · 孤立商品
+                          Raw Floor Snapshot · Isolated Item
                         </div>
                       </div>
 
@@ -2266,7 +2266,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-amber-950/80 border border-amber-500/40 backdrop-blur-md text-[10px] text-amber-200 font-medium truncate">
-                          100% 皮包细节锁定 · 场景置换
+                          100% Bag Details Locked &amp; Relocated
                         </div>
                       </div>
                     </div>
@@ -2278,7 +2278,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;锁定复古棕色皮质邮差包的所有外形细节、缝线和金属搭扣保持100%不变，将其自然摆放在采光明亮的北欧咖啡馆实木桌面上&quot;
+                      &quot;Keep the vintage tan leather bag 100% identical with all buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
                     </p>
                   </div>
                 </div>
@@ -2288,7 +2288,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_lock_before.jpg',
-                      '锁定复古棕色皮质邮差包的所有外形细节、缝线和金属搭扣保持100%不变，将其自然摆放在采光明亮的北欧咖啡馆实木桌面上',
+                      'Keep the vintage tan leather bag 100% identical with all buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh',
                       '/images/showcase_lock_after.jpg'
                     )
                   }
@@ -2299,22 +2299,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 6: ⑤ 风格转换与创意设计 (真实生活照转唯美二次元日漫插画) */}
+              {/* Showcase 6: ⑤ Photo to Anime Illustration */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
-                          🎨 ⑤ 照片转动漫插画 · 风格转换
+                          🎨 ⑤ Photo to Anime Illustration
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image style transfer</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-purple-300 transition-colors">
-                        真实生活人像随拍 ➔ 唯美新海诚二次元日漫插画
+                        Real Life Portrait ➔ Makoto Shinkai Anime Illustration
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        一键将日常写实照片转化为高品质日漫插画、动漫二次元或油画风格，保留人物动作、笑容与场景氛围。
+                        One-click transform everyday candid photos into breathtaking Japanese anime art, preserving coffee pose, facial smile, and olive green sweater with luminous cinematic lighting.
                       </p>
                     </div>
                   </div>
@@ -2334,7 +2334,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          真实街角咖啡厅写实人像
+                          Real Life Street Cafe Portrait
                         </div>
                       </div>
 
@@ -2355,7 +2355,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
-                          唯美新海诚日漫杰作插画
+                          Makoto Shinkai Masterpiece Anime Art
                         </div>
                       </div>
                     </div>
@@ -2367,7 +2367,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;将这张照片转换成新海诚风格的高清日漫插画，保留喝咖啡的动作、微笑神态与绿毛衣，赋予通透的动漫光影与唯美发光粒子&quot;
+                      &quot;Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh&quot;
                     </p>
                   </div>
                 </div>
@@ -2377,7 +2377,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_anime_before.jpg',
-                      '将这张照片转换成新海诚风格的高清日漫插画，保留喝咖啡的动作、微笑神态与绿毛衣，赋予通透的动漫光影与唯美发光粒子',
+                      'Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh',
                       '/images/showcase_anime_after.jpg'
                     )
                   }
