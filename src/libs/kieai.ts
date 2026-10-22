@@ -82,6 +82,45 @@ export async function testKieKey(
 }
 
 /**
+/**
+ * Helper to upload image to KIE storage via official File Upload API
+ * Ensures KIE workers can access source images without CDN or bot restrictions
+ */
+async function uploadImageToKie(imageUrl: string, apiKey: string): Promise<string> {
+  if (imageUrl.includes('tempfile.redpandaai.co') || imageUrl.includes('tempfile.aiquickdraw.com')) {
+    return imageUrl;
+  }
+
+  let finalUrl = imageUrl;
+  if (finalUrl.startsWith('/')) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com';
+    finalUrl = `${siteUrl.replace(/\/+$/, '')}${finalUrl}`;
+  }
+
+  try {
+    const res = await fetch('https://kieai.redpandaai.co/api/file-url-upload', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey.trim()}`,
+      },
+      body: JSON.stringify({
+        fileUrl: finalUrl,
+        uploadPath: 'images',
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data?.data?.downloadUrl) {
+      return data.data.downloadUrl;
+    }
+  } catch (e: any) {
+    console.warn('[KIE AI] file-url-upload error, falling back to direct URL:', e?.message);
+  }
+
+  return finalUrl;
+}
+
+/**
  * Submit an image generation or editing task to KIE AI (Qwen-Image-2.1)
  */
 export async function submitKieTask(params: KieGenerateParams): Promise<KieTaskResult> {
@@ -110,24 +149,28 @@ export async function submitKieTask(params: KieGenerateParams): Promise<KieTaskR
   const resolution = isPro ? '2K' : '1K';
 
   let resolvedModel = 'qwen2-1/text-to-image';
-  const inputPayload: any = {
-    prompt,
-    aspect_ratio: resolvedAspectRatio,
-    resolution,
-    output_format: 'png',
-  };
+  let inputPayload: any;
 
   if (taskType === 'image_edit' && imageUrl) {
-    resolvedModel = 'qwen2-1/image-to-image';
+    // Official Qwen Image Edit model on KIE AI
+    resolvedModel = 'qwen/image-edit';
 
-    // Normalize image URL: if relative path, prepend public site domain
-    let finalImageUrl = imageUrl;
-    if (finalImageUrl.startsWith('/')) {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com';
-      finalImageUrl = `${siteUrl.replace(/\/+$/, '')}${finalImageUrl}`;
-    }
+    // Upload image to KIE storage to ensure accessibility
+    const hostedImageUrl = await uploadImageToKie(imageUrl, apiKey);
 
-    inputPayload.image_url = [finalImageUrl];
+    inputPayload = {
+      prompt,
+      image_url: hostedImageUrl,
+      output_format: 'png',
+    };
+  } else {
+    // Text to Image model
+    inputPayload = {
+      prompt,
+      aspect_ratio: resolvedAspectRatio,
+      resolution,
+      output_format: 'png',
+    };
   }
 
   const payload = {
@@ -190,20 +233,34 @@ export async function queryKieTask(
   const rawStatus = String(record.status || record.state || '').toLowerCase();
 
   if (rawStatus === 'success' || rawStatus === 'succeeded' || rawStatus === 'completed') {
-    // Extract output URL
+    // Extract output URL from KIE response format
     let outputUrl = '';
-    if (record.output && typeof record.output === 'string') {
-      outputUrl = record.output;
-    } else if (Array.isArray(record.output) && record.output.length > 0) {
-      outputUrl = record.output[0];
-    } else if (record.results && Array.isArray(record.results) && record.results.length > 0) {
-      outputUrl = record.results[0]?.url || record.results[0];
-    } else if (record.result_url) {
-      outputUrl = record.result_url;
-    } else if (record.output?.url) {
-      outputUrl = record.output.url;
-    } else if (record.data?.output) {
-      outputUrl = Array.isArray(record.data.output) ? record.data.output[0] : record.data.output;
+
+    if (record.response?.resultUrls && Array.isArray(record.response.resultUrls) && record.response.resultUrls.length > 0) {
+      outputUrl = record.response.resultUrls[0];
+    } else if (record.resultJson) {
+      try {
+        const parsed = typeof record.resultJson === 'string' ? JSON.parse(record.resultJson) : record.resultJson;
+        if (parsed?.resultUrls && Array.isArray(parsed.resultUrls) && parsed.resultUrls.length > 0) {
+          outputUrl = parsed.resultUrls[0];
+        }
+      } catch (e) {}
+    }
+
+    if (!outputUrl) {
+      if (record.output && typeof record.output === 'string') {
+        outputUrl = record.output;
+      } else if (Array.isArray(record.output) && record.output.length > 0) {
+        outputUrl = record.output[0];
+      } else if (record.results && Array.isArray(record.results) && record.results.length > 0) {
+        outputUrl = record.results[0]?.url || record.results[0];
+      } else if (record.result_url) {
+        outputUrl = record.result_url;
+      } else if (record.output?.url) {
+        outputUrl = record.output.url;
+      } else if (record.data?.output) {
+        outputUrl = Array.isArray(record.data.output) ? record.data.output[0] : record.data.output;
+      }
     }
 
     return {
@@ -215,7 +272,7 @@ export async function queryKieTask(
   if (rawStatus === 'fail' || rawStatus === 'failed' || rawStatus === 'error') {
     return {
       status: 'fail',
-      message: record.message || record.error || record.failReason || 'KIE AI generation failed',
+      message: record.failMsg || record.errorMessage || record.message || record.error || record.failReason || 'KIE AI generation failed',
     };
   }
 
