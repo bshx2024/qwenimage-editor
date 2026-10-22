@@ -963,22 +963,31 @@ export default function PageComponent({
                             setIsAutoPlaying(false);
                             setTextStr(e.target.value);
                           }}
+                          onKeyDown={(e) => {
+                            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                              e.preventDefault();
+                              if (!isProcessing && (textStr || activeTab === 'edit')) {
+                                handleSubmit(e as any);
+                              }
+                            }
+                          }}
                           placeholder={
                             activeTab === 'edit'
                               ? "Describe what to edit, add, or replace (e.g., 'Change background to neon Tokyo, add cyberpunk iridescent jacket')..."
                               : "Describe the image to generate in detail..."
                           }
-                          className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none"
+                          className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none pb-1"
                         />
-                        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 text-xs text-slate-400">
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2.5 text-xs text-slate-400 gap-2 flex-wrap sm:flex-nowrap">
+                          {/* Left: Model Selector */}
+                          <div className="flex items-center gap-2 min-w-0">
                             <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 rounded-lg px-2.5 py-1 text-slate-300 transition-colors">
                               <CpuChipIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                               <span className="text-[11px] text-slate-400 font-medium shrink-0">Model:</span>
                               <select
                                 value={selectedModel}
                                 onChange={(e) => setSelectedModel(e.target.value)}
-                                className="bg-transparent text-[11px] font-semibold text-cyan-300 focus:outline-none cursor-pointer pr-1"
+                                className="bg-transparent text-[11px] font-semibold text-cyan-300 focus:outline-none cursor-pointer pr-1 max-w-[140px] sm:max-w-none truncate"
                               >
                                 {activeTab === 'edit' ? (
                                   <>
@@ -1011,13 +1020,49 @@ export default function PageComponent({
                               </select>
                             </div>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => setTextStr('')}
-                            className="text-slate-500 hover:text-slate-300"
-                          >
-                            Clear
-                          </button>
+
+                          {/* Right: Clear button & Primary In-Box Generate / Apply Button */}
+                          <div className="flex items-center gap-2 shrink-0 ml-auto">
+                            {textStr && (
+                              <button
+                                type="button"
+                                onClick={() => setTextStr('')}
+                                className="text-slate-500 hover:text-slate-300 text-xs px-2 py-1 rounded transition-colors"
+                                title="Clear prompt"
+                              >
+                                Clear
+                              </button>
+                            )}
+
+                            {/* In-box Quick Apply / Generate Button */}
+                            <button
+                              type="submit"
+                              disabled={isProcessing || (!textStr && activeTab === 'generate')}
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:via-purple-400 hover:to-pink-400 px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 transition-all cursor-pointer group"
+                              title="Shortcut: Ctrl+Enter (Cmd+Enter on Mac)"
+                            >
+                              {isProcessing ? (
+                                <>
+                                  <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                                  <span>Processing...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <SparklesIcon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
+                                  <span>
+                                    {!userData
+                                      ? 'Sign In'
+                                      : activeTab === 'edit'
+                                      ? 'Apply Edit'
+                                      : 'Generate'}
+                                  </span>
+                                  <span className="hidden sm:inline-block px-1 py-0.5 rounded text-[10px] bg-white/20 text-white/90 font-mono font-normal">
+                                    ↵
+                                  </span>
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
