@@ -326,36 +326,43 @@ export default function PageComponent({
       name: '👗 AI Fashion & Wardrobe',
       items: [
         {
+          label: 'Emerald Silk Gala',
           text: 'Swap clothes to elegant emerald green silk gala evening dress, high slit',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_dress_after.jpg',
         },
         {
+          label: 'Navy Tailored Blazer',
           text: 'Change outfit to tailored luxury navy blazer and white silk blouse',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
         },
         {
+          label: 'Boho Floral Sundress',
           text: 'Change clothing to chic bohemian floral summer beach sundress',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
         },
         {
+          label: 'Distressed Biker Jacket',
           text: 'Swap jacket to vintage distressed black leather biker jacket',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_leather_jacket.jpg',
         },
         {
+          label: 'Haute Couture Velvet',
           text: 'Transform attire to modern haute couture velvet gown with pearls',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_velvet_gown.jpg',
         },
         {
+          label: 'Oversized Knit Sweater',
           text: 'Change outfit to casual oversized beige knit sweater and jeans',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_knit_sweater.jpg',
         },
         {
+          label: 'Peony Embroidery',
           text: 'Change dress pattern to vibrant pink peony floral embroidery',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_pink_embroidery.jpg',
@@ -366,21 +373,25 @@ export default function PageComponent({
       name: '🤵 Suits & Formal Wear',
       items: [
         {
+          label: 'Black Velvet Tuxedo',
           text: 'Swap outfit to bespoke sharp black tuxedo with satin peak lapels',
           sourceUrl: '/images/showcase_man_suit_before.jpg',
           previewUrl: '/images/showcase_man_suit_after.jpg',
         },
         {
+          label: 'Charcoal 3-Piece Suit',
           text: 'Change clothing to modern slim-fit charcoal three-piece business suit',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
         },
         {
+          label: 'French Cuff Shirt & Tie',
           text: 'Swap shirt to formal crisp white French cuff dress shirt and tie',
           sourceUrl: '/images/showcase_man_suit_before.jpg',
           previewUrl: '/images/showcase_man_suit_after.jpg',
         },
         {
+          label: 'Cashmere Trench Coat',
           text: 'Change attire to executive cashmere trench coat with tailored pants',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
@@ -391,21 +402,25 @@ export default function PageComponent({
       name: '🛍️ Studio & Background',
       items: [
         {
+          label: 'Neon Cyberpunk Street',
           text: 'Change background to cyberpunk neon metropolis night street',
           sourceUrl: '/images/showcase_cafe_before.jpg',
           previewUrl: '/images/showcase_cyberpunk_after.jpg',
         },
         {
+          label: 'Minimalist Studio Backdrop',
           text: 'Change background to luxury minimalist clean studio backdrop',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_knit_sweater.jpg',
         },
         {
+          label: 'Seamless White Catalog',
           text: 'Isolate subject on pure white seamless ecommerce catalog background',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_dress_before.jpg',
         },
         {
+          label: 'Sunset Golden Hour',
           text: 'Add warm golden hour sunset rim lighting and soft shadows',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
@@ -416,16 +431,19 @@ export default function PageComponent({
       name: '✨ Face & Retouch',
       items: [
         {
+          label: 'Vogue Editorial Portrait',
           text: 'Transform portrait into high-end Vogue fashion editorial photography',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_velvet_gown.jpg',
         },
         {
+          label: 'Natural Glossy Waves',
           text: 'Refine hair to voluminous natural glossy waves with soft rim light',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_dress_after.jpg',
         },
         {
+          label: 'Tortoise-Shell Glasses',
           text: 'Add realistic retro tortoise-shell eyeglasses and warm smile',
           sourceUrl: '/images/showcase_dress_before.jpg',
           previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
@@ -775,60 +793,57 @@ export default function PageComponent({
             {/* Main Interactive Editor Card */}
             <div id="editor-card" className="rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-7 shadow-2xl shadow-indigo-950/40">
               {/* Credit Status & Usage Rules Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 mb-6 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-slate-400">
-                      {locale?.startsWith('zh') ? '今日额度:' : 'Daily Quota:'}
-                    </span>
-                    {userData ? (
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-slate-300 font-medium text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-6 rounded-2xl bg-slate-950/90 border border-slate-800/90 text-xs shadow-inner">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  {userData ? (
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-xs shadow-sm">
+                        <span className="flex h-2 w-2 relative">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-slate-400 font-medium">
                           {locale?.startsWith('zh') ? '今日剩余:' : 'Remaining:'}
                         </span>
-                        <span className="font-bold text-cyan-300 font-mono text-sm">
+                        <span className="font-bold text-cyan-300 font-mono text-xs">
                           {userData.available_times ?? 0} Credits
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                          <span>⏱ {locale?.startsWith('zh') ? '重置倒计时:' : 'Reset in:'}</span>
-                          <span className="font-mono font-bold text-white">{resetCountdown}</span>
-                        </span>
                       </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setShowLoginModal(true)}
-                        className="inline-flex items-center gap-1.5 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-md transition-colors cursor-pointer text-xs"
-                      >
-                        <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                          {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial Quota: 1/1'}
-                        </span>
-                        <span>{locale?.startsWith('zh') ? '(登录即领) →' : '(Sign in to claim) →'}</span>
-                      </button>
-                    )}
-                  </div>
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 text-[11px] font-mono">
+                        <span>⏱ {locale?.startsWith('zh') ? '重置:' : 'Reset:'}</span>
+                        <strong className="text-white font-bold">{resetCountdown}</strong>
+                      </span>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginModal(true)}
+                      className="inline-flex items-center gap-2 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer text-xs group shadow-sm"
+                    >
+                      <span className="px-1.5 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
+                        {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial Quota: 1/1'}
+                      </span>
+                      <span className="group-hover:translate-x-0.5 transition-transform">
+                        {locale?.startsWith('zh') ? '(登录即领) →' : '(Sign in to claim) →'}
+                      </span>
+                    </button>
+                  )}
                 </div>
 
-                <div className="flex items-center gap-4 text-slate-400 text-[11px] flex-wrap">
-                  <span className="flex items-center gap-1">
+                <div className="flex items-center gap-3 text-slate-400 text-[11px] flex-wrap">
+                  <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
                     <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Cost: <strong>1 Credit</strong>/edit (2 for Pro)</span>
-                  </span>
-                  <span className="hidden sm:inline text-slate-700">|</span>
-                  <span className="flex items-center gap-1">
-                    <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Starter: <strong>$4.99 / 100 Credits</strong> (Never expires)</span>
-                  </span>
+                    <span>Cost: <strong>1 Credit</strong>/edit (2 Pro)</span>
+                  </div>
+                  <span className="hidden sm:inline text-slate-800">|</span>
                   <button
                     type="button"
                     onClick={() => setShowPricingModal(true)}
-                    className="ml-auto text-indigo-400 hover:text-indigo-300 font-bold underline underline-offset-2 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-500/15 via-teal-500/15 to-cyan-500/15 hover:from-emerald-500/25 hover:to-cyan-500/25 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-300 font-semibold text-xs transition-all cursor-pointer shadow-sm group ml-auto sm:ml-0"
                   >
-                    View Plans →
+                    <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Starter: <strong>$4.99 / 100 Credits</strong></span>
+                    <span className="text-cyan-400 group-hover:translate-x-0.5 transition-transform">→</span>
                   </button>
                 </div>
               </div>
@@ -947,7 +962,7 @@ export default function PageComponent({
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-slate-700 hover:border-indigo-500/70 rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all bg-slate-950/40 hover:bg-slate-950/60 group"
+                        className="border-2 border-dashed border-slate-700 hover:border-indigo-500/70 rounded-2xl p-3 sm:p-4 text-center cursor-pointer transition-all bg-slate-950/40 hover:bg-slate-950/60 group"
                       >
                         {sourceImage ? (
                           <div className="relative group/preview inline-block">
@@ -955,9 +970,9 @@ export default function PageComponent({
                               src={sourceImage}
                               alt="Source photo to edit with Qwen Image Editor"
                               width={500}
-                              height={224}
+                              height={200}
                               loading="lazy"
-                              className="max-h-56 mx-auto rounded-xl object-contain shadow-md"
+                              className="max-h-48 sm:max-h-52 mx-auto rounded-xl object-contain shadow-md"
                             />
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/preview:opacity-100 rounded-xl flex items-center justify-center text-xs font-medium text-white transition-opacity">
                               Click or Drop new image to replace
@@ -1062,11 +1077,11 @@ export default function PageComponent({
                               </button>
                             )}
 
-                            {/* In-box Quick Apply / Generate Button */}
+                            {/* In-box Primary Apply / Generate Button */}
                             <button
                               type="submit"
                               disabled={isProcessing || (!textStr && activeTab === 'generate')}
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:via-purple-400 hover:to-pink-400 px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 transition-all cursor-pointer group"
+                              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:via-purple-400 hover:to-pink-400 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 transition-all cursor-pointer group"
                               title="Shortcut: Ctrl+Enter (Cmd+Enter on Mac)"
                             >
                               {isProcessing ? (
@@ -1313,9 +1328,9 @@ export default function PageComponent({
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
                         {promptPresetCategories[activePresetCategory]?.items.map((preset: any, idx: number) => {
-                          const item = typeof preset === 'string' ? { text: preset, previewUrl: undefined, sourceUrl: undefined } : preset;
+                          const item = typeof preset === 'string' ? { label: preset, text: preset, previewUrl: undefined, sourceUrl: undefined } : preset;
                           const isSelected = textStr === item.text;
                           return (
                             <button
@@ -1329,16 +1344,17 @@ export default function PageComponent({
                                   setActiveTab('edit');
                                 }
                               }}
-                              className={`rounded-full border px-2.5 py-1 text-[11px] transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                              className={`rounded-xl border px-2.5 py-1 text-[11px] font-medium transition-all cursor-pointer text-left flex items-center gap-1.5 shrink-0 ${
                                 isSelected
-                                  ? 'border-indigo-400 bg-indigo-950/70 text-indigo-100 shadow-sm shadow-indigo-500/20'
-                                  : 'border-slate-800 bg-slate-950/60 text-slate-300 hover:border-indigo-500/50 hover:bg-slate-900 hover:text-white'
+                                  ? 'border-indigo-400 bg-indigo-950/80 text-indigo-100 shadow-sm shadow-indigo-500/25 ring-1 ring-indigo-400/40'
+                                  : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:bg-slate-800 hover:text-white'
                               }`}
+                              title={item.text}
                             >
                               <span className={isSelected ? 'text-indigo-400 font-bold' : 'text-slate-500'}>
                                 {isSelected ? '●' : '+'}
                               </span>
-                              <span>{item.text}</span>
+                              <span>{item.label || item.text}</span>
                             </button>
                           );
                         })}
@@ -1394,7 +1410,7 @@ export default function PageComponent({
                     )}
 
                     {/* Speed indicator & Generation Settings */}
-                    <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                    <div className="flex items-center justify-between pt-1 text-xs text-slate-400 flex-wrap gap-2">
                       <div className="flex items-center gap-2 text-[11px] text-cyan-300/90 font-mono">
                         <span className="flex h-2 w-2 relative">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -1420,55 +1436,34 @@ export default function PageComponent({
                         </Switch>
                         <span className="text-xs text-slate-400">Share to Community Gallery</span>
                       </div>
+                    </div>
 
-                      <button
-                        type="submit"
-                        disabled={isProcessing || (!textStr && activeTab === 'generate')}
-                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:opacity-95 disabled:opacity-50 transition-all cursor-pointer"
-                      >
-                        {isProcessing ? (
-                          <>
-                            <ArrowPathIcon className="w-4 h-4 animate-spin" />
-                            <span>Processing...</span>
-                          </>
-                        ) : (
-                          <>
-                            <SparklesIcon className="w-4 h-4" />
-                            <span>
-                              {!userData
-                                ? 'Sign In to Generate'
-                                : activeTab === 'edit'
-                                ? 'Apply Edit'
-                                : 'Generate'}
-                            </span>
-                          </>
-                        )}
-                      </button>
-
-                      {/* Transparent Usage & Pricing Rules */}
-                      <div className="w-full mt-2 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <span className="flex items-center gap-1 text-slate-300">
-                            <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-300 inline-flex items-center justify-center font-bold text-[10px]">1</span>
-                            <span>Sign in daily to claim <strong>1 quota (1/1)</strong></span>
-                          </span>
-                          <span className="flex items-center gap-1 text-slate-300">
-                            <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-300 inline-flex items-center justify-center font-bold text-[10px]">2</span>
-                            <span><strong>1 Credit</strong>/standard edit (2 for Pro)</span>
-                          </span>
-                          <span className="flex items-center gap-1 text-emerald-300">
-                            <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-300 inline-flex items-center justify-center font-bold text-[10px]">3</span>
-                            <span>No recurring auto-charge • Zero subscription trap</span>
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setShowPricingModal(true)}
-                          className="text-cyan-400 hover:text-cyan-300 font-medium underline underline-offset-2 ml-auto cursor-pointer"
-                        >
-                          Starter Pack $4.99 (100 credits) →
-                        </button>
+                    {/* Integrated Trust & Transparency Badge */}
+                    <div className="rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 sm:p-3.5 flex flex-wrap items-center justify-between gap-2.5 text-[11px] shadow-sm">
+                      <div className="flex items-center gap-3 text-slate-300 flex-wrap">
+                        <span className="inline-flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 inline-flex items-center justify-center font-bold text-[10px]">✓</span>
+                          <span>Daily <strong>1/1 Quota</strong> on Login</span>
+                        </span>
+                        <span className="hidden sm:inline text-slate-700">•</span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-400 inline-flex items-center justify-center font-bold text-[10px]">⚡</span>
+                          <span><strong>1 Credit</strong>/edit (2 for Pro)</span>
+                        </span>
+                        <span className="hidden sm:inline text-slate-700">•</span>
+                        <span className="inline-flex items-center gap-1.5 text-emerald-300 font-medium">
+                          <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>No Auto-Renew · Zero Trap</span>
+                        </span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowPricingModal(true)}
+                        className="ml-auto inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold text-xs transition-colors cursor-pointer group"
+                      >
+                        <span>Starter $4.99 (100 credits)</span>
+                        <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                      </button>
                     </div>
                   </form>
                 </div>
