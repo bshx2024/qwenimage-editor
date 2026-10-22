@@ -9,13 +9,56 @@ import {
   PhotoIcon,
   CheckIcon,
   XMarkIcon,
+  LockClosedIcon,
+  BoltIcon,
+  ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/solid';
 
-const TIPS = [
-  'Wanx 2.1 executes maskless inpainting with native bilingual typography.',
-  'Preserving 68+ facial consistency landmarks during character modifications.',
-  'Generated outputs are commercial-use friendly with 2K high-resolution downloads.',
-  'Try natural language commands like "Add golden hour sunset" or "Change background to cyberpunk".',
+interface GeneratingTip {
+  iconType: 'lock' | 'bolt' | 'gem' | 'sparkles';
+  tag?: string;
+  tagColor?: string;
+  title: string;
+  desc: string;
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const TIPS: GeneratingTip[] = [
+  {
+    iconType: 'lock',
+    tag: 'Identity Protected',
+    tagColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+    title: '100% Face & Identity Lock',
+    desc: 'Preserving natural facial expressions and biometric landmarks with zero distortion.',
+  },
+  {
+    iconType: 'bolt',
+    tag: 'Fast-Track',
+    tagColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+    title: 'Tired of waiting in queue?',
+    desc: 'Pro members get dedicated GPU fast-track priority (avg. 3.5s per image).',
+    ctaText: 'Get Fast-Track',
+    ctaHref: '/pricing',
+  },
+  {
+    iconType: 'gem',
+    tag: 'Studio Mode',
+    tagColor: 'text-purple-400 bg-purple-500/10 border-purple-500/30',
+    title: 'Commercial 2K High-Res Export',
+    desc: 'Unlocks 2048×2048 lossless PNG downloads with watermark-free commercial rights.',
+    ctaText: 'Unlock 2K',
+    ctaHref: '/pricing',
+  },
+  {
+    iconType: 'sparkles',
+    tag: 'E-commerce Mode',
+    tagColor: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
+    title: 'Batch Outfit Swaps on Same Model',
+    desc: 'Swap 20+ outfits on identical model pose with seamless consistency. Built for sellers.',
+    ctaText: 'Explore Pro',
+    ctaHref: '/pricing',
+  },
 ];
 
 export default function GeneratingModal({
@@ -153,7 +196,9 @@ export default function GeneratingModal({
                       Elapsed: {elapsed.toFixed(1)}s
                     </span>
                     <span className="text-slate-600">•</span>
-                    <span className="text-slate-400">Est. ~6-10s</span>
+                    <span className="text-slate-400">
+                      {elapsed > 12 ? 'Refining 2K Details...' : 'Est. ~6-10s'}
+                    </span>
                     <span className="text-slate-600">•</span>
                     <span className="text-indigo-300 font-bold">{progressPercent}%</span>
                   </div>
@@ -251,13 +296,60 @@ export default function GeneratingModal({
                   </div>
                 </div>
 
-                {/* Cycling Tips Footer */}
-                <div className="rounded-xl bg-slate-950/70 border border-slate-800/80 p-3 flex items-start gap-2.5">
-                  <PhotoIcon className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-slate-300 leading-relaxed min-h-[32px] transition-all">
-                    {TIPS[tipIndex]}
-                  </p>
-                </div>
+                {/* Cycling High-Converting Tips & Pro Perks Footer */}
+                {(() => {
+                  const currentTip = TIPS[tipIndex] || TIPS[0];
+                  return (
+                    <div className="rounded-xl bg-slate-950/80 border border-slate-800/90 p-3.5 transition-all">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                          <div className="mt-0.5 flex-shrink-0">
+                            {currentTip.iconType === 'lock' && (
+                              <LockClosedIcon className="w-4 h-4 text-emerald-400" />
+                            )}
+                            {currentTip.iconType === 'bolt' && (
+                              <BoltIcon className="w-4 h-4 text-cyan-400" />
+                            )}
+                            {currentTip.iconType === 'gem' && (
+                              <SparklesIcon className="w-4 h-4 text-purple-400" />
+                            )}
+                            {currentTip.iconType === 'sparkles' && (
+                              <PhotoIcon className="w-4 h-4 text-amber-400" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                              <span className="text-xs font-bold text-white tracking-tight">
+                                {currentTip.title}
+                              </span>
+                              {currentTip.tag && (
+                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold border ${currentTip.tagColor}`}>
+                                  {currentTip.tag}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-slate-300 leading-relaxed">
+                              {currentTip.desc}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Unobtrusive Pro CTA Button */}
+                        {currentTip.ctaText && (
+                          <a
+                            href={currentTip.ctaHref || '/pricing'}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex-shrink-0 px-2.5 py-1.5 text-[10px] font-bold text-cyan-300 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 hover:border-cyan-400 rounded-lg transition-all flex items-center gap-1 shadow-sm hover:shadow-cyan-500/20 group"
+                          >
+                            <span>{currentTip.ctaText}</span>
+                            <ArrowTopRightOnSquareIcon className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Background execution notice */}
                 <div className="mt-3 text-center">
