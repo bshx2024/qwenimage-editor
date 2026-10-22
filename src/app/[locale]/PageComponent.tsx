@@ -1854,22 +1854,22 @@ export default function PageComponent({
 
             {/* 6 High-Conversion Split-View Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Showcase 1: Flagship Virtual Try-On */}
+              {/* Showcase 1: 保留经典换装案例 (AI Virtual Try-On) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[11px] font-bold">
-                          👗 AI Virtual Try-On
+                          👗 保留换装案例 · 虚拟试衣
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen AI virtual try-on</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-pink-300 transition-colors">
-                        Casual T-Shirt ➔ Emerald Silk Evening Gown
+                        白 T 恤日常肖像 ➔ 高定墨绿丝绸晚礼服
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Precision inpainting replaces ordinary cotton t-shirt with a luxurious draped satin dress while locking exact facial identity and posture.
+                        精准替换棉质 T 恤为具有真实丝绸垂坠与缎面光泽的高定晚礼服，面部五官与肢体姿态 100% 锁定。
                       </p>
                     </div>
                   </div>
@@ -1889,7 +1889,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Plain White Cotton Tee
+                          日常白棉 T 恤便装
                         </div>
                       </div>
 
@@ -1910,7 +1910,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
-                          Emerald Silk Evening Gown
+                          高定墨绿丝绸晚礼服
                         </div>
                       </div>
                     </div>
@@ -1922,7 +1922,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency&quot;
+                      &quot;把衣服换成优雅的墨绿色丝绸晚礼服，带有自然的丝绸垂坠感和缎面褶皱反光，保持原本的面部神态、身姿和环境光影不变&quot;
                     </p>
                   </div>
                 </div>
@@ -1932,7 +1932,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_dress_before.jpg',
-                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency',
+                      '把衣服换成优雅的墨绿色丝绸晚礼服，带有自然的丝绸垂坠感和缎面褶皱反光，保持原本的面部神态、身姿和环境光影不变',
                       '/images/showcase_dress_after.jpg'
                     )
                   }
@@ -1943,22 +1943,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 2: ① Photo Edit & Background Swap */}
+              {/* Showcase 2: ① 修改照片 (深蓝西装 + 办公室背景 + 自然光线) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-blue-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[11px] font-bold">
-                          📸 ① AI Photo Edit &amp; Retouch
+                          📸 ① 修改照片 · 换背景换装去杂物
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen AI photo editor online</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-blue-300 transition-colors">
-                        Casual Outfit ➔ Bespoke Navy Blazer &amp; Executive Studio
+                        杂乱走廊旧卫衣 ➔ 深蓝西装 + 现代办公室 (自然光线)
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Easily swap clothing, remove background distractions, and upgrade to executive studio lighting while keeping 100% facial identity and expression.
+                        一句话完成“外套换深蓝西装 + 背景换采光办公室 + 光线更自然”，自动消除走廊杂物，五官笑容 100% 锁定。
                       </p>
                     </div>
                   </div>
@@ -1967,8 +1967,8 @@ export default function PageComponent({
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_man_suit_before.jpg"
-                          alt="Original Portrait in Casual White T-Shirt"
+                          src="/images/showcase_photo_before.jpg"
+                          alt="Original Messy Apartment Hallway with Rumpled Casual Hoodie"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -1978,7 +1978,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Casual Cotton T-Shirt
+                          杂乱走廊 · 抓拍旧卫衣
                         </div>
                       </div>
 
@@ -1988,8 +1988,8 @@ export default function PageComponent({
 
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_man_suit_after.jpg"
-                          alt="AI Inpainted Navy Blue Tailored Blazer and Studio Atmosphere"
+                          src="/images/showcase_photo_after.jpg"
+                          alt="AI Inpainted Navy Blue Suit in Modern Bright Office with Soft Natural Light"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -1999,7 +1999,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-blue-950/80 border border-blue-500/40 backdrop-blur-md text-[10px] text-blue-200 font-medium truncate">
-                          Tailored Navy Blazer Studio
+                          深蓝西装 · 现代办公室自然光
                         </div>
                       </div>
                     </div>
@@ -2011,7 +2011,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Change outfit to a sharp bespoke dark navy blue blazer with crisp white dress shirt, executive portrait studio lighting, preserve face structure and friendly smile&quot;
+                      &quot;把我的外套换成深蓝色西装，内搭白色衬衫，把背景换成带落地窗的现代采光明亮高管办公室，让光线更自然柔和，保持人物面部和微笑一致&quot;
                     </p>
                   </div>
                 </div>
@@ -2020,9 +2020,9 @@ export default function PageComponent({
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/showcase_man_suit_before.jpg',
-                      'Change outfit to a sharp bespoke dark navy blue blazer with crisp white dress shirt, executive portrait studio lighting, preserve face structure and friendly smile',
-                      '/images/showcase_man_suit_after.jpg'
+                      '/images/showcase_photo_before.jpg',
+                      '把我的外套换成深蓝色西装，内搭白色衬衫，把背景换成带落地窗的现代采光明亮高管办公室，让光线更自然柔和，保持人物面部和微笑一致',
+                      '/images/showcase_photo_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-[0.98] cursor-pointer"
@@ -2032,22 +2032,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 3: ② E-Commerce Product Studio */}
+              {/* Showcase 3: ② 制作电商产品图 (手机随拍 -> 4K大理石商业展台) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
-                          🛍️ ② E-Commerce Product Studio
+                          🛍️ ② 制作电商商品图 · 商业主图
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit product photo</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-emerald-300 transition-colors">
-                        Raw Smartphone Snapshot ➔ 4K Marble Studio Pedestal
+                        普通手机随手随拍 ➔ 4K 商业大理石展台主图
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Convert ordinary product photos into high-converting e-commerce commercial hero images with white marble plinth and organic palm leaf shadows.
+                        低成本将普通商品照片转换为白底主图、高端大理石商业场景图，无需昂贵摄影棚与人工抠图。
                       </p>
                     </div>
                   </div>
@@ -2067,7 +2067,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Raw Tabletop Product Snapshot
+                          杂乱桌面 · 手机随手随拍
                         </div>
                       </div>
 
@@ -2088,7 +2088,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
-                          4K Commercial Marble Studio Hero
+                          4K 商业大理石展台主图
                         </div>
                       </div>
                     </div>
@@ -2100,7 +2100,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Place the luxury perfume bottle on an elegant round white Carrara marble pedestal, clean warm morning sunlight casting delicate tropical leaf shadows, high-end e-commerce commercial studio shot&quot;
+                      &quot;将香水瓶放置在圆柱形白色大理石商业展台，搭配清晨柔和侧光与热带绿植阴影，4K超清电商高品质广告海报&quot;
                     </p>
                   </div>
                 </div>
@@ -2110,7 +2110,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_product_before.jpg',
-                      'Place the luxury perfume bottle on an elegant round white Carrara marble pedestal, clean warm morning sunlight casting delicate tropical leaf shadows, high-end e-commerce commercial studio shot',
+                      '将香水瓶放置在圆柱形白色大理石商业展台，搭配清晨柔和侧光与热带绿植阴影，4K超清电商高品质广告海报',
                       '/images/showcase_product_after.jpg'
                     )
                   }
@@ -2121,22 +2121,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 4: ③ In-Image Text & Typography Editing */}
+              {/* Showcase 4: ③ 修改图片中的文字 (修正海报错字、替换广告文案、保留原排版) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
-                          🔤 ③ In-Image Text &amp; Typography
+                          🔤 ③ 修改图片文字 · 修正错字换文案
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit text in image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-cyan-300 transition-colors">
-                        Garbled AI Lettering ➔ Crisp Magazine Typography
+                        错字与过期海报 ➔ 完美修正中英文字体与新排版
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Eliminates nonsensical distorted diffusion glyphs and inlays razor-sharp editorial headlines with high contrast and immaculate letterforms.
+                        智能纠正海报/包装/菜单错别字，替换活动文案与中英文字体，保留原图插画构图与排版设计。
                       </p>
                     </div>
                   </div>
@@ -2145,18 +2145,18 @@ export default function PageComponent({
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_typography_before.jpg"
-                          alt="Standard Diffusion Text Rendering with Distorted Letters"
+                          src="/images/showcase_text_before.jpg"
+                          alt="Poster with Typo SUMMR and Outdated Promo Text SPECAIL OFFERS 2024"
                           width={400}
                           height={400}
                           loading="lazy"
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-rose-300 font-bold text-[10px] tracking-wider border border-rose-500/20 shadow-sm">
-                          ❌ STANDARD AI
+                          ❌ 错字与旧文案
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-rose-300 truncate">
-                          Garbled &amp; Illiterate Glyphs
+                          错别字 SUMMR / SPECAIL
                         </div>
                       </div>
 
@@ -2166,18 +2166,18 @@ export default function PageComponent({
 
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_typography_after.jpg"
-                          alt="Qwen 2.1 Inpainted Crisp Magazine Typography"
+                          src="/images/showcase_text_after.jpg"
+                          alt="Poster Inpainted with AUTUMN ICED COFFEE and SPECIAL OFFERS 2026"
                           width={400}
                           height={400}
                           loading="lazy"
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
-                          ✨ QWEN 2026
+                          ✨ 完美修正
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-cyan-950/80 border border-cyan-500/40 backdrop-blur-md text-[10px] text-cyan-200 font-medium truncate">
-                          Perfect Editorial Typography
+                          新排版 AUTUMN · SPECIAL 2026
                         </div>
                       </div>
                     </div>
@@ -2189,7 +2189,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Inpaint magazine cover title to &apos;QWEN IMAGE 2026&apos;, replace subtitle with &apos;NEXT GEN EDITING&apos;, perfectly crisp typography, high legibility, clean layout&quot;
+                      &quot;修改海报顶部标题为&apos;AUTUMN ICED COFFEE&apos;，修正错字，底部文案修改为&apos;SPECIAL OFFERS 2026&apos;，保留原有插画色彩与排版设计&quot;
                     </p>
                   </div>
                 </div>
@@ -2198,9 +2198,9 @@ export default function PageComponent({
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/showcase_typography_before.jpg',
-                      'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout',
-                      '/images/showcase_typography_after.jpg'
+                      '/images/showcase_text_before.jpg',
+                      '修改海报顶部标题为"AUTUMN ICED COFFEE"，修正错字，底部文案修改为"SPECIAL OFFERS 2026"，保留原有插画色彩与排版设计',
+                      '/images/showcase_text_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] cursor-pointer"
@@ -2210,22 +2210,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 5: ④ Subject Lock & Scene Relocation */}
+              {/* Showcase 5: ④ 保持主体不变，只改变局部或场景 (商品细节100%锁定置换场景) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
-                          🔒 ④ Subject Lock &amp; Scene Relocation
+                          🔒 ④ 保持主体不变 · 改变场景
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image edit keep original image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-amber-300 transition-colors">
-                        Isolated Product ➔ Sunlit Scandinavian Cafe Table
+                        地面粗糙随拍商品 ➔ 北欧暖阳咖啡厅实木桌面
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Lock 100% of product geometry, leather grain, and brass buckles while completely swapping background to a sunlit Nordic cafe with organic wooden textures.
+                        100% 锁定商品外形、颜色、皮革纹理与金属搭扣，仅改变光线、摆放环境与氛围构图。
                       </p>
                     </div>
                   </div>
@@ -2245,7 +2245,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Raw Floor Snapshot
+                          地面粗糙抓拍 · 孤立商品
                         </div>
                       </div>
 
@@ -2266,7 +2266,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-amber-950/80 border border-amber-500/40 backdrop-blur-md text-[10px] text-amber-200 font-medium truncate">
-                          100% Bag Details Locked &amp; Relocated
+                          100% 皮包细节锁定 · 场景置换
                         </div>
                       </div>
                     </div>
@@ -2278,7 +2278,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Keep the vintage tan leather messenger bag 100% identical with exact buckles, straps and texture, place it naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft bokeh&quot;
+                      &quot;锁定复古棕色皮质邮差包的所有外形细节、缝线和金属搭扣保持100%不变，将其自然摆放在采光明亮的北欧咖啡馆实木桌面上&quot;
                     </p>
                   </div>
                 </div>
@@ -2288,7 +2288,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_lock_before.jpg',
-                      'Keep the vintage tan leather messenger bag 100% identical with exact buckles, straps and texture, place it naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft bokeh',
+                      '锁定复古棕色皮质邮差包的所有外形细节、缝线和金属搭扣保持100%不变，将其自然摆放在采光明亮的北欧咖啡馆实木桌面上',
                       '/images/showcase_lock_after.jpg'
                     )
                   }
@@ -2299,22 +2299,22 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 6: ⑤ Style Transfer & Creative Design */}
+              {/* Showcase 6: ⑤ 风格转换与创意设计 (真实生活照转唯美二次元日漫插画) */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
-                          🎨 ⑤ Style Transfer &amp; Creative Design
+                          🎨 ⑤ 照片转动漫插画 · 风格转换
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">Qwen image style transfer</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-purple-300 transition-colors">
-                        Daytime Cafe ➔ Cyberpunk Tokyo Neon Night
+                        真实生活人像随拍 ➔ 唯美新海诚二次元日漫插画
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Replaces warm indoor cafe background with rainy Tokyo neon streets, transforming green jacket into a futuristic metallic holographic biker jacket.
+                        一键将日常写实照片转化为高品质日漫插画、动漫二次元或油画风格，保留人物动作、笑容与场景氛围。
                       </p>
                     </div>
                   </div>
@@ -2323,8 +2323,8 @@ export default function PageComponent({
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_cafe_before.jpg"
-                          alt="Original Portrait in Daytime Coffee Shop"
+                          src="/images/showcase_anime_before.jpg"
+                          alt="Original Portrait at Outdoor Street Cafe"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -2334,28 +2334,28 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Daytime Cafe &amp; Khaki Jacket
+                          真实街角咖啡厅写实人像
                         </div>
                       </div>
 
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-purple-500/40">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-purple-500/40">
                         <span className="text-xs font-black">➔</span>
                       </div>
 
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_cyberpunk_after.jpg"
-                          alt="Inpainted Cyberpunk Tokyo Street with Holographic Jacket"
+                          src="/images/showcase_anime_after.jpg"
+                          alt="Makoto Shinkai Anime Illustration Style with Luminous Golden Hour"
                           width={400}
                           height={400}
                           loading="lazy"
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-purple-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
-                          Holographic Jacket &amp; Tokyo Neon
+                          唯美新海诚日漫杰作插画
                         </div>
                       </div>
                     </div>
@@ -2367,7 +2367,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity&quot;
+                      &quot;将这张照片转换成新海诚风格的高清日漫插画，保留喝咖啡的动作、微笑神态与绿毛衣，赋予通透的动漫光影与唯美发光粒子&quot;
                     </p>
                   </div>
                 </div>
@@ -2376,14 +2376,14 @@ export default function PageComponent({
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/showcase_cafe_before.jpg',
-                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
-                      '/images/showcase_cyberpunk_after.jpg'
+                      '/images/showcase_anime_before.jpg',
+                      '将这张照片转换成新海诚风格的高清日漫插画，保留喝咖啡的动作、微笑神态与绿毛衣，赋予通透的动漫光影与唯美发光粒子',
+                      '/images/showcase_anime_after.jpg'
                     )
                   }
-                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-cyan-500 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-pink-600 to-indigo-600 hover:from-purple-400 hover:to-pink-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
                 >
-                  <BoltIcon className="w-4 h-4 text-cyan-300" />
+                  <BoltIcon className="w-4 h-4 text-amber-200" />
                   <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
