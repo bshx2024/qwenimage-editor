@@ -989,7 +989,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
 
       {/* Top Navbar */}
       <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white font-black text-base shadow-md shadow-cyan-500/20">
               Q
@@ -1033,7 +1033,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       </header>
 
       {/* Main Layout (Sidebar + Content) */}
-      <div className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex-1 mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar Tabs */}
           <aside className="w-full md:w-60 shrink-0">
@@ -1288,20 +1288,22 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                   <table className="min-w-full divide-y divide-slate-800 text-left text-xs">
                     <thead className="bg-slate-900 text-slate-300 font-semibold">
                       <tr>
-                        <th className="px-5 py-3.5">User</th>
-                        <th className="px-5 py-3.5">Email</th>
-                        <th className="px-5 py-3.5">Credits Available</th>
-                        <th className="px-5 py-3.5">Registered</th>
-                        <th className="px-5 py-3.5">Source / Country</th>
-                        <th className="px-5 py-3.5">Last Login IP</th>
-                        <th className="px-5 py-3.5 text-right">Actions</th>
+                        <th className="px-4 py-3">User</th>
+                        <th className="px-3.5 py-3">Email</th>
+                        <th className="px-3 py-3">Credits</th>
+                        <th className="px-3.5 py-3">Registered</th>
+                        <th className="px-3.5 py-3">Source / Country</th>
+                        <th className="px-3 py-3">Last Login IP</th>
+                        <th className="px-4 py-3 text-right whitespace-nowrap sticky right-0 bg-slate-900 z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.5)]">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60 text-slate-300">
                       {users.length > 0 ? (
                         users.map((u) => (
                           <tr key={u.id} className="hover:bg-slate-900/60 transition-colors">
-                            <td className="px-5 py-3 flex items-center gap-2.5">
+                            <td className="px-4 py-3 flex items-center gap-2.5">
                               {u.image ? (
                                 <img
                                   src={u.image}
@@ -1315,14 +1317,14 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                               )}
                               <span className="font-semibold text-white">{u.name || 'Anonymous'}</span>
                             </td>
-                            <td className="px-5 py-3 font-mono text-[11px] text-slate-300">{u.email || '--'}</td>
-                            <td className="px-5 py-3">
+                            <td className="px-3.5 py-3 font-mono text-[11px] text-slate-300">{u.email || '--'}</td>
+                            <td className="px-3 py-3">
                               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
                                 <SparklesIcon className="w-3 h-3 text-amber-400" />
                                 {u.available_times}
                               </span>
                             </td>
-                            <td className="px-5 py-3 text-slate-400 text-[11px] whitespace-nowrap">
+                            <td className="px-3.5 py-3 text-slate-400 text-[11px] whitespace-nowrap">
                               {u.created_at ? (
                                 <div title={new Date(u.created_at).toLocaleString()}>
                                   <div className="text-slate-200 font-mono">
@@ -1341,7 +1343,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                                 '--'
                               )}
                             </td>
-                            <td className="px-5 py-3 text-[11px]">
+                            <td className="px-3.5 py-3 text-[11px]">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <span className="rounded px-2 py-0.5 text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700 capitalize">
                                   {u.first_source || 'direct'}
@@ -1366,8 +1368,8 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                                 </div>
                               )}
                             </td>
-                            <td className="px-5 py-3 text-slate-500 text-[11px]">{u.last_login_ip || '--'}</td>
-                            <td className="px-5 py-3 text-right">
+                            <td className="px-3 py-3 text-slate-500 text-[11px] font-mono">{u.last_login_ip || '--'}</td>
+                            <td className="px-4 py-3 text-right whitespace-nowrap sticky right-0 bg-slate-900/95 backdrop-blur-sm z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.5)]">
                               <div className="flex items-center justify-end gap-2">
                                 <button
                                   onClick={() => {
@@ -1397,6 +1399,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                         </tr>
                       )}
                     </tbody>
+
                   </table>
                 </div>
 
