@@ -705,37 +705,49 @@ export default function PageComponent({
                       type="button"
                       onClick={() =>
                         handleSampleSelect(
-                          '/images/qwen_editor_demo.jpg',
-                          'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape'
+                          '/images/showcase_dress_before.jpg',
+                          'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/40 hover:border-pink-400 text-pink-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
                     >
-                      <span>👗 Fashion Try-On</span>
+                      <span>👗 Silk Dress</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleSampleSelect(
+                          '/images/showcase_cafe_before.jpg',
+                          'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity'
+                        )
+                      }
+                      className="px-2.5 py-1 rounded-md bg-purple-500/20 border border-purple-500/40 hover:border-purple-400 text-purple-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
+                    >
+                      <span>🌆 Cyberpunk</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleSampleSelect(
+                          '/images/showcase_typography_before.jpg',
+                          'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout'
+                        )
+                      }
+                      className="px-2.5 py-1 rounded-md bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400 text-cyan-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
+                    >
+                      <span>🔤 Crisp Title</span>
                     </button>
                     <button
                       type="button"
                       onClick={() =>
                         handleSampleSelect(
                           '/images/rumpelstiltskin_vintage_demo.jpg',
-                          'Change outfit to a sharp bespoke black tuxedo suit with satin peak lapels'
+                          'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere'
                         )
                       }
-                      className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+                      className="px-2.5 py-1 rounded-md bg-amber-500/20 border border-amber-500/40 hover:border-amber-400 text-amber-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
                     >
-                      <span>🤵 Suit / Tuxedo</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleSampleSelect(
-                          '/images/model_compare_demo.jpg',
-                          'Change the title text to "NEW ARRIVAL FASHION 2026"'
-                        )
-                      }
-                      className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer"
-                    >
-                      Poster Text
+                      <span>🤵 Velvet Tuxedo</span>
                     </button>
                   </div>
                 )}
@@ -1480,227 +1492,395 @@ export default function PageComponent({
         </section>
 
         {/* Real Inpainting Showcase & Interactive Prompt Gallery */}
-        <section className="py-14 border-t border-slate-900 bg-slate-950/80 relative">
+        <section className="py-16 lg:py-20 border-t border-slate-900 bg-slate-950/80 relative">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-300 mb-3">
+                <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3.5 py-1 text-xs font-semibold text-purple-300 mb-3">
                   <SparklesIcon className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Interactive Real-World Showcase</span>
+                  <span>Real Inpainting Case Studies</span>
                 </div>
                 <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-                  Real Inpainting Results &amp; Original Prompts
+                  Before &amp; After Showcase &amp; Exact Prompts
                 </h2>
                 <p className="text-sm text-slate-400 mt-2 max-w-2xl">
-                  Inspect genuine visual transformations powered by Qwen-Image 2.1. Click <strong>&quot;Try This Example&quot;</strong> on any card to load its source image and prompt directly into the editor above.
+                  Side-by-side visual comparisons powered by Qwen-Image 2.1 foundation models. Click <strong>&quot;Try This Recipe in Editor&quot;</strong> to load the original photo and exact prompt instantly.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>4 Production-Ready Recipes</span>
+                <span>4 Production-Ready Workflows</span>
               </div>
             </div>
 
-            {/* Showcase Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Showcase 1: Fashion Swap */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/90 transition-all group">
-                <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/qwen_editor_demo.jpg"
-                      alt="Fashion Try-On and Outfit Swap Demo with Qwen Image"
-                      width={400}
-                      height={500}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-pink-500/90 text-white font-bold text-[10px] shadow-sm">
-                      👗 Fashion Swap
+            {/* 2x2 Wide Split-View Showcase Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Showcase 1: Fashion Try-On (White T-Shirt -> Emerald Silk Dress) */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  {/* Header & Badges */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[11px] font-bold">
+                        👗 AI Virtual Try-On
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-pink-300 transition-colors">
+                        Casual T-Shirt ➔ Emerald Silk Evening Gown
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Precision inpainting replaces ordinary cotton t-shirt with a luxurious draped satin dress while locking exact facial identity and posture.
+                      </p>
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-pink-300 transition-colors">
-                      Silk Evening Dress Try-On
-                    </h3>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                      Replaces casual clothing with an emerald silk dress, maintaining original lighting and body posture.
-                    </p>
+                  {/* Side-by-Side Before vs After Window */}
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      {/* Before: Plain T-Shirt */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_dress_before.jpg"
+                          alt="Original Portrait in Casual White T-Shirt"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-slate-200 font-bold text-[10px] tracking-wider border border-white/10 shadow-sm">
+                          📷 BEFORE
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
+                          Plain White Cotton Tee
+                        </div>
+                      </div>
+
+                      {/* Floating Arrow */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-pink-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      {/* After: Emerald Silk Gown */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_dress_after.jpg"
+                          alt="Inpainted Emerald Green Silk Evening Dress with Satin Drape"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ AI AFTER
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
+                          Emerald Silk Evening Gown
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Prompt Box */}
-                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
-                    <div className="text-[10px] uppercase font-semibold text-pink-400 mb-1">Original Prompt:</div>
-                    <span className="line-clamp-3">
-                      &quot;Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic folds&quot;
-                    </span>
+                  {/* Prompt Terminal Box */}
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Prompt:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency&quot;
+                    </p>
                   </div>
                 </div>
 
+                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/qwen_editor_demo.jpg',
-                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic folds'
+                      '/images/showcase_dress_before.jpg',
+                      'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
                     )
                   }
-                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/40 text-pink-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-pink-500/20 active:scale-[0.98] cursor-pointer"
                 >
-                  <BoltIcon className="w-3.5 h-3.5 text-pink-400" />
-                  <span>Try This Example ⚡</span>
+                  <BoltIcon className="w-4 h-4 text-amber-300" />
+                  <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
 
-              {/* Showcase 2: Typography / Text Inpainting */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/90 transition-all group">
-                <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/model_compare_demo.jpg"
-                      alt="Typography Text Inpainting Demo with Qwen Image Editor"
-                      width={400}
-                      height={500}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-bold text-[10px] shadow-sm">
-                      🔤 Text Inpainting
+              {/* Showcase 2: Cyberpunk Style & Neon Jacket */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  {/* Header & Badges */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
+                        🌆 Background Swap &amp; Styling
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-purple-300 transition-colors">
+                        Daytime Cafe ➔ Cyberpunk Tokyo Neon Night
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Replaces warm indoor cafe background with rainy Tokyo neon streets, transforming green jacket into a futuristic metallic holographic biker jacket.
+                      </p>
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      Poster Headline Redesign
-                    </h3>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                      Replaces existing headline text with zero glyph artifacting, adhering strictly to editorial formatting.
-                    </p>
+                  {/* Side-by-Side Before vs After Window */}
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      {/* Before: Cafe */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_cafe_before.jpg"
+                          alt="Original Portrait in Daytime Coffee Shop"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-slate-200 font-bold text-[10px] tracking-wider border border-white/10 shadow-sm">
+                          📷 BEFORE
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
+                          Daytime Cafe &amp; Khaki Jacket
+                        </div>
+                      </div>
+
+                      {/* Floating Arrow */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-purple-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      {/* After: Cyberpunk */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_cyberpunk_after.jpg"
+                          alt="Inpainted Cyberpunk Tokyo Street with Holographic Jacket"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ AI AFTER
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
+                          Holographic Jacket &amp; Tokyo Neon
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Prompt Box */}
-                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
-                    <div className="text-[10px] uppercase font-semibold text-cyan-400 mb-1">Original Prompt:</div>
-                    <span className="line-clamp-3">
-                      &quot;Change the title text to &apos;NEW ARRIVAL FASHION 2026&apos;, maintain high-contrast editorial typography&quot;
-                    </span>
+                  {/* Prompt Terminal Box */}
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Prompt:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity&quot;
+                    </p>
                   </div>
                 </div>
 
+                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/model_compare_demo.jpg',
-                      'Change the title text to "NEW ARRIVAL FASHION 2026", maintain high-contrast editorial typography'
+                      '/images/showcase_cafe_before.jpg',
+                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity'
                     )
                   }
-                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-cyan-500 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
                 >
-                  <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Try This Example ⚡</span>
+                  <BoltIcon className="w-4 h-4 text-cyan-300" />
+                  <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
 
-              {/* Showcase 3: Tuxedo & Character Consistency */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/90 transition-all group">
-                <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/rumpelstiltskin_tuxedo_result.jpg"
-                      alt="Bespoke Tuxedo Suit Modification and Identity Consistency Demo"
-                      width={400}
-                      height={500}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-amber-500/90 text-white font-bold text-[10px] shadow-sm">
-                      🤵 Suit Transformation
+              {/* Showcase 3: Typography & Text Inpainting */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  {/* Header & Badges */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+                        🔤 Clean Typography Inpainting
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-cyan-300 transition-colors">
+                        Garbled AI Lettering ➔ Crisp Magazine Cover
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Eliminates nonsensical distorted diffusion glyphs and inlays razor-sharp editorial headlines with high contrast and immaculate letterforms.
+                      </p>
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
-                      Bespoke Tuxedo &amp; Consistency
-                    </h3>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                      Replaces character clothing with satin lapel tuxedo while strictly locking facial geometry and eye line.
-                    </p>
+                  {/* Side-by-Side Before vs After Window */}
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      {/* Before: Garbled Text */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_typography_before.jpg"
+                          alt="Standard Diffusion Text Rendering with Distorted Letters"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-rose-300 font-bold text-[10px] tracking-wider border border-rose-500/20 shadow-sm">
+                          ❌ STANDARD AI
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-rose-300 truncate">
+                          Garbled &amp; Illiterate Glyphs
+                        </div>
+                      </div>
+
+                      {/* Floating Arrow */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-cyan-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      {/* After: Crisp Qwen Typography */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_typography_after.jpg"
+                          alt="Qwen 2.1 Inpainted Crisp Magazine Typography"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ QWEN 2026
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-cyan-950/80 border border-cyan-500/40 backdrop-blur-md text-[10px] text-cyan-200 font-medium truncate">
+                          Perfect Editorial Typography
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Prompt Box */}
-                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
-                    <div className="text-[10px] uppercase font-semibold text-amber-400 mb-1">Original Prompt:</div>
-                    <span className="line-clamp-3">
-                      &quot;Change outfit to a sharp bespoke black tuxedo suit with satin peak lapels, preserve facial features&quot;
-                    </span>
+                  {/* Prompt Terminal Box */}
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Prompt:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Inpaint magazine cover title to &apos;QWEN IMAGE 2026&apos;, replace subtitle with &apos;NEXT GEN EDITING&apos;, perfectly crisp typography, high legibility, clean layout&quot;
+                    </p>
                   </div>
                 </div>
 
+                {/* Action CTA */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/showcase_typography_before.jpg',
+                      'Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout'
+                    )
+                  }
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] cursor-pointer"
+                >
+                  <BoltIcon className="w-4 h-4 text-cyan-300" />
+                  <span>Try This Recipe in Editor ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 4: Bespoke Tuxedo & Character Posture Consistency */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  {/* Header & Badges */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
+                        🤵 Character &amp; Tuxedo Inpaint
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-amber-300 transition-colors">
+                        Ragged Robes ➔ Bespoke Velvet Tuxedo
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Replaces vintage rough peasant clothing with a tailored velvet tuxedo tailcoat and bowtie, preserving identical jumping posture and candle-lit barn atmosphere.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Side-by-Side Before vs After Window */}
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      {/* Before: Vintage Ragged Cloth */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/rumpelstiltskin_vintage_demo.jpg"
+                          alt="Original Character in Ragged Peasant Clothing"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-slate-200 font-bold text-[10px] tracking-wider border border-white/10 shadow-sm">
+                          📷 BEFORE
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
+                          Ragged Peasant Robe
+                        </div>
+                      </div>
+
+                      {/* Floating Arrow */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-amber-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      {/* After: Velvet Tuxedo */}
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/rumpelstiltskin_tuxedo_result.jpg"
+                          alt="Character Inpainted into Bespoke Velvet Tuxedo Suit"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-amber-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ AI AFTER
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-amber-950/80 border border-amber-500/40 backdrop-blur-md text-[10px] text-amber-200 font-medium truncate">
+                          Tailored Velvet Tuxedo Suit
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Prompt Terminal Box */}
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Prompt:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere&quot;
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/rumpelstiltskin_vintage_demo.jpg',
-                      'Change outfit to a sharp bespoke black tuxedo suit with satin peak lapels, preserve facial features'
+                      'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere'
                     )
                   }
-                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
                 >
-                  <BoltIcon className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Try This Example ⚡</span>
-                </button>
-              </div>
-
-              {/* Showcase 4: Background Swap */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/90 transition-all group">
-                <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden aspect-[4/5] bg-slate-950 border border-slate-800">
-                    <img
-                      src="/images/og-image.jpg"
-                      alt="Cyberpunk Tokyo Background Swap Demo with Qwen Image"
-                      width={400}
-                      height={500}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-purple-500/90 text-white font-bold text-[10px] shadow-sm">
-                      🌆 Background Swap
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
-                      Cyberpunk Tokyo Street Swap
-                    </h3>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                      Separates subject automatically and blends natural neon reflections and rainy asphalt ambiance.
-                    </p>
-                  </div>
-
-                  {/* Prompt Box */}
-                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] text-slate-300 font-mono">
-                    <div className="text-[10px] uppercase font-semibold text-purple-400 mb-1">Original Prompt:</div>
-                    <span className="line-clamp-3">
-                      &quot;Replace background with a neon-lit cyberpunk Tokyo street at night with wet asphalt reflections&quot;
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleLoadShowcase(
-                      '/images/og-image.jpg',
-                      'Replace background with a neon-lit cyberpunk Tokyo street at night with wet asphalt reflections'
-                    )
-                  }
-                  className="mt-4 w-full py-2.5 px-3 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
-                >
-                  <BoltIcon className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Try This Example ⚡</span>
+                  <BoltIcon className="w-4 h-4 text-amber-200" />
+                  <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
             </div>
