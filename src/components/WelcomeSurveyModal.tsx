@@ -373,7 +373,7 @@ export function WelcomeSurveyModal() {
                 onClick={handleDismiss}
                 className="text-xs text-slate-500 hover:text-slate-300 transition-colors py-1 cursor-pointer block mx-auto"
               >
-                Maybe later, continue with free trial
+                Maybe later, continue with daily quota (1/1)
               </button>
             </div>
           </div>

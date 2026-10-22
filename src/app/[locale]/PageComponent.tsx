@@ -66,6 +66,21 @@ export default function PageComponent({
   const [tryOnFidelity, setTryOnFidelity] = useState<boolean>(true);
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [resetCountdown, setResetCountdown] = useState<string>('00:00');
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const tomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+      const diffMs = Math.max(0, tomorrow.getTime() - now.getTime());
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      setResetCountdown(`${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`);
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -580,12 +595,12 @@ export default function PageComponent({
           itemListElement: [
             {
               '@type': 'Offer',
-              name: 'Free Trial',
+              name: 'Daily Trial Quota',
               price: '0.00',
               priceCurrency: 'USD',
               availability: 'https://schema.org/InStock',
               description:
-                'Free trial with complimentary daily AI generation and inpainting credits upon registration.',
+                'Daily complimentary trial quota with 1 daily AI generation and inpainting credit upon registration.',
             },
             {
               '@type': 'Offer',
@@ -767,14 +782,20 @@ export default function PageComponent({
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400">Account Balance:</span>
+                    <span className="text-slate-400">
+                      {locale?.startsWith('zh') ? '今日额度:' : 'Daily Quota:'}
+                    </span>
                     {userData ? (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-slate-300 font-medium text-xs">
+                          {locale?.startsWith('zh') ? '今日剩余:' : 'Remaining:'}
+                        </span>
                         <span className="font-bold text-cyan-300 font-mono text-sm">
                           {userData.available_times ?? 0} Credits
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                          Quota Claimed
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                          <span>⏱ {locale?.startsWith('zh') ? '重置倒计时:' : 'Reset in:'}</span>
+                          <span className="font-mono font-bold text-white">{resetCountdown}</span>
                         </span>
                       </div>
                     ) : (
@@ -783,10 +804,10 @@ export default function PageComponent({
                         onClick={() => setShowLoginModal(true)}
                         className="inline-flex items-center gap-1.5 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-md transition-colors cursor-pointer text-xs"
                       >
-                        <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                          Today's Quota: 1/1
+                        <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
+                          {locale?.startsWith('zh') ? '今日体验额度: 1/1' : 'Daily Trial Quota: 1/1'}
                         </span>
-                        <span>Sign In to Claim Daily Quota →</span>
+                        <span>{locale?.startsWith('zh') ? '(登录即领) →' : '(Sign in to claim) →'}</span>
                       </button>
                     )}
                   </div>
@@ -1735,10 +1756,15 @@ export default function PageComponent({
                       <div className="text-right">
                         {userData ? (
                           <div className="text-[11px]">
-                            <span className="text-slate-400">Balance: </span>
+                            <span className="text-slate-400">
+                              {locale?.startsWith('zh') ? '今日剩余: ' : 'Remaining: '}
+                            </span>
                             <strong className="text-cyan-300 font-mono font-bold">
                               {userData.available_times ?? 0} Credits
                             </strong>
+                            <span className="block text-[10px] text-slate-400 font-mono">
+                              ⏱ {locale?.startsWith('zh') ? '重置倒计时: ' : 'Reset in: '}{resetCountdown}
+                            </span>
                             {(userData.available_times ?? 0) <= 1 && (
                               <span className="block text-[10px] text-amber-400 font-semibold animate-pulse">
                                 ⚠️ Low Balance — Top up now
@@ -1747,7 +1773,7 @@ export default function PageComponent({
                           </div>
                         ) : (
                           <span className="text-[11px] text-slate-400">
-                            Free Trial Active
+                            {locale?.startsWith('zh') ? '今日体验额度: 1/1 (登录即领)' : 'Daily Trial Quota: 1/1'}
                           </span>
                         )}
                       </div>
