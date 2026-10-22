@@ -69,7 +69,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
       name: 'Bilingual Typography & Spelling',
       icon: DocumentTextIcon,
       prompt: 'A minimalist craft brewery label with sharp lettering "CASCADE HOPPING 2026" and Chinese characters "精酿啤酒"',
-      qwenPros: 'Flawlessly spells multi-word English sentences and Chinese hanzi characters with correct strokes, clean kerning, and zero gibberish.',
+      qwenPros: 'Accurately renders multi-word English sentences and Chinese hanzi characters with correct strokes, clean kerning, and high typographic legibility.',
       fluxPros: 'Exceptional with short English words on street signs and posters, but fails on Chinese characters and multi-clause sentences.',
       metrics: { qwenSpeed: '2.6s', fluxSpeed: '7.9s', qwenVram: '11 GB', fluxVram: '18 GB' },
     },
@@ -143,7 +143,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
     },
     {
       q: 'Which model renders written text and typography more accurately?',
-      a: 'While Flux.1 excels at short English typography on billboards and street signs, Qwen delivers unmatched bilingual accuracy across both Latin alphabets and complex Chinese ideograms. Qwen consistently avoids letter merging, glyph corruption, and hallucinated spelling mistakes, making it the preferred choice for commercial posters, logos, and UI mockups.',
+      a: 'While Flux.1 excels at short English typography on billboards and street signs, Qwen delivers strong bilingual accuracy across both Latin alphabets and complex Chinese ideograms. Qwen significantly reduces letter merging and hallucinated spelling mistakes, making it an effective choice for commercial posters, logos, and UI mockups.',
     },
     {
       q: 'Which engine produces higher generation speed and batch throughput?',

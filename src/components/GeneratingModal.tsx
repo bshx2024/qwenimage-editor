@@ -29,8 +29,8 @@ const TIPS: GeneratingTip[] = [
     iconType: 'lock',
     tag: 'Identity Protected',
     tagColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-    title: '100% Face & Identity Lock',
-    desc: 'Preserving natural facial expressions and biometric landmarks with zero distortion.',
+    title: 'Facial & Structural Preservation',
+    desc: 'Designed to preserve natural facial expressions and biometric landmarks during prompt edits.',
   },
   {
     iconType: 'bolt',

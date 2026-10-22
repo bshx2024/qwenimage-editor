@@ -75,7 +75,7 @@ export default function ProductPhotoEditorComponent({
             "name": "Does Qwen Product Photo Editor alter text labels, brand logos, or product dimensions?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Qwen Image 2.1 locks the foreground bounding mask with zero deformation, preserving 100% of brand logos, typography, barcode lines, and product aspect ratios."
+              "text": "No. Qwen Image 2.1 applies precise foreground masking with high structural fidelity, helping protect brand logos, typography, barcode lines, and product dimensions from unintended distortion."
             }
           },
           {
@@ -205,10 +205,10 @@ export default function ProductPhotoEditorComponent({
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
                   <ShieldCheckIcon className="w-5 h-5" />
                 </div>
-                <h3 className="font-semibold text-white text-base">Zero-Distortion Masking</h3>
+                <h3 className="font-semibold text-white text-base">High-Fidelity Masking</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  <strong>Logo Integrity:</strong> Exact preservation of fonts, colors, and trademarks.<br />
-                  <strong>Geometry:</strong> Fixed boundary box preventing product warping.
+                  <strong>Logo Protection:</strong> High fidelity across brand fonts, colors, and trademarks.<br />
+                  <strong>Geometry:</strong> Fixed boundary focus helping prevent product warping.
                 </p>
               </div>
 
@@ -349,7 +349,7 @@ export default function ProductPhotoEditorComponent({
                   Does Qwen Product Photo Editor alter text labels, brand logos, or product dimensions?
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  No. Qwen Image 2.1 locks the foreground bounding mask with zero deformation, preserving 100% of brand logos, typography, barcode lines, and product aspect ratios.
+                  No. Qwen Image 2.1 applies precise foreground masking with high structural fidelity, helping protect brand logos, typography, barcode lines, and product dimensions from unintended distortion.
                 </p>
               </div>
 

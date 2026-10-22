@@ -510,7 +510,7 @@ export default function PageComponent({
   const faqList = [
     {
       q: 'What is Qwen Image Editor and how does it work?',
-      a: "Qwen Image Editor is a browser-based AI platform that modifies images through natural language prompts using Alibaba Cloud's Qwen-Image 2.1 foundation models. Rather than regenerating complete canvases from scratch, the system maps multimodal visual tokens directly to prompt instructions, isolating edit boundaries with zero manual masking. It executes localized inpainting on 1024×1024 pixel inputs within 2.5 to 4.5 seconds on cloud GPUs, preserving 100% of unedited textures and facial landmarks without requiring 24GB local VRAM.",
+      a: "Qwen Image Editor is a browser-based AI platform that modifies images through natural language prompts using Alibaba Cloud's DashScope foundation models (wanx2.1-imageedit). Rather than regenerating complete canvases from scratch, the system maps multimodal visual tokens directly to prompt instructions, isolating edit boundaries without manual brush masking. It executes localized inpainting on 1024×1024 pixel inputs with typical cloud turnaround in 8 to 15 seconds, helping preserve unedited textures and facial features without requiring local GPU hardware.",
     },
     {
       q: 'Can I use Qwen Image Editor for AI clothes changing and virtual try-on?',
@@ -595,8 +595,8 @@ export default function PageComponent({
           'Professional online AI image editing tool powered by Alibaba Cloud Bailian and Qwen-Image 2.1 models. Features conversational inpainting, background removal, bilingual typography rendering, and high-fidelity text-to-image synthesis directly in browser without ComfyUI.',
         featureList: [
           'AI Inpainting: Conversational instruction-guided photo modifications',
-          'Text-guided Photo Editing: Pinpoint adjustments without identity drift',
-          'Background Removal & Replacement: Zero-shot subject isolation and scene re-lighting',
+          'Text-guided Photo Editing: Targeted adjustments designed to maintain subject consistency',
+          'Background Removal & Replacement: Subject isolation and scene re-lighting',
           'Text to Image: High-fidelity generation with crisp bilingual typography',
         ],
         aggregateRating: {
@@ -786,7 +786,7 @@ export default function PageComponent({
               {/* Credit Status & Usage Rules Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-6 rounded-2xl bg-slate-950/90 border border-slate-800/90 text-xs shadow-inner">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  {userData ? (
+                  {Boolean(userData && userData.user_id) ? (
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-xs shadow-sm">
                         <span className="flex h-2 w-2 relative">
@@ -1026,16 +1026,13 @@ export default function PageComponent({
                                 {activeTab === 'edit' ? (
                                   <>
                                     <option value="wanx2.1-imageedit" className="bg-slate-900 text-slate-200">
-                                      Qwen/Wanx Image Edit (Instruction Inpaint 🎨 - 1 Credit)
+                                      Wanx 2.1 Image Edit (Instruction Inpaint 🎨 - 1 Credit)
                                     </option>
                                     <option value="wanx2.1-i2i-turbo" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Turbo (Fast Edit ⚡ - 1 Credit)
                                     </option>
                                     <option value="wanx2.1-i2i-plus" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Plus (High Fidelity 🌟 - 2 Credits)
-                                    </option>
-                                    <option value="qwen-image-edit" className="bg-slate-900 text-slate-200">
-                                      Qwen Multimodal Edit (Official API 🚀 - 2 Credits)
                                     </option>
                                   </>
                                 ) : (
@@ -1045,9 +1042,6 @@ export default function PageComponent({
                                     </option>
                                     <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
                                       Wanx 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
-                                    </option>
-                                    <option value="qwen-image" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image Multimodal (Official API 🚀 - 2 Credits)
                                     </option>
                                   </>
                                 )}
@@ -1740,7 +1734,7 @@ export default function PageComponent({
 
                       {/* User Balance Status */}
                       <div className="text-right">
-                        {userData ? (
+                        {Boolean(userData && userData.user_id) ? (
                           <div className="text-[11px]">
                             <span className="text-slate-400">
                               {locale?.startsWith('zh') ? '今日剩余: ' : 'Remaining: '}
@@ -1758,9 +1752,13 @@ export default function PageComponent({
                             )}
                           </div>
                         ) : (
-                          <span className="text-[11px] text-slate-400">
-                            {locale?.startsWith('zh') ? '今日体验额度: 1/1 (登录即领)' : 'Daily Trial Quota: 1/1'}
-                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setShowLoginModal(true)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-medium text-[11px] hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                          >
+                            <span>🎁 {locale?.startsWith('zh') ? '新用户赠送 1 积分 (登录即领)' : 'Daily Trial: 1 Credit (Sign in to claim)'}</span>
+                          </button>
                         )}
                       </div>
                     </div>
@@ -1860,7 +1858,7 @@ export default function PageComponent({
                         Casual White Tee ➔ Emerald Silk Evening Gown
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Precision AI clothing replacement with realistic fabric drape and satin sheen, while keeping facial identity, posture, and lighting 100% locked.
+                        Precision AI clothing replacement with realistic fabric drape and satin sheen, designed to preserve subject identity, posture, and lighting coherence.
                       </p>
                     </div>
                   </div>
@@ -1913,7 +1911,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original facial identity and posture&quot;
+                      &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture&quot;
                     </p>
                   </div>
                 </div>
@@ -1923,7 +1921,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_dress_before.jpg',
-                      'Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original facial identity and posture',
+                      'Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture',
                       '/images/showcase_dress_after.jpg'
                     )
                   }
@@ -2002,7 +2000,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, keep facial identity and smile identical&quot;
+                      &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression&quot;
                     </p>
                   </div>
                 </div>
@@ -2012,7 +2010,7 @@ export default function PageComponent({
                   onClick={() =>
                     handleLoadShowcase(
                       '/images/showcase_photo_before.jpg',
-                      'Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, keep facial identity and smile identical',
+                      'Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression',
                       '/images/showcase_photo_after.jpg'
                     )
                   }
@@ -2587,7 +2585,7 @@ export default function PageComponent({
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Facial identity &amp; posture preservation</span>
+                      <span>Helps preserve facial features &amp; posture</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
@@ -2729,7 +2727,7 @@ export default function PageComponent({
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span><strong>Always Latest Checkpoints:</strong> Automatically updated with Qwen-Image-Edit 2511, 2512, and continuous fine-tuning improvements.</span>
+                    <span><strong>Official Foundation Models:</strong> Direct cloud integration with Alibaba Cloud DashScope endpoints (<code>wanx2.1-imageedit</code> and <code>wanx2.1-t2i</code>) with stable GPU cluster availability.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold">✓</span>

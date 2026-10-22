@@ -183,7 +183,7 @@ export default function EditTextInImageComponent({
             "name": "Can I edit text in image photos with bilingual Chinese or Japanese characters?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. When you edit text in image assets using Qwen, native bilingual tokenization supports English, Chinese, Japanese, and Korean glyphs with zero spelling distortion or character hallucination."
+              "text": "Yes. When you edit text in image assets using Qwen, native bilingual tokenization supports English, Chinese, Japanese, and Korean glyphs with significantly improved spelling fidelity and accurate typography layout."
             }
           },
           {
@@ -191,7 +191,7 @@ export default function EditTextInImageComponent({
             "name": "Does the AI edit text in image without blurring the surrounding background?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. When you edit text in image documents or product shots, precise localized bounding masks preserve 100% of the surrounding face, product contours, and background textures at full resolution."
+              "text": "Yes. When you edit text in image documents or product shots, localized bounding attention helps preserve surrounding faces, product contours, and background textures at full resolution."
             }
           },
           {
@@ -849,7 +849,7 @@ export default function EditTextInImageComponent({
                   Can I edit text in image photos with bilingual Chinese or Japanese characters?
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Yes. When you <strong>edit text in image</strong> assets using Qwen, native bilingual tokenization supports English, Chinese, Japanese, and Korean glyphs with zero spelling distortion or character hallucination.
+                  Yes. When you <strong>edit text in image</strong> assets using Qwen, native bilingual tokenization supports English, Chinese, Japanese, and Korean glyphs with significantly improved spelling fidelity and accurate typography layout.
                 </p>
               </div>
 
@@ -858,7 +858,7 @@ export default function EditTextInImageComponent({
                   Does the AI edit text in image without blurring the surrounding background?
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Yes. When you <strong>edit text in image</strong> documents or product shots, precise localized bounding masks preserve 100% of the surrounding face, product contours, and background textures at full resolution.
+                  Yes. When you <strong>edit text in image</strong> documents or product shots, localized bounding attention helps preserve surrounding faces, product contours, and background textures at full resolution.
                 </p>
               </div>
 

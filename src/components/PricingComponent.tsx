@@ -202,7 +202,7 @@ export default function Pricing({
                       ${priceFormatted}
                     </span>
                     <span className="text-xs text-slate-400">
-                      {isOneTime ? ' one-time' : plan.id.includes('yearly') ? '/ year' : '/ month'}
+                      {isOneTime ? ' one-time' : plan.id.includes('yearly') ? '/ year ($9.90/mo)' : '/ month'}
                     </span>
                   </div>
 

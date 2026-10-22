@@ -53,7 +53,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
       name: 'Typography & Text Spelling',
       icon: DocumentTextIcon,
       prompt: 'A cyberpunk neon billboard in Tokyo with bold illuminated text reading "CYBER FUTURE 2026", photorealistic 8k',
-      qwenPros: 'Renders exact characters "CYBER FUTURE 2026" with accurate kerning, glowing neon shaders, and zero spelling artifacts.',
+      qwenPros: 'Renders characters "CYBER FUTURE 2026" with accurate kerning, glowing neon shaders, and high spelling fidelity.',
       mjCons: 'Frequently distorts multi-word slogans into unrecognizable pseudo-English characters or garbled glyphs.',
       benchmarkScore: { qwen: '99/100', mj: '68/100' },
     },

@@ -46,11 +46,11 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     name: 'Pro Monthly',
     price: 19.90,
     period: 'month',
-    credits: 250,
+    credits: 500,
     productId: process.env.WAFFO_PRODUCT_PRO_MONTHLY || 'PROD_0bhIkei7YAngBgCbPswItP',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_PRO_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_0bhIkei7YAngBgCbPswItP?type=subscription&currency=USD',
     features: [
-      '250 AI Credits / month',
+      '500 AI Credits / month',
       'Ultra HD Resolution & Inpainting',
       'Commercial Usage License',
       'Fast GPU Priority Queue'
@@ -61,11 +61,11 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     name: 'Pro Yearly',
     price: 118.80,
     period: 'year',
-    credits: 3600,
+    credits: 6000,
     productId: process.env.WAFFO_PRODUCT_PRO_YEARLY || 'PROD_7PVW8DleskmRyJ98oLkZSJ',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_MEGA_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_7PVW8DleskmRyJ98oLkZSJ?type=subscription&currency=USD',
     features: [
-      '3,600 AI Credits / year ($9.90/mo)',
+      '6,000 AI Credits / year ($9.90/mo)',
       'Save 50% Compared to Monthly',
       'VIP Dedicated Fast Queue',
       'Commercial Usage License'

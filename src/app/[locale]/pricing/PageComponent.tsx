@@ -140,7 +140,7 @@ const PageComponent = ({
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
               <span className="font-semibold text-pink-300 block">Pro Yearly</span>
-              <span className="text-slate-400 text-[11px]">$118.80/yr ($9.90/mo), 6000 credits, save 50%</span>
+              <span className="text-slate-400 text-[11px]">$118.80/yr ($9.90/mo), 6,000 credits, save 50%</span>
             </div>
           </div>
         </div>
