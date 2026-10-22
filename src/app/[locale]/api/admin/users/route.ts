@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { verifyAdmin } from '~/libs/adminAuth';
 import { getDb } from '~/libs/db';
 import { resolveCountryFromIp } from '~/libs/geoip';
+import { deleteUserCompletely } from '~/servers/user';
 
 export const dynamic = 'force-dynamic';
 
@@ -213,9 +214,52 @@ export async function POST(request: Request) {
       });
     }
 
+    if (action === 'delete_user') {
+      if (!userId) {
+        return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+      }
+
+      const { email } = body;
+      const purgeStats = await deleteUserCompletely(userId, email);
+
+      return NextResponse.json({
+        success: true,
+        message: `User and all associated data permanently erased.`,
+        details: purgeStats,
+      });
+    }
+
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
   } catch (err: any) {
-    console.error('Admin adjust credits error:', err);
+    console.error('Admin user operation error:', err);
+    return NextResponse.json({ error: err?.message || 'Database error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const auth = await verifyAdmin(request);
+  if (!auth.isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const email = searchParams.get('email') || undefined;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Missing userId query parameter' }, { status: 400 });
+    }
+
+    const purgeStats = await deleteUserCompletely(userId, email);
+
+    return NextResponse.json({
+      success: true,
+      message: 'User and all associated records permanently purged.',
+      details: purgeStats,
+    });
+  } catch (err: any) {
+    console.error('Admin DELETE user error:', err);
     return NextResponse.json({ error: err?.message || 'Database error' }, { status: 500 });
   }
 }

@@ -20,6 +20,7 @@ export const CommonProvider = ({
   const [intervalUserData, setIntervalUserData] = useState<number | undefined>(1000);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [showGeneratingModal, setShowGeneratingModal] = useState(false);
   const [showPricingModal, setShowPricingModal] = useState(false);
@@ -100,6 +101,8 @@ export const CommonProvider = ({
         setShowLoginModal,
         showLogoutModal,
         setShowLogoutModal,
+        showDeleteAccountModal,
+        setShowDeleteAccountModal,
         showLoadingModal,
         setShowLoadingModal,
         showGeneratingModal,

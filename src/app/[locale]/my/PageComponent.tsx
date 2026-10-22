@@ -18,6 +18,7 @@ import {
   ExclamationTriangleIcon,
   ClockIcon,
   FireIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 
 interface PageComponentProps {
@@ -46,6 +47,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
     setShowLoadingModal,
     setShowLoginModal,
     setShowPricingModal,
+    setShowDeleteAccountModal,
     userData,
   } = useCommonContext();
 
@@ -541,6 +543,31 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
                 </div>
               )}
             </>
+          )}
+
+          {/* GDPR Account & Data Erasure Section */}
+          {userData?.email && (
+            <div className="mt-16 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-white">Privacy &amp; Data Rights</h3>
+                  <span className="inline-flex items-center gap-1 rounded bg-cyan-500/10 border border-cyan-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-cyan-300">
+                    <ShieldCheckIcon className="w-3 h-3" /> GDPR Compliant
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-slate-400 max-w-xl">
+                  You have the statutory right under GDPR Article 17 to permanently delete your account, authentication links, and all creation history from our servers at any time.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDeleteAccountModal(true)}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 px-4 py-2 text-xs font-semibold text-red-300 transition-colors cursor-pointer flex-shrink-0"
+              >
+                <TrashIcon className="w-3.5 h-3.5 text-red-400" />
+                <span>Delete Account &amp; Erase Data</span>
+              </button>
+            </div>
           )}
         </div>
       </main>

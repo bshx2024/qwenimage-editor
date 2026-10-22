@@ -77,6 +77,8 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [creditMode, setCreditMode] = useState<'add' | 'set'>('add');
   const [isUpdatingCredit, setIsUpdatingCredit] = useState<boolean>(false);
   const [isCompensating, setIsCompensating] = useState<boolean>(false);
+  const [deleteModalUser, setDeleteModalUser] = useState<any>(null);
+  const [isDeletingUser, setIsDeletingUser] = useState<boolean>(false);
 
   // Works Data
   const [works, setWorks] = useState<any[]>([]);
@@ -381,6 +383,35 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       showToast(err?.message || 'Error updating credits', 'error');
     } finally {
       setIsUpdatingCredit(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!deleteModalUser) return;
+    setIsDeletingUser(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'delete_user',
+          userId: deleteModalUser.user_id,
+          email: deleteModalUser.email,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`User ${deleteModalUser.email || deleteModalUser.name} permanently deleted.`);
+        setDeleteModalUser(null);
+        fetchUsers();
+        fetchStats();
+      } else {
+        showToast(data.error || 'Failed to delete user.', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error deleting user.', 'error');
+    } finally {
+      setIsDeletingUser(false);
     }
   };
 
@@ -1337,16 +1368,24 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                             </td>
                             <td className="px-5 py-3 text-slate-500 text-[11px]">{u.last_login_ip || '--'}</td>
                             <td className="px-5 py-3 text-right">
-                              <button
-                                onClick={() => {
-                                  setCreditModalUser(u);
-                                  setCreditAmount(10);
-                                  setCreditMode('add');
-                                }}
-                                className="rounded-lg bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 text-[11px] font-semibold text-cyan-300 hover:bg-cyan-500/20 transition-colors cursor-pointer"
-                              >
-                                Adjust Points
-                              </button>
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  onClick={() => {
+                                    setCreditModalUser(u);
+                                    setCreditAmount(10);
+                                    setCreditMode('add');
+                                  }}
+                                  className="rounded-lg bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 text-[11px] font-semibold text-cyan-300 hover:bg-cyan-500/20 transition-colors cursor-pointer"
+                                >
+                                  Adjust Points
+                                </button>
+                                <button
+                                  onClick={() => setDeleteModalUser(u)}
+                                  className="rounded-lg bg-red-500/10 border border-red-500/30 px-2.5 py-1 text-[11px] font-semibold text-red-300 hover:bg-red-500/20 transition-colors cursor-pointer"
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -3067,6 +3106,72 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                 className="flex-1 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-xs font-bold text-white hover:opacity-95 disabled:opacity-50"
               >
                 {isUpdatingCredit ? 'Saving...' : 'Apply Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete User Confirmation Modal */}
+      {deleteModalUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-red-500/30 bg-slate-900 p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-red-400">
+              <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-lg font-bold">
+                ⚠️
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Permanently Delete User?</h3>
+                <p className="text-xs text-red-400">GDPR Right to Erasure Enforcement</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-slate-950/70 border border-slate-800 p-3 space-y-1.5 text-xs">
+              <div className="text-slate-400">
+                User: <strong className="text-white">{deleteModalUser.name || 'Unnamed'}</strong>
+              </div>
+              <div className="text-slate-400">
+                Email: <strong className="text-cyan-300 font-mono">{deleteModalUser.email}</strong>
+              </div>
+              <div className="text-slate-400">
+                User ID: <span className="text-slate-500 font-mono text-[10px]">{deleteModalUser.user_id}</span>
+              </div>
+              <div className="text-slate-400">
+                Available Credits: <span className="text-amber-400 font-semibold">{deleteModalUser.available_times}</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              This action will permanently cascade and erase:
+            </p>
+            <ul className="text-[11px] text-slate-400 list-disc list-inside space-y-1 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/60">
+              <li>Profile data from <code className="text-cyan-400">user_info</code></li>
+              <li>Credit balance from <code className="text-cyan-400">user_available</code></li>
+              <li>Generated works and gallery records from <code className="text-cyan-400">works</code></li>
+              <li>Onboarding survey responses from <code className="text-cyan-400">user_survey_logs</code></li>
+              <li>Anonymize payment transaction receipts for tax compliance</li>
+            </ul>
+
+            <p className="text-xs font-semibold text-rose-400">
+              ⚠️ This operation is irreversible and takes effect immediately in the database.
+            </p>
+
+            <div className="flex gap-2 pt-2 border-t border-slate-800">
+              <button
+                type="button"
+                disabled={isDeletingUser}
+                onClick={() => setDeleteModalUser(null)}
+                className="flex-1 py-2 rounded-xl border border-slate-800 bg-slate-950 text-xs text-slate-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingUser}
+                onClick={handleDeleteUser}
+                className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {isDeletingUser ? 'Erasing...' : 'Confirm Delete'}
               </button>
             </div>
           </div>

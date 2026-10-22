@@ -10,6 +10,7 @@ import {
   BoltIcon,
   SparklesIcon,
   CreditCardIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import { useCommonContext } from '~/context/common-context';
 import { useSession } from 'next-auth/react';
@@ -31,6 +32,7 @@ export default function LoginButton({
     userData,
     setShowLoginModal,
     setShowLogoutModal,
+    setShowDeleteAccountModal,
     setShowPricingModal,
     authText
   } = useCommonContext();
@@ -187,19 +189,35 @@ export default function LoginButton({
               </Menu.Item>
             </div>
 
-            {/* Sign Out Button */}
-            <div className="p-1.5">
+            {/* Account Actions */}
+            <div className="p-1.5 border-t border-slate-800/80 space-y-0.5">
               <Menu.Item>
                 {({ active }) => (
                   <button
                     type="button"
                     onClick={() => setShowLogoutModal(true)}
                     className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-                      active ? 'bg-red-500/15 text-red-300' : 'text-red-400 hover:bg-red-500/10'
+                      active ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800/60'
                     }`}
                   >
-                    <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                    <ArrowRightOnRectangleIcon className="w-4 h-4 text-slate-400" />
                     <span>Sign out</span>
+                  </button>
+                )}
+              </Menu.Item>
+
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteAccountModal(true)}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+                      active ? 'bg-rose-500/15 text-rose-300' : 'text-rose-400/90 hover:bg-rose-500/10 hover:text-rose-300'
+                    }`}
+                  >
+                    <TrashIcon className="w-4 h-4 text-rose-400" />
+                    <span className="flex-1 text-left">Delete Account</span>
+                    <span className="text-[10px] uppercase font-bold text-rose-400/70 border border-rose-500/30 rounded px-1 py-0.2">GDPR</span>
                   </button>
                 )}
               </Menu.Item>

@@ -291,3 +291,104 @@ export const getUserByEmail = async (email: string) => {
     };
   }
 };
+
+/**
+ * Permanently delete user and cascade across all associated tables for GDPR compliance
+ */
+export const deleteUserCompletely = async (userId: string, email?: string) => {
+  const db = getDb();
+  let resolvedEmail = email;
+
+  // Resolve email from userId if not provided
+  if (!resolvedEmail && userId) {
+    try {
+      const uRes = await db.query('SELECT email FROM user_info WHERE user_id = $1 LIMIT 1', [userId]);
+      if (uRes.rows.length > 0) {
+        resolvedEmail = uRes.rows[0].email;
+      }
+    } catch (e) {
+      console.warn('Could not resolve user email before deletion:', e);
+    }
+  }
+
+  const results = {
+    surveys: 0,
+    credits: 0,
+    works: 0,
+    subscriptions: 0,
+    customers: 0,
+    ordersAnonymized: 0,
+    userInfo: 0,
+  };
+
+  // 1. Delete user survey logs
+  try {
+    const surveyRes = await db.query(
+      'DELETE FROM user_survey_logs WHERE user_id = $1 OR (user_email IS NOT NULL AND user_email = $2)',
+      [userId, resolvedEmail || '']
+    );
+    results.surveys = surveyRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Delete user_survey_logs error:', err?.message);
+  }
+
+  // 2. Delete user available credits
+  try {
+    const availRes = await db.query('DELETE FROM user_available WHERE user_id = $1', [userId]);
+    results.credits = availRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Delete user_available error:', err?.message);
+  }
+
+  // 3. Delete user works / creations
+  try {
+    const worksRes = await db.query('DELETE FROM works WHERE user_id = $1', [userId]);
+    results.works = worksRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Delete works error:', err?.message);
+  }
+
+  // 4. Delete stripe subscriptions / customer mapping
+  try {
+    const subRes = await db.query('DELETE FROM stripe_subscriptions WHERE user_id = $1', [userId]);
+    results.subscriptions = subRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Delete stripe_subscriptions error:', err?.message);
+  }
+
+  try {
+    const custRes = await db.query('DELETE FROM stripe_customers WHERE user_id = $1', [userId]);
+    results.customers = custRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Delete stripe_customers error:', err?.message);
+  }
+
+  // 5. Anonymize payment orders (retaining financial records without personal identifiers for tax compliance)
+  try {
+    const orderRes = await db.query(
+      `UPDATE payment_orders 
+       SET user_email = 'anonymized@gdpr.purged', 
+           user_id = 'purged_' || substring(md5(random()::text) from 1 for 12),
+           updated_at = NOW() 
+       WHERE user_id = $1 OR (user_email IS NOT NULL AND user_email = $2)`,
+      [userId, resolvedEmail || '']
+    );
+    results.ordersAnonymized = orderRes.rowCount || 0;
+  } catch (err: any) {
+    console.warn('Anonymize payment_orders error:', err?.message);
+  }
+
+  // 6. Delete user_info main record
+  try {
+    const userRes = await db.query(
+      'DELETE FROM user_info WHERE user_id = $1 OR (email IS NOT NULL AND email = $2)',
+      [userId, resolvedEmail || '']
+    );
+    results.userInfo = userRes.rowCount || 0;
+  } catch (err: any) {
+    console.error('Delete user_info error:', err?.message);
+    throw err;
+  }
+
+  return results;
+};

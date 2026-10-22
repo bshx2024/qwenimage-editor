@@ -10,6 +10,7 @@ import GeneratingModal from "~/components/GeneratingModal";
 import LoginButton from './LoginButton';
 import LoginModal from './LoginModal';
 import LogoutModal from "./LogoutModal";
+import DeleteAccountModal from "./DeleteAccountModal";
 import { getLinkHref } from "~/configs/buildLink";
 
 export default function Header({
@@ -50,6 +51,7 @@ export default function Header({
         cancelButtonText={authText?.cancelButtonText || 'Cancel'}
         redirectPath={pageResult}
       />
+      <DeleteAccountModal redirectPath={pageResult} />
       
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Global">
         {/* Brand Logo */}
