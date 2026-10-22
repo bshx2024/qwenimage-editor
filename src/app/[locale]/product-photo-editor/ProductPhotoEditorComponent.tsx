@@ -102,7 +102,7 @@ export default function ProductPhotoEditorComponent({
   const benchmarks = [
     {
       metric: "Product Feature & Logo Preservation",
-      qwen: "100% Pixel Mask Lock (0% Distortion)",
+      qwen: "Precise Semantic Masking (Minimizes Distortion)",
       midjourney: "Frequent hallucinations & deformed logos",
       flair: "Variable masking bleed"
     },
@@ -120,7 +120,7 @@ export default function ProductPhotoEditorComponent({
     },
     {
       metric: "Amazon Pure White Mode (RGB 255)",
-      qwen: "One-click 100% white background",
+      qwen: "Studio Pure White Mode (RGB 255)",
       midjourney: "Requires manual background removal",
       flair: "Supported with paid tier"
     },
@@ -136,7 +136,7 @@ export default function ProductPhotoEditorComponent({
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
       <HeadInfo
         title="AI Product Photography & Studio Photo Editor | Qwen Image 2.1"
-        description="Transform phone snapshots into studio product photography in 3 seconds. Flawless logo preservation, physically accurate shadows, and Amazon/Shopify compliance."
+        description="Transform phone snapshots into studio product photography in ~8–15 seconds. Designed for logo retention, physically accurate shadows, and Amazon/Shopify compliance."
         page="product-photo-editor"
         locale={locale}
       />
@@ -165,7 +165,7 @@ export default function ProductPhotoEditorComponent({
 
             {/* GEO Conclusion-First Rule */}
             <div className="mx-auto max-w-3xl p-4 sm:p-5 rounded-xl border border-purple-500/20 bg-purple-950/30 text-slate-200 text-sm sm:text-base leading-relaxed text-left font-mono">
-              <span className="text-purple-400 font-bold">Conclusion:</span> Qwen Product Photo Editor is an AI commercial staging tool that transforms product captures into high-converting studio visuals in <strong className="text-white">2.8 seconds</strong>, locking <strong className="text-white">100% of logos and typography</strong> while calculating physically accurate contact shadows for Amazon and Shopify.
+              <span className="text-purple-400 font-bold">Conclusion:</span> Qwen Product Photo Editor is an AI commercial staging tool that transforms product captures into high-converting studio visuals in <strong className="text-white">~8–15 seconds</strong>, designed to retain <strong className="text-white">product logos and typography</strong> while calculating physically accurate contact shadows for Amazon and Shopify.
             </div>
 
             {/* CTAs */}

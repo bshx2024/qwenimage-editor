@@ -530,7 +530,7 @@ export default function PageComponent({
     },
     {
       q: 'Which model checkpoints and APIs are supported?',
-      a: 'Our cloud platform connects directly to production Alibaba Cloud Bailian (DashScope) APIs, utilizing Wanx 2.1 Image Edit (wanx2.1-imageedit) for description-based inpainting and Wanx 2.1 Turbo/Plus for text-to-image synthesis. We also track open-weights Qwen-Image family releases for ongoing workflow compatibility.',
+      a: 'The online editor executes managed production APIs from Alibaba Cloud DashScope, specifically Wanx 2.1 Image Edit (wanx2.1-imageedit) for instruction-based inpainting and Wanx 2.1 Turbo/Plus for text-to-image synthesis. While open-source research checkpoints from the Qwen-Image family are available on Hugging Face and ModelScope for self-hosted ComfyUI rigs, this website provides a managed serverless cloud environment with no local GPU setup required.',
     },
     {
       q: 'Can I try this online editor for free without ComfyUI or a high-end GPU?',
@@ -1402,7 +1402,7 @@ export default function PageComponent({
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
                         </span>
-                        <span>⚡ Ultra-Fast GPU Queue Active (~3-6s)</span>
+                        <span>⚡ Cloud GPU Queue Active (~8-15s typical)</span>
                       </div>
 
                       <div className="flex items-center gap-2">
@@ -2528,7 +2528,7 @@ export default function PageComponent({
                 <SparklesIcon className="w-8 h-8 text-purple-400" />
                 <h3 className="text-base font-bold text-white">Crisp Text & Typography</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Render photorealistic English and Chinese typography on street banners, apparel, packaging, and digital advertisements without garbled characters.
+                  Render photorealistic English and Chinese typography on street banners, apparel, packaging, and digital advertisements with enhanced character fidelity and minimized glyph distortion.
                 </p>
               </div>
 
@@ -2635,7 +2635,7 @@ export default function PageComponent({
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">Open Ecosystem Checkpoints</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Continuous cross-benchmarking against community ComfyUI workflows and Hugging Face releases to ensure our cloud workspace delivers parity with local 24GB VRAM workstation environments.
+                    Online workspace powered by Alibaba Cloud DashScope <code className="text-cyan-300">wanx2.1-imageedit</code> production endpoints. This cloud deployment frees creators from downloading 20GB+ open-source weights (such as Qwen-Image checkpoints) or operating local 24GB VRAM workstation hardware.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">

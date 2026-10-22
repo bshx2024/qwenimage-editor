@@ -620,7 +620,7 @@ export default function EditTextInImageComponent({
               When graphic designers and marketers attempt to <strong>edit text in image</strong> assets using legacy tools like Photoshop or GIMP, they must perform tedious manual clone stamping, texture recreation, perspective correction, and font identification. In contrast, modern neural diffusion models allow anyone to <strong>edit text in image</strong> documents by simply describing the desired modification.
             </p>
             <p>
-              Our system is powered by Qwen Image Edit neural architectures. Unlike generic text-to-image models that re-roll the entire composition, our pipeline creates a dynamic semantic mask around the targeted typography. This ensures that when you <strong>edit text in image</strong> photos, the underlying facial geometry, product surfaces, and background details remain 100% untouched.
+              Our system is powered by Qwen Image Edit neural architectures. Unlike generic text-to-image models that re-roll the entire composition, our pipeline creates a dynamic semantic mask around the targeted typography. This ensures that when you <strong>edit text in image</strong> photos, the underlying facial geometry, product surfaces, and background details remain preserved and uncorrupted.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">

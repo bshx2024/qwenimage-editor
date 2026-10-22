@@ -19,11 +19,12 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     productId: process.env.WAFFO_PRODUCT_CREDITS_100 || 'PROD_4Ggdu4ZQ0RICi3tCNI4iEe',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_STARTER_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_4Ggdu4ZQ0RICi3tCNI4iEe?type=onetime&currency=USD',
     features: [
-      '100 One-time AI Credits',
+      'Up to 100 standard edits (1 credit/task, 2 for Plus)',
+      'Automatic refund on failure ($0 loss)',
+      'Free high-resolution downloads ($0 extra fee)',
       'Never Expires',
       'Full Qwen & Wanx 2.1 Model Access',
-      'High-Resolution Download',
-      'Commercial Usage License'
+      'Commercial usage permitted per Terms'
     ]
   },
   'credits-pack-100': {
@@ -35,10 +36,12 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     productId: process.env.WAFFO_PRODUCT_CREDITS_100 || 'PROD_4Ggdu4ZQ0RICi3tCNI4iEe',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_STARTER_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_4Ggdu4ZQ0RICi3tCNI4iEe?type=onetime&currency=USD',
     features: [
-      '100 One-time AI Credits',
+      'Up to 100 standard edits (1 credit/task, 2 for Plus)',
+      'Automatic refund on failure ($0 loss)',
+      'Free high-resolution downloads ($0 extra fee)',
       'Never Expires',
       'Full Qwen & Wanx 2.1 Model Access',
-      'Commercial Usage License'
+      'Commercial usage permitted per Terms'
     ]
   },
   'pro-monthly': {
@@ -50,10 +53,12 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     productId: process.env.WAFFO_PRODUCT_PRO_MONTHLY || 'PROD_0bhIkei7YAngBgCbPswItP',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_PRO_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_0bhIkei7YAngBgCbPswItP?type=subscription&currency=USD',
     features: [
-      '500 AI Credits / month',
-      'Ultra HD Resolution & Inpainting',
-      'Commercial Usage License',
-      'Fast GPU Priority Queue'
+      'Up to 500 standard edits/month (1 credit/task, 2 for Plus)',
+      'Automatic refund on failure ($0 loss)',
+      'Free high-resolution downloads ($0 extra fee)',
+      'Dedicated Fast GPU Priority Queue',
+      'Cancel anytime with 1-click',
+      'Commercial usage permitted per Terms'
     ]
   },
   'pro-yearly': {
@@ -65,10 +70,12 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
     productId: process.env.WAFFO_PRODUCT_PRO_YEARLY || 'PROD_7PVW8DleskmRyJ98oLkZSJ',
     checkoutUrl: process.env.NEXT_PUBLIC_WAFFO_MEGA_LINK || 'https://pancake.waffo.ai/store/qwen-image-editor-1aao3v6w/product/PROD_7PVW8DleskmRyJ98oLkZSJ?type=subscription&currency=USD',
     features: [
-      '6,000 AI Credits / year ($9.90/mo)',
-      'Save 50% Compared to Monthly',
-      'VIP Dedicated Fast Queue',
-      'Commercial Usage License'
+      'Up to 6,000 standard edits/year (500/mo, 1 credit/task)',
+      'Only $9.90/month (billed annually $118.80, save 50%)',
+      'Automatic refund on failure ($0 loss)',
+      'Free high-resolution downloads ($0 extra fee)',
+      '👑 VIP Dedicated Priority GPU Queue',
+      'Commercial usage permitted per Terms'
     ]
   }
 };

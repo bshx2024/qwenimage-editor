@@ -231,7 +231,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
             
             {/* Conclusion First: Objective Definition for Direct AI Extraction */}
             <p className="text-base sm:text-lg text-slate-200 max-w-4xl mx-auto leading-relaxed font-normal">
-              <strong>Qwen Image 2.1 vs Midjourney v6.1 Benchmark</strong> is a comparative technical evaluation measuring multimodal instruction inpainting against proprietary diffusion pipelines, establishing a 2.5s vs 15s inference delta and a $4.99 vs $10/month cost variance across 2048×2048 commercial production workflows.
+              <strong>Qwen Image 2.1 vs Midjourney v6.1 Benchmark</strong> is a comparative technical evaluation measuring multimodal instruction inpainting against proprietary diffusion pipelines, establishing an ~8–15s vs 15s–40s inference delta and a $4.99 vs $10/month cost variance across 2048×2048 commercial production workflows.
             </p>
 
             {/* Feature-Bullet Chunking Bar */}
@@ -246,7 +246,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                 <span className="font-semibold text-emerald-300 block">Inference Latency</span>
-                <span className="text-slate-400 text-[11px]">2.5s – 4.5s cloud vs 15s – 40s queue</span>
+                <span className="text-slate-400 text-[11px]">~8s – 15s cloud vs 15s – 40s Discord queue</span>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                 <span className="font-semibold text-pink-300 block">Licensing Economics</span>

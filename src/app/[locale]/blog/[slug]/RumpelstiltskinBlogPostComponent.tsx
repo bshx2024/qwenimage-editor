@@ -284,7 +284,7 @@ export default function RumpelstiltskinBlogPostComponent({
         body: JSON.stringify({
           prompt: isMimic
             ? `${customPrompt}, precise motion transfer replication of driving actor choreography, ${filmStockProfiles[filmStock].technicalTokens}, 1987 dark fantasy atmosphere --ar ${videoAspectRatio}`
-            : `${compiledPrompt}${selectedReferenceType === 'green_screen' ? ', seamless chroma key extraction, composite subject cleanly into authentic candlelit 1778 barn interior, 35mm film grain, no green fringes or artifacts, 100% preserve character face, smile and black tuxedo clothing identity' : ''}`,
+            : `${compiledPrompt}${selectedReferenceType === 'green_screen' ? ', seamless chroma key extraction, composite subject cleanly into authentic candlelit 1778 barn interior, 35mm film grain, no green fringes or artifacts, preserve character face, smile and black tuxedo clothing identity' : ''}`,
           imageUrl: getActiveReferenceUrl(),
           videoUrl: isMimic ? customVideoUrl : '',
           duration: videoDuration,
@@ -1453,7 +1453,7 @@ print(f"[Harmonized 35mm Masterplate Ready for I2V]: {harmonized_asset}")`;
                       </span>
                     </div>
                     <span className="text-[9px] text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded font-sans shrink-0 font-medium">
-                      100% Face &amp; Costume Identity Locked
+                      Face &amp; Costume Identity Retained
                     </span>
                   </div>
 

@@ -158,7 +158,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
       icon: SparklesIcon,
       prompt: 'A photorealistic neon noodle bar in futuristic Shanghai, rain-slicked asphalt, glowing kanji signs "RAMEN 2026", 8k optical bokeh',
       description: 'Generates coherent scenes with pin-sharp bilingual typography without separate prompt decoders.',
-      badge: '2.5s Latency',
+      badge: 'Fast Cloud GPU (~8-15s)',
       demoBefore: '/images/model_compare_demo.jpg',
       demoAfter: '/images/qwen_editor_demo.jpg',
     },
@@ -207,7 +207,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
     },
     {
       q: 'How does Qwen Image 2.1 differ from local ComfyUI and GGUF workflows?',
-      a: 'Local ComfyUI and GGUF deployments require downloading 20GB+ checkpoint weights, configuring Python environments, and running a dedicated 24GB VRAM GPU (like NVIDIA RTX 3090/4090). This online platform executes serverless cloud inference in 2.2 to 3.5 seconds across any Mac, Windows PC, or mobile device with zero hardware overhead.',
+      a: 'Local ComfyUI and GGUF deployments require downloading 20GB+ checkpoint weights, configuring Python environments, and running a dedicated 24GB VRAM GPU (like NVIDIA RTX 3090/4090). This online platform executes serverless cloud inference in ~8 to 15 seconds across any Mac, Windows PC, or mobile device with zero hardware overhead.',
     },
     {
       q: 'Is Qwen Image 2.1 any good compared to Midjourney v6.1 and Flux.1 Dev?',
@@ -281,13 +281,13 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
             '@type': 'HowToStep',
             position: 2,
             name: 'Select Aspect Ratio and Execute Inference',
-            text: 'Choose square 1:1, widescreen 16:9, or portrait 9:16 and click Generate for 2.5s neural processing.',
+            text: 'Choose square 1:1, widescreen 16:9, or portrait 9:16 and click Generate for ~8–15s neural processing.',
           },
           {
             '@type': 'HowToStep',
             position: 3,
             name: 'Download Lossless 2048px Image',
-            text: 'Save the generated high-resolution PNG or WebP output with 100% commercial usage rights.',
+            text: 'Save the generated high-resolution PNG or WebP output with commercial usage permissions per Terms.',
           },
         ],
       },
@@ -312,7 +312,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
         locale={locale}
         page="qwen-image-2-1"
         title="Qwen Image 2.1 Online: Free AI Generator & Photo Editor"
-        description="Try Qwen Image 2.1 online without 24GB VRAM or ComfyUI. Instant 2048px text-to-image synthesis, conversational inpainting, and photo editing in 2.5s."
+        description="Try Qwen Image 2.1 online without 24GB VRAM or ComfyUI. Instant 2048px text-to-image synthesis, conversational inpainting, and photo editing in ~8–15s."
         image="/images/og-image.jpg"
         schemaData={schemaData}
       />
@@ -344,7 +344,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-medium text-indigo-300 shadow-inner">
               <SparklesIcon className="w-4 h-4 text-indigo-400" />
-              <span>Zero ComfyUI Node Setup • 100% In-Browser 2048px Cloud Inference</span>
+              <span>Zero ComfyUI Node Setup • In-Browser 2048px Cloud Inference</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
@@ -353,7 +353,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
 
             {/* GEO Conclusion First & Quotable Definition */}
             <p className="text-sm sm:text-base text-slate-200 max-w-4xl mx-auto leading-relaxed font-normal">
-              <strong>Qwen Image 2.1 Online</strong> is Alibaba Cloud Tongyi Lab&apos;s multimodal foundation studio. It unifies high-resolution 2048×2048 generation, conversational inpainting, and multi-reference conditioning into a single neural backbone—delivering 2.5s cloud inference directly in your browser without 24GB VRAM graphics cards, Python drivers, or local ComfyUI installations.
+              <strong>Qwen Image 2.1 Online</strong> is Alibaba Cloud Tongyi Lab&apos;s multimodal foundation studio. It unifies high-resolution 2048×2048 generation, conversational inpainting, and multi-reference conditioning into a single neural backbone—delivering ~8–15s cloud inference directly in your browser without 24GB VRAM graphics cards, Python drivers, or local ComfyUI installations.
             </p>
 
             {/* Quantitative Feature Chunking */}
@@ -485,7 +485,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                     {isGenerating ? (
                       <>
                         <ArrowPathIcon className="w-4 h-4 animate-spin" />
-                        <span>Processing in Cloud (2.5s)...</span>
+                        <span>Processing in Cloud (~8–15s)...</span>
                       </>
                     ) : (
                       <>

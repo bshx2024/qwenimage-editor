@@ -182,7 +182,7 @@ export default function BlogCallToActionBanner({
               <ShieldCheckIcon className="w-3 h-3 text-emerald-400" />
               <span>No credit card needed</span>
             </span>
-            <span className="text-slate-500">2.5s Cloud GPU inference</span>
+            <span className="text-slate-500">Fast Cloud GPU (~8–15s)</span>
           </div>
         </aside>
       )}

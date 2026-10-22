@@ -57,13 +57,13 @@ export default function BackgroundRemoverComponent({
             "@type": "HowToStep",
             "position": 2,
             "name": "Execute AI Alpha Isolation",
-            "text": "Qwen Image 2.1 parses hair strands, jewelry gaps, and complex contours with sub-pixel alpha matting in 2.2 seconds."
+            "text": "Qwen Image 2.1 parses hair strands, jewelry gaps, and complex contours with sub-pixel alpha matting in ~8–15 seconds."
           },
           {
             "@type": "HowToStep",
             "position": 3,
             "name": "Export Lossless Transparent PNG",
-            "text": "Download full-resolution RGBA transparent PNG cutouts with 100% commercial use rights."
+            "text": "Download full-resolution RGBA transparent PNG cutouts with commercial use permissions per Terms."
           }
         ]
       },
@@ -120,7 +120,7 @@ export default function BackgroundRemoverComponent({
     },
     {
       metric: "Commercial Rights & Watermarks",
-      qwen: "100% Commercial rights, 0 watermarks",
+      qwen: "Commercial rights per Terms, 0 watermarks",
       photoroom: "Watermarked on free tier",
       clipdrop: "Watermarked on free tier"
     },
@@ -240,7 +240,7 @@ export default function BackgroundRemoverComponent({
                 </div>
                 <h3 className="font-semibold text-white text-base">Commercial Cleared</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  <strong>Ownership:</strong> 100% commercial and editorial rights granted upon generation.<br />
+                  <strong>Ownership:</strong> Commercial and editorial rights granted per Terms of Service.<br />
                   <strong>Privacy:</strong> Zero-retention server pipelines.
                 </p>
               </div>

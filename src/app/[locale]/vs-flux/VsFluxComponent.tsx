@@ -43,7 +43,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
     inpaintingFlux: string;
     verdict: string;
   } | null>({
-    latencyQwen: '2.5s (Serverless Cloud)',
+    latencyQwen: '~8–15s (Serverless Cloud)',
     latencyFlux: '8.4s (28 Steps Diffusion)',
     vramQwen: '10GB - 12GB (FP8 Optimized)',
     vramFlux: '16GB - 24GB (Flux.1 Dev)',
@@ -139,7 +139,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
     },
     {
       q: 'How does Flux.1 Dev compare to Qwen Image in ComfyUI and SwarmUI workflows?',
-      a: 'In local interfaces like ComfyUI and SwarmUI, Flux.1 Dev requires 16GB to 24GB of dedicated VRAM, frequently necessitating heavy GGUF offloading on consumer GPUs. Qwen deploys smoothly on 10GB to 12GB GPUs using FP8 or INT4 quantizations, offering faster generation cycles (~2.5s vs ~8s) and streamlined single-node workflows without requiring auxiliary text encoder nodes.',
+      a: 'In local interfaces like ComfyUI and SwarmUI, Flux.1 Dev requires 16GB to 24GB of dedicated VRAM, frequently necessitating heavy GGUF offloading on consumer GPUs. Qwen deploys smoothly on 10GB to 12GB GPUs using FP8 or INT4 quantizations, offering streamlined single-node workflows without requiring auxiliary text encoder nodes.',
     },
     {
       q: 'Which model renders written text and typography more accurately?',
@@ -147,7 +147,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
     },
     {
       q: 'Which engine produces higher generation speed and batch throughput?',
-      a: 'Qwen completes high-resolution 1024x1024 generations in approximately 2.2 to 3.5 seconds on cloud GPU infrastructure. Flux.1 Dev typically requires 28 to 50 diffusion steps, taking anywhere from 6 to 15 seconds per iteration. For production applications handling thousands of daily requests, Qwen offers nearly triple the generation throughput.',
+      a: 'Qwen completes high-resolution 1024x1024 generations in approximately 8 to 15 seconds on cloud GPU infrastructure. Flux.1 Dev typically requires 28 to 50 diffusion steps, taking anywhere from 15 to 30 seconds per iteration on equivalent setups. For production applications handling thousands of daily requests, Qwen offers significantly higher generation throughput.',
     },
     {
       q: 'What are the commercial licensing differences between Flux and Qwen?',
@@ -251,7 +251,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
 
             {/* Conclusion First: Objective Definition for Direct AI Extraction */}
             <p className="text-base sm:text-lg text-slate-200 max-w-4xl mx-auto leading-relaxed font-normal">
-              <strong>Qwen Image 2.1 vs Flux.1 Benchmark</strong> is a hardware and generative benchmark analyzing unified Multimodal Transformer versus 12B Flow-Matching DiT architectures, demonstrating a 10GB vs 24GB VRAM operating delta and a 2.5s vs 8.4s generation latency difference.
+              <strong>Qwen Image 2.1 vs Flux.1 Benchmark</strong> is a hardware and generative benchmark analyzing unified Multimodal Transformer versus 12B Flow-Matching DiT architectures, demonstrating a 10GB vs 24GB VRAM operating delta and cloud-accelerated ~8–15s generation turnaround.
             </p>
 
             {/* Feature-Bullet Chunking Bar */}
@@ -262,7 +262,7 @@ export default function VsFluxComponent({ locale = 'en' }: { locale?: string }) 
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                 <span className="font-semibold text-emerald-300 block">Inference Speed</span>
-                <span className="text-slate-400 text-[11px]">2.5s cloud vs 8.4s (28-step diffusion process)</span>
+                <span className="text-slate-400 text-[11px]">~8–15s cloud vs 15s–30s (28-step diffusion process)</span>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                 <span className="font-semibold text-purple-300 block">Typography Score</span>

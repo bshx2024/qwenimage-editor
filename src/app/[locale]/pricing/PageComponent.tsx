@@ -123,7 +123,7 @@ const PageComponent = ({
             Transparent Pricing & Flexible AI Credits
           </h1>
           <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto font-normal">
-            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a $0.00 free tier up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with 100% commercial usage rights and zero contract commitments.
+            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a $0.00 free tier up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with commercial usage permitted (per Terms & API licenses) and zero contract commitments.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">

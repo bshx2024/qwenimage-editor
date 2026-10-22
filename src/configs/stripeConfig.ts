@@ -22,12 +22,12 @@ export const oneTimePriceList: PriceItem[] = [
     badge: "Lowest Entry — $0.05 / edit",
     isPopular: false,
     features: [
-      "100 AI Edit & Generation Credits",
+      "Up to 100 standard edits (1 credit/task, 2 for Plus)",
+      "Automatic refund if task fails ($0 loss)",
+      "Free high-resolution downloads ($0 extra fee)",
       "One-time payment, Credits Never Expire",
       "Full Qwen & Wanx 2.1 Model Access",
-      "High Resolution Download",
-      "Full Inpainting & Editing Tools",
-      "Commercial Usage License"
+      "Commercial usage permitted per Terms"
     ]
   }
 ];
@@ -44,11 +44,12 @@ export const subscriptionPriceList: PriceItem[] = [
     badge: "Most Popular — Fast GPU",
     isPopular: true,
     features: [
-      "500 AI Credits Per Month",
+      "Up to 500 standard edits/month (1 credit/task, 2 for Plus)",
+      "Automatic refund if task fails ($0 loss)",
+      "Free high-resolution downloads ($0 extra fee)",
       "Dedicated Fast GPU Priority Queue",
-      "Ultra HD Resolution & Inpainting",
       "Cancel anytime with 1-click",
-      "Commercial Usage License"
+      "Commercial usage permitted per Terms"
     ]
   },
   {
@@ -60,10 +61,12 @@ export const subscriptionPriceList: PriceItem[] = [
     credits: 6000,
     badge: "Best Value — Save 50%",
     features: [
-      "6,000 AI Credits Per Year (500/mo)",
-      "Only $9.90/month (billed annually $118.80)",
-      "👑 VIP Dedicated Priority Queue",
-      "Full Commercial License",
+      "Up to 6,000 standard edits/year (500/mo, 1 credit/task)",
+      "Only $9.90/month (billed annually $118.80, save 50%)",
+      "Automatic refund on task failure ($0 loss)",
+      "Free high-resolution downloads ($0 extra fee)",
+      "👑 VIP Dedicated Priority GPU Queue",
+      "Commercial usage permitted per Terms",
       "Priority Customer Support"
     ]
   }

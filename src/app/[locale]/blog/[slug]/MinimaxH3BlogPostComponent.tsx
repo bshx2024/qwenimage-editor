@@ -583,7 +583,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                 </div>
                 <div className="font-bold text-white text-sm">Step 1: Prep Assets Online</div>
                 <p className="text-slate-400 leading-relaxed">
-                  Upload raw photos to <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:underline">Qwen Image Editor</Link>. Clean backgrounds, edit clothing, and export 2048px plates in 2.5s.
+                  Upload raw photos to <Link href={getLinkHref(locale, 'qwen-image-2-1')} className="text-indigo-400 hover:underline">Qwen Image Editor</Link>. Clean backgrounds, edit clothing, and export 2048px plates in ~8–15s.
                 </p>
               </div>
 
@@ -750,7 +750,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                     Credits &amp; Pricing Plans &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Affordable pay-as-you-go lifetime credits with 100% commercial usage rights.
+                    Affordable pay-as-you-go lifetime credits with commercial usage permitted per Terms.
                   </p>
                 </Link>
               </div>

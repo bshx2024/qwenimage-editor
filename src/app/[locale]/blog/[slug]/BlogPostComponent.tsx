@@ -757,7 +757,7 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                     Credits &amp; Pricing Plans &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Affordable pay-as-you-go lifetime credits with 100% commercial usage rights.
+                    Affordable pay-as-you-go lifetime credits with commercial usage permitted per Terms.
                   </p>
                 </Link>
               </div>

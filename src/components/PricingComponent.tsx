@@ -206,13 +206,29 @@ export default function Pricing({
                     </span>
                   </div>
 
-                  <p className="text-xs text-cyan-300 font-semibold mb-6 flex items-center gap-1.5">
+                  <p className="text-xs text-cyan-300 font-semibold mb-3 flex items-center gap-1.5">
                     <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
                     <span>
                       {plan.credits.toLocaleString()} AI Credits
                       {isOneTime ? ` ($${costPerCredit}/credit · Never expires)` : ' refreshed each period'}
                     </span>
                   </p>
+
+                  {/* Accounting Transparency Pill */}
+                  <div className="mb-5 rounded-2xl bg-slate-950/60 border border-slate-800/80 p-3 text-left space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-400">Estimated Output:</span>
+                      <strong className="text-white font-mono">~{plan.credits.toLocaleString()} standard edits</strong>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400">Failure Protection:</span>
+                      <span className="text-emerald-400 font-medium">Automatic refund ($0 loss)</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400">HD Download:</span>
+                      <span className="text-cyan-300 font-medium">Included ($0 extra fee)</span>
+                    </div>
+                  </div>
 
                   {/* Features List */}
                   <ul className="space-y-3 pt-4 border-t border-slate-800/80 mb-6 text-xs text-slate-300">
