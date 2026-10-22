@@ -1848,20 +1848,22 @@ export default function PageComponent({
 
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>4 Production-Ready Workflows</span>
+                <span>6 Production-Ready Workflows</span>
               </div>
             </div>
 
-            {/* 2x2 Wide Split-View Showcase Grid */}
+            {/* 6 High-Conversion Split-View Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Showcase 1: Fashion Try-On (White T-Shirt -> Emerald Silk Dress) */}
+              {/* Showcase 1: Flagship Virtual Try-On */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
-                  {/* Header & Badges */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[11px] font-bold">
-                        👗 AI Virtual Try-On
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[11px] font-bold">
+                          👗 AI Virtual Try-On
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen AI virtual try-on</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-pink-300 transition-colors">
                         Casual T-Shirt ➔ Emerald Silk Evening Gown
@@ -1872,10 +1874,8 @@ export default function PageComponent({
                     </div>
                   </div>
 
-                  {/* Side-by-Side Before vs After Window */}
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                      {/* Before: Plain T-Shirt */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
                           src="/images/showcase_dress_before.jpg"
@@ -1893,12 +1893,10 @@ export default function PageComponent({
                         </div>
                       </div>
 
-                      {/* Floating Arrow */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-pink-500/40">
                         <span className="text-xs font-black">➔</span>
                       </div>
 
-                      {/* After: Emerald Silk Gown */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
                           src="/images/showcase_dress_after.jpg"
@@ -1918,10 +1916,9 @@ export default function PageComponent({
                     </div>
                   </div>
 
-                  {/* Prompt Terminal Box */}
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
-                      <span>Exact Inpainting Prompt:</span>
+                      <span>Exact Inpainting Recipe:</span>
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
@@ -1930,7 +1927,6 @@ export default function PageComponent({
                   </div>
                 </div>
 
-                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
@@ -1947,32 +1943,32 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 2: Cyberpunk Style & Neon Jacket */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
+              {/* Showcase 2: ① Photo Edit & Background Swap */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-blue-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
-                  {/* Header & Badges */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
-                        🌆 Background Swap &amp; Styling
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[11px] font-bold">
+                          📸 ① AI Photo Edit &amp; Retouch
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen AI photo editor online</span>
                       </div>
-                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-purple-300 transition-colors">
-                        Daytime Cafe ➔ Cyberpunk Tokyo Neon Night
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-blue-300 transition-colors">
+                        Casual Outfit ➔ Bespoke Navy Blazer &amp; Executive Studio
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Replaces warm indoor cafe background with rainy Tokyo neon streets, transforming green jacket into a futuristic metallic holographic biker jacket.
+                        Easily swap clothing, remove background distractions, and upgrade to executive studio lighting while keeping 100% facial identity and expression.
                       </p>
                     </div>
                   </div>
 
-                  {/* Side-by-Side Before vs After Window */}
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                      {/* Before: Cafe */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_cafe_before.jpg"
-                          alt="Original Portrait in Daytime Coffee Shop"
+                          src="/images/showcase_man_suit_before.jpg"
+                          alt="Original Portrait in Casual White T-Shirt"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -1982,75 +1978,162 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Daytime Cafe &amp; Khaki Jacket
+                          Casual Cotton T-Shirt
                         </div>
                       </div>
 
-                      {/* Floating Arrow */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-purple-500/40">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-blue-500/40">
                         <span className="text-xs font-black">➔</span>
                       </div>
 
-                      {/* After: Cyberpunk */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_cyberpunk_after.jpg"
-                          alt="Inpainted Cyberpunk Tokyo Street with Holographic Jacket"
+                          src="/images/showcase_man_suit_after.jpg"
+                          alt="AI Inpainted Navy Blue Tailored Blazer and Studio Atmosphere"
                           width={400}
                           height={400}
                           loading="lazy"
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-blue-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
                           ✨ AI AFTER
                         </div>
-                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
-                          Holographic Jacket &amp; Tokyo Neon
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-blue-950/80 border border-blue-500/40 backdrop-blur-md text-[10px] text-blue-200 font-medium truncate">
+                          Tailored Navy Blazer Studio
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Prompt Terminal Box */}
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
-                    <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
-                      <span>Exact Inpainting Prompt:</span>
+                    <div className="flex items-center justify-between text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Recipe:</span>
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity&quot;
+                      &quot;Change outfit to a sharp bespoke dark navy blue blazer with crisp white dress shirt, executive portrait studio lighting, preserve face structure and friendly smile&quot;
                     </p>
                   </div>
                 </div>
 
-                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/showcase_cafe_before.jpg',
-                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
-                      '/images/showcase_cyberpunk_after.jpg'
+                      '/images/showcase_man_suit_before.jpg',
+                      'Change outfit to a sharp bespoke dark navy blue blazer with crisp white dress shirt, executive portrait studio lighting, preserve face structure and friendly smile',
+                      '/images/showcase_man_suit_after.jpg'
                     )
                   }
-                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-cyan-500 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-[0.98] cursor-pointer"
                 >
-                  <BoltIcon className="w-4 h-4 text-cyan-300" />
+                  <BoltIcon className="w-4 h-4 text-amber-300" />
                   <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
 
-              {/* Showcase 3: Typography & Text Inpainting */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
+              {/* Showcase 3: ② E-Commerce Product Studio */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
-                  {/* Header & Badges */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
-                        🔤 Clean Typography Inpainting
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+                          🛍️ ② E-Commerce Product Studio
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen image edit product photo</span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-emerald-300 transition-colors">
+                        Raw Smartphone Snapshot ➔ 4K Marble Studio Pedestal
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Convert ordinary product photos into high-converting e-commerce commercial hero images with white marble plinth and organic palm leaf shadows.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_product_before.jpg"
+                          alt="Raw Product Snapshot of Perfume Bottle on Cluttered Surface"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-slate-200 font-bold text-[10px] tracking-wider border border-white/10 shadow-sm">
+                          📷 BEFORE
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
+                          Raw Tabletop Product Snapshot
+                        </div>
+                      </div>
+
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-emerald-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_product_after.jpg"
+                          alt="High-end Commercial Perfume Bottle on White Marble Pedestal"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ AI AFTER
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-emerald-950/80 border border-emerald-500/40 backdrop-blur-md text-[10px] text-emerald-200 font-medium truncate">
+                          4K Commercial Marble Studio Hero
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Recipe:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Place the luxury perfume bottle on an elegant round white Carrara marble pedestal, clean warm morning sunlight casting delicate tropical leaf shadows, high-end e-commerce commercial studio shot&quot;
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/showcase_product_before.jpg',
+                      'Place the luxury perfume bottle on an elegant round white Carrara marble pedestal, clean warm morning sunlight casting delicate tropical leaf shadows, high-end e-commerce commercial studio shot',
+                      '/images/showcase_product_after.jpg'
+                    )
+                  }
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
+                >
+                  <BoltIcon className="w-4 h-4 text-amber-300" />
+                  <span>Try This Recipe in Editor ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 4: ③ In-Image Text & Typography Editing */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+                          🔤 ③ In-Image Text &amp; Typography
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen image edit text in image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-cyan-300 transition-colors">
-                        Garbled AI Lettering ➔ Crisp Magazine Cover
+                        Garbled AI Lettering ➔ Crisp Magazine Typography
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                         Eliminates nonsensical distorted diffusion glyphs and inlays razor-sharp editorial headlines with high contrast and immaculate letterforms.
@@ -2058,10 +2141,8 @@ export default function PageComponent({
                     </div>
                   </div>
 
-                  {/* Side-by-Side Before vs After Window */}
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                      {/* Before: Garbled Text */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
                           src="/images/showcase_typography_before.jpg"
@@ -2079,12 +2160,10 @@ export default function PageComponent({
                         </div>
                       </div>
 
-                      {/* Floating Arrow */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-cyan-500/40">
                         <span className="text-xs font-black">➔</span>
                       </div>
 
-                      {/* After: Crisp Qwen Typography */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
                           src="/images/showcase_typography_after.jpg"
@@ -2104,10 +2183,9 @@ export default function PageComponent({
                     </div>
                   </div>
 
-                  {/* Prompt Terminal Box */}
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
-                      <span>Exact Inpainting Prompt:</span>
+                      <span>Exact Inpainting Recipe:</span>
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
@@ -2116,7 +2194,6 @@ export default function PageComponent({
                   </div>
                 </div>
 
-                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
@@ -2133,32 +2210,32 @@ export default function PageComponent({
                 </button>
               </div>
 
-              {/* Showcase 4: Bespoke Tuxedo & Character Posture Consistency */}
+              {/* Showcase 5: ④ Subject Lock & Scene Relocation */}
               <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/80 transition-all group">
                 <div className="space-y-4">
-                  {/* Header & Badges */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
-                        🤵 Character &amp; Tuxedo Inpaint
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
+                          🔒 ④ Subject Lock &amp; Scene Relocation
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen image edit keep original image</span>
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-amber-300 transition-colors">
-                        Casual Crewneck ➔ Bespoke Velvet Tuxedo
+                        Isolated Product ➔ Sunlit Scandinavian Cafe Table
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Replaces everyday casual white t-shirt with a luxury bespoke velvet tuxedo and silk bowtie, preserving 100% facial identity, friendly expression, and studio lighting.
+                        Lock 100% of product geometry, leather grain, and brass buckles while completely swapping background to a sunlit Nordic cafe with organic wooden textures.
                       </p>
                     </div>
                   </div>
 
-                  {/* Side-by-Side Before vs After Window */}
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                      {/* Before: Casual T-shirt */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_man_suit_before.jpg"
-                          alt="Original Male Model in Casual White T-Shirt"
+                          src="/images/showcase_lock_before.jpg"
+                          alt="Isolated Vintage Leather Messenger Bag on Tiled Floor"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -2168,20 +2245,18 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Casual Cotton T-Shirt
+                          Raw Floor Snapshot
                         </div>
                       </div>
 
-                      {/* Floating Arrow */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-amber-500/40">
                         <span className="text-xs font-black">➔</span>
                       </div>
 
-                      {/* After: Velvet Tuxedo */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/showcase_man_suit_after.jpg"
-                          alt="Male Model Inpainted into Bespoke Velvet Tuxedo Suit"
+                          src="/images/showcase_lock_after.jpg"
+                          alt="Leather Bag Locked Exactly on Rustic Sunlit Scandinavian Cafe Wooden Table"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -2191,37 +2266,124 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-amber-950/80 border border-amber-500/40 backdrop-blur-md text-[10px] text-amber-200 font-medium truncate">
-                          Tailored Velvet Tuxedo Suit
+                          100% Bag Details Locked &amp; Relocated
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Prompt Terminal Box */}
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
-                      <span>Exact Inpainting Prompt:</span>
+                      <span>Exact Inpainting Recipe:</span>
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting&quot;
+                      &quot;Keep the vintage tan leather messenger bag 100% identical with exact buckles, straps and texture, place it naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft bokeh&quot;
                     </p>
                   </div>
                 </div>
 
-                {/* Action CTA */}
                 <button
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/showcase_man_suit_before.jpg',
-                      'Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting',
-                      '/images/showcase_man_suit_after.jpg'
+                      '/images/showcase_lock_before.jpg',
+                      'Keep the vintage tan leather messenger bag 100% identical with exact buckles, straps and texture, place it naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft bokeh',
+                      '/images/showcase_lock_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-200" />
+                  <span>Try This Recipe in Editor ⚡</span>
+                </button>
+              </div>
+
+              {/* Showcase 6: ⑤ Style Transfer & Creative Design */}
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
+                          🎨 ⑤ Style Transfer &amp; Creative Design
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Qwen image style transfer</span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mt-2 group-hover:text-purple-300 transition-colors">
+                        Daytime Cafe ➔ Cyberpunk Tokyo Neon Night
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Replaces warm indoor cafe background with rainy Tokyo neon streets, transforming green jacket into a futuristic metallic holographic biker jacket.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_cafe_before.jpg"
+                          alt="Original Portrait in Daytime Coffee Shop"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-slate-200 font-bold text-[10px] tracking-wider border border-white/10 shadow-sm">
+                          📷 BEFORE
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
+                          Daytime Cafe &amp; Khaki Jacket
+                        </div>
+                      </div>
+
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-slate-900 flex items-center justify-center text-white shadow-xl shadow-purple-500/40">
+                        <span className="text-xs font-black">➔</span>
+                      </div>
+
+                      <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
+                        <img
+                          src="/images/showcase_cyberpunk_after.jpg"
+                          alt="Inpainted Cyberpunk Tokyo Street with Holographic Jacket"
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
+                          ✨ AI AFTER
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
+                          Holographic Jacket &amp; Tokyo Neon
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
+                      <span>Exact Inpainting Recipe:</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                    </div>
+                    <p className="text-slate-200 leading-relaxed font-sans">
+                      &quot;Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity&quot;
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleLoadShowcase(
+                      '/images/showcase_cafe_before.jpg',
+                      'Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity',
+                      '/images/showcase_cyberpunk_after.jpg'
+                    )
+                  }
+                  className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-cyan-500 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
+                >
+                  <BoltIcon className="w-4 h-4 text-cyan-300" />
                   <span>Try This Recipe in Editor ⚡</span>
                 </button>
               </div>
