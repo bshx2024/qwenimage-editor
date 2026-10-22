@@ -24,6 +24,7 @@ import {
   ShieldCheckIcon,
   CpuChipIcon,
   ShareIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 import { exportImageWithTier, exportComparisonCard } from "~/libs/imageExport";
@@ -786,6 +787,67 @@ export default function PageComponent({
                 <span className="hidden sm:inline text-slate-700">•</span>
                 <span>⏱️ Typical processing ~8–15s (varies with model, size &amp; server load)</span>
               </div>
+
+              {/* Explicit Credit Quota & Login Requirement Disclosure Banner (Gefei Checklist Aligned) */}
+              <div className="pt-3 max-w-4xl mx-auto w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 p-3 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left text-xs shadow-lg backdrop-blur-md">
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-xl bg-indigo-500/15 text-indigo-400 shrink-0">
+                      <UserCircleIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-white block">
+                        {locale?.startsWith('zh') ? 'Google 一键登录' : 'Google Sign-In'}
+                      </span>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">
+                        {locale?.startsWith('zh') ? '免密登录，激活配额与历史记录' : '1-click sign-in to activate quota'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-400 shrink-0">
+                      <SparklesIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-white block">
+                        {locale?.startsWith('zh') ? '今日免费额度: 1/1' : 'Daily Free Quota: 1/1'}
+                      </span>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">
+                        {locale?.startsWith('zh') ? '每天 00:00 UTC 自动刷新' : '1 daily edit, resets at 00:00 UTC'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-400 shrink-0">
+                      <BoltIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-white block">
+                        {locale?.startsWith('zh') ? '消耗 1 额度 / 次' : '1 Credit Per Edit'}
+                      </span>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">
+                        {locale?.startsWith('zh') ? '标准编辑扣 1 点，失败自动返还' : 'Standard edits, auto-refund on fail'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400 shrink-0">
+                      <ShieldCheckIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-white block">
+                        {locale?.startsWith('zh') ? '$4.99 / 100 积分' : '$4.99 / 100 Credits'}
+                      </span>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">
+                        {locale?.startsWith('zh') ? '单次买断永不过期，平均 $0.05/次' : 'Non-expiring lifetime, $0.05/edit'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Main Interactive Editor Card */}
@@ -801,11 +863,16 @@ export default function PageComponent({
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <span className="text-slate-400 font-medium">
-                          {locale?.startsWith('zh') ? '今日可用:' : 'Available:'}
+                          {locale?.startsWith('zh') ? '今日免费额度:' : 'Daily Free Quota:'}
                         </span>
                         <span className="font-bold text-cyan-300 font-mono text-xs">
-                          {userData.available_times ?? 0} Credits
+                          {Math.min(userData.available_times ?? 0, 1)}/1
                         </span>
+                        {(userData.available_times ?? 0) > 1 && (
+                          <span className="text-slate-400 text-[11px] font-mono">
+                            ({locale?.startsWith('zh') ? `总可用 ${userData.available_times} 点` : `Total: ${userData.available_times} credits`})
+                          </span>
+                        )}
                       </div>
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 text-[11px] font-mono">
                         <span>⏱ {locale?.startsWith('zh') ? '每日额度刷新:' : 'Daily Reset:'}</span>
@@ -817,13 +884,13 @@ export default function PageComponent({
                       type="button"
                       onClick={() => setShowLoginModal(true)}
                       className="inline-flex items-center gap-2 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer text-xs group shadow-sm"
-                      title="1 free credit granted every 24 hours upon sign-in. Resets daily at 00:00 UTC."
+                      title="Google sign-in required to activate 1 daily credit. Resets daily at 00:00 UTC."
                     >
                       <span className="px-1.5 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                        {locale?.startsWith('zh') ? '每日免费额度: 1 积分' : 'Daily Free Quota: 1 Credit'}
+                        {locale?.startsWith('zh') ? '今日免费额度: 1/1' : 'Daily Free Quota: 1/1'}
                       </span>
                       <span className="group-hover:translate-x-0.5 transition-transform text-slate-300">
-                        {locale?.startsWith('zh') ? '(登录即领 · 每日刷新) →' : '(Sign in to claim · Resets daily) →'}
+                        {locale?.startsWith('zh') ? '(需登录激活 · 00:00 UTC 刷新) →' : '(Sign in to activate · 00:00 UTC reset) →'}
                       </span>
                     </button>
                   )}
@@ -996,7 +1063,7 @@ export default function PageComponent({
                             <span>{locale?.startsWith('zh') ? '或直接点击示例立即体验（无需找图）:' : 'Or Click a Demo to Test Immediately (Zero Upload Needed):'}</span>
                           </span>
                           <span className="text-[10px] text-emerald-400 font-mono font-semibold">
-                            {locale?.startsWith('zh') ? '免费体验 1 次' : '100% Free Trial'}
+                            {locale?.startsWith('zh') ? '今日额度 1/1' : '1 Daily Credit'}
                           </span>
                         </div>
 
@@ -1108,17 +1175,17 @@ export default function PageComponent({
                         </span>
                         <div>
                           <span className="font-bold text-white block">
-                            {locale?.startsWith('zh') ? '欢迎使用！您已有 1 次免费测试额度就绪' : 'Welcome! You have 1 Free Credit ready to test'}
+                            {locale?.startsWith('zh') ? '欢迎使用！今日额度已就绪' : 'Welcome! Today quota is ready'}
                           </span>
                           <span className="text-slate-300 text-[11px]">
                             {locale?.startsWith('zh')
-                              ? '点击上方示例卡片或上传本地照片，点击「立即生成 (免费 1 次)」即可出图。'
+                              ? '点击上方示例卡片或上传本地照片，点击「立即生成」即可快速出图。'
                               : 'Select any demo preset above or upload a photo, then hit Apply Edit to generate in seconds.'}
                           </span>
                         </div>
                       </div>
                       <span className="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 font-mono font-bold text-xs shrink-0 border border-emerald-500/40">
-                        1 Credit Free
+                        1 Credit / Task
                       </span>
                     </div>
                   )}
@@ -1261,10 +1328,10 @@ export default function PageComponent({
                                   <SparklesIcon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
                                   <span>
                                     {!userData
-                                      ? (locale?.startsWith('zh') ? '登录领 1 次免费额度' : 'Sign In (Claim 1 Free Credit)')
+                                      ? (locale?.startsWith('zh') ? '登录激活今日额度 (1/1)' : 'Sign In to Use Quota (1/1)')
                                       : activeTab === 'edit'
-                                      ? ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生成 (免费 1 次)' : 'Apply Edit (1 Free Credit)') : (locale?.startsWith('zh') ? '立即生成' : 'Apply Edit'))
-                                      : ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生图 (免费 1 次)' : 'Generate (1 Free Credit)') : (locale?.startsWith('zh') ? '立即生图' : 'Generate'))}
+                                      ? ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生成 (消耗 1 额度)' : 'Apply Edit (1 Credit)') : (locale?.startsWith('zh') ? '立即生成 (额度不足)' : 'Apply Edit'))
+                                      : ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生图 (消耗 1 额度)' : 'Generate (1 Credit)') : (locale?.startsWith('zh') ? '立即生图 (额度不足)' : 'Generate'))}
                                   </span>
                                   <span className="hidden sm:inline-block px-1 py-0.5 rounded text-[10px] bg-white/20 text-white/90 font-mono font-normal">
                                     ↵
@@ -1925,7 +1992,7 @@ export default function PageComponent({
                                     <div>
                                       <div className="flex items-center gap-1.5">
                                         <span className="font-semibold text-emerald-400">Standard 512px Preview</span>
-                                        <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1 py-0.5 rounded font-bold border border-emerald-500/40">FREE</span>
+                                        <span className="text-[9px] bg-slate-700/60 text-slate-300 px-1 py-0.5 rounded font-bold border border-slate-600">STANDARD</span>
                                       </div>
                                       <span className="text-[10px] text-slate-400 block mt-0.5">Sample size with subtle watermark</span>
                                     </div>
@@ -2077,7 +2144,7 @@ export default function PageComponent({
         </section>
 
         {/* Real Inpainting Showcase & Interactive Prompt Gallery */}
-        <section className="py-16 lg:py-20 border-t border-slate-900 bg-slate-950/80 relative">
+        <section id="gallery" className="py-16 lg:py-20 border-t border-slate-900 bg-slate-950/80 relative">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
@@ -2089,20 +2156,31 @@ export default function PageComponent({
                   Before &amp; After Showcase &amp; Exact Prompts
                 </h2>
                 <p className="text-sm text-slate-400 mt-2 max-w-2xl">
-                  Side-by-side visual comparisons powered by Qwen-Image 2.1 foundation models. Click <strong>&quot;Try This Recipe in Editor&quot;</strong> to load the original photo and exact prompt instantly.
+                  Side-by-side visual comparisons powered by Qwen-Image 2.1 foundation models. Click <strong>any card or recipe button</strong> to load the original photo and exact prompt into the editor instantly.
                 </p>
               </div>
 
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>6 Production-Ready Workflows</span>
+                <span>6 Clickable Interactive Recipes</span>
               </div>
             </div>
 
             {/* 6 High-Conversion Split-View Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Showcase 1: Flagship Virtual Try-On */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_dress_before.jpg',
+                    'Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture',
+                    '/images/showcase_dress_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-pink-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2119,6 +2197,9 @@ export default function PageComponent({
                         Precision AI clothing replacement with realistic fabric drape and satin sheen, designed to preserve subject identity, posture, and lighting coherence.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-pink-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2176,13 +2257,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_dress_before.jpg',
                       'Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture',
                       '/images/showcase_dress_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-pink-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-300" />
@@ -2191,7 +2273,18 @@ export default function PageComponent({
               </div>
 
               {/* Showcase 2: ① Photo Edit & Background Swap */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-blue-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_photo_before.jpg',
+                    'Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression',
+                    '/images/showcase_photo_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-blue-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2208,6 +2301,9 @@ export default function PageComponent({
                         One prompt achieves &quot;swap hoodie to tailored navy blazer, change background to sunlit office, make lighting natural&quot;, removing clutter while locking face identity.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-blue-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2265,13 +2361,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_photo_before.jpg',
                       'Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression',
                       '/images/showcase_photo_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-300" />
@@ -2280,7 +2377,18 @@ export default function PageComponent({
               </div>
 
               {/* Showcase 3: ② E-Commerce Product Studio */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_product_before.jpg',
+                    'Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic',
+                    '/images/showcase_product_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-emerald-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2297,6 +2405,9 @@ export default function PageComponent({
                         Turn ordinary tabletop product snapshots into high-converting commercial hero shots on Italian white marble with organic botanical shadows.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-emerald-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2354,13 +2465,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_product_before.jpg',
                       'Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic',
                       '/images/showcase_product_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-300" />
@@ -2369,7 +2481,18 @@ export default function PageComponent({
               </div>
 
               {/* Showcase 4: ③ In-Image Text & Typography Editing */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_text_before.jpg',
+                    "Inpaint poster headline to crisp typography 'AUTUMN ICED COFFEE', fix typos, update bottom promo to 'SPECIAL OFFERS 2026 FRESH BREWED DAILY', preserve illustration layout and color style",
+                    '/images/showcase_text_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2386,6 +2509,9 @@ export default function PageComponent({
                         Correct spelling mistakes (SUMMR ➔ AUTUMN, SPECAIL ➔ SPECIAL) and update promotional copy while seamlessly preserving the original illustration and design layout.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-cyan-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2443,13 +2569,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_text_before.jpg',
                       "Inpaint poster headline to crisp typography 'AUTUMN ICED COFFEE', fix typos, update bottom promo to 'SPECIAL OFFERS 2026 FRESH BREWED DAILY', preserve illustration layout and color style",
                       '/images/showcase_text_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-cyan-300" />
@@ -2458,7 +2585,18 @@ export default function PageComponent({
               </div>
 
               {/* Showcase 5: ④ Subject Lock & Scene Relocation */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_lock_before.jpg',
+                    'Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh',
+                    '/images/showcase_lock_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-amber-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2475,6 +2613,9 @@ export default function PageComponent({
                         Designed to preserve item geometry, vintage leather patina, stitching, and brass buckles while naturally adapting the environment to a sunlit Scandinavian cafe.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-amber-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2532,13 +2673,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_lock_before.jpg',
                       'Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh',
                       '/images/showcase_lock_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-200" />
@@ -2547,7 +2689,18 @@ export default function PageComponent({
               </div>
 
               {/* Showcase 6: ⑤ Photo to Anime Illustration */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/50 hover:bg-slate-900/80 transition-all group">
+              <div
+                onClick={() =>
+                  handleLoadShowcase(
+                    '/images/showcase_anime_before.jpg',
+                    'Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh',
+                    '/images/showcase_anime_after.jpg'
+                  )
+                }
+                role="button"
+                tabIndex={0}
+                className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-purple-500/60 hover:bg-slate-900/90 hover:scale-[1.01] transition-all group cursor-pointer"
+              >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -2564,6 +2717,9 @@ export default function PageComponent({
                         One-click transform everyday candid photos into breathtaking Japanese anime art, preserving coffee pose, facial smile, and olive green sweater with luminous cinematic lighting.
                       </p>
                     </div>
+                    <span className="shrink-0 text-[11px] text-purple-400 font-medium group-hover:underline flex items-center gap-1">
+                      ⚡ {locale?.startsWith('zh') ? '点击载入' : 'Click to Load'}
+                    </span>
                   </div>
 
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
@@ -2621,13 +2777,14 @@ export default function PageComponent({
 
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation();
                     handleLoadShowcase(
                       '/images/showcase_anime_before.jpg',
                       'Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh',
                       '/images/showcase_anime_after.jpg'
-                    )
-                  }
+                    );
+                  }}
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 via-pink-600 to-indigo-600 hover:from-purple-400 hover:to-pink-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-[0.98] cursor-pointer"
                 >
                   <BoltIcon className="w-4 h-4 text-amber-200" />

@@ -92,7 +92,7 @@ export default function VsMidjourneyComponent({ locale = 'en' }: { locale?: stri
     { feature: 'Instruction-Based Editing', qwen: 'Native natural language conversational inpainting', mj: 'Discord Vary (Region) brush tool' },
     { feature: 'Img2Prompt / Vision Reasoning', qwen: 'Native Multimodal understanding & prompt extraction', mj: 'Basic CLIP /describe command' },
     { feature: 'Developer Ecosystem & API', qwen: 'Open model weights, REST API & local ComfyUI', mj: 'Walled garden (Discord / Web subscription only)' },
-    { feature: 'Starting Cost & Free Tier', qwen: 'Free Online Playground & low-cost API', mj: 'Paid only (Starting at $10/month)' },
+    { feature: 'Entry Cost & Quota', qwen: 'Daily Quota (1/1) & $4.99 Pack', mj: 'Paid only (Starting at $10/month)' },
     { feature: 'Artistic Stylization', qwen: 'High Commercial Photorealism & Design Accuracy', mj: 'Signature painterly & fantasy aesthetic flair' },
     { feature: 'Image Consistency & Retention', qwen: 'Superior subject & architectural consistency', mj: 'High randomness and variance per generation' },
   ];

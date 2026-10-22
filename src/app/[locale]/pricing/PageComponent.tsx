@@ -123,13 +123,13 @@ const PageComponent = ({
             Transparent Pricing & Flexible AI Credits
           </h1>
           <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto font-normal">
-            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a $0.00 free tier up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with commercial usage permitted (per Terms & API licenses) and zero contract commitments.
+            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a daily complimentary quota (1/1) up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with commercial usage permitted (per Terms & API licenses) and zero contract commitments.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-              <span className="font-semibold text-emerald-300 block">Trial Credit</span>
-              <span className="text-slate-400 text-[11px]">$0.00, sign-in bonus, 1024×1024 resolution</span>
+              <span className="font-semibold text-emerald-300 block">Daily Quota</span>
+              <span className="text-slate-400 text-[11px]">1 daily credit upon sign-in, resets 00:00 UTC</span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
               <span className="font-semibold text-indigo-300 block">Starter Pack</span>

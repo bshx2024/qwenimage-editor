@@ -96,6 +96,13 @@ export default function Header({
             Online Editor
           </Link>
           <Link
+            href={getLinkHref(locale, '#gallery')}
+            onClick={() => checkPageAndLoading('#gallery')}
+            className="text-sm font-medium transition-colors text-slate-200 hover:text-white"
+          >
+            Showcase Gallery
+          </Link>
+          <Link
             href={getLinkHref(locale, 'generator')}
             onClick={() => checkPageAndLoading('generator')}
             className={`text-sm font-medium transition-colors ${page === 'generator' ? 'text-indigo-400 font-semibold' : 'text-slate-200 hover:text-white'}`}
@@ -241,6 +248,13 @@ export default function Header({
                   className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-slate-900"
                 >
                   Online Editor
+                </Link>
+                <Link
+                  href={getLinkHref(locale, '#gallery')}
+                  onClick={() => checkPageAndLoading('#gallery')}
+                  className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-indigo-300 hover:bg-slate-900"
+                >
+                  Showcase Gallery
                 </Link>
                 <Link
                   href={getLinkHref(locale, 'generator')}

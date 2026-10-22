@@ -85,6 +85,16 @@ export async function handleWaffoOrderCompleted(payload: any): Promise<{ success
   }
 
   try {
+    // 0. Idempotency Check: if this order was already processed and completed, avoid duplicate fulfillment
+    const existingOrder = await db.query(
+      'SELECT status FROM payment_orders WHERE order_id = $1 LIMIT 1',
+      [orderId]
+    );
+    if (existingOrder.rows.length > 0 && existingOrder.rows[0].status === 'completed') {
+      console.log(`[Waffo Webhook] Order ${orderId} already completed, skipping duplicate credit fulfillment.`);
+      return { success: true, creditsAdded: 0 };
+    }
+
     // 1. Record the order idempotently
     await db.query(`
       INSERT INTO payment_orders (order_id, provider, user_id, user_email, amount, currency, status, plan_id, credits_added, raw_payload)
