@@ -45,7 +45,7 @@ export default function PageComponent({
   } = useCommonContext();
 
   const [textStr, setTextStr] = useState(
-    'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency'
+    'Swap clothes to elegant emerald green silk gala evening dress, high slit'
   );
   const [sourceImage, setSourceImage] = useState<string | null>('/images/showcase_dress_before.jpg');
   const [isUploading, setIsUploading] = useState(false);
@@ -307,42 +307,137 @@ export default function PageComponent({
     {
       name: '👗 AI Fashion & Wardrobe',
       items: [
-        'Swap clothes to elegant emerald green silk gala evening dress, high slit',
-        'Change outfit to tailored luxury navy blazer and white silk blouse',
-        'Change clothing to chic bohemian floral summer beach sundress',
-        'Swap jacket to vintage distressed black leather biker jacket',
-        'Transform attire to modern haute couture velvet gown with pearls',
-        'Change outfit to casual oversized beige knit sweater and jeans',
-        'Change dress pattern to vibrant pink peony floral embroidery',
+        {
+          text: 'Swap clothes to elegant emerald green silk gala evening dress, high slit',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_dress_after.jpg',
+        },
+        {
+          text: 'Change outfit to tailored luxury navy blazer and white silk blouse',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
+        },
+        {
+          text: 'Change clothing to chic bohemian floral summer beach sundress',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
+        },
+        {
+          text: 'Swap jacket to vintage distressed black leather biker jacket',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_leather_jacket.jpg',
+        },
+        {
+          text: 'Transform attire to modern haute couture velvet gown with pearls',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_velvet_gown.jpg',
+        },
+        {
+          text: 'Change outfit to casual oversized beige knit sweater and jeans',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_knit_sweater.jpg',
+        },
+        {
+          text: 'Change dress pattern to vibrant pink peony floral embroidery',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_pink_embroidery.jpg',
+        },
       ],
     },
     {
       name: '🤵 Suits & Formal Wear',
       items: [
-        'Swap outfit to bespoke sharp black tuxedo with satin peak lapels',
-        'Change clothing to modern slim-fit charcoal three-piece business suit',
-        'Swap shirt to formal crisp white French cuff dress shirt and tie',
-        'Change attire to executive cashmere trench coat with tailored pants',
+        {
+          text: 'Swap outfit to bespoke sharp black tuxedo with satin peak lapels',
+          sourceUrl: '/images/rumpelstiltskin_vintage_demo.jpg',
+          previewUrl: '/images/rumpelstiltskin_tuxedo_result.jpg',
+        },
+        {
+          text: 'Change clothing to modern slim-fit charcoal three-piece business suit',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
+        },
+        {
+          text: 'Swap shirt to formal crisp white French cuff dress shirt and tie',
+          sourceUrl: '/images/rumpelstiltskin_vintage_demo.jpg',
+          previewUrl: '/images/rumpelstiltskin_tuxedo_result.jpg',
+        },
+        {
+          text: 'Change attire to executive cashmere trench coat with tailored pants',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_navy_blazer.jpg',
+        },
       ],
     },
     {
       name: '🛍️ Studio & Background',
       items: [
-        'Change background to luxury minimalist clean studio backdrop',
-        'Isolate subject on pure white seamless ecommerce catalog background',
-        'Add warm golden hour sunset rim lighting and soft shadows',
-        'Change background to cyberpunk neon metropolis night street',
+        {
+          text: 'Change background to cyberpunk neon metropolis night street',
+          sourceUrl: '/images/showcase_cafe_before.jpg',
+          previewUrl: '/images/showcase_cyberpunk_after.jpg',
+        },
+        {
+          text: 'Change background to luxury minimalist clean studio backdrop',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_knit_sweater.jpg',
+        },
+        {
+          text: 'Isolate subject on pure white seamless ecommerce catalog background',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_dress_before.jpg',
+        },
+        {
+          text: 'Add warm golden hour sunset rim lighting and soft shadows',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
+        },
       ],
     },
     {
       name: '✨ Face & Retouch',
       items: [
-        'Add realistic retro tortoise-shell eyeglasses and warm smile',
-        'Refine hair to voluminous natural glossy waves with soft rim light',
-        'Transform portrait into high-end Vogue fashion editorial photography',
+        {
+          text: 'Transform portrait into high-end Vogue fashion editorial photography',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_velvet_gown.jpg',
+        },
+        {
+          text: 'Refine hair to voluminous natural glossy waves with soft rim light',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_dress_after.jpg',
+        },
+        {
+          text: 'Add realistic retro tortoise-shell eyeglasses and warm smile',
+          sourceUrl: '/images/showcase_dress_before.jpg',
+          previewUrl: '/images/showcase_fashion_boho_sundress.jpg',
+        },
       ],
     },
   ];
+
+  // Preload fashion showcase demo images for instant zero-latency preview switching
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const demoImages = [
+      '/images/showcase_dress_before.jpg',
+      '/images/showcase_dress_after.jpg',
+      '/images/showcase_fashion_navy_blazer.jpg',
+      '/images/showcase_fashion_boho_sundress.jpg',
+      '/images/showcase_fashion_leather_jacket.jpg',
+      '/images/showcase_fashion_velvet_gown.jpg',
+      '/images/showcase_fashion_knit_sweater.jpg',
+      '/images/showcase_fashion_pink_embroidery.jpg',
+      '/images/rumpelstiltskin_vintage_demo.jpg',
+      '/images/rumpelstiltskin_tuxedo_result.jpg',
+      '/images/showcase_cafe_before.jpg',
+      '/images/showcase_cyberpunk_after.jpg',
+    ];
+    demoImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   // FAQ Items - Comprehensive coverage for search intent, citations, and LLM entity confidence
   const faqList = [
@@ -714,7 +809,7 @@ export default function PageComponent({
                       onClick={() =>
                         handleSampleSelect(
                           '/images/showcase_dress_before.jpg',
-                          'Swap clothes to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, maintain original lighting and facial consistency',
+                          'Swap clothes to elegant emerald green silk gala evening dress, high slit',
                           '/images/showcase_dress_after.jpg'
                         )
                       }
@@ -1063,16 +1158,34 @@ export default function PageComponent({
                       </div>
 
                       <div className="flex flex-wrap gap-1.5">
-                        {promptPresetCategories[activePresetCategory]?.items.map((preset, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setTextStr(preset)}
-                            className="rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-[11px] text-slate-300 hover:border-indigo-500/50 hover:bg-slate-900 hover:text-white transition-all cursor-pointer text-left"
-                          >
-                            + {preset}
-                          </button>
-                        ))}
+                        {promptPresetCategories[activePresetCategory]?.items.map((preset: any, idx: number) => {
+                          const item = typeof preset === 'string' ? { text: preset, previewUrl: undefined, sourceUrl: undefined } : preset;
+                          const isSelected = textStr === item.text;
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                setTextStr(item.text);
+                                if (item.previewUrl) {
+                                  setCurrentResultImage(item.previewUrl);
+                                  setSourceImage(item.sourceUrl || '/images/showcase_dress_before.jpg');
+                                  setActiveTab('edit');
+                                }
+                              }}
+                              className={`rounded-full border px-2.5 py-1 text-[11px] transition-all cursor-pointer text-left flex items-center gap-1.5 ${
+                                isSelected
+                                  ? 'border-indigo-400 bg-indigo-950/70 text-indigo-100 shadow-sm shadow-indigo-500/20'
+                                  : 'border-slate-800 bg-slate-950/60 text-slate-300 hover:border-indigo-500/50 hover:bg-slate-900 hover:text-white'
+                              }`}
+                            >
+                              <span className={isSelected ? 'text-indigo-400 font-bold' : 'text-slate-500'}>
+                                {isSelected ? '●' : '+'}
+                              </span>
+                              <span>{item.text}</span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
