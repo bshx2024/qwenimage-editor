@@ -9,8 +9,14 @@ export const getQwenEditInput = async (imageUrl: string, textStr: string, checkS
     revised_text = textStr;
   }
 
+  let finalImageUrl = imageUrl;
+  if (finalImageUrl && finalImageUrl.startsWith("/")) {
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.qwenimage-editor.com").replace(/\/+$/, "");
+    finalImageUrl = `${siteUrl}${finalImageUrl}`;
+  }
+
   return {
-    image: imageUrl,
+    image: finalImageUrl,
     prompt: revised_text,
     go_fast: true,
     output_format: "webp",

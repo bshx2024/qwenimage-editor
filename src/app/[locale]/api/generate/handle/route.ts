@@ -18,7 +18,11 @@ export async function POST(req: Request) {
     const textStr = json.textStr || "";
     const user_id = json.user_id || "";
     let is_public = Boolean(json.is_public);
-    const imageUrl = json.imageUrl || ""; // Input image for editing
+    let imageUrl = json.imageUrl || ""; // Input image for editing
+    if (imageUrl && imageUrl.startsWith("/")) {
+      const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.qwenimage-editor.com").replace(/\/+$/, "");
+      imageUrl = `${siteUrl}${imageUrl}`;
+    }
     const taskType = json.taskType || (imageUrl ? "image_edit" : "text2image");
     const requestedModel = String(json.model || "");
     const aspectRatio = String(json.aspectRatio || "1:1");
