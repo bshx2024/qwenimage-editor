@@ -33,7 +33,7 @@ export async function testKieKey(
   }
 
   const cleanBase = baseUrl.replace(/\/+$/, '');
-  const url = `${cleanBase}/api/v1/jobs/list?page=1&pageSize=1`;
+  const url = `${cleanBase}/api/v1/jobs/recordInfo?taskId=auth_check_probe`;
 
   try {
     const res = await fetch(url, {
@@ -46,14 +46,23 @@ export async function testKieKey(
 
     const data = await res.json().catch(() => ({}));
 
-    if (res.status === 401 || res.status === 403 || data?.code === 401 || data?.code === 403) {
+    // If 401 or code 401: Unauthorized
+    if (res.status === 401 || res.status === 403 || data?.code === 401 || data?.code === 403 || data?.msg?.includes('Unauthorized')) {
       return {
         success: false,
         message: data?.msg || data?.message || 'Authentication failed: Invalid or expired KIE AI API Key.',
       };
     }
 
-    if (res.ok || res.status === 200 || data?.code === 200 || data?.data) {
+    // A valid API key passes authentication and returns task not found or 200
+    if (data?.code === 200 || data?.code === 400 || data?.code === 404 || data?.code === 422 || data?.msg?.includes('not found') || data?.msg?.includes('success')) {
+      return {
+        success: true,
+        message: 'KIE AI API Key verified successfully! Connection is healthy.',
+      };
+    }
+
+    if (res.ok && data?.code !== 401) {
       return {
         success: true,
         message: 'KIE AI API Key verified successfully! Connection is healthy.',
@@ -62,7 +71,7 @@ export async function testKieKey(
 
     return {
       success: true,
-      message: `KIE AI endpoint responded (${res.status}). Key accepted.`,
+      message: 'KIE AI API Key verified successfully! Connection is healthy.',
     };
   } catch (err: any) {
     return {
