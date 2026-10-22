@@ -10,7 +10,7 @@ export interface PriceItem {
   features: string[];
 }
 
-// 1. One-time Credit Packs (Primary Focus)
+// 1. One-time Credit Packs
 export const oneTimePriceList: PriceItem[] = [
   {
     id: "pack_starter",
@@ -19,7 +19,8 @@ export const oneTimePriceList: PriceItem[] = [
     type: "one_time",
     unit_amount: 499, // $4.99
     credits: 100,
-    badge: "Special Offer",
+    badge: "Lowest Entry — $0.05 / edit",
+    isPopular: false,
     features: [
       "100 AI Edit & Generation Credits",
       "One-time payment, Credits Never Expire",
@@ -28,47 +29,10 @@ export const oneTimePriceList: PriceItem[] = [
       "Full Inpainting & Editing Tools",
       "Commercial Usage License"
     ]
-  },
-  {
-    id: "pack_standard",
-    name: "Standard Pack",
-    currency: "usd",
-    type: "one_time",
-    unit_amount: 2990, // $29.90
-    credits: 350,
-    badge: "Most Popular — Best Value",
-    isPopular: true,
-    features: [
-      "350 AI Edit & Generation Credits",
-      "Only $0.085 per credit",
-      "One-time payment, Credits Never Expire",
-      "Fast GPU Priority Processing Queue",
-      "Ultra HD Resolution & Inpainting",
-      "Cloud Gallery Archiving",
-      "Commercial Usage License"
-    ]
-  },
-  {
-    id: "pack_pro",
-    name: "Pro Pack",
-    currency: "usd",
-    type: "one_time",
-    unit_amount: 6990, // $69.90
-    credits: 1000,
-    badge: "Maximum Savings",
-    features: [
-      "1,000 AI Edit & Generation Credits",
-      "Only $0.069 per credit (Save 30%)",
-      "One-time payment, Credits Never Expire",
-      "VIP Dedicated Priority Queue",
-      "👑 Lifetime Cloud Vault Archiving",
-      "Highest Resolution & Ultra HD",
-      "Commercial Usage License"
-    ]
   }
 ];
 
-// 2. Subscriptions (Secondary / Optional)
+// 2. Subscriptions
 export const subscriptionPriceList: PriceItem[] = [
   {
     id: "sub_monthly",
@@ -77,12 +41,13 @@ export const subscriptionPriceList: PriceItem[] = [
     type: "recurring",
     unit_amount: 1990,
     credits: 250,
-    badge: "Flexible Billing",
+    badge: "Most Popular — Fast GPU",
+    isPopular: true,
     features: [
       "250 AI Credits Per Month",
+      "Dedicated Fast GPU Priority Queue",
+      "Ultra HD Resolution & Inpainting",
       "Cancel anytime with 1-click",
-      "Fast GPU Priority Queue",
-      "Full Inpainting & Editing Tools",
       "Commercial Usage License"
     ]
   },
@@ -93,17 +58,16 @@ export const subscriptionPriceList: PriceItem[] = [
     type: "recurring",
     unit_amount: 11880,
     credits: 3600,
-    badge: "Save 50%",
+    badge: "Best Value — Save 50%",
     features: [
       "3,600 AI Credits Per Year (300/mo)",
-      "Only $9.90/month (billed annually)",
-      "👑 Unlimited Lifetime Cloud Vault Archiving",
-      "VIP Dedicated Priority Queue",
-      "Commercial Usage License",
-      "Priority 24/7 Support"
+      "Only $9.90/month (billed annually $118.80)",
+      "👑 VIP Dedicated Priority Queue",
+      "Full Commercial License",
+      "Priority Customer Support"
     ]
   }
 ];
 
-// Unified price list (one-time first, followed by subscriptions)
+// Unified price list (Starter Pack, Pro Monthly, Pro Yearly)
 export const priceList: PriceItem[] = [...oneTimePriceList, ...subscriptionPriceList];

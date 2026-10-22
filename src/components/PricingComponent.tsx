@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCommonContext } from "~/context/common-context";
 import LoadingDots from "./LoadingDots";
-import { oneTimePriceList, subscriptionPriceList, PriceItem } from "~/configs/stripeConfig";
+import { oneTimePriceList, subscriptionPriceList, priceList, PriceItem } from "~/configs/stripeConfig";
 import { getStripe } from '~/libs/stripeClient';
 import { CheckIcon, SparklesIcon, BoltIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ export default function Pricing({
   redirectUrl?: string;
   isPricing?: boolean;
 }) {
-  const [billingMode, setBillingMode] = useState<'onetime' | 'subscription'>('onetime');
+  const [billingMode, setBillingMode] = useState<'all' | 'onetime' | 'subscription'>('all');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const {
     setShowLoginModal,
@@ -35,13 +35,9 @@ export default function Pricing({
       const paymentProvider = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || 'waffo';
 
       if (paymentProvider === 'waffo') {
-        let planId = 'pack-standard';
+        let planId = 'pack-starter';
         if (price.id === 'pack_starter' || price.id === 'price_starter' || price.id === 'credits-pack-100') {
           planId = 'pack-starter';
-        } else if (price.id === 'pack_standard') {
-          planId = 'pack-standard';
-        } else if (price.id === 'pack_pro') {
-          planId = 'pack-pro';
         } else if (price.id === 'sub_monthly' || price.id === 'price_monthly' || price.id === 'pro-monthly') {
           planId = 'pro-monthly';
         } else if (price.id === 'sub_yearly' || price.id === 'price_yearly' || price.id === 'pro-yearly') {
@@ -94,7 +90,12 @@ export default function Pricing({
     }
   };
 
-  const displayedPlans = billingMode === 'onetime' ? oneTimePriceList : subscriptionPriceList;
+  const displayedPlans =
+    billingMode === 'onetime'
+      ? oneTimePriceList
+      : billingMode === 'subscription'
+      ? subscriptionPriceList
+      : priceList;
 
   return (
     <section id="pricing-plans" className={`w-full py-12 md:py-16 text-white ${isPricing ? "" : "background-div"}`}>
@@ -111,50 +112,58 @@ export default function Pricing({
           </h2>
 
           <p className="text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            Purchase credits on demand for high-resolution Qwen &amp; Wanx 2.1 AI image generation and editing. Zero subscription commitment required.
+            Choose between non-expiring one-time credits or monthly/annual plans for high-resolution Qwen &amp; Wanx 2.1 AI image generation.
           </p>
 
           {/* Highlight Banner */}
           <div className="inline-flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-200">
             <BoltIcon className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>⚡ <strong>One-Time Payment:</strong> Credits never expire. Use whenever you need without monthly auto-renewals!</span>
+            <span>⚡ <strong>Starter Pack ($4.99):</strong> 100 Credits, one-time payment, never expires. No recurring subscription!</span>
           </div>
 
-          {/* Billing Switcher (One-Time vs Subscriptions) */}
+          {/* Billing Switcher (All vs One-Time vs Subscriptions) */}
           <div className="pt-4 flex items-center justify-center">
-            <div className="inline-flex p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl">
+            <div className="inline-flex p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl flex-wrap justify-center gap-1">
+              <button
+                type="button"
+                onClick={() => setBillingMode('all')}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  billingMode === 'all'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>All Plans (3)</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setBillingMode('onetime')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   billingMode === 'onetime'
                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <BoltIcon className="w-4 h-4" />
-                <span>One-Time Packs (Pay As You Go)</span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
-                  Recommended
-                </span>
+                <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
+                <span>One-Time ($4.99)</span>
               </button>
               <button
                 type="button"
                 onClick={() => setBillingMode('subscription')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   billingMode === 'subscription'
                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <span>Recurring Subscriptions</span>
+                <span>Subscriptions ($19.90 / $118.80)</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className={`grid grid-cols-1 ${billingMode === 'onetime' ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-4xl'} gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto`}>
+        <div className={`grid grid-cols-1 ${displayedPlans.length === 3 ? 'md:grid-cols-3' : displayedPlans.length === 2 ? 'md:grid-cols-2 max-w-4xl' : 'max-w-md'} gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto`}>
           {displayedPlans.map((plan) => {
             const isPopular = plan.isPopular;
             const priceFormatted = (plan.unit_amount / 100).toFixed(2);

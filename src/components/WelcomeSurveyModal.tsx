@@ -127,8 +127,8 @@ export function WelcomeSurveyModal() {
             planId: 'pack-starter',
             userId: userData.user_id,
             userEmail: userData.email || '',
-            bonusCredits: 150,
-            redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + '/pricing?payment_success=true&welcome_bonus=150&provider=waffo',
+            bonusCredits: 100,
+            redirectUrl: (typeof window !== 'undefined' ? window.location.origin : '') + '/pricing?payment_success=true&provider=waffo',
           }),
         });
         const res = await response.json();
@@ -139,7 +139,7 @@ export function WelcomeSurveyModal() {
           alert('Checkout notice: ' + res.error);
         }
       } else {
-        // Stripe flow for $9.90 Starter Pack + 50 Bonus Credits
+        // Stripe flow for $4.99 Starter Pack (100 Credits)
         const starterPrice = priceList.find((p) => p.id === 'pack_starter') || priceList[0];
         const response = await fetch('/api/stripe/create-checkout-session', {
           method: 'POST',
@@ -148,10 +148,9 @@ export function WelcomeSurveyModal() {
             price: starterPrice,
             quantity: 1,
             user_id: userData.user_id,
-            redirectUrl: '/pricing?payment_success=true&welcome_bonus=150',
+            redirectUrl: '/pricing?payment_success=true',
             metadata: {
-              credits: '150',
-              is_welcome_bonus: 'true',
+              credits: '100',
               survey_use_case: useCase,
               survey_priority: priority,
             },

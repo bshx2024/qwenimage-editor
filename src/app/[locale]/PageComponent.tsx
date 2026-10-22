@@ -769,17 +769,24 @@ export default function PageComponent({
                   <div className="flex items-center gap-2">
                     <span className="text-slate-400">Account Balance:</span>
                     {userData ? (
-                      <span className="font-bold text-cyan-300 font-mono text-sm">
-                        {userData.available_times ?? 0} Credits
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-cyan-300 font-mono text-sm">
+                          {userData.available_times ?? 0} Credits
+                        </span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          Quota Claimed
+                        </span>
+                      </div>
                     ) : (
                       <button
                         type="button"
                         onClick={() => setShowLoginModal(true)}
-                        className="inline-flex items-center gap-1 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-0.5 rounded-md transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-md transition-colors cursor-pointer text-xs"
                       >
-                        <span>Sign In with Google to get 1 Free Credit</span>
-                        <span>→</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
+                          Today's Quota: 1/1
+                        </span>
+                        <span>Sign In to Claim Daily Quota →</span>
                       </button>
                     )}
                   </div>
@@ -788,19 +795,19 @@ export default function PageComponent({
                 <div className="flex items-center gap-4 text-slate-400 text-[11px] flex-wrap">
                   <span className="flex items-center gap-1">
                     <BoltIcon className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Cost: <strong>1 Credit</strong> / standard edit</span>
+                    <span>Cost: <strong>1 Credit</strong>/edit (2 for Pro)</span>
                   </span>
                   <span className="hidden sm:inline text-slate-700">|</span>
                   <span className="flex items-center gap-1">
                     <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Starter Pack: <strong>$4.99 / 100 Credits</strong></span>
+                    <span>Starter: <strong>$4.99 / 100 Credits</strong> (Never expires)</span>
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowPricingModal(true)}
                     className="ml-auto text-indigo-400 hover:text-indigo-300 font-bold underline underline-offset-2 cursor-pointer"
                   >
-                    Get Credits →
+                    View Plans →
                   </button>
                 </div>
               </div>
@@ -1416,6 +1423,31 @@ export default function PageComponent({
                           </>
                         )}
                       </button>
+
+                      {/* Transparent Usage & Pricing Rules */}
+                      <div className="w-full mt-2 pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <span className="flex items-center gap-1 text-slate-300">
+                            <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-300 inline-flex items-center justify-center font-bold text-[10px]">1</span>
+                            <span>Sign in daily to claim <strong>1 quota (1/1)</strong></span>
+                          </span>
+                          <span className="flex items-center gap-1 text-slate-300">
+                            <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-300 inline-flex items-center justify-center font-bold text-[10px]">2</span>
+                            <span><strong>1 Credit</strong>/standard edit (2 for Pro)</span>
+                          </span>
+                          <span className="flex items-center gap-1 text-emerald-300">
+                            <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-300 inline-flex items-center justify-center font-bold text-[10px]">3</span>
+                            <span>No recurring auto-charge • Zero subscription trap</span>
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowPricingModal(true)}
+                          className="text-cyan-400 hover:text-cyan-300 font-medium underline underline-offset-2 ml-auto cursor-pointer"
+                        >
+                          Starter Pack $4.99 (100 credits) →
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
