@@ -349,8 +349,8 @@ export default function PageComponent({
       items: [
         {
           text: 'Swap outfit to bespoke sharp black tuxedo with satin peak lapels',
-          sourceUrl: '/images/rumpelstiltskin_vintage_demo.jpg',
-          previewUrl: '/images/rumpelstiltskin_tuxedo_result.jpg',
+          sourceUrl: '/images/showcase_man_suit_before.jpg',
+          previewUrl: '/images/showcase_man_suit_after.jpg',
         },
         {
           text: 'Change clothing to modern slim-fit charcoal three-piece business suit',
@@ -359,8 +359,8 @@ export default function PageComponent({
         },
         {
           text: 'Swap shirt to formal crisp white French cuff dress shirt and tie',
-          sourceUrl: '/images/rumpelstiltskin_vintage_demo.jpg',
-          previewUrl: '/images/rumpelstiltskin_tuxedo_result.jpg',
+          sourceUrl: '/images/showcase_man_suit_before.jpg',
+          previewUrl: '/images/showcase_man_suit_after.jpg',
         },
         {
           text: 'Change attire to executive cashmere trench coat with tailored pants',
@@ -428,8 +428,8 @@ export default function PageComponent({
       '/images/showcase_fashion_velvet_gown.jpg',
       '/images/showcase_fashion_knit_sweater.jpg',
       '/images/showcase_fashion_pink_embroidery.jpg',
-      '/images/rumpelstiltskin_vintage_demo.jpg',
-      '/images/rumpelstiltskin_tuxedo_result.jpg',
+      '/images/showcase_man_suit_before.jpg',
+      '/images/showcase_man_suit_after.jpg',
       '/images/showcase_cafe_before.jpg',
       '/images/showcase_cyberpunk_after.jpg',
     ];
@@ -847,9 +847,9 @@ export default function PageComponent({
                       type="button"
                       onClick={() =>
                         handleSampleSelect(
-                          '/images/rumpelstiltskin_vintage_demo.jpg',
-                          'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere',
-                          '/images/rumpelstiltskin_tuxedo_result.jpg'
+                          '/images/showcase_man_suit_before.jpg',
+                          'Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting',
+                          '/images/showcase_man_suit_after.jpg'
                         )
                       }
                       className="px-2.5 py-1 rounded-md bg-amber-500/20 border border-amber-500/40 hover:border-amber-400 text-amber-200 transition-colors flex items-center gap-1 font-medium cursor-pointer shadow-sm"
@@ -1955,10 +1955,10 @@ export default function PageComponent({
                         🤵 Character &amp; Tuxedo Inpaint
                       </div>
                       <h3 className="text-lg font-bold text-white mt-2 group-hover:text-amber-300 transition-colors">
-                        Ragged Robes ➔ Bespoke Velvet Tuxedo
+                        Casual Crewneck ➔ Bespoke Velvet Tuxedo
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                        Replaces vintage rough peasant clothing with a tailored velvet tuxedo tailcoat and bowtie, preserving identical jumping posture and candle-lit barn atmosphere.
+                        Replaces everyday casual white t-shirt with a luxury bespoke velvet tuxedo and silk bowtie, preserving 100% facial identity, friendly expression, and studio lighting.
                       </p>
                     </div>
                   </div>
@@ -1966,11 +1966,11 @@ export default function PageComponent({
                   {/* Side-by-Side Before vs After Window */}
                   <div className="relative rounded-2xl bg-slate-950 p-2.5 border border-slate-800/90 shadow-inner">
                     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                      {/* Before: Vintage Ragged Cloth */}
+                      {/* Before: Casual T-shirt */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/rumpelstiltskin_vintage_demo.jpg"
-                          alt="Original Character in Ragged Peasant Clothing"
+                          src="/images/showcase_man_suit_before.jpg"
+                          alt="Original Male Model in Casual White T-Shirt"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -1980,7 +1980,7 @@ export default function PageComponent({
                           📷 BEFORE
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/70 backdrop-blur-md text-[10px] text-slate-300 truncate">
-                          Ragged Peasant Robe
+                          Casual Cotton T-Shirt
                         </div>
                       </div>
 
@@ -1992,8 +1992,8 @@ export default function PageComponent({
                       {/* After: Velvet Tuxedo */}
                       <div className="relative rounded-xl overflow-hidden aspect-square bg-slate-900 group/img">
                         <img
-                          src="/images/rumpelstiltskin_tuxedo_result.jpg"
-                          alt="Character Inpainted into Bespoke Velvet Tuxedo Suit"
+                          src="/images/showcase_man_suit_after.jpg"
+                          alt="Male Model Inpainted into Bespoke Velvet Tuxedo Suit"
                           width={400}
                           height={400}
                           loading="lazy"
@@ -2016,7 +2016,7 @@ export default function PageComponent({
                       <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
-                      &quot;Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere&quot;
+                      &quot;Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting&quot;
                     </p>
                   </div>
                 </div>
@@ -2026,9 +2026,9 @@ export default function PageComponent({
                   type="button"
                   onClick={() =>
                     handleLoadShowcase(
-                      '/images/rumpelstiltskin_vintage_demo.jpg',
-                      'Change outfit to a sharp bespoke black velvet tuxedo tailcoat with satin peak lapels, white dress shirt and black bowtie, maintain jumping posture and candle-lit barn atmosphere',
-                      '/images/rumpelstiltskin_tuxedo_result.jpg'
+                      '/images/showcase_man_suit_before.jpg',
+                      'Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting',
+                      '/images/showcase_man_suit_after.jpg'
                     )
                   }
                   className="mt-5 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer"
