@@ -61,3 +61,18 @@
     /* 偏移其中一个渐变，以产生交错效果 */
     background-position: 0 0, 10px 10px;
 }
+
+@keyframes crossFade {
+    0% {
+        opacity: 0.55;
+        transform: scale(0.992);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-crossfade {
+    animation: crossFade 0.45s ease-out forwards;
+}

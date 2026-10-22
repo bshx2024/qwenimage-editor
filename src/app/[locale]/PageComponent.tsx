@@ -64,6 +64,8 @@ export default function PageComponent({
   const [isDownloading, setIsDownloading] = useState(false);
   const [activePresetCategory, setActivePresetCategory] = useState<number>(0);
   const [tryOnFidelity, setTryOnFidelity] = useState<boolean>(true);
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -134,6 +136,7 @@ export default function PageComponent({
   // Handle local file upload
   const handleFileUpload = async (file: File) => {
     if (!file) return;
+    setIsAutoPlaying(false);
     setIsUploading(true);
     try {
       const formData = new FormData();
@@ -438,6 +441,37 @@ export default function PageComponent({
       img.src = src;
     });
   }, []);
+
+  // Auto-rotate fashion showcase presets & live preview every 3.5s (pauses on hover or manual interaction)
+  useEffect(() => {
+    if (!isAutoPlaying || isHovered || isProcessing || activeTab !== 'edit') {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      const currentCategory = promptPresetCategories[activePresetCategory];
+      if (!currentCategory || !currentCategory.items || currentCategory.items.length === 0) return;
+
+      const currentIndex = currentCategory.items.findIndex((item) => {
+        const itemText = typeof item === 'string' ? item : item.text;
+        return itemText === textStr;
+      });
+
+      const nextIndex = (currentIndex + 1) % currentCategory.items.length;
+      const nextPreset: any = currentCategory.items[nextIndex];
+      const nextText = typeof nextPreset === 'string' ? nextPreset : nextPreset.text;
+      const nextPreview = typeof nextPreset === 'string' ? undefined : nextPreset.previewUrl;
+      const nextSource = typeof nextPreset === 'string' ? undefined : nextPreset.sourceUrl;
+
+      setTextStr(nextText);
+      if (nextPreview) {
+        setCurrentResultImage(nextPreview);
+        setSourceImage(nextSource || '/images/showcase_dress_before.jpg');
+      }
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [isAutoPlaying, isHovered, isProcessing, activeTab, activePresetCategory, textStr]);
 
   // FAQ Items - Comprehensive coverage for search intent, citations, and LLM entity confidence
   const faqList = [
@@ -925,7 +959,10 @@ export default function PageComponent({
                           id="promptInput"
                           rows={3}
                           value={textStr}
-                          onChange={(e) => setTextStr(e.target.value)}
+                          onChange={(e) => {
+                            setIsAutoPlaying(false);
+                            setTextStr(e.target.value);
+                          }}
                           placeholder={
                             activeTab === 'edit'
                               ? "Describe what to edit, add, or replace (e.g., 'Change background to neon Tokyo, add cyberpunk iridescent jacket')..."
@@ -1134,17 +1171,63 @@ export default function PageComponent({
                     </div>
 
                     {/* Quick Preset Prompts by Category */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                          Quick Presets &amp; Templates:
-                        </span>
-                        <div className="flex gap-1">
+                    <div
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      className="space-y-2.5 p-3 rounded-2xl bg-slate-950/40 border border-slate-800/80 transition-colors"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                            Quick Presets &amp; Templates:
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium transition-all cursor-pointer ${
+                              isAutoPlaying
+                                ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25'
+                                : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-slate-200'
+                            }`}
+                            title={isAutoPlaying ? 'Click to pause auto rotation' : 'Click to resume auto rotation'}
+                          >
+                            {isAutoPlaying ? (
+                              <>
+                                <span className="flex h-1.5 w-1.5 relative">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                </span>
+                                <span>{isHovered ? 'Paused (Hovering)' : 'Auto-Rotating'}</span>
+                                <span className="opacity-70 text-[9px]">⏸</span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-[9px]">▶</span>
+                                <span>Auto-Play</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                        <div className="flex gap-1 flex-wrap">
                           {promptPresetCategories.map((cat, cIdx) => (
                             <button
                               key={cIdx}
                               type="button"
-                              onClick={() => setActivePresetCategory(cIdx)}
+                              onClick={() => {
+                                setActivePresetCategory(cIdx);
+                                const firstItem: any = cat.items[0];
+                                if (firstItem) {
+                                  const fText = typeof firstItem === 'string' ? firstItem : firstItem.text;
+                                  const fPrev = typeof firstItem === 'string' ? undefined : firstItem.previewUrl;
+                                  const fSrc = typeof firstItem === 'string' ? undefined : firstItem.sourceUrl;
+                                  setTextStr(fText);
+                                  if (fPrev) {
+                                    setCurrentResultImage(fPrev);
+                                    setSourceImage(fSrc || '/images/showcase_dress_before.jpg');
+                                    setActiveTab('edit');
+                                  }
+                                }
+                              }}
                               className={`px-2 py-0.5 rounded-lg text-[10px] font-medium transition-colors cursor-pointer ${
                                 activePresetCategory === cIdx
                                   ? 'bg-indigo-500/30 text-indigo-200 border border-indigo-500/40'
@@ -1323,7 +1406,11 @@ export default function PageComponent({
                   </div>
 
                   {/* Preview Canvas */}
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 min-h-[380px] flex flex-col justify-center items-center relative overflow-hidden group">
+                  <div
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 min-h-[380px] flex flex-col justify-center items-center relative overflow-hidden group"
+                  >
                     {isProcessing ? (
                       <div className="w-full min-h-[360px] flex flex-col items-center justify-center p-8 text-center relative overflow-hidden rounded-xl border border-indigo-500/20 bg-slate-900/40 backdrop-blur-sm">
                         {/* Animated laser scanning line */}
@@ -1376,9 +1463,10 @@ export default function PageComponent({
                               {/* AI Inpainted Result */}
                               <div className="relative rounded-lg overflow-hidden aspect-square bg-slate-950 group/img">
                                 <img
+                                  key={currentResultImage}
                                   src={currentResultImage}
                                   alt="AI Inpainted output result"
-                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
+                                  className="w-full h-full object-cover group-hover/img:scale-105 transition-all duration-300 animate-crossfade"
                                 />
                                 <span className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-emerald-500/90 text-[10px] font-extrabold text-white shadow-sm">
                                   ✨ OUTPUT
@@ -1393,15 +1481,17 @@ export default function PageComponent({
                         ) : (
                           <div className="w-full relative group/result">
                             <img
+                              key={currentResultImage}
                               src={currentResultImage}
                               alt="Generated Visual Output from Qwen Image Edit"
                               width={768}
                               height={440}
                               loading="lazy"
-                              className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl"
+                              className="w-full max-h-[440px] rounded-xl object-contain shadow-2xl animate-crossfade"
                             />
-                            <div className="absolute top-2 right-2 px-2.5 py-1 rounded-md bg-emerald-500/90 text-white text-xs font-bold shadow-md pointer-events-none">
-                              ✨ AI Generated Output
+                            <div className="absolute top-2 right-2 px-2.5 py-1 rounded-md bg-emerald-500/90 text-white text-xs font-bold shadow-md pointer-events-none flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                              <span>✨ AI Generated Output</span>
                             </div>
                           </div>
                         )}
