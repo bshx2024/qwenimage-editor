@@ -55,7 +55,7 @@ export default function PageComponent({
   const [isPublic, setIsPublic] = useState(true);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
   const [aspectRatio, setAspectRatio] = useState<'auto' | '1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('auto');
-  const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-i2i-turbo');
+  const [selectedModel, setSelectedModel] = useState<string>('qwen-image-2.1-edit');
   const [comparisonMode, setComparisonMode] = useState<'split' | 'result'>('result');
   const [currentResultImage, setCurrentResultImage] = useState<string | null>('/images/showcase_dress_after.jpg');
   const [uid, setUid] = useState('');
@@ -137,12 +137,11 @@ export default function PageComponent({
 
   useEffect(() => {
     if (activeTab === 'edit') {
-      if (selectedModel === 'wanx2.1-t2i-turbo') setSelectedModel('wanx2.1-i2i-turbo');
-      else if (selectedModel === 'wanx2.1-t2i-plus') setSelectedModel('wanx2.1-i2i-plus');
+      if (selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-plus');
+      else setSelectedModel('qwen-image-2.1-edit');
     } else {
-      if (selectedModel === 'wanx2.1-i2i-turbo') setSelectedModel('wanx2.1-t2i-turbo');
-      else if (selectedModel === 'wanx2.1-i2i-plus') setSelectedModel('wanx2.1-t2i-plus');
-      else if (selectedModel === 'qwen-image-edit') setSelectedModel('wanx2.1-t2i-turbo');
+      if (selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-plus');
+      else setSelectedModel('qwen-image-2.1-turbo');
       if (aspectRatio === 'auto') setAspectRatio('1:1');
     }
   }, [activeTab]);
@@ -1274,23 +1273,23 @@ export default function PageComponent({
                               >
                                 {activeTab === 'edit' ? (
                                   <>
-                                    <option value="wanx2.1-imageedit" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Image Edit (Instruction Inpaint 🎨 - 1 Credit)
+                                    <option value="qwen-image-2.1-edit" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 (Instruction Inpaint 🎨 - 1 Credit)
                                     </option>
-                                    <option value="wanx2.1-i2i-turbo" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Turbo (Fast Edit ⚡ - 1 Credit)
+                                    <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Turbo (Fast Edit ⚡ - 1 Credit)
                                     </option>
-                                    <option value="wanx2.1-i2i-plus" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Plus (High Fidelity 🌟 - 2 Credits)
+                                    <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Plus (High Fidelity 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 ) : (
                                   <>
-                                    <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Turbo (Fast ⚡ - 1 Credit)
+                                    <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Turbo (Fast ⚡ - 1 Credit)
                                     </option>
-                                    <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
-                                      Wanx 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
+                                    <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 )}
@@ -2247,7 +2246,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture&quot;
@@ -2351,7 +2350,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression&quot;
@@ -2455,7 +2454,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic&quot;
@@ -2559,7 +2558,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Inpaint poster headline to crisp typography &apos;AUTUMN ICED COFFEE&apos;, fix typos, update bottom promo to &apos;SPECIAL OFFERS 2026 FRESH BREWED DAILY&apos;, preserve illustration layout and color style&quot;
@@ -2663,7 +2662,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
@@ -2767,7 +2766,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Wanx 2.1 (wanx2.1-imageedit)</span>
+                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh&quot;
@@ -2985,13 +2984,13 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
-                      wanx2.1-imageedit
+                      Qwen-Image 2.1 Inpaint
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-medium">Official Cloud API</span>
+                    <span className="text-[11px] text-emerald-400 font-medium">Alibaba Cloud Engine</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Wanx 2.1 Image Edit</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image 2.1 Inpaint</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    The official multimodal inpainting endpoint on Alibaba Cloud DashScope. Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
+                    Alibaba&apos;s multimodal inpainting architecture (powered by DashScope cloud endpoints). Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
@@ -3014,11 +3013,11 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
-                      wanx2.1-t2i-turbo / plus
+                      Qwen-Image 2.1 Turbo / Plus
                     </span>
                     <span className="text-[11px] text-purple-400 font-medium">Text-to-Image</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Wanx 2.1 Generation</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image 2.1 Generation</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
                     High-performance text-to-image foundation models. Turbo provides sub-second rapid prototyping, while Plus synthesizes high-density textures and crisp bilingual typography.
                   </p>

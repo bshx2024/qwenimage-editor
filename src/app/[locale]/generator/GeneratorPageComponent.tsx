@@ -336,11 +336,11 @@ export default function GeneratorPageComponent({
                               <option value="qwen-image-3.0-pro" className="bg-slate-900 text-slate-200">
                                 Qwen-Image 3.0 Pro (Flagship 👑 - 2 Credits)
                               </option>
-                              <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
-                                Wanx 2.1 Turbo (Fast ⚡ - 1 Credit)
+                              <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
+                                Qwen-Image 2.1 Turbo (Fast ⚡ - 1 Credit)
                               </option>
-                              <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
-                                Wanx 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
+                              <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
+                                Qwen-Image 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
                               </option>
                             </select>
                           </div>
