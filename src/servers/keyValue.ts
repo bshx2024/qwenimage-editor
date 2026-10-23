@@ -125,7 +125,7 @@ export async function getAISettings(): Promise<AISettings> {
     kieBaseUrl: kieBaseUrl || process.env.KIE_BASE_URL || 'https://api.kie.ai',
     bailianApiKey: bailianApiKey || process.env.DASHSCOPE_API_KEY || '',
     bailianBaseUrl: bailianBaseUrl || 'https://dashscope.aliyuncs.com',
-    bailianModel: bailianModel || 'wanx2.1-t2i-turbo',
+    bailianModel: bailianModel || 'qwen-image-2.1-1k',
     replicateToken: replicateToken || process.env.REPLICATE_API_TOKEN || '',
   };
 }

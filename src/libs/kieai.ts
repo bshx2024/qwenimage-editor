@@ -145,26 +145,30 @@ export async function submitKieTask(params: KieGenerateParams): Promise<KieTaskR
   else if (aspectRatio === '4:3' || size === '1152*864') resolvedAspectRatio = '4:3';
   else if (aspectRatio === '3:4' || size === '864*1152') resolvedAspectRatio = '3:4';
 
-  const isPro = model?.includes('pro') || model?.includes('plus') || model?.includes('2K');
+  const isPro = model?.includes('pro') || model?.includes('plus') || model?.includes('2k') || model?.includes('2K');
   const resolution = isPro ? '2K' : '1K';
 
   let resolvedModel = 'qwen2-1/text-to-image';
   let inputPayload: any;
 
   if (taskType === 'image_edit' && imageUrl) {
-    // Official Qwen Image Edit model on KIE AI
-    resolvedModel = 'qwen/image-edit';
+    // Official Qwen-Image-2.1 Image-to-Image / Edit model on KIE AI
+    resolvedModel = 'qwen2-1/image-to-image';
 
     // Upload image to KIE storage to ensure accessibility
     const hostedImageUrl = await uploadImageToKie(imageUrl, apiKey);
 
     inputPayload = {
       prompt,
-      image_url: hostedImageUrl,
+      image_urls: [hostedImageUrl],
+      image_url: hostedImageUrl, // backwards compatibility
+      aspect_ratio: resolvedAspectRatio === 'auto' ? 'auto' : resolvedAspectRatio,
+      resolution,
       output_format: 'png',
     };
   } else {
-    // Text to Image model
+    // Official Qwen-Image-2.1 Text-to-Image model on KIE AI
+    resolvedModel = 'qwen2-1/text-to-image';
     inputPayload = {
       prompt,
       aspect_ratio: resolvedAspectRatio,
@@ -178,7 +182,7 @@ export async function submitKieTask(params: KieGenerateParams): Promise<KieTaskR
     input: inputPayload,
   };
 
-  const res = await fetch(endpoint, {
+  let res = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +191,36 @@ export async function submitKieTask(params: KieGenerateParams): Promise<KieTaskR
     body: JSON.stringify(payload),
   });
 
-  const data = await res.json().catch(() => ({}));
+  let data = await res.json().catch(() => ({}));
+
+  // If image-to-image returns an unrecognized model error, attempt fallback to qwen/image-edit
+  if ((!res.ok || (data.code && data.code !== 200 && data.code !== 0)) && taskType === 'image_edit' && resolvedModel === 'qwen2-1/image-to-image') {
+    try {
+      const fallbackPayload = {
+        model: 'qwen/image-edit',
+        input: {
+          prompt,
+          image_url: inputPayload.image_url,
+          output_format: 'png',
+        },
+      };
+      const fallbackRes = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey.trim()}`,
+        },
+        body: JSON.stringify(fallbackPayload),
+      });
+      const fallbackData = await fallbackRes.json().catch(() => ({}));
+      if (fallbackRes.ok && (fallbackData.code === 200 || fallbackData.code === 0 || (!fallbackData.code && (fallbackData.data?.taskId || fallbackData.taskId)))) {
+        res = fallbackRes;
+        data = fallbackData;
+      }
+    } catch {
+      // Continue with original response
+    }
+  }
 
   if (!res.ok || (data.code && data.code !== 200 && data.code !== 0)) {
     const errorMsg = data.msg || data.message || `KIE AI API returned status ${res.status}`;

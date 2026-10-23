@@ -44,7 +44,7 @@ export default function GeneratorPageComponent({
 
   const [prompt, setPrompt] = useState(searchParams?.prompt || '');
   const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('1:1');
-  const [selectedModel, setSelectedModel] = useState<string>('wanx2.1-t2i-turbo');
+  const [selectedModel, setSelectedModel] = useState<string>('qwen-image-2.1-1k');
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>('/images/model_compare_demo.jpg');
   const [uid, setUid] = useState('');
@@ -279,13 +279,13 @@ export default function GeneratorPageComponent({
               </h1>
               {/* Conclusion First: Objective Definition for Direct AI Extraction */}
               <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
-                <strong>Qwen Image Generator</strong> is an online text-to-image synthesis engine built on Wanx 2.1 and Qwen vision foundation architectures, delivering 1024×1024 to 2048×2048 photorealistic imagery with fast cloud inference across 1:1, 16:9, and 9:16 aspect ratios.
+                <strong>Qwen Image Generator</strong> is an online text-to-image synthesis engine powered by Alibaba&apos;s Qwen-Image-2.1 foundation architecture, delivering 1024×1024 to 2048×2048 photorealistic imagery with fast cloud inference across 1:1, 16:9, and 9:16 aspect ratios.
               </p>
               {/* Feature-Bullet Chunking Bar */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
                 <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                   <span className="font-semibold text-purple-300 block">Text-to-Image Synthesis</span>
-                  <span className="text-slate-400 text-[11px]">Wanx 2.1 & Qwen multimodal backbone, cloud GPU</span>
+                  <span className="text-slate-400 text-[11px]">Qwen-Image-2.1 multimodal backbone, cloud GPU</span>
                 </div>
                 <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
                   <span className="font-semibold text-indigo-300 block">Bilingual Signage</span>
@@ -330,11 +330,11 @@ export default function GeneratorPageComponent({
                               onChange={(e) => setSelectedModel(e.target.value)}
                               className="bg-transparent text-[11px] font-semibold text-purple-300 focus:outline-none cursor-pointer pr-1"
                             >
-                              <option value="wanx2.1-t2i-turbo" className="bg-slate-900 text-slate-200">
-                                wanx2.1-t2i-turbo (Fast Gen ⚡ - 1 Credit)
+                              <option value="qwen-image-2.1-1k" className="bg-slate-900 text-slate-200">
+                                Qwen-Image-2.1 1K (Fast Gen ⚡ - 1 Credit)
                               </option>
-                              <option value="wanx2.1-t2i-plus" className="bg-slate-900 text-slate-200">
-                                wanx2.1-t2i-plus (Plus Model 🌟 - 2 Credits)
+                              <option value="qwen-image-2.1-2k" className="bg-slate-900 text-slate-200">
+                                Qwen-Image-2.1 2K (Plus Model 🌟 - 2 Credits)
                               </option>
                             </select>
                           </div>
@@ -532,7 +532,7 @@ export default function GeneratorPageComponent({
                           </span>
                         </h4>
                         <p className="text-xs text-slate-400 max-w-sm mb-4">
-                          Running Qwen & Wanx 2.1 text-to-image neural diffusion. Output will automatically display here.
+                          Running Qwen-Image-2.1 text-to-image neural diffusion. Output will automatically display here.
                         </p>
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-[11px] font-mono text-cyan-300">
                           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
@@ -985,7 +985,7 @@ export default function GeneratorPageComponent({
                 </div>
                 <h3 className="text-base font-bold text-white">Step 2: Select Ratio & Model</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Choose your aspect ratio (1:1, 16:9, or 9:16) and select between Wanx 2.1 Turbo or Plus checkpoints.
+                  Choose your aspect ratio (1:1, 16:9, or 9:16) and select between Qwen-Image-2.1 1K or 2K resolutions.
                 </p>
               </div>
 

@@ -60,9 +60,11 @@ export async function POST(req: Request) {
     }
 
     // Differentiated Credit Deduction:
-    // Standard models (wanx2.1-t2i-turbo, wanx2.1-imageedit, wanx2.1-i2i-turbo): 1 Credit
-    // Pro / Flagship models (qwen-image-2.1-pro, qwen-image-3.0-pro, wanx2.1-t2i-plus, wanx2.1-i2i-plus): 2 Credits
+    // Standard models (Qwen-Image-2.1 Inpaint, 1K): 1 Credit
+    // 2K / Plus / Pro models (Qwen-Image-2.1 2K): 2 Credits
     const isProModel =
+      requestedModel.includes("2k") ||
+      requestedModel.includes("2K") ||
       requestedModel.includes("pro") ||
       requestedModel.includes("plus") ||
       requestedModel.includes("3.0");

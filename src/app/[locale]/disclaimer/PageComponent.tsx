@@ -34,7 +34,7 @@ Welcome to **Qwen Image Editor** (accessible at [https://qwenimage-editor.com](h
 
 ### 3. Trademark & Intellectual Property Notice
 - "Qwen", "Tongyi Qianwen", "通义千问", "Alibaba", and related names, logos, and emblems are registered trademarks or service marks owned by Alibaba Group Holding Limited or their respective owners.
-- Any reference on this website to "Qwen", "Qwen-Image", or specific foundation model checkpoints (e.g., Qwen-Image-Edit 2511, Wanx 2.1) is purely for **nominative descriptive purposes** to accurately inform users which underlying models and technical capabilities power their visual tasks.
+- Any reference on this website to "Qwen", "Qwen-Image", or specific foundation model checkpoints (e.g., Qwen-Image-2.1) is purely for **nominative descriptive purposes** to accurately inform users which underlying models and technical capabilities power their visual tasks.
 - Such nominative use does not constitute trademark infringement or imply any brand affiliation.
 
 ---

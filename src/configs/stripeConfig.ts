@@ -26,7 +26,7 @@ export const oneTimePriceList: PriceItem[] = [
       "Instant automatic credit refund if task fails ($0 loss)",
       "Full high-resolution downloads included ($0 extra fee)",
       "One-time payment, Credits Never Expire",
-      "Full Qwen & Wanx 2.1 Model Access",
+      "Full Qwen-Image-2.1 Model Access",
       "Commercial use subject to our Terms and applicable model-provider terms"
     ]
   }

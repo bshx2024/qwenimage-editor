@@ -23,7 +23,7 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
       'Instant automatic refund on failure ($0 loss)',
       'Full high-resolution downloads included ($0 extra fee)',
       'Never Expires',
-      'Full Qwen & Wanx 2.1 Model Access',
+      'Full Qwen-Image-2.1 Model Access',
       'Commercial use subject to our Terms and applicable model-provider terms'
     ]
   },
@@ -40,7 +40,7 @@ export const WAFFO_PLANS: Record<string, WaffoPlan> = {
       'Instant automatic refund on failure ($0 loss)',
       'Full high-resolution downloads included ($0 extra fee)',
       'Never Expires',
-      'Full Qwen & Wanx 2.1 Model Access',
+      'Full Qwen-Image-2.1 Model Access',
       'Commercial use subject to our Terms and applicable model-provider terms'
     ]
   },

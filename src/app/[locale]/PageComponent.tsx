@@ -137,11 +137,11 @@ export default function PageComponent({
 
   useEffect(() => {
     if (activeTab === 'edit') {
-      if (selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-plus');
+      if (selectedModel.includes('2k') || selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-2k');
       else setSelectedModel('qwen-image-2.1-edit');
     } else {
-      if (selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-plus');
-      else setSelectedModel('qwen-image-2.1-turbo');
+      if (selectedModel.includes('2k') || selectedModel.includes('plus')) setSelectedModel('qwen-image-2.1-2k');
+      else setSelectedModel('qwen-image-2.1-1k');
       if (aspectRatio === 'auto') setAspectRatio('1:1');
     }
   }, [activeTab]);
@@ -515,7 +515,7 @@ export default function PageComponent({
   const faqList = [
     {
       q: 'What is Qwen Image Editor and how does it work?',
-      a: "Qwen Image Editor is a browser-based AI platform that modifies images through natural language prompts using Alibaba Cloud's DashScope foundation models (wanx2.1-imageedit). Rather than regenerating complete canvases from scratch, the system maps multimodal visual tokens directly to prompt instructions, isolating edit boundaries without manual brush masking. It executes localized inpainting on 1024×1024 pixel inputs with typical cloud turnaround in 8 to 15 seconds, helping preserve unedited textures and facial features without requiring local GPU hardware.",
+      a: "Qwen Image Editor is a browser-based AI platform that modifies images through natural language prompts using Alibaba's Qwen-Image-2.1 multimodal foundation models. Rather than regenerating complete canvases from scratch, the system maps multimodal visual tokens directly to prompt instructions, isolating edit boundaries without manual brush masking. It executes localized inpainting on 1024×1024 pixel inputs with typical cloud turnaround in 8 to 15 seconds, helping preserve unedited textures and facial features without requiring local GPU hardware.",
     },
     {
       q: 'Can I use Qwen Image Editor for AI clothes changing and virtual try-on?',
@@ -531,11 +531,11 @@ export default function PageComponent({
     },
     {
       q: 'Are the AI-generated images commercial-use friendly and private?',
-      a: 'Yes, images generated and edited on Qwen Image Editor carry commercial usage permissions in accordance with our Terms of Service and upstream Alibaba Cloud DashScope foundation model commercial licensing terms. Users retain exploitation rights to use visual outputs across commercial campaigns, client projects, and marketing collateral without royalty obligations. Image uploads and generated outputs are transmitted via 256-bit SSL encryption. Paid subscribers can toggle private mode to ensure inputs and outputs remain completely confidential.',
+      a: 'Yes, images generated and edited on Qwen Image Editor carry commercial usage permissions in accordance with our Terms of Service and upstream Alibaba Cloud foundation model commercial licensing terms. Users retain exploitation rights to use visual outputs across commercial campaigns, client projects, and marketing collateral without royalty obligations. Image uploads and generated outputs are transmitted via 256-bit SSL encryption. Paid subscribers can toggle private mode to ensure inputs and outputs remain completely confidential.',
     },
     {
       q: 'Which model checkpoints and APIs are supported?',
-      a: 'The online editor executes managed production APIs from Alibaba Cloud DashScope, specifically Wanx 2.1 Image Edit (wanx2.1-imageedit) for instruction-based inpainting and Wanx 2.1 Turbo/Plus for text-to-image synthesis. While open-source research checkpoints from the Qwen-Image family are available on Hugging Face and ModelScope for self-hosted ComfyUI rigs, this website provides a managed serverless cloud environment with no local GPU setup required.',
+      a: 'The online editor executes managed production APIs for Qwen-Image-2.1 (including Qwen-Image-2.1 Image-to-Image for instruction-based inpainting and Qwen-Image-2.1 Text-to-Image 1K/2K for text-to-image synthesis). While open-source research checkpoints from the Qwen-Image family are available on Hugging Face and ModelScope for self-hosted ComfyUI rigs, this website provides a managed serverless cloud environment with no local GPU setup required.',
     },
     {
       q: 'Can I try this online editor for free without ComfyUI or a high-end GPU?',
@@ -748,7 +748,7 @@ export default function PageComponent({
                 </Link>
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
                   <SparklesIcon className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Qwen-Image &amp; Wanx 2.1 Engine</span>
+                  <span>Qwen-Image 2.1 Engine</span>
                 </div>
               </div>
 
@@ -1280,22 +1280,22 @@ export default function PageComponent({
                                 {activeTab === 'edit' ? (
                                   <>
                                     <option value="qwen-image-2.1-edit" className="bg-slate-900 text-slate-200">
-                                      wanx2.1-imageedit (Inpaint 🎨 - 1 Credit)
+                                      Qwen-Image-2.1 (Inpaint 🎨 - 1 Credit)
                                     </option>
-                                    <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
-                                      wanx2.1-t2i-turbo (Fast Edit ⚡ - 1 Credit)
+                                    <option value="qwen-image-2.1-1k" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image-2.1 1K (Fast Edit ⚡ - 1 Credit)
                                     </option>
-                                    <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
-                                      wanx2.1-t2i-plus (Plus Model 🌟 - 2 Credits)
+                                    <option value="qwen-image-2.1-2k" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image-2.1 2K (Plus Model 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 ) : (
                                   <>
-                                    <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
-                                      wanx2.1-t2i-turbo (Fast ⚡ - 1 Credit)
+                                    <option value="qwen-image-2.1-1k" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image-2.1 1K (Fast Gen ⚡ - 1 Credit)
                                     </option>
-                                    <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
-                                      wanx2.1-t2i-plus (Plus Model 🌟 - 2 Credits)
+                                    <option value="qwen-image-2.1-2k" className="bg-slate-900 text-slate-200">
+                                      Qwen-Image-2.1 2K (Plus Model 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 )}
@@ -2252,7 +2252,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture&quot;
@@ -2356,7 +2356,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression&quot;
@@ -2460,7 +2460,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic&quot;
@@ -2564,7 +2564,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Inpaint poster headline to crisp typography &apos;AUTUMN ICED COFFEE&apos;, fix typos, update bottom promo to &apos;SPECIAL OFFERS 2026 FRESH BREWED DAILY&apos;, preserve illustration layout and color style&quot;
@@ -2668,7 +2668,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
@@ -2772,7 +2772,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: Qwen-Image-2.1</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh&quot;
@@ -2990,18 +2990,18 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
-                      wanx2.1-imageedit
+                      Qwen-Image-2.1 (Image-to-Image)
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-medium">Inpainting Production API</span>
+                    <span className="text-[11px] text-emerald-400 font-medium">Inpaint &amp; Edit API</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Image Inpainting Engine</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image-2.1 Inpaint &amp; Edit</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Our online photo editing workflow directly calls Alibaba Cloud DashScope <code className="text-indigo-300">wanx2.1-imageedit</code>. Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
+                    Our image editing and inpainting pipeline is powered by Alibaba&apos;s Qwen-Image-2.1 architecture (available in 1K and 2K resolutions). Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Mode: <code>description_edit</code> instruction inpainting</span>
+                      <span>Mode: <code>image-to-image</code> instruction inpainting</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
@@ -3009,7 +3009,7 @@ export default function PageComponent({
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Resolution support up to 2048×2048</span>
+                      <span>Resolution support up to 2048×2048 (2K)</span>
                     </li>
                   </ul>
                 </div>
@@ -3019,13 +3019,13 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
-                      wanx2.1-t2i-turbo / plus
+                      Qwen-Image-2.1 (Text-to-Image)
                     </span>
                     <span className="text-[11px] text-purple-400 font-medium">Text-to-Image API</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Text-to-Image Generation Engine</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image-2.1 Generation</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Text-to-image generation is served by Alibaba Cloud DashScope <code className="text-purple-300">wanx2.1-t2i-turbo</code> (Standard, 1 Credit) and <code className="text-purple-300">wanx2.1-t2i-plus</code> (Plus, 2 Credits) for high-density textures and bilingual typography.
+                    Text-to-image generation is powered by Qwen-Image-2.1 (1K standard for 1 Credit, and 2K high-fidelity for 2 Credits) for high-density textures and crisp bilingual typography.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
@@ -3034,11 +3034,11 @@ export default function PageComponent({
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Multiple aspect ratios (1:1, 16:9, 9:16, 4:3)</span>
+                      <span>Multiple aspect ratios (1:1, 16:9, 9:16, 4:3, 3:4)</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircleIcon className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Commercial-grade photorealism &amp; product shots</span>
+                      <span>1K standard and 2K ultra-sharp resolutions</span>
                     </li>
                   </ul>
                 </div>
@@ -3147,7 +3147,7 @@ export default function PageComponent({
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span><strong>Official Foundation Models:</strong> Direct cloud integration with Alibaba Cloud DashScope endpoints (<code>wanx2.1-imageedit</code> and <code>wanx2.1-t2i</code>) with stable GPU cluster availability.</span>
+                    <span><strong>Official Foundation Models:</strong> Cloud integration with Alibaba&apos;s Qwen-Image-2.1 endpoints (image-to-image and text-to-image) with stable GPU cluster availability.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold">✓</span>

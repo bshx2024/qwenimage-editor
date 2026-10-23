@@ -81,7 +81,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
           user_id: userData?.user_id || 'guest',
           is_public: true,
           aspectRatio,
-          model: 'wanx2.1-t2i-turbo',
+          model: 'qwen-image-2.1-1k',
         }),
       });
       const data = await res.json();

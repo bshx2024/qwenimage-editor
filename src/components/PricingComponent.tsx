@@ -112,7 +112,7 @@ export default function Pricing({
           </h2>
 
           <p className="text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            Choose between non-expiring one-time credits or monthly/annual plans for high-resolution Qwen &amp; Wanx 2.1 AI image generation.
+            Choose between non-expiring one-time credits or monthly/annual plans for high-resolution Qwen-Image-2.1 AI image generation.
           </p>
 
           {/* Highlight Banner */}

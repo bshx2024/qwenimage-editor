@@ -214,7 +214,7 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
               </div>
               <h3 className="text-lg font-bold text-white">No Visual Creations Yet</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Start your creative journey! Enter a prompt to synthesize photorealistic images with Qwen & Wanx 2.1 models.
+                Start your creative journey! Enter a prompt to synthesize photorealistic images with Qwen-Image-2.1 models.
               </p>
               <Link
                 href={getLinkHref(locale, '')}

@@ -84,7 +84,7 @@ export async function submitBailianTask(params: BailianGenerateParams): Promise<
   
   // Resolve valid text2image model on DashScope
   let t2iModel = 'wanx2.1-t2i-turbo';
-  if (model?.includes('plus') || model?.includes('pro') || model?.includes('3.0')) {
+  if (model?.includes('2k') || model?.includes('2K') || model?.includes('plus') || model?.includes('pro') || model?.includes('3.0')) {
     t2iModel = 'wanx2.1-t2i-plus';
   } else if (model === 'wanx-v1') {
     t2iModel = 'wanx-v1';
