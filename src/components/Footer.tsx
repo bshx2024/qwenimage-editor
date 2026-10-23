@@ -83,8 +83,13 @@ export default function Footer({
                 </a>
               </div>
             </div>
-            <div className="text-xs text-slate-500">
-              © {new Date().getFullYear()} Qwen Image Editor. All rights reserved.
+            <div className="text-xs text-slate-500 space-y-1">
+              <div>© {new Date().getFullYear()} Astrapix LLC. All rights reserved.</div>
+              <div className="text-[11px] text-slate-500">
+                {locale?.startsWith('zh') 
+                  ? '运营主体：Astrapix LLC · 注册地址：30 N Gould St Ste R, Sheridan, WY 82801, USA'
+                  : 'Operated by Astrapix LLC · 30 N Gould St Ste R, Sheridan, WY 82801, USA'}
+              </div>
             </div>
           </div>
 

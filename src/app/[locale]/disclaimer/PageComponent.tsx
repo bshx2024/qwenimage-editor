@@ -19,7 +19,7 @@ Welcome to **Qwen Image Editor** (accessible at [https://qwenimage-editor.com](h
 
 ### 1. Independent Third-Party Service Statement
 **Qwen Image Editor is an independent, third-party software application and web service.** 
-- This website and application are owned and operated independently by our software team.
+- This website and application are owned and operated by **Astrapix LLC** (a Wyoming limited liability company, registered at 30 N Gould St Ste R, Sheridan, WY 82801, USA).
 - **We are NOT affiliated with, sponsored by, endorsed by, maintained by, or partnered with Alibaba Group Holding Limited, Alibaba Cloud, Tongyi Qianwen (通义千问), or any of their corporate affiliates or subsidiaries.**
 - We do not represent ourselves as an official division, authorized distributor, or official agent of Alibaba Group.
 
@@ -48,6 +48,7 @@ Welcome to **Qwen Image Editor** (accessible at [https://qwenimage-editor.com](h
 
 ### 5. Contact Information
 If you have any questions, trademark inquiries, or compliance notices, please contact us promptly:
+- **Operating Entity:** Astrapix LLC (30 N Gould St Ste R, Sheridan, WY 82801, USA)
 - **Compliance & Legal Contact:** \`legal@qwenimage-editor.com\`
 - **Customer Support:** \`support@qwenimage-editor.com\`
 - **Website:** [https://qwenimage-editor.com](https://qwenimage-editor.com)
@@ -56,7 +57,7 @@ If you have any questions, trademark inquiries, or compliance notices, please co
 const DISCLAIMER_CONTENT_ZH = `
 # 品牌免责声明与独立第三方服务声明
 
-**最近更新：** 2026年10月7日
+**最近更新：** 2026年10月23日
 
 欢迎访问 **Qwen Image Editor**（网站：[https://qwenimage-editor.com](https://qwenimage-editor.com)）。本声明旨在向所有用户、监管机构与合作伙伴明确本平台的独立服务性质及品牌免责条款，以消除任何品牌混淆风险。
 
@@ -64,7 +65,7 @@ const DISCLAIMER_CONTENT_ZH = `
 
 ### 一、 独立第三方服务声明
 **Qwen Image Editor（本平台）为独立开发运营的第三方工具应用与在线软件服务：**
-- 本网站与应用由独立技术团队负责研发与维护运营。
+- 本网站与应用由 **Astrapix LLC**（依据美国怀俄明州法律设立，注册办事处：30 N Gould St Ste R, Sheridan, WY 82801, USA）合法所有并独立运营。
 - **本平台与阿里巴巴集团（Alibaba Group）、阿里云计算有限公司、通义千问（Qwen）官方团队及其关联公司不存在任何股权隶属、商业加盟、授权代理或官方背书关系。**
 - 本平台并非阿里巴巴或通义千问的官方产品，亦未以官方名义开展任何运营活动。
 
