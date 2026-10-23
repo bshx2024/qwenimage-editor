@@ -123,12 +123,12 @@ const PageComponent = ({
             Transparent Pricing & Flexible AI Credits
           </h1>
           <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto font-normal">
-            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a daily complimentary quota (1/1) up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with commercial usage permitted (per Terms & API licenses) and zero contract commitments.
+            <strong>Qwen Image Editor Pricing</strong> offers flexible AI image generation and inpainting credits, starting from a daily available quota (1/1) up to a $118.80 annual subscription (equivalent to $9.90/month, saving 50%), with commercial usage permitted (per Terms & API licenses) and zero contract commitments.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-left text-xs">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
-              <span className="font-semibold text-emerald-300 block">Daily Quota</span>
+              <span className="font-semibold text-emerald-300 block">Daily Available Quota</span>
               <span className="text-slate-400 text-[11px]">1 daily credit upon sign-in, resets 00:00 UTC</span>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-2.5">
@@ -195,6 +195,126 @@ const PageComponent = ({
           </div>
         </section>
 
+        {/* Transparent Credit Deduction & Actual Cost Matrix (P0 Solved) */}
+        <section className="py-10 border-t border-slate-900 max-w-5xl mx-auto px-4 mt-8">
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+              Clear Unit Economics
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-3">
+              Exact Credit Costs &amp; Image Estimates
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-2 max-w-2xl mx-auto">
+              Know exactly what every image costs before spending. Zero hidden deductions, instant automated refunds on API failure, and full commercial terms.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 overflow-hidden bg-slate-900/60 shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm text-slate-300">
+                <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase text-[11px]">
+                  <tr>
+                    <th className="py-3.5 px-4 font-semibold">Operation &amp; Model</th>
+                    <th className="py-3.5 px-4 font-semibold text-center">Credit Cost</th>
+                    <th className="py-3.5 px-4 font-semibold text-center text-indigo-400">Starter Pack ($4.99)</th>
+                    <th className="py-3.5 px-4 font-semibold text-center text-purple-400">Pro Monthly ($19.90)</th>
+                    <th className="py-3.5 px-4 font-semibold text-center text-pink-400">Pro Yearly ($118.80)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60 font-normal">
+                  <tr>
+                    <td className="py-3.5 px-4 font-medium text-white">
+                      <div>Image Inpainting &amp; Retouching</div>
+                      <div className="text-[11px] text-slate-400 font-mono">wanx2.1-imageedit</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center font-bold text-cyan-300">1 Credit</td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0499 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 100 images</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0398 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 500 images/mo</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div className="text-emerald-400 font-semibold">$0.0198 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 6,000 images/yr</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-medium text-white">
+                      <div>Text-to-Image (Fast Turbo)</div>
+                      <div className="text-[11px] text-slate-400 font-mono">wanx2.1-t2i-turbo</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center font-bold text-cyan-300">1 Credit</td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0499 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 100 images</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0398 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 500 images/mo</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div className="text-emerald-400 font-semibold">$0.0198 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 6,000 images/yr</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3.5 px-4 font-medium text-white">
+                      <div>Text-to-Image (High-Density Plus)</div>
+                      <div className="text-[11px] text-slate-400 font-mono">wanx2.1-t2i-plus</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center font-bold text-purple-300">2 Credits</td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0998 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 50 images</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div>$0.0796 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 250 images/mo</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-slate-300">
+                      <div className="text-emerald-400 font-semibold">$0.0396 / image</div>
+                      <div className="text-[11px] text-slate-400">Up to 3,000 images/yr</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Crucial Policy & Transparency Disclosures */}
+            <div className="p-4 bg-slate-950/80 border-t border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                <div className="font-semibold text-emerald-300 flex items-center gap-1.5 mb-1">
+                  <span>🛡️ 0-Second Instant Refund</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  If an upstream model times out or returns a generation error, your credits are automatically refunded immediately ($0 charge).
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                <div className="font-semibold text-indigo-300 flex items-center gap-1.5 mb-1">
+                  <span>🔄 Quota Rollover Policy</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  Starter Pack credits never expire. Pro Monthly &amp; Yearly credits reset at the start of each billing cycle (no rollover to subsequent months).
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+                <div className="font-semibold text-cyan-300 flex items-center gap-1.5 mb-1">
+                  <span>⚖️ Commercial Licensing</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  Images generated with paid credits include commercial exploitation rights, subject to our Terms of Service and applicable upstream model terms.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Cross-Entity Pricing Comparison Matrix */}
         <section className="py-12 border-t border-slate-900 max-w-5xl mx-auto px-4 mt-8">
           <div className="text-center mb-8">
@@ -246,7 +366,7 @@ const PageComponent = ({
               <ul className="list-disc list-inside space-y-1 text-slate-400">
                 <li><strong>Credit Consumption:</strong> 1 standard image generation or inpainting edit consumes 1 credit (e.g. <code>wanx2.1-imageedit</code> or <code>wanx2.1-t2i-turbo</code>). High-fidelity Plus models consume 2 credits. High-resolution download is included with no extra fees.</li>
                 <li><strong>Effective Per-Image Cost Calculation:</strong> Starter Pack ($4.99 / 100 credits) = $0.0499/edit (~$0.05). Pro Monthly ($19.90 / 500 credits) = $0.0398/edit (~$0.04). Pro Yearly ($118.80 / 6,000 credits) = $0.0198/edit (~$0.02).</li>
-                <li><strong>Failed Task Protection:</strong> Network or upstream API task failures automatically refund consumed credits back to your account balance.</li>
+                <li><strong>Failed Task Protection:</strong> Network or upstream API task failures automatically refund consumed credits back to your account balance within 0 seconds.</li>
                 <li><strong>Commercial Rights &amp; Licensing:</strong> All outputs generated by paid credit packages or subscriptions include commercial exploitation rights in accordance with our <Link href={`/${locale}/terms-of-service`} className="text-cyan-400 hover:underline">Terms of Service</Link> and upstream foundation model licenses.</li>
               </ul>
             </div>

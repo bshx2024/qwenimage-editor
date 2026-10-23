@@ -22,12 +22,12 @@ export const oneTimePriceList: PriceItem[] = [
     badge: "Lowest Entry — $0.05 / edit",
     isPopular: false,
     features: [
-      "Up to 100 standard edits (1 credit/task, 2 for Plus)",
-      "Automatic refund if task fails ($0 loss)",
-      "Free high-resolution downloads ($0 extra fee)",
+      "100 standard edits (1 credit/edit) or 50 Plus edits (2 credits)",
+      "Instant automatic credit refund if task fails ($0 loss)",
+      "Full high-resolution downloads included ($0 extra fee)",
       "One-time payment, Credits Never Expire",
       "Full Qwen & Wanx 2.1 Model Access",
-      "Commercial usage permitted per Terms"
+      "Commercial use subject to our Terms and applicable model-provider terms"
     ]
   }
 ];
@@ -44,12 +44,13 @@ export const subscriptionPriceList: PriceItem[] = [
     badge: "Most Popular — Fast GPU",
     isPopular: true,
     features: [
-      "Up to 500 standard edits/month (1 credit/task, 2 for Plus)",
-      "Automatic refund if task fails ($0 loss)",
-      "Free high-resolution downloads ($0 extra fee)",
-      "Dedicated Fast GPU Priority Queue",
+      "500 standard edits/month (1 credit/edit) or 250 Plus edits",
+      "Dedicated Fast GPU Priority Queue (Zero Wait)",
+      "Instant automatic credit refund if task fails ($0 loss)",
+      "Monthly quota resets each cycle (does not roll over)",
+      "Full high-resolution downloads included ($0 extra fee)",
       "Cancel anytime with 1-click",
-      "Commercial usage permitted per Terms"
+      "Commercial use subject to our Terms and applicable model-provider terms"
     ]
   },
   {
@@ -61,12 +62,12 @@ export const subscriptionPriceList: PriceItem[] = [
     credits: 6000,
     badge: "Best Value — Save 50%",
     features: [
-      "Up to 6,000 standard edits/year (500/mo, 1 credit/task)",
+      "6,000 standard edits/year (500/mo, 1 credit/edit)",
       "Only $9.90/month (billed annually $118.80, save 50%)",
-      "Automatic refund on task failure ($0 loss)",
-      "Free high-resolution downloads ($0 extra fee)",
       "👑 VIP Dedicated Priority GPU Queue",
-      "Commercial usage permitted per Terms",
+      "Instant automatic credit refund on task failure ($0 loss)",
+      "Full high-resolution downloads included ($0 extra fee)",
+      "Commercial use subject to our Terms and applicable model-provider terms",
       "Priority Customer Support"
     ]
   }

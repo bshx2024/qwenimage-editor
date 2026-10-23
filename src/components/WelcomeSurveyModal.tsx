@@ -341,7 +341,7 @@ export function WelcomeSurveyModal() {
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldCheckIcon className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span><strong>Full Commercial Rights</strong></span>
+                  <span><strong>Commercial Rights</strong> (Terms Apply)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircleIcon className="w-4 h-4 text-cyan-400 shrink-0" />

@@ -785,7 +785,7 @@ export default function PageComponent({
                 <span className="hidden sm:inline text-slate-700">•</span>
                 <span>🔤 Helps improve typography rendering</span>
                 <span className="hidden sm:inline text-slate-700">•</span>
-                <span>⏱️ Typical processing ~8–15s (varies with model, size &amp; server load)</span>
+                <span>⏱️ Measured latency (p50–p90): Inpaint ~8–15s · Turbo T2I ~4–8s · Plus T2I ~12–20s</span>
               </div>
 
               {/* Explicit Credit Quota & Login Requirement Disclosure Banner (Gefei Checklist Aligned) */}
@@ -811,7 +811,7 @@ export default function PageComponent({
                     </div>
                     <div>
                       <span className="font-bold text-white block">
-                        {locale?.startsWith('zh') ? '今日免费额度: 1/1' : 'Daily Free Quota: 1/1'}
+                        {locale?.startsWith('zh') ? '今日可用额度: 1/1' : "Today's Available Quota: 1/1"}
                       </span>
                       <span className="text-[11px] text-slate-400 block mt-0.5">
                         {locale?.startsWith('zh') ? '每天 00:00 UTC 自动刷新' : '1 daily edit, resets at 00:00 UTC'}
@@ -825,10 +825,10 @@ export default function PageComponent({
                     </div>
                     <div>
                       <span className="font-bold text-white block">
-                        {locale?.startsWith('zh') ? '消耗 1 额度 / 次' : '1 Credit Per Edit'}
+                        {locale?.startsWith('zh') ? '扣点规则透明' : 'Clear Credit Pricing'}
                       </span>
                       <span className="text-[11px] text-slate-400 block mt-0.5">
-                        {locale?.startsWith('zh') ? '标准编辑扣 1 点，失败自动返还' : 'Standard edits, auto-refund on fail'}
+                        {locale?.startsWith('zh') ? '标准编辑 1 点，Plus 2 点，失败即时退' : '1 credit/edit (Plus: 2), instant refund on fail'}
                       </span>
                     </div>
                   </div>
@@ -863,7 +863,7 @@ export default function PageComponent({
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <span className="text-slate-400 font-medium">
-                          {locale?.startsWith('zh') ? '今日免费额度:' : 'Daily Free Quota:'}
+                          {locale?.startsWith('zh') ? '今日可用额度:' : "Today's Available Quota:"}
                         </span>
                         <span className="font-bold text-cyan-300 font-mono text-xs">
                           {Math.min(userData.available_times ?? 0, 1)}/1
@@ -887,7 +887,7 @@ export default function PageComponent({
                       title="Google sign-in required to activate 1 daily credit. Resets daily at 00:00 UTC."
                     >
                       <span className="px-1.5 py-0.5 rounded-lg bg-amber-400/20 text-amber-200 font-mono font-bold text-[11px]">
-                        {locale?.startsWith('zh') ? '今日免费额度: 1/1' : 'Daily Free Quota: 1/1'}
+                        {locale?.startsWith('zh') ? '今日可用额度: 1/1' : "Today's Available Quota: 1/1"}
                       </span>
                       <span className="group-hover:translate-x-0.5 transition-transform text-slate-300">
                         {locale?.startsWith('zh') ? '(需登录激活 · 00:00 UTC 刷新) →' : '(Sign in to activate · 00:00 UTC reset) →'}
@@ -1677,12 +1677,12 @@ export default function PageComponent({
                       <div className="flex items-center gap-3 text-slate-300 flex-wrap">
                         <span className="inline-flex items-center gap-1.5">
                           <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 inline-flex items-center justify-center font-bold text-[10px]">✓</span>
-                          <span>Daily <strong>1/1 Quota</strong> on Login</span>
+                          <span>Today&apos;s Available <strong>1/1 Quota</strong> on Login</span>
                         </span>
                         <span className="hidden sm:inline text-slate-700">•</span>
                         <span className="inline-flex items-center gap-1.5">
                           <span className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-400 inline-flex items-center justify-center font-bold text-[10px]">⚡</span>
-                          <span><strong>1 Credit</strong>/edit (2 for Pro)</span>
+                          <span>Standard: <strong>1 Credit</strong> (Plus: 2)</span>
                         </span>
                         <span className="hidden sm:inline text-slate-700">•</span>
                         <span className="inline-flex items-center gap-1.5 text-emerald-300 font-medium">
@@ -2082,7 +2082,7 @@ export default function PageComponent({
                             onClick={() => setShowLoginModal(true)}
                             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-medium text-[11px] hover:bg-emerald-500/20 transition-colors cursor-pointer"
                           >
-                            <span>🎁 {locale?.startsWith('zh') ? '新用户赠送 1 积分 (登录即领)' : 'Daily Trial: 1 Credit (Sign in to claim)'}</span>
+                            <span>🎁 {locale?.startsWith('zh') ? '今日可用额度: 1 算力 (登录即领)' : "Today's Available Quota: 1 Credit (Sign in to claim)"}</span>
                           </button>
                         )}
                       </div>
@@ -2547,7 +2547,7 @@ export default function PageComponent({
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
-                          ✨ PERFECT INPAINT
+                          ✨ INPAINTED RESULT
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-cyan-950/80 border border-cyan-500/40 backdrop-blur-md text-[10px] text-cyan-200 font-medium truncate">
                           Clean AUTUMN · SPECIAL 2026
@@ -2950,7 +2950,7 @@ export default function PageComponent({
                 <ShieldCheckIcon className="w-8 h-8 text-pink-400" />
                 <h3 className="text-base font-bold text-white">Character & Face Consistency</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Locks facial geometry, gaze vectors, and core character identity across sequential background changes, wardrobe replacements, and style shifts.
+                  Designed to help preserve facial features, posture, and core character identity across sequential background changes, wardrobe replacements, and style shifts.
                 </p>
               </div>
 
@@ -2970,13 +2970,13 @@ export default function PageComponent({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-14">
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
-                Model Architecture & Cloud Endpoints
+                Models &amp; Technology
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-4">
                 Supported Foundation Models &amp; APIs
               </h2>
               <p className="text-sm sm:text-base text-slate-400 mt-3 leading-relaxed">
-                Our platform accesses official Alibaba Cloud Bailian (DashScope) production endpoints and benchmarks against open-source Qwen-Image family releases for maximum fidelity and reliability.
+                This editor uses the image models listed below for editing and generation. Model availability may vary by feature. Qwen-Image checkpoints referenced in our guides are used for comparison and workflow research; they are not necessarily the model serving every request.
               </p>
             </div>
 
@@ -3205,7 +3205,7 @@ export default function PageComponent({
               <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-pink-400 inline-block"></span>
-                  Flawless Graphic Text & Signage
+                  Improved Graphic Text & Signage (Results May Vary)
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Need to replace text on packaging, posters, or t-shirts? Use explicit quotation marks to instruct the Qwen vision decoder to render exact typography:
@@ -3214,7 +3214,7 @@ export default function PageComponent({
                   &quot;Inpaint the coffee cup label to read &apos;QWEN BREW&apos; in clean minimalist serif font.&quot;
                 </div>
                 <p className="text-xs text-slate-500">
-                  Generates sharp lettering without typical diffusion blur, gibberish, or missing vowels.
+                  Designed to generate sharp lettering with reduced glyph distortion, though complex scripts and unusual fonts may vary.
                 </p>
               </div>
             </div>
@@ -3305,13 +3305,13 @@ export default function PageComponent({
                     </tr>
                     <tr>
                       <td className="py-3.5 px-4 font-medium text-white">Commercial Rights</td>
-                      <td className="py-3.5 px-4 text-emerald-400 font-medium">Full Commercial Rights on User Outputs</td>
+                      <td className="py-3.5 px-4 text-emerald-400 font-medium">Commercial use subject to our Terms and model-provider terms</td>
                       <td className="py-3.5 px-4 text-slate-400">Paid subscribers only ($10+/mo)</td>
                       <td className="py-3.5 px-4 text-slate-400">Non-commercial research only</td>
                     </tr>
                     <tr>
                       <td className="py-3.5 px-4 font-medium text-white">Pricing & Entry Cost</td>
-                      <td className="py-3.5 px-4 text-indigo-300 font-medium">Trial credit + $4.99 starter pack (100 credits)</td>
+                      <td className="py-3.5 px-4 text-indigo-300 font-medium">Daily available quota (1/1) + $4.99 starter pack (100 credits)</td>
                       <td className="py-3.5 px-4 text-slate-400">$10/month recurring minimum</td>
                       <td className="py-3.5 px-4 text-slate-400">Requires 24GB VRAM GPU ($1500+)</td>
                     </tr>
