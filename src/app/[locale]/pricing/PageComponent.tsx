@@ -144,6 +144,11 @@ const PageComponent = ({
               <span className="text-slate-400 text-[11px]">$118.80/yr ($9.90/mo), 6,000 credits, save 50%</span>
             </div>
           </div>
+
+          {/* Unified Credit Rule Banner */}
+          <div className="max-w-2xl mx-auto rounded-2xl border border-indigo-500/30 bg-indigo-950/40 p-3 text-xs text-slate-300 text-center leading-relaxed mt-3">
+            <span className="text-emerald-400 font-bold">Free daily credit:</span> Sign in to receive 1 credit per day. The quota resets at 00:00 UTC. Standard tasks use 1 credit; Plus tasks use 2 credits. Failed tasks are automatically refunded.
+          </div>
         </div>
 
         <Pricing

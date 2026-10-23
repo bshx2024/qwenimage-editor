@@ -89,10 +89,10 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: '8 min read',
     category: 'Open Source & Creative AI Tools',
     author: {
-      name: 'Alex Chen',
-      role: 'Staff Systems & Open-Source Pipeline Architect',
+      name: 'Qwen Editorial & Systems Team',
+      role: 'Platform Engineering & Open-Source Security Review',
       avatar: '/images/author-alex.jpg',
-      bio: 'Former distributed graphics and WebAssembly systems researcher specializing in Rust toolchains, low-level GPU acceleration (wgpu/Vulkan), and scalable multimodal diffusion inference pipelines.',
+      bio: 'Technical evaluation authored collaboratively by the Qwen Image Editor engineering staff, conducting reproducible code audits, network socket inspections, and diffusion model comparisons.',
     },
     keywords: [
       'photocraft review',

@@ -851,6 +851,12 @@ export default function PageComponent({
 
             {/* Main Interactive Editor Card */}
             <div id="editor-card" className="rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-7 shadow-2xl shadow-indigo-950/40">
+              {/* Unified Credit Policy Rule (Gefei Checklist Aligned) */}
+              <div className="mb-4 rounded-xl border border-indigo-500/20 bg-indigo-950/30 p-2.5 text-[11px] text-slate-300 flex items-center gap-2 flex-wrap">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+                <span><strong>Free daily credit:</strong> Sign in to receive 1 credit per day. The quota resets at 00:00 UTC. Standard tasks use 1 credit; Plus tasks use 2 credits. Failed tasks are automatically refunded.</span>
+              </div>
+
               {/* Credit Status & Usage Rules Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-6 rounded-2xl bg-slate-950/90 border border-slate-800/90 text-xs shadow-inner">
                 <div className="flex items-center gap-2.5 flex-wrap">
@@ -1274,22 +1280,22 @@ export default function PageComponent({
                                 {activeTab === 'edit' ? (
                                   <>
                                     <option value="qwen-image-2.1-edit" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 (Instruction Inpaint 🎨 - 1 Credit)
+                                      wanx2.1-imageedit (Inpaint 🎨 - 1 Credit)
                                     </option>
                                     <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Turbo (Fast Edit ⚡ - 1 Credit)
+                                      wanx2.1-t2i-turbo (Fast Edit ⚡ - 1 Credit)
                                     </option>
                                     <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Plus (High Fidelity 🌟 - 2 Credits)
+                                      wanx2.1-t2i-plus (Plus Model 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 ) : (
                                   <>
                                     <option value="qwen-image-2.1-turbo" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Turbo (Fast ⚡ - 1 Credit)
+                                      wanx2.1-t2i-turbo (Fast ⚡ - 1 Credit)
                                     </option>
                                     <option value="qwen-image-2.1-plus" className="bg-slate-900 text-slate-200">
-                                      Qwen-Image 2.1 Plus (Ultra-HD 🌟 - 2 Credits)
+                                      wanx2.1-t2i-plus (Plus Model 🌟 - 2 Credits)
                                     </option>
                                   </>
                                 )}
@@ -2246,7 +2252,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-pink-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap outfit to an elegant emerald green silk evening dress with natural fabric drape and realistic satin folds, preserve subject features and natural posture&quot;
@@ -2350,7 +2356,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Swap jacket to a tailored dark navy blue business blazer and crisp white shirt, change background to a modern sunlit executive office with floor-to-ceiling windows, soft natural daylight, preserve facial features and natural expression&quot;
@@ -2454,7 +2460,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Place the perfume bottle on a circular white Carrara marble pedestal, clean morning sunlight with soft tropical leaf shadows, high-end commercial e-commerce advertising aesthetic&quot;
@@ -2546,7 +2552,7 @@ export default function PageComponent({
                           className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-cyan-500/90 text-white font-extrabold text-[10px] tracking-wider shadow-md">
-                          ✨ INPAINTED RESULT
+                          ✨ AI Inpainting Result
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-cyan-950/80 border border-cyan-500/40 backdrop-blur-md text-[10px] text-cyan-200 font-medium truncate">
                           Clean AUTUMN · SPECIAL 2026
@@ -2558,7 +2564,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Inpaint poster headline to crisp typography &apos;AUTUMN ICED COFFEE&apos;, fix typos, update bottom promo to &apos;SPECIAL OFFERS 2026 FRESH BREWED DAILY&apos;, preserve illustration layout and color style&quot;
@@ -2662,7 +2668,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Preserve vintage tan leather bag details, buckles, stitching and patina, place naturally on a rustic wooden table in a sunlit Scandinavian cafe with soft warm bokeh&quot;
@@ -2757,7 +2763,7 @@ export default function PageComponent({
                           ✨ AI AFTER
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-purple-950/80 border border-purple-500/40 backdrop-blur-md text-[10px] text-purple-200 font-medium truncate">
-                          Makoto Shinkai Masterpiece Anime Art
+                          Anime-Style Transformation
                         </div>
                       </div>
                     </div>
@@ -2766,7 +2772,7 @@ export default function PageComponent({
                   <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800 text-[11px] font-mono space-y-1">
                     <div className="flex items-center justify-between text-[10px] text-purple-400 font-semibold uppercase tracking-wider">
                       <span>Exact Inpainting Recipe:</span>
-                      <span className="text-slate-500 font-sans">Model: Qwen-Image 2.1</span>
+                      <span className="text-slate-400 font-sans font-mono text-[10px]">Model: wanx2.1-imageedit (Alibaba Cloud)</span>
                     </div>
                     <p className="text-slate-200 leading-relaxed font-sans">
                       &quot;Transform this photo into Makoto Shinkai anime illustration style, keep smiling pose, coffee cup and green sweater, luminous golden hour lighting, aesthetic airiness and sparkling bokeh&quot;
@@ -2984,13 +2990,13 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
-                      Qwen-Image 2.1 Inpaint
+                      wanx2.1-imageedit
                     </span>
-                    <span className="text-[11px] text-emerald-400 font-medium">Alibaba Cloud Engine</span>
+                    <span className="text-[11px] text-emerald-400 font-medium">Inpainting Production API</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image 2.1 Inpaint</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Image Inpainting Engine</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Alibaba&apos;s multimodal inpainting architecture (powered by DashScope cloud endpoints). Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
+                    Our online photo editing workflow directly calls Alibaba Cloud DashScope <code className="text-indigo-300">wanx2.1-imageedit</code>. Specializes in conversational instruction edits, subject retention, background swaps, and material transformations.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
@@ -3013,13 +3019,13 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
-                      Qwen-Image 2.1 Turbo / Plus
+                      wanx2.1-t2i-turbo / plus
                     </span>
-                    <span className="text-[11px] text-purple-400 font-medium">Text-to-Image</span>
+                    <span className="text-[11px] text-purple-400 font-medium">Text-to-Image API</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Qwen-Image 2.1 Generation</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Text-to-Image Generation Engine</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    High-performance text-to-image foundation models. Turbo provides sub-second rapid prototyping, while Plus synthesizes high-density textures and crisp bilingual typography.
+                    Text-to-image generation is served by Alibaba Cloud DashScope <code className="text-purple-300">wanx2.1-t2i-turbo</code> (Standard, 1 Credit) and <code className="text-purple-300">wanx2.1-t2i-plus</code> (Plus, 2 Credits) for high-density textures and bilingual typography.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
@@ -3042,13 +3048,13 @@ export default function PageComponent({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">
-                      Qwen-Image Open Hub
+                      Qwen-Image Research Hub
                     </span>
-                    <span className="text-[11px] text-cyan-400 font-medium">Hugging Face &amp; ComfyUI</span>
+                    <span className="text-[11px] text-cyan-400 font-medium">Open Weights &amp; ComfyUI</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Open Ecosystem Checkpoints</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Research &amp; Comparative Benchmarks</h3>
                   <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                    Online workspace powered by Alibaba Cloud DashScope <code className="text-cyan-300">wanx2.1-imageedit</code> production endpoints. This cloud deployment frees creators from downloading 20GB+ open-source weights (such as Qwen-Image checkpoints) or operating local 24GB VRAM workstation hardware.
+                    Open-source checkpoints from the Qwen-Image family referenced in our guides and benchmarks are used for comparative research and community ComfyUI workflows. This website provides managed cloud API access without requiring local GPU installations.
                   </p>
                   <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
@@ -3181,7 +3187,7 @@ export default function PageComponent({
                   &quot;Keep face identity, facial features and gaze untouched; replace jacket with dark bomber jacket.&quot;
                 </div>
                 <p className="text-xs text-slate-500">
-                  The model cross-references original face landmarks and preserves personal identity.
+                  The model cross-references original face landmarks and is designed to help preserve facial features.
                 </p>
               </div>
 
@@ -3262,7 +3268,7 @@ export default function PageComponent({
                 </div>
                 <h3 className="text-base font-bold text-white">Step 3: Download in High Resolution</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Receive your neural inpainting results with accurate subject coherence and download high-resolution lossless PNG or WebP assets.
+                  Receive your neural inpainting results, which aim to maintain subject consistency, and download high-resolution PNG or WebP assets.
                 </p>
               </div>
             </div>
