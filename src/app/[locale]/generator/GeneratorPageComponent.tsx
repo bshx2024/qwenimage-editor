@@ -18,7 +18,9 @@ import {
   CheckCircleIcon,
   ArrowsRightLeftIcon,
   CpuChipIcon,
+  LockClosedIcon,
 } from "@heroicons/react/24/outline";
+import { Switch } from "@headlessui/react";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 import { exportImageWithTier } from "~/libs/imageExport";
 
@@ -45,6 +47,7 @@ export default function GeneratorPageComponent({
   const [prompt, setPrompt] = useState(searchParams?.prompt || '');
   const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('1:1');
   const [selectedModel, setSelectedModel] = useState<string>('qwen-image-2.1-1k');
+  const [isPublic, setIsPublic] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>('/images/model_compare_demo.jpg');
   const [uid, setUid] = useState('');
@@ -79,7 +82,7 @@ export default function GeneratorPageComponent({
           textStr: prompt,
           taskType: 'text2image',
           user_id: userData?.user_id || 'guest',
-          is_public: true,
+          is_public: isPublic,
           aspectRatio,
           model: selectedModel,
         }),
@@ -139,7 +142,7 @@ export default function GeneratorPageComponent({
         setIsGenerating(false);
         setPollInterval(undefined);
         refreshUserCredits?.();
-        alert(data.message || 'Generation failed, please try again.');
+        alert((data.message ? `${data.message}\n\n` : '') + 'Generation task could not be completed. Your credits have been automatically refunded to your balance.');
       }
     } catch (e) {
       // Keep polling
@@ -338,13 +341,39 @@ export default function GeneratorPageComponent({
                               </option>
                             </select>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => setPrompt('')}
-                            className="text-slate-500 hover:text-slate-300 text-[11px]"
-                          >
-                            Clear
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <Switch
+                              checked={isPublic}
+                              onChange={setIsPublic}
+                              className={`${
+                                isPublic ? 'bg-indigo-600' : 'bg-slate-800'
+                              } relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out`}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={`${
+                                  isPublic ? 'translate-x-3' : 'translate-x-0'
+                                } pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                              />
+                            </Switch>
+                            <span className="text-[11px] text-slate-400">
+                              {isPublic ? (
+                                <span className="text-cyan-300">Public Gallery</span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
+                                  <LockClosedIcon className="w-3 h-3 text-emerald-400" />
+                                  <span>Private by Default</span>
+                                </span>
+                              )}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setPrompt('')}
+                              className="text-slate-500 hover:text-slate-300 text-[11px] ml-auto"
+                            >
+                              Clear
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

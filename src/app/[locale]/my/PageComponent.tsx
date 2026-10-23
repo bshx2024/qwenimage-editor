@@ -51,8 +51,10 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
     userData,
   } = useCommonContext();
 
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
   const handleDeleteWork = async (uid: string) => {
-    if (!window.confirm('Remove this record from your gallery?')) return;
+    if (!window.confirm('Permanently delete this creation? It will be immediately purged from your vault.')) return;
     try {
       const res = await fetch('/api/works/updateWork', {
         method: 'POST',
@@ -61,6 +63,8 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
       });
       if (res.ok) {
         setResultInfoList((prev) => prev.filter((item) => item.uid !== uid));
+        setToastMsg('Creation permanently purged from your vault.');
+        setTimeout(() => setToastMsg(null), 3500);
       }
     } catch (e) {
       console.error('Failed to remove creation:', e);
@@ -148,6 +152,13 @@ const PageComponent = ({ locale, worksText }: PageComponentProps) => {
         description={worksText.description}
       />
       <Header locale={locale} page={pagePath} />
+
+      {toastMsg && (
+        <div className="fixed top-20 right-6 z-50 rounded-xl bg-emerald-950/90 border border-emerald-500/50 px-4 py-2.5 text-xs font-semibold text-emerald-200 shadow-xl backdrop-blur-md flex items-center gap-2 animate-bounce">
+          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>{toastMsg}</span>
+        </div>
+      )}
 
       <main className="flex-1 w-full pb-20">
         {/* Hero Section */}

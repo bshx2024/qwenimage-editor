@@ -25,6 +25,7 @@ import {
   CpuChipIcon,
   ShareIcon,
   UserCircleIcon,
+  LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 import { exportImageWithTier, exportComparisonCard } from "~/libs/imageExport";
@@ -52,7 +53,7 @@ export default function PageComponent({
   const [sourceImage, setSourceImage] = useState<string | null>('/images/showcase_dress_before.jpg');
   const [isUploading, setIsUploading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(false);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
   const [aspectRatio, setAspectRatio] = useState<'auto' | '1:1' | '16:9' | '9:16' | '3:4' | '4:3'>('auto');
   const [selectedModel, setSelectedModel] = useState<string>('qwen-image-2.1-edit');
@@ -314,7 +315,7 @@ export default function PageComponent({
         setIsProcessing(false);
         setIntervalResultInfo(undefined);
         refreshUserCredits?.();
-        alert(info.message || 'Generation failed, please try again.');
+        alert((info.message ? `${info.message}\n\n` : '') + 'Generation task could not be completed. Your credits have been automatically refunded to your balance.');
       }
     } catch (e) {
       // Continue polling
@@ -1673,7 +1674,16 @@ export default function PageComponent({
                             } pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                           />
                         </Switch>
-                        <span className="text-xs text-slate-400">Share to Community Gallery</span>
+                        <span className="text-xs text-slate-400">
+                          {isPublic ? (
+                            <span className="text-cyan-300">Share to Community Gallery</span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-emerald-400/90 font-medium">
+                              <LockClosedIcon className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Private by Default</span>
+                            </span>
+                          )}
+                        </span>
                       </div>
                     </div>
 
@@ -1693,6 +1703,11 @@ export default function PageComponent({
                         <span className="inline-flex items-center gap-1.5 text-emerald-300 font-medium">
                           <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
                           <span>No Auto-Renew · Zero Trap</span>
+                        </span>
+                        <span className="hidden sm:inline text-slate-700">•</span>
+                        <span className="inline-flex items-center gap-1.5 text-cyan-300 font-medium">
+                          <LockClosedIcon className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>Private Storage · No AI Training</span>
                         </span>
                       </div>
                       <button
