@@ -84,37 +84,45 @@ export async function testKieKey(
 /**
 /**
  * Helper to upload image to KIE storage via official File Upload API
+ * Supports both public URLs (/api/file-url-upload) and Base64 Data URLs (/api/file-base64-upload)
  * Ensures KIE workers can access source images without CDN or bot restrictions
  */
-async function uploadImageToKie(imageUrl: string, apiKey: string): Promise<string> {
+export async function uploadImageToKie(imageUrl: string, apiKey: string): Promise<string> {
   if (imageUrl.includes('tempfile.redpandaai.co') || imageUrl.includes('tempfile.aiquickdraw.com')) {
     return imageUrl;
   }
 
+  const isDataUrl = imageUrl.startsWith('data:image/');
+
   let finalUrl = imageUrl;
-  if (finalUrl.startsWith('/')) {
+  if (!isDataUrl && finalUrl.startsWith('/')) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.qwenimage-editor.com';
     finalUrl = `${siteUrl.replace(/\/+$/, '')}${finalUrl}`;
   }
 
   try {
-    const res = await fetch('https://kieai.redpandaai.co/api/file-url-upload', {
+    const endpoint = isDataUrl
+      ? 'https://kieai.redpandaai.co/api/file-base64-upload'
+      : 'https://kieai.redpandaai.co/api/file-url-upload';
+
+    const body = isDataUrl
+      ? { base64Data: imageUrl, uploadPath: 'images' }
+      : { fileUrl: finalUrl, uploadPath: 'images' };
+
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey.trim()}`,
       },
-      body: JSON.stringify({
-        fileUrl: finalUrl,
-        uploadPath: 'images',
-      }),
+      body: JSON.stringify(body),
     });
     const data = await res.json().catch(() => ({}));
     if (data?.data?.downloadUrl) {
       return data.data.downloadUrl;
     }
   } catch (e: any) {
-    console.warn('[KIE AI] file-url-upload error, falling back to direct URL:', e?.message);
+    console.warn('[KIE AI] file upload error, falling back to direct URL:', e?.message);
   }
 
   return finalUrl;

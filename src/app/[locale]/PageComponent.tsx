@@ -26,6 +26,7 @@ import {
   ShareIcon,
   UserCircleIcon,
   LockClosedIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 import { exportImageWithTier, exportComparisonCard } from "~/libs/imageExport";
@@ -52,6 +53,8 @@ export default function PageComponent({
   );
   const [sourceImage, setSourceImage] = useState<string | null>('/images/showcase_dress_before.jpg');
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [activeTab, setActiveTab] = useState<'edit' | 'generate'>('edit');
@@ -154,27 +157,114 @@ export default function PageComponent({
     }
   }, [searchParams]);
 
+  // Browser-side image optimizer to keep file size within Vercel body limits (~2MB) and accelerate uploads
+  const optimizeImageFile = async (file: File): Promise<File | Blob> => {
+    return new Promise((resolve) => {
+      if (!file.type.startsWith('image/')) {
+        resolve(file);
+        return;
+      }
+      if (file.size <= 1.5 * 1024 * 1024 && file.type !== 'image/tiff') {
+        resolve(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new window.Image();
+        img.onload = () => {
+          let width = img.naturalWidth || img.width;
+          let height = img.naturalHeight || img.height;
+          const maxDim = 2048;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(file);
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (blob && blob.size < file.size) {
+                resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+              } else {
+                resolve(file);
+              }
+            },
+            'image/jpeg',
+            0.88
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  };
+
   // Handle local file upload
   const handleFileUpload = async (file: File) => {
     if (!file) return;
     setIsAutoPlaying(false);
+    setUploadError(null);
     setIsUploading(true);
+
+    // Instant local preview so user gets immediate visual confirmation
     try {
+      const localPreviewUrl = URL.createObjectURL(file);
+      setSourceImage(localPreviewUrl);
+      setActiveTab('edit');
+    } catch {
+      // ignore
+    }
+
+    try {
+      const optimizedFile = await optimizeImageFile(file);
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', optimizedFile);
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `Upload failed (${res.status})`);
+      }
+
       const data = await res.json();
       if (data.url) {
         setSourceImage(data.url);
-        setActiveTab('edit');
+      } else if (data.error) {
+        throw new Error(data.error);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error('Upload failed:', e);
+      setUploadError(
+        locale?.startsWith('zh')
+          ? `图片上传失败: ${e?.message || '请重试'}`
+          : `Upload failed: ${e?.message || 'Please try again'}`
+      );
     } finally {
       setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -243,7 +333,22 @@ export default function PageComponent({
       };
 
       if (activeTab === 'edit' && sourceImage) {
-        payload.imageUrl = sourceImage;
+        let finalImageUrl = sourceImage;
+        // If still a client-side blob URL, convert to Base64 data URL for API consumption
+        if (finalImageUrl.startsWith('blob:')) {
+          try {
+            const blobRes = await fetch(finalImageUrl);
+            const blob = await blobRes.blob();
+            finalImageUrl = await new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.readAsDataURL(blob);
+            });
+          } catch (blobErr) {
+            console.warn('Blob conversion failed:', blobErr);
+          }
+        }
+        payload.imageUrl = finalImageUrl;
         payload.taskType = 'image_edit';
       } else {
         payload.taskType = 'text2image';
@@ -1016,25 +1121,66 @@ export default function PageComponent({
                   {/* Upload Box (Only for Edit tab) */}
                   {activeTab === 'edit' && (
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                        1. Source Image to Edit
-                      </label>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                          {locale?.startsWith('zh') ? '1. 上传需编辑的原图' : '1. Source Image to Edit'}
+                        </label>
+                        <div className="flex items-center gap-2">
+                          {sourceImage && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSourceImage(null);
+                                setUploadError(null);
+                                if (fileInputRef.current) fileInputRef.current.value = '';
+                              }}
+                              className="text-[11px] text-slate-400 hover:text-rose-400 transition-colors flex items-center gap-1 cursor-pointer"
+                              title={locale?.startsWith('zh') ? '清除当前图片' : 'Clear image'}
+                            >
+                              <TrashIcon className="w-3.5 h-3.5" />
+                              <span>{locale?.startsWith('zh') ? '清除' : 'Clear'}</span>
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 hover:border-indigo-400 transition-all flex items-center gap-1 cursor-pointer shadow-sm"
+                          >
+                            <ArrowUpTrayIcon className="w-3.5 h-3.5" />
+                            <span>{locale?.startsWith('zh') ? '选择本地图片' : 'Upload Image'}</span>
+                          </button>
+                        </div>
+                      </div>
+
                       <input
                         type="file"
                         ref={fileInputRef}
-                        accept="image/*"
+                        accept="image/png,image/jpeg,image/webp,image/jpg"
                         className="hidden"
                         onChange={(e) => {
                           if (e.target.files && e.target.files[0]) {
                             handleFileUpload(e.target.files[0]);
                           }
+                          e.target.value = '';
                         }}
                       />
                       <div
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleDrop}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          setIsDragOver(true);
+                        }}
+                        onDragLeave={() => setIsDragOver(false)}
+                        onDrop={(e) => {
+                          setIsDragOver(false);
+                          handleDrop(e);
+                        }}
                         onClick={() => fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-slate-700 hover:border-indigo-500/70 rounded-2xl p-3 sm:p-4 text-center cursor-pointer transition-all bg-slate-950/40 hover:bg-slate-950/60 group"
+                        className={`relative border-2 border-dashed rounded-2xl p-3 sm:p-4 text-center cursor-pointer transition-all group ${
+                          isDragOver
+                            ? 'border-indigo-400 bg-indigo-500/20 scale-[0.99]'
+                            : 'border-slate-700 hover:border-indigo-500/70 bg-slate-950/40 hover:bg-slate-950/60'
+                        }`}
                       >
                         {sourceImage ? (
                           <div className="relative group/preview inline-block">
@@ -1046,20 +1192,58 @@ export default function PageComponent({
                               loading="lazy"
                               className="max-h-48 sm:max-h-52 mx-auto rounded-xl object-contain shadow-md"
                             />
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/preview:opacity-100 rounded-xl flex items-center justify-center text-xs font-medium text-white transition-opacity">
-                              Click or Drop new image to replace
+                            {/* Hover overlay */}
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/preview:opacity-100 rounded-xl flex flex-col items-center justify-center gap-1.5 text-xs font-medium text-white transition-opacity">
+                              <ArrowUpTrayIcon className="w-6 h-6 text-indigo-400" />
+                              <span>{locale?.startsWith('zh') ? '点击或拖拽新图片替换' : 'Click or Drop new image to replace'}</span>
                             </div>
+                            {/* Uploading Spinner Overlay */}
+                            {isUploading && (
+                              <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center gap-2 text-indigo-400 z-10">
+                                <div className="w-7 h-7 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                <span className="text-xs font-semibold text-slate-200">
+                                  {locale?.startsWith('zh') ? '正在优化并上传图片...' : 'Optimizing & uploading image...'}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <div className="py-6 space-y-2">
-                            <ArrowUpTrayIcon className="w-8 h-8 text-indigo-400 mx-auto group-hover:-translate-y-1 transition-transform" />
-                            <p className="text-sm font-semibold text-slate-200">
-                              {isUploading ? 'Uploading to cloud...' : 'Click or drag & drop image here'}
-                            </p>
-                            <p className="text-xs text-slate-500">Supports PNG, JPG, WebP up to 10MB</p>
+                            {isUploading ? (
+                              <div className="flex flex-col items-center justify-center gap-2">
+                                <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                <p className="text-sm font-semibold text-slate-200">
+                                  {locale?.startsWith('zh') ? '正在优化并上传图片...' : 'Optimizing & uploading image...'}
+                                </p>
+                              </div>
+                            ) : (
+                              <>
+                                <ArrowUpTrayIcon className="w-8 h-8 text-indigo-400 mx-auto group-hover:-translate-y-1 transition-transform" />
+                                <p className="text-sm font-semibold text-slate-200">
+                                  {locale?.startsWith('zh') ? '点击或拖拽图片到此处上传' : 'Click or drag & drop image here'}
+                                </p>
+                                <p className="text-xs text-slate-500">Supports PNG, JPG, WebP up to 10MB</p>
+                              </>
+                            )}
                           </div>
                         )}
                       </div>
+
+                      {uploadError && (
+                        <div className="mt-2 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 rounded-lg px-3 py-2 flex items-center justify-between">
+                          <span>{uploadError}</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setUploadError(null);
+                            }}
+                            className="text-rose-400 hover:text-white font-bold ml-2 cursor-pointer"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      )}
 
                       {/* One-Click Demo Presets for Instant Testing (Zero Upload Barrier) */}
                       <div className="mt-3 space-y-2">
