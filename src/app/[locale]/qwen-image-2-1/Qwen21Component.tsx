@@ -50,6 +50,12 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
 
   const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true, 1: true, 2: false, 3: false, 4: false, 5: false });
   const [activeTab, setActiveTab] = useState<'generation' | 'inpainting' | 'multiref' | 'transparent'>('generation');
+  const [guestTrialsRemaining, setGuestTrialsRemaining] = useState<number>(1);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setGuestTrialsRemaining(getGuestTrialsRemaining());
+  }, []);
 
   const samplePrompts = [
     'Editorial fashion photography of a cybernetic model in silk robe, studio soft rim light, 8k sharp focus',
@@ -62,8 +68,8 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
     e.preventDefault();
     if (!prompt.trim()) return;
 
-    // Require login to generate images
-    if (!userData) {
+    // Require login only if guest trial is exhausted
+    if (!userData && getGuestTrialsRemaining() <= 0) {
       setShowLoginModal(true);
       return;
     }
@@ -104,6 +110,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
       if (data.uid) {
         if (!userData) {
           recordGuestTrialUse();
+          setGuestTrialsRemaining(0);
         }
         setUid(data.uid);
         setPollInterval(3000);
@@ -463,15 +470,21 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                   <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl border bg-slate-900/80 border-indigo-500/30 text-slate-200 text-xs">
                     <div className="flex items-center gap-1.5 font-medium">
                       <SparklesIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>Sign in with Google to generate images with Qwen 2.1</span>
+                      <span>
+                        {guestTrialsRemaining > 0
+                          ? '🎁 1 Free Trial Available (No Login Required) — Click Generate to Test!'
+                          : 'Sign in with Google to get daily free credits & unlock HD exports'}
+                      </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowLoginModal(true)}
-                      className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
-                    >
-                      Sign In
-                    </button>
+                    {guestTrialsRemaining <= 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginModal(true)}
+                        className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
+                      >
+                        Sign In
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -492,7 +505,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
                         <SparklesIcon className="w-4 h-4" />
                         <span>
                           {!userData
-                            ? 'Sign In to Generate'
+                            ? (guestTrialsRemaining > 0 ? 'Try Free Once (No Login)' : 'Sign In to Generate')
                             : 'Generate with Qwen 2.1'}
                         </span>
                       </>

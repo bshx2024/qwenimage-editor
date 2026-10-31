@@ -84,9 +84,12 @@ export default function PageComponent({
   const [highlightGenerateBtn, setHighlightGenerateBtn] = useState<boolean>(false);
   const [isChatGptVisitor, setIsChatGptVisitor] = useState<boolean>(false);
   const [chatGptBannerDismissed, setChatGptBannerDismissed] = useState<boolean>(false);
+  const [guestTrialsRemaining, setGuestTrialsRemaining] = useState<number>(1);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    setGuestTrialsRemaining(getGuestTrialsRemaining());
+
     if (sessionStorage.getItem('qwen_chatgpt_banner_dismissed') === '1') {
       setChatGptBannerDismissed(true);
       return;
@@ -402,8 +405,8 @@ export default function PageComponent({
     e.preventDefault();
     if (!textStr && activeTab === 'generate') return;
 
-    // Require login to generate or edit images
-    if (!userData) {
+    // Require login to generate or edit images only if guest trial is exhausted
+    if (!userData && getGuestTrialsRemaining() <= 0) {
       setShowLoginModal(true);
       return;
     }
@@ -480,6 +483,7 @@ export default function PageComponent({
       if (result.uid) {
         if (!userData) {
           recordGuestTrialUse();
+          setGuestTrialsRemaining(0);
         }
         setUid(result.uid);
         setIntervalResultInfo(3000);
@@ -1754,7 +1758,9 @@ export default function PageComponent({
                                   <SparklesIcon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
                                   <span>
                                     {!userData
-                                      ? (locale?.startsWith('zh') ? '登录激活今日额度 (1/1)' : 'Sign In to Use Quota (1/1)')
+                                      ? (guestTrialsRemaining > 0
+                                          ? (locale?.startsWith('zh') ? '免登录立即体验 (免费 1 次)' : 'Try Free Once (No Login)')
+                                          : (locale?.startsWith('zh') ? '登录激活今日额度 (1/1)' : 'Sign In to Use Quota (1/1)'))
                                       : activeTab === 'edit'
                                       ? ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生成 (消耗 1 额度)' : 'Apply Edit (1 Credit)') : (locale?.startsWith('zh') ? '立即生成 (额度不足)' : 'Apply Edit'))
                                       : ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生图 (消耗 1 额度)' : 'Generate (1 Credit)') : (locale?.startsWith('zh') ? '立即生图 (额度不足)' : 'Generate'))}

@@ -75,11 +75,22 @@ export async function POST(req: Request) {
     let checkSubscribeStatus = false;
 
     if (isGuest) {
-      return Response.json({
-        msg: "Please sign in and get credits to start generating images.",
-        status: 601,
-        guestLimitReached: true,
-      });
+      const forwarded =
+        req.headers.get("x-forwarded-for") ||
+        req.headers.get("x-real-ip") ||
+        req.headers.get("cf-connecting-ip");
+      const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+      const cleanIp = clientIp.replace(/[^a-zA-Z0-9_.-]/g, "_");
+      const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
+      const guestUsedCount = Number(guestUsedCountStr || 0);
+
+      if (guestUsedCount >= 1) {
+        return Response.json({
+          msg: "You have used your 1 free guest trial. Please sign in with Google to get daily free credits & unlock HD exports!",
+          status: 601,
+          guestLimitReached: true,
+        });
+      }
     } else {
       // Authenticated User Verification
       if (process.env.NEXT_PUBLIC_CHECK_GOOGLE_LOGIN != "0") {
