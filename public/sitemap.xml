@@ -51,7 +51,15 @@
     <!-- Blog Hub -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog</loc>
-        <lastmod>2026-10-20</lastmod>
+        <lastmod>2026-10-31</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Article: Open-H3-Regenerate-2K ComfyUI Guide & Alternatives -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/open-h3-regenerate-2k-comfyui-setup-alternatives</loc>
+        <lastmod>2026-10-31</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>

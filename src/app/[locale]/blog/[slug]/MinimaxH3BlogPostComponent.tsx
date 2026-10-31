@@ -721,14 +721,14 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                   </p>
                 </Link>
                 <Link
-                  href={getLinkHref(locale, 'blog/higgsfield-genjutsu-workflow-guide-free-alternatives')}
-                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-pink-500/50 transition-all text-left block"
+                  href={getLinkHref(locale, 'blog/open-h3-regenerate-2k-comfyui-setup-alternatives')}
+                  className="group p-4 rounded-xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 hover:border-indigo-500/50 transition-all text-left block"
                 >
-                  <span className="text-xs font-bold text-pink-300 group-hover:text-pink-200 block mb-1">
-                    Higgsfield Genjutsu Guide &rarr;
+                  <span className="text-xs font-bold text-indigo-300 group-hover:text-indigo-200 block mb-1">
+                    Open H3 Regenerate 2K &rarr;
                   </span>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Master Vid2Vid motion transfer, trend recreation, and ecommerce asset prep.
+                    NVIDIA open-source 2K refiner DiT setup, ComfyUI node fixes, and low-VRAM workflows.
                   </p>
                 </Link>
                 <Link

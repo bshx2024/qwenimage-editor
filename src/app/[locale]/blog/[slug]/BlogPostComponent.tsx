@@ -16,6 +16,7 @@ import {
   SparklesIcon,
   BoltIcon
 } from "@heroicons/react/24/outline";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
 export default function BlogPostComponent({
   post,
@@ -489,6 +490,9 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
               In summary, if you need low-latency interactive code completions with Cursor or Claude Code, running <strong>Qwen Next Flash under StrataLLM</strong> provides the highest throughput per watt without purchasing enterprise A100 or H100 cloud instances.
             </p>
 
+            {/* High-Converting In-Article Cloud Alternative CTA */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="full" />
+
             {/* Section 3: Installation & Common Fixes */}
             <h2 className="text-xl sm:text-2xl font-bold text-white pt-4">
               Strata Qwen GitHub Repository &amp; Step-by-Step Setup Guide
@@ -707,6 +711,9 @@ START-HERE.bat --model Qwen3.8-Flash-Next-${selectedQuant}.gguf --vram-budget ${
                 </p>
               </div>
             </div>
+
+            {/* Secondary In-Article Compact CTA */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="compact" />
 
             {/* Related Tools Internal Grid */}
             <div className="mt-12 pt-8 border-t border-slate-800/80">

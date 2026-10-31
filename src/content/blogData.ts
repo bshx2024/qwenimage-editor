@@ -19,6 +19,34 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'open-h3-regenerate-2k-comfyui-setup-alternatives',
+    // Strict 59 chars (50-60 safety range, locks 'Open H3 Regenerate 2K', 'ComfyUI Setup', 'Reddit')
+    title: 'Open H3 Regenerate 2K: ComfyUI Setup, Reddit & Low-VRAM Fix',
+    // Strict 155 chars (140-160 range, answers GitHub downloads, ComfyUI, Reddit VRAM fixes, and free 2K web alternative)
+    description: 'Complete guide to Open-H3-Regenerate-2K. Master ComfyUI setup, GitHub model downloads, Reddit VRAM fixes, and discover free 2K online inpainting alternatives.',
+    date: '2026-10-31',
+    readTime: '11 min read',
+    category: 'Generative Video & Workflows',
+    author: {
+      name: 'Dr. Marcus Vance',
+      role: 'Staff Generative Video Researcher & Systems Lead',
+      avatar: '/images/author-marcus.jpg',
+      bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, temporal character consistency, and neural rendering workflows.',
+    },
+    keywords: [
+      'open h3 regenerate 2k',
+      'open h3 regenerate 2k comfyui',
+      'open h3 regenerate 2k github',
+      'open h3 regenerate 2k download',
+      'open h3 regenerate 2k reddit',
+      'open h3 regenerate 2k vram',
+      'open h3 regenerate 2k workflow',
+      'h3 regenerate 2k alternative',
+      'minimax h3 2k upscale',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'moss-image-guide-comfyui-workflow-prompting-edit',
     // Strict 57 chars (50-60 safety range, targets 'MOSS Image Guide', 'ComfyUI Workflow', 'Prompting', 'Edit')
     title: 'MOSS Image Guide: ComfyUI Workflow, Prompting & Edit',

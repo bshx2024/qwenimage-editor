@@ -11,6 +11,7 @@ import RumpelstiltskinBlogPostComponent from './RumpelstiltskinBlogPostComponent
 import PhotoCraftBlogPostComponent from './PhotoCraftBlogPostComponent';
 import Qwen4ReleaseDateBlogPostComponent from './Qwen4ReleaseDateBlogPostComponent';
 import MossImageBlogPostComponent from './MossImageBlogPostComponent';
+import OpenH3RegenerateBlogPostComponent from './OpenH3RegenerateBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -34,7 +35,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'moss-image-guide-comfyui-workflow-prompting-edit') {
+  if (slug === 'open-h3-regenerate-2k-comfyui-setup-alternatives') {
+    postComponent = <OpenH3RegenerateBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'moss-image-guide-comfyui-workflow-prompting-edit') {
     postComponent = <MossImageBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'qwen-4-release-date-27b-specs-roadmap') {
     postComponent = <Qwen4ReleaseDateBlogPostComponent post={post} locale={locale} />;

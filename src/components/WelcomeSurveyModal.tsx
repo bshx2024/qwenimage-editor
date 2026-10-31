@@ -17,6 +17,24 @@ export function WelcomeSurveyModal() {
   const [priority, setPriority] = useState<string>('');
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 59); // 14:59
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatGpt, setIsChatGpt] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmSource = urlParams.get('utm_source')?.toLowerCase() || '';
+    const ref = document.referrer?.toLowerCase() || '';
+    let ft = '';
+    try {
+      ft = localStorage.getItem('attr_first_touch')?.toLowerCase() || '';
+    } catch {}
+
+    if (utmSource.includes('chatgpt') || ref.includes('chatgpt') || ft.includes('chatgpt')) {
+      setIsChatGpt(true);
+      setUseCase((prev) => prev || 'fashion');
+      setPriority((prev) => prev || 'speed');
+    }
+  }, []);
 
   // Check whether to show the modal automatically
   useEffect(() => {
@@ -91,6 +109,24 @@ export function WelcomeSurveyModal() {
     sendSurveyUpdate(useCase, id);
   };
 
+  const dispatchSurveyIntent = (intentUseCase: string, intentPriority: string) => {
+    if (typeof window !== 'undefined' && intentUseCase) {
+      try {
+        localStorage.setItem(
+          'qwen_active_intent',
+          JSON.stringify({ useCase: intentUseCase, priority: intentPriority, at: Date.now() })
+        );
+        window.dispatchEvent(
+          new CustomEvent('qwen-apply-survey-intent', {
+            detail: { useCase: intentUseCase, priority: intentPriority },
+          })
+        );
+      } catch (e) {
+        console.warn('Error dispatching survey intent:', e);
+      }
+    }
+  };
+
   const handleCompleteSurvey = () => {
     if (!useCase) return;
     const finalPriority = priority || 'speed';
@@ -99,6 +135,7 @@ export function WelcomeSurveyModal() {
       localStorage.setItem(`${SURVEY_DONE_KEY}_${userData.user_id}`, JSON.stringify({ useCase, priority: finalPriority, at: Date.now() }));
     }
     sendSurveyUpdate(useCase, finalPriority);
+    dispatchSurveyIntent(useCase, finalPriority);
     setStep(2);
   };
 
@@ -106,6 +143,9 @@ export function WelcomeSurveyModal() {
     setIsOpen(false);
     if (userData?.user_id) {
       localStorage.setItem(`${OFFER_DISMISSED_KEY}_${userData.user_id}`, String(Date.now()));
+    }
+    if (useCase) {
+      dispatchSurveyIntent(useCase, priority || 'speed');
     }
   };
 
@@ -193,14 +233,23 @@ export function WelcomeSurveyModal() {
           /* STEP 1: Micro Personalization Quiz */
           <div className="space-y-6">
             <div className="space-y-2 text-center">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                <SparklesIcon className="w-3.5 h-3.5" /> Fast Setup · 10 Seconds
-              </span>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                  <SparklesIcon className="w-3.5 h-3.5" /> Fast Setup · 10 Seconds
+                </span>
+                {isChatGpt && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-indigo-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                    🤖 Recommended by ChatGPT
+                  </span>
+                )}
+              </div>
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-                Customize Your AI Workspace
+                {isChatGpt ? 'Calibrate Your ChatGPT AI Workspace' : 'Customize Your AI Workspace'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-400">
-                Help us calibrate the optimal GPU model parameters and unlock your Creator Welcome Pass.
+                {isChatGpt
+                  ? 'We have pre-calibrated optimal speed parameters for your trial based on popular community presets.'
+                  : 'Help us calibrate the optimal GPU model parameters and unlock your Creator Welcome Pass.'}
               </p>
             </div>
 
@@ -282,10 +331,15 @@ export function WelcomeSurveyModal() {
           <div className="space-y-5 text-center">
             {/* Header Badge & Urgency */}
             <div className="flex flex-col items-center gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
                   🎁 Welcome Privilege · Special Starter Offer
                 </span>
+                {isChatGpt && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    🤖 ChatGPT VIP Trial Access
+                  </span>
+                )}
               </div>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Starter Credits Pack

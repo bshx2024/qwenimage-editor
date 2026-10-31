@@ -19,6 +19,7 @@ import {
   ExclamationTriangleIcon,
   ArrowRightIcon
 } from "@heroicons/react/24/outline";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
 export default function Qwen4ReleaseDateBlogPostComponent({
   post,
@@ -631,6 +632,9 @@ cmake -B build -DGGML_CUDA=ON && cmake --build build --config Release
               </div>
             </div>
           </section>
+
+          {/* High-Converting In-Article CTA Banner */}
+          <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="full" />
 
           {/* Section 7: FAQ Accordion (Answering Google PAA) */}
           <section className="space-y-4 pt-4 border-t border-slate-900">

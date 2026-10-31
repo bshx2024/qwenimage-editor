@@ -77,6 +77,102 @@ export default function PageComponent({
   const [copiedShare, setCopiedShare] = useState<boolean>(false);
   const [isMobileHoldingOriginal, setIsMobileHoldingOriginal] = useState<boolean>(false);
   const [demoActiveNotice, setDemoActiveNotice] = useState<string | null>(null);
+  const [personalizedSurveyBanner, setPersonalizedSurveyBanner] = useState<{
+    useCase: string;
+    priority?: string;
+  } | null>(null);
+  const [highlightGenerateBtn, setHighlightGenerateBtn] = useState<boolean>(false);
+  const [isChatGptVisitor, setIsChatGptVisitor] = useState<boolean>(false);
+  const [chatGptBannerDismissed, setChatGptBannerDismissed] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (sessionStorage.getItem('qwen_chatgpt_banner_dismissed') === '1') {
+      setChatGptBannerDismissed(true);
+      return;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmSource = urlParams.get('utm_source')?.toLowerCase() || '';
+    const ref = document.referrer?.toLowerCase() || '';
+    let ft = '';
+    try {
+      ft = localStorage.getItem('attr_first_touch')?.toLowerCase() || '';
+    } catch {}
+
+    if (utmSource.includes('chatgpt') || ref.includes('chatgpt') || ft.includes('chatgpt')) {
+      setIsChatGptVisitor(true);
+    }
+  }, []);
+
+  const scrollToSubmitAndHighlight = () => {
+    setHighlightGenerateBtn(true);
+    setTimeout(() => {
+      const submitBtn = document.getElementById('mainSubmitButton');
+      if (submitBtn) {
+        submitBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 120);
+    setTimeout(() => {
+      setHighlightGenerateBtn(false);
+    }, 4500);
+  };
+
+  useEffect(() => {
+    const handleSurveyIntent = (e: any) => {
+      const detail = e.detail;
+      if (!detail || !detail.useCase) return;
+
+      setPersonalizedSurveyBanner({
+        useCase: detail.useCase,
+        priority: detail.priority,
+      });
+
+      setActiveTab('edit');
+
+      if (detail.useCase === 'fashion') {
+        setSourceImage('/images/showcase_dress_before.jpg');
+        setCurrentResultImage('/images/showcase_dress_after.jpg');
+        setTextStr('Swap clothes to elegant emerald green silk gala evening dress, high slit');
+        setDemoActiveNotice(locale?.startsWith('zh') ? '👗 电商模特换装 (Fashion Try-On)' : '👗 AI Fashion Try-On');
+        setActivePresetCategory(0);
+      } else if (detail.useCase === 'portrait') {
+        setSourceImage('/images/showcase_man_suit_before.jpg');
+        setCurrentResultImage('/images/showcase_man_suit_after.jpg');
+        setTextStr('Change outfit to a sharp bespoke black velvet tuxedo with satin peak lapels, crisp white dress shirt and black bowtie, preserve face structure, hair and studio lighting');
+        setDemoActiveNotice(locale?.startsWith('zh') ? '🤵 西装人像质感置换 (Bespoke Tuxedo)' : '🤵 Bespoke Tuxedo');
+        setActivePresetCategory(1);
+      } else if (detail.useCase === 'ecommerce' || detail.useCase === 'background') {
+        setSourceImage('/images/showcase_cafe_before.jpg');
+        setCurrentResultImage('/images/showcase_cyberpunk_after.jpg');
+        setTextStr('Change background to a neon-lit cyberpunk Tokyo street at night, swap jacket to a futuristic holographic iridescent leather biker jacket with neon reflections, maintain face and smile identity');
+        setDemoActiveNotice(locale?.startsWith('zh') ? '🛍️ 背景替换与商业环境渲染' : '🛍️ Background & Scene Swap');
+        setActivePresetCategory(2);
+      } else {
+        setSourceImage('/images/showcase_typography_before.jpg');
+        setCurrentResultImage('/images/showcase_typography_after.jpg');
+        setTextStr('Inpaint magazine cover title to "QWEN IMAGE 2026", replace subtitle with "NEXT GEN EDITING", perfectly crisp typography, high legibility, clean layout');
+        setDemoActiveNotice(locale?.startsWith('zh') ? '🔤 清晰双语海报文字排印' : '🔤 Clean Typography');
+      }
+
+      scrollToSubmitAndHighlight();
+    };
+
+    window.addEventListener('qwen-apply-survey-intent', handleSurveyIntent);
+
+    try {
+      const savedIntent = localStorage.getItem('qwen_active_intent');
+      if (savedIntent) {
+        const parsed = JSON.parse(savedIntent);
+        if (parsed?.useCase && Date.now() - parsed.at < 24 * 60 * 60 * 1000) {
+          handleSurveyIntent({ detail: parsed });
+        }
+      }
+    } catch {}
+
+    return () => {
+      window.removeEventListener('qwen-apply-survey-intent', handleSurveyIntent);
+    };
+  }, [locale]);
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -837,6 +933,93 @@ export default function PageComponent({
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-600/10 blur-[130px] pointer-events-none rounded-full" />
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* ChatGPT VIP Referral Onboarding Banner */}
+            {isChatGptVisitor && !chatGptBannerDismissed && (
+              <div className="mb-6 mx-auto max-w-4xl relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/40 via-slate-900/90 to-indigo-950/40 p-4 sm:p-5 shadow-2xl shadow-emerald-950/30 backdrop-blur-xl animate-in fade-in slide-in-from-top-4 duration-300">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                        <SparklesIcon className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Recommended by ChatGPT</span>
+                      </span>
+                      <span className="text-xs text-slate-400 font-mono">Qwen Image 2.1 Online</span>
+                    </div>
+                    <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                      Welcome ChatGPT Explorer! Your AI Photo Canvas is Ready
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">
+                      Alibaba Qwen&apos;s multimodal conversational model is online. Inpaint clothing, modify portraits, or swap backgrounds with natural language.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('edit');
+                          setSourceImage('/images/showcase_dress_before.jpg');
+                          setCurrentResultImage('/images/showcase_dress_after.jpg');
+                          setTextStr('Swap clothes to elegant emerald green silk gala evening dress, high slit');
+                          setActivePresetCategory(0);
+                          scrollToSubmitAndHighlight();
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        👗 Test Fashion Swap
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('edit');
+                          setSourceImage('/images/showcase_man_suit_before.jpg');
+                          setCurrentResultImage('/images/showcase_man_suit_after.jpg');
+                          setTextStr('Swap outfit to bespoke sharp black tuxedo with satin peak lapels');
+                          setActivePresetCategory(1);
+                          scrollToSubmitAndHighlight();
+                        }}
+                        className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        🤵 Test Bespoke Suit
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
+                    {!userData?.user_id ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginModal(true)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 transition-all cursor-pointer whitespace-nowrap"
+                      >
+                        <BoltIcon className="w-4 h-4" />
+                        <span>Sign In for 2 Free Trials</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={scrollToSubmitAndHighlight}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all cursor-pointer whitespace-nowrap"
+                      >
+                        <BoltIcon className="w-4 h-4" />
+                        <span>Start Editing Now</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setChatGptBannerDismissed(true);
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem('qwen_chatgpt_banner_dismissed', '1');
+                        }
+                      }}
+                      className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Header Titles - Streamlined & Action-First */}
             <div className="text-center max-w-3xl mx-auto space-y-3.5 mb-7">
               {/* Compliance & API Access Badge */}
@@ -1118,6 +1301,50 @@ export default function PageComponent({
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Upload & Prompt Controls */}
                 <div className="lg:col-span-6 space-y-6">
+                  {/* Personalized Survey Banner based on user preferences */}
+                  {personalizedSurveyBanner && (
+                    <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-cyan-950/90 via-slate-900 to-indigo-950/90 border-2 border-cyan-400/60 shadow-xl shadow-cyan-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in duration-300">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shrink-0">
+                          {personalizedSurveyBanner.useCase === 'fashion' ? '👗' : personalizedSurveyBanner.useCase === 'portrait' ? '🤵' : '🛍️'}
+                        </span>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                              {locale?.startsWith('zh') ? '根据您的问卷偏好推荐' : 'Personalized Workspace Ready'}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                              ⚡ {locale?.startsWith('zh') ? 'GPU 优先测试' : 'Fast GPU Queue'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-200 mt-0.5 font-medium">
+                            {personalizedSurveyBanner.useCase === 'fashion'
+                              ? (locale?.startsWith('zh') ? '已为您自动预装「👗 电商模特换装与晚礼服」测试模板，点击即可立即测试！' : 'Loaded "AI Fashion & Clothes Try-On" demo. Zero upload needed, ready to test!')
+                              : (locale?.startsWith('zh') ? '已为您自动预装专属高品质模板，点击即可立即体验！' : 'Loaded personalized workflow based on your goal. Zero upload needed!')}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <button
+                          type="button"
+                          onClick={scrollToSubmitAndHighlight}
+                          className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-bold transition-all shadow-md shadow-cyan-500/25 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                        >
+                          <span>{locale?.startsWith('zh') ? '立即免费测试' : 'Run Free Test'}</span>
+                          <span>↓</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPersonalizedSurveyBanner(null)}
+                          className="text-slate-400 hover:text-white text-xs px-2 py-1 cursor-pointer"
+                          title="Close"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Upload Box (Only for Edit tab) */}
                   {activeTab === 'edit' && (
                     <div>
@@ -1303,14 +1530,11 @@ export default function PageComponent({
                                   setTextStr(demo.prompt);
                                   setActiveTab('edit');
                                   setDemoActiveNotice(demo.label);
-                                  setTimeout(() => {
-                                    const inputEl = document.getElementById('promptInput');
-                                    inputEl?.focus();
-                                  }, 50);
+                                  scrollToSubmitAndHighlight();
                                 }}
                                 className={`relative rounded-xl border p-2 flex flex-col items-center text-center transition-all cursor-pointer group/card snap-start ${
                                   isSelected
-                                    ? 'border-indigo-400 bg-gradient-to-b from-indigo-950/90 to-purple-950/70 shadow-md shadow-indigo-500/20 ring-1 ring-indigo-400/50'
+                                    ? 'border-cyan-400 bg-gradient-to-b from-cyan-950/90 to-indigo-950/80 shadow-lg shadow-cyan-500/25 ring-2 ring-cyan-400/60 scale-[1.02]'
                                     : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900/60'
                                 }`}
                               >
@@ -1327,8 +1551,8 @@ export default function PageComponent({
                                 <span className="text-[11px] font-bold text-white leading-tight truncate w-full">
                                   {demo.label}
                                 </span>
-                                <span className="text-[9px] text-cyan-300/90 font-medium mt-0.5">
-                                  {locale?.startsWith('zh') ? '点击载入试玩' : 'Click to Load & Try'}
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-cyan-300 bg-cyan-950/70 border border-cyan-500/30 px-2 py-0.5 rounded-full mt-1 group-hover/card:bg-cyan-500 group-hover/card:text-slate-950 transition-colors">
+                                  <span>⚡ {locale?.startsWith('zh') ? '载入并测试' : 'Load & Test'}</span>
                                 </span>
                               </button>
                             );
@@ -1501,11 +1725,23 @@ export default function PageComponent({
                               </button>
                             )}
 
+                            {highlightGenerateBtn && (
+                              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-1 rounded-xl animate-pulse">
+                                <span>👉</span>
+                                <span>{locale?.startsWith('zh') ? '点击此处立即测试！' : 'Click here to test!'}</span>
+                              </span>
+                            )}
+
                             {/* In-box Primary Apply / Generate Button */}
                             <button
+                              id="mainSubmitButton"
                               type="submit"
                               disabled={isProcessing || (!textStr && activeTab === 'generate')}
-                              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:via-purple-400 hover:to-pink-400 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 transition-all cursor-pointer group"
+                              className={`inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:via-purple-400 hover:to-pink-400 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 transition-all cursor-pointer group ${
+                                highlightGenerateBtn
+                                  ? 'ring-4 ring-amber-400 ring-offset-2 ring-offset-slate-950 scale-105 shadow-2xl shadow-amber-500/50 animate-pulse'
+                                  : ''
+                              }`}
                               title="Shortcut: Ctrl+Enter (Cmd+Enter on Mac)"
                             >
                               {isProcessing ? (
