@@ -48,11 +48,11 @@ export default function OpenH3RegenerateBlogPostComponent({
     'high': { level: 'Aggressive (Sigma 0.50)', desc: 'Extremely sharp 4K textures, but causes character facial shifts.' }
   };
 
-  const generatedScript = `# Open H3 Regenerate 2K ComfyUI Custom Node Setup
+  const generatedScript = `# ComfyUI Custom Node Setup for Video Refinement
 git clone https://github.com/NVlabs/Open-H3-Regenerate-2K custom_nodes/ComfyUI-OpenH3-Regenerate2K
 cd custom_nodes/ComfyUI-OpenH3-Regenerate2K && pip install -r requirements.txt
 
-# Launch ComfyUI with Open H3 Regenerate 2K DiT Refiner Optimizations
+# Launch ComfyUI with Latent DiT Refiner Optimizations
 python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8_e4m3fn-text-enc' : gpuHardware === '24gb' ? '--gpu-only --highvram' : '--listen 0.0.0.0'} \\
   --extra-model-paths-config models/open_h3_regenerate_config.yaml \\
   --vae-backend ${vaeDecoder === 'streamrender' ? 'streamrender_noncausal_24' : vaeDecoder === 'tiled' ? 'tiled_latent_vae' : 'standard_taesd'} \\
@@ -67,30 +67,22 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
   const faqData = [
     {
       q: "What is Open H3 Regenerate 2K and who developed it?",
-      a: "Open H3 Regenerate 2K is an open-source video refinement pipeline created by NVIDIA research teams (NVlabs / Efficient-Large-Model). It serves as an open alternative to the closed MiniMax H3-Regenerate-2K API, allowing video editors to upscale low-resolution video drafts to crisp 2560×1440 (2K) resolution in just 3 diffusion refinement steps."
+      a: "It is an open-source video refinement pipeline created by NVIDIA research teams (NVlabs / Efficient-Large-Model). It serves as an open alternative to the closed MiniMax H3-Regenerate-2K API, allowing video editors to upscale low-resolution video drafts to crisp 2560×1440 (2K) resolution in just 3 diffusion refinement steps."
     },
     {
-      q: "Where can I find Open H3 Regenerate 2K download files and GitHub code?",
-      a: "The official Open H3 Regenerate 2K model weights are hosted on Hugging Face under 'Efficient-Large-Model/Open-H3-Regenerate-2K'. ComfyUI custom node wrappers and execution scripts are accessible on GitHub under NVlabs and community repositories."
+      q: "Where can I find Open H3 Regenerate 2K download files and model weights?",
+      a: "The official weights are hosted on Hugging Face under 'Efficient-Large-Model/Open-H3-Regenerate-2K'. ComfyUI custom node wrappers and execution scripts are accessible on GitHub under NVlabs and community repositories."
     },
     {
-      q: "Can I run Open H3 Regenerate 2K locally on a 16GB GPU without OOM?",
-      a: "Running native 2K video regeneration on 16GB cards like the RTX 4070 or 4080 requires memory optimizations: enabling latent tiling (512×512) and FP8 weights. A 24GB GPU such as the RTX 3090 or RTX 4090 offers the smoothest local inference experience."
+      q: "Can I run 2K video regeneration locally on a 16GB GPU without OOM?",
+      a: "Running native 2K video refinement on 16GB cards like the RTX 4070 or 4080 requires memory optimizations: enabling latent tiling (512×512) and FP8 weights. A 24GB GPU such as the RTX 3090 or RTX 4090 offers the smoothest local inference experience."
     },
     {
-      q: "How do I fix actor drift when running Open H3 Regenerate 2K?",
-      a: "Character identity variation happens when the refiner denoises too aggressively. To fix it: (1) clamp refiner Sigma between 0.28 and 0.35, (2) load Kijai's rank-384 refiner LoRA, or (3) pre-generate high-resolution 2K keyframes in an online image studio before video generation."
+      q: "How do I fix actor identity drift during 2K regeneration?",
+      a: "Character identity variation happens when the refiner denoises too aggressively. To fix it: (1) clamp refiner Sigma between 0.28 and 0.35, (2) load Kijai's rank-384 refiner LoRA, or (3) pre-generate high-resolution keyframes in an online image studio before video generation."
     },
     {
-      q: "How does Open H3 Regenerate 2K compare to Topaz Video AI and Real-ESRGAN?",
-      a: "Traditional upscalers rely on pixel interpolation, frequently causing plastic skin smoothing or ringing halos. Open H3 Regenerate 2K operates directly in the latent DiT space, synthesizing realistic micro-geometry like authentic hair follicles and fabric weave without blur."
-    },
-    {
-      q: "What should I do if Open H3 Regenerate 2K distorts typography and logos?",
-      a: "Video diffusion transformer models lack character-level typographic priors. The recommended hybrid workflow is to pre-inpaint keyframe text and signs in an AI canvas editor, then feed the clean frame into the Open H3 Regenerate 2K ComfyUI workflow."
-    },
-    {
-      q: "Is there an online alternative to Open H3 Regenerate 2K without local setup?",
+      q: "Is there a free online alternative without local ComfyUI setup?",
       a: "Yes. For creators without a 24GB GPU, cloud-based visual platforms like Qwen Image Editor offer instant, zero-VRAM browser inpainting, canvas expansion, and 2K asset generation powered by enterprise cloud GPUs."
     }
   ];
@@ -256,7 +248,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               <span>Executive Summary &amp; Key Findings</span>
             </div>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              <strong>Open H3 Regenerate 2K</strong> is an open-source 3-step diffusion transformer refinement pipeline released by NVIDIA (NVlabs / Efficient-Large-Model) to enable high-resolution 2K video upscaling without relying on MiniMax’s closed-source paid cloud API. While local deployment delivers crisp texture synthesis via 3D latent upsamplers, standard execution demands <strong>24GB of VRAM</strong> and can cause subtle character facial shifts. This guide details the complete <strong>Open H3 Regenerate 2K ComfyUI workflow</strong>, low-VRAM optimizations for 16GB GPUs, and hybrid web solutions.
+              <strong>Open H3 Regenerate 2K</strong> is an open-source 3-step diffusion transformer refinement pipeline released by NVIDIA (NVlabs / Efficient-Large-Model) to enable high-resolution 2K video upscaling without relying on MiniMax’s closed-source paid cloud API. While local deployment delivers crisp texture synthesis via 3D latent upsamplers, standard execution demands <strong>24GB of VRAM</strong> and can cause subtle character facial shifts. This guide details the complete ComfyUI setup, low-VRAM optimizations for 16GB GPUs, and hybrid web solutions.
             </p>
           </div>
 
@@ -266,7 +258,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               <div>
                 <div className="text-base font-bold text-white flex items-center gap-2">
                   <CommandLineIcon className="w-5 h-5 text-indigo-400" />
-                  <span>Open H3 Regenerate 2K ComfyUI Workflow &amp; Low-VRAM Configurator</span>
+                  <span>Interactive ComfyUI Workflow &amp; Low-VRAM Configurator</span>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Simulate local GPU allocations, refiner denoising sigma, and generate production-ready ComfyUI launch scripts.
@@ -352,7 +344,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
             {/* Generated CLI Launch Command */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">Open H3 Regenerate 2K Launch Command:</span>
+                <span className="text-xs font-mono text-slate-400">ComfyUI Launch Terminal Command:</span>
                 <button
                   onClick={copyScript}
                   className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
@@ -383,24 +375,21 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               <span>1. What is Open H3 Regenerate 2K? (Architecture &amp; NVIDIA Release)</span>
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              The generative AI video ecosystem evolved rapidly when MiniMax released weights for its 33B video model, MiniMax H3-Base (Hailuo 3.0), enabling local 768p generation. However, independent creators encountered a limitation: MiniMax reserved its premier 2K refinement model behind a closed-source cloud API.
+              The generative video ecosystem evolved rapidly when MiniMax released weights for its 33B foundational model, MiniMax H3-Base, enabling local 768p generation. However, independent creators encountered a limitation: MiniMax reserved its premier 2K refinement model behind a closed-source cloud API.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              How Open H3 Regenerate 2K Breaks the MiniMax API Paywall
+              Breaking the MiniMax API Paywall
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              To dismantle this paywall bottleneck, NVIDIA’s research team (NVlabs and the Efficient-Large-Model initiative) published <strong>Open H3 Regenerate 2K</strong>. Pipeline operators can execute this two-stage workflow on private hardware: generating an initial 768p draft on H3-Base and upsampling it through NVIDIA’s open weights directly into 2560×1440 (2K) video sequences.
+              To dismantle this bottleneck, NVIDIA’s research team (NVlabs and the Efficient-Large-Model initiative) published <strong>Open H3 Regenerate 2K</strong>. Pipeline operators can execute this two-stage workflow on private hardware: generating an initial 768p draft on H3-Base and upsampling it through open weights directly into 2560×1440 (2K) video sequences.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Open H3 Regenerate 2K 3-Step Diffusion vs Traditional 2K Upscalers
+              3-Step Diffusion Refiner vs Traditional 2K Upscalers
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              Traditional spatial video upscalers (such as Real-ESRGAN or Topaz Video AI) operate on RGB pixel values. They calculate convolutional interpolation, frequently introducing plastic smoothing and artificial halo artifacts.
-            </p>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              In contrast, <strong>Open H3 Regenerate 2K</strong> operates within the latent space of a Diffusion Transformer (DiT). By coupling a 3D-convolution latent upsampler with a specialized refiner LoRA adapter, the model synthesizes authentic micro-geometry—like realistic hair strands, pore textures, and fabric weaves—in just <strong>3 diffusion denoising steps</strong>.
+              Traditional spatial video upscalers (such as Real-ESRGAN or Topaz Video AI) operate on RGB pixel values, frequently introducing plastic smoothing and artificial halo artifacts. In contrast, this pipeline operates within the latent space of a Diffusion Transformer (DiT). By coupling a 3D-convolution latent upsampler with a specialized refiner LoRA adapter, the model synthesizes authentic micro-geometry in just <strong>3 diffusion denoising steps</strong>.
             </p>
           </section>
 
@@ -411,23 +400,23 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               <span>2. Open H3 Regenerate 2K GitHub Code &amp; Hugging Face Weights Download</span>
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              Setting up an <strong>Open H3 Regenerate 2K ComfyUI workflow</strong> requires downloading model checkpoints from Hugging Face and installing the corresponding custom node wrapper.
+              Setting up a local ComfyUI workflow requires downloading model checkpoints from Hugging Face and installing the corresponding custom node wrapper.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Locating Open H3 Regenerate 2K Model Checkpoints on Hugging Face
+              Locating Model Checkpoints on Hugging Face
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              The authoritative <strong>Open H3 Regenerate 2K model weights</strong> are distributed on Hugging Face under <code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">Efficient-Large-Model/Open-H3-Regenerate-2K</code>. The download bundle contains three essential elements:
+              The authoritative model weights are distributed on Hugging Face under <code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">Efficient-Large-Model/Open-H3-Regenerate-2K</code>. The download bundle contains three essential elements:
             </p>
             <ul className="list-disc list-inside space-y-1.5 text-slate-300 text-sm pl-2">
-              <li><strong className="text-white">open_h3_regenerate_2k_lora.safetensors</strong>: The merged DiT refiner LoRA driving the 3-step detail synthesis.</li>
-              <li><strong className="text-white">sharp_curve_branches.safetensors</strong>: Directional branch weights that prevent texture swimming across fast camera motion.</li>
-              <li><strong className="text-white">latent_upsampler/</strong>: 3D-convolution weights that elevate 768p latent feature maps into 2K spatial representations.</li>
+              <li><strong className="text-white">open_h3_regenerate_2k_lora.safetensors</strong>: The merged DiT refiner LoRA driving detail synthesis.</li>
+              <li><strong className="text-white">sharp_curve_branches.safetensors</strong>: Directional branch weights preventing texture swimming.</li>
+              <li><strong className="text-white">latent_upsampler/</strong>: 3D-convolution weights transitioning 768p latent maps into 2K spatial representations.</li>
             </ul>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Installing Open H3 Regenerate 2K in ComfyUI (Step-by-Step)
+              Installing the ComfyUI Custom Node (Step-by-Step)
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
               The community relies on custom node repositories like <code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">ComfyUI-OpenH3-Regenerate2K</code>. To install the custom node in your terminal:
@@ -489,28 +478,33 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
                     <td className="p-3">300+ seconds</td>
                     <td className="p-3 text-rose-400">Experimental; lacks CUDA graphs</td>
                   </tr>
-                  <tr className="hover:bg-slate-900/30 bg-indigo-950/20">
-                    <td className="p-3 font-semibold text-indigo-300">Web Cloud Inpainting</td>
-                    <td className="p-3 text-emerald-400 font-mono">0 GB Local VRAM</td>
+                  <tr className="hover:bg-slate-900/30 bg-indigo-950/30 border-l-4 border-indigo-500">
+                    <td className="p-3 font-semibold text-indigo-300">
+                      <Link href={getLinkHref(locale, '')} className="hover:underline flex items-center gap-1">
+                        <span>Qwen Image Editor (Cloud)</span>
+                        <ArrowRightIcon className="w-3.5 h-3.5" />
+                      </Link>
+                    </td>
+                    <td className="p-3 text-emerald-400 font-mono font-bold">0 GB Local VRAM</td>
                     <td className="p-3 text-emerald-400">4 – 8 seconds</td>
-                    <td className="p-3 text-indigo-300 font-semibold">Zero-VRAM 2K asset generation</td>
+                    <td className="p-3 text-indigo-300 font-semibold">Zero-VRAM in-browser 2K asset generation</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Optimizing Open H3 Regenerate 2K for 16GB GPUs (Tiling &amp; VAE Offload)
+              Optimizing for 16GB GPUs (Latent Tiling &amp; VAE Offload)
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              If your ComfyUI session encounters <code className="text-rose-400 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">CUDA out of memory</code> errors, apply these three targeted adjustments:
+              If your ComfyUI session encounters <code className="text-rose-400 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">CUDA out of memory</code> errors, apply these three adjustments:
             </p>
             <ol className="list-decimal list-inside space-y-2 text-slate-300 text-sm pl-2">
               <li>
-                <strong className="text-white">StreamRender-H3 Non-Causal Decoder:</strong> The default MiniMax VAE decoder allocates excessive memory during spatial decompression. Switching to the non-causal decoder reduces peak VAE memory by up to 40%.
+                <strong className="text-white">StreamRender-H3 Non-Causal Decoder:</strong> Reduces peak VAE memory by up to 40% during spatial decompression.
               </li>
               <li>
-                <strong className="text-white">Latent Spatial Tiling:</strong> Insert a tiled decode node set to tile dimensions of 512×512 with 64px overlap to process 2K frames without memory saturation.
+                <strong className="text-white">Latent Spatial Tiling:</strong> Insert a tiled decode node set to 512×512 with 64px overlap to process 2K frames without memory saturation.
               </li>
               <li>
                 <strong className="text-white">SageAttention Kernel Integration:</strong> Leverage SageAttention v2 to replace standard attention matrices with memory-efficient INT8 quantized kernels.
@@ -525,7 +519,7 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               <span>4. Open H3 Regenerate 2K Actor Drift &amp; Typography: Reddit Community Insights</span>
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              Analysis across Reddit AI communities (<code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">r/StableDiffusion</code> and <code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">r/comfyui</code>) indicates that the most common challenge in an <strong>Open H3 Regenerate 2K workflow</strong> is subject identity shift and text logo distortion.
+              Analysis across Reddit AI communities (<code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">r/StableDiffusion</code> and <code className="text-indigo-300 bg-slate-900 px-2 py-0.5 rounded font-mono text-xs">r/comfyui</code>) indicates that the most common challenge in video regeneration is subject identity shift and text logo distortion.
             </p>
 
             {/* Markdown Table 2: Community Issue Matrix */}
@@ -564,14 +558,14 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
             </div>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Why Open H3 Regenerate 2K Mutates Faces, Ages and Text Logos
+              Why Generative Refiners Mutate Faces, Ages and Text Logos
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              Because <strong>Open H3 Regenerate 2K</strong> performs an iterative diffusion forward pass, it reconstructs pixels based on learned generative priors rather than simple scaling. On human close-ups, excessive denoise values can subtly age subjects or alter delicate costume embroidery.
+              Because diffusion refiners perform an iterative forward pass, pixels are reconstructed based on learned generative priors rather than simple scaling. On human close-ups, excessive denoise values can subtly age subjects or alter delicate costume embroidery.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Tuning Open H3 Regenerate 2K Denoising Sigma &amp; LoRA Weights
+              Tuning Denoising Sigma &amp; Refiner LoRA Weights
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
               Open-source developers have released lightweight rank-384 refiner LoRAs. Restricting refinement sigma between <strong>0.28 and 0.35</strong> preserves draft fidelity while synthesizing sharp 2K surface details.
@@ -600,13 +594,13 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
                   <strong>Step 2: Low-Resolution Motion Animation:</strong> Pass the 2K keyframe into your video engine (MiniMax H3 or CogVideoX) at 768p to generate fluid motion dynamics.
                 </p>
                 <p>
-                  <strong>Step 3: Conservative Latent Refinement:</strong> Execute <strong>Open H3 Regenerate 2K</strong> with a conservative Sigma (0.28–0.32). Because the keyframe already features high-fidelity textures, the refiner preserves character identity cleanly.
+                  <strong>Step 3: Conservative Latent Refinement:</strong> Execute the 2K DiT refiner with a conservative Sigma (0.28–0.32). Because the keyframe already features high-fidelity textures, the pipeline preserves character identity cleanly.
                 </p>
               </div>
             </div>
 
             <h3 className="text-lg font-semibold text-slate-200 pt-2">
-              Zero-VRAM Open H3 Regenerate 2K Browser Inpainting Alternative
+              Zero-VRAM In-Browser 2K Regeneration &amp; Inpainting Alternative
             </h3>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
               For digital creators who do not possess a 24GB RTX 3090/4090 or who focus primarily on key visuals, concept art, and ecommerce banners, maintaining a local ComfyUI setup may be unnecessary overhead.
