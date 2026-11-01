@@ -20,8 +20,8 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'open-h3-regenerate-2k-comfyui-setup-alternatives',
-    // Strict 59 chars (50-60 safety range, locks 'Open H3 Regenerate 2K', 'ComfyUI Setup', 'Reddit')
-    title: 'Open H3 Regenerate 2K: ComfyUI Setup, Reddit & Low-VRAM Fix',
+    // Strict 60 chars (50-60 safety range, targets 'Open H3 Regenerate 2K', 'ComfyUI Workflow', 'Download', 'VRAM Fix')
+    title: 'Open H3 Regenerate 2K: ComfyUI Workflow, Download & VRAM Fix',
     // Strict 155 chars (140-160 range, answers GitHub downloads, ComfyUI, Reddit VRAM fixes, and free 2K web alternative)
     description: 'Master Open H3 Regenerate 2K with our complete ComfyUI setup guide, GitHub model download, Reddit low-VRAM fixes, and free 2K online inpainting alternatives.',
     date: '2026-10-31',
