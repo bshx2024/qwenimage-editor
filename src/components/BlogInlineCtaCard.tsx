@@ -71,6 +71,8 @@ export default function BlogInlineCtaCard({
 
           <Link
             href={`${homeUrl}?utm_source=blog_inline_compact`}
+            data-umami-event="blog_inline_compact_click"
+            data-umami-event-context={contextTitle}
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all whitespace-nowrap self-start sm:self-center"
           >
             <span>Launch Web Editor</span>
@@ -124,6 +126,9 @@ export default function BlogInlineCtaCard({
               <Link
                 key={idx}
                 href={`${homeUrl}?utm_source=blog_inline&prompt=${encodeURIComponent(item.prompt)}`}
+                data-umami-event="blog_inline_preset_click"
+                data-umami-event-context={contextTitle}
+                data-umami-event-preset={item.label}
                 className="group relative flex items-center justify-between p-3 rounded-2xl border border-slate-800 bg-slate-900/80 hover:bg-slate-800/90 hover:border-indigo-500/60 transition-all shadow-sm"
               >
                 <div className="space-y-0.5 truncate pr-2">
@@ -165,6 +170,8 @@ export default function BlogInlineCtaCard({
 
           <Link
             href={`${homeUrl}?utm_source=blog_inline_btn`}
+            data-umami-event="blog_inline_full_click"
+            data-umami-event-context={contextTitle}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-indigo-500/25 transition-all text-center"
           >
             <BoltIcon className="w-4 h-4" />

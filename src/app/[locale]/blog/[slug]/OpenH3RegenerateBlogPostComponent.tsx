@@ -20,6 +20,7 @@ import {
   ShieldCheckIcon,
   ArrowDownTrayIcon
 } from "@heroicons/react/24/outline";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
 export default function OpenH3RegenerateBlogPostComponent({
   post,
@@ -510,6 +511,9 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
                 <strong className="text-white">SageAttention Kernel Integration:</strong> Leverage SageAttention v2 to replace standard attention matrices with memory-efficient INT8 quantized kernels.
               </li>
             </ol>
+
+            {/* Zero GPU Setup In-Article Alternative */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="compact" />
           </section>
 
           {/* Section 4: The Actor Drift & Typography Dilemma */}
@@ -609,24 +613,8 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --fp8
               Using an in-browser platform like <Link href={getLinkHref(locale, '')} className="text-indigo-400 font-semibold underline">Qwen Image Editor</Link>, you can execute natural-language conversational inpainting, expand canvas frames, isolate backgrounds with the <Link href={getLinkHref(locale, 'background-remover')} className="text-indigo-400 font-semibold underline">AI Background Remover</Link>, and export 2048px assets in seconds—leveraging server-side cloud acceleration without local setup.
             </p>
 
-            {/* Direct In-Page Interactive CTA Box */}
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-900/50 via-slate-900 to-purple-950/40 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-              <div className="space-y-1 text-center sm:text-left">
-                <div className="text-base font-bold text-white">
-                  Experience Zero-VRAM 2K Generative Inpainting
-                </div>
-                <p className="text-xs text-slate-400 max-w-md">
-                  No 24GB GPU required. Perfect character faces, render crisp bilingual typography, and upscale visual assets in seconds.
-                </p>
-              </div>
-              <Link
-                href={getLinkHref(locale, '')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-md hover:shadow-indigo-500/25 shrink-0"
-              >
-                <span>Launch Image Studio</span>
-                <ArrowRightIcon className="w-4 h-4" />
-              </Link>
-            </div>
+            {/* Interactive Zero-VRAM Live Demo & Preset Launcher */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="full" />
           </section>
 
           {/* Author Bio Box */}

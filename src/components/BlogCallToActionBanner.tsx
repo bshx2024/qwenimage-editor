@@ -94,6 +94,8 @@ export default function BlogCallToActionBanner({
             <div className="flex items-center gap-2 shrink-0">
               <Link
                 href={homeUrl}
+                data-umami-event="blog_top_banner_click"
+                data-umami-event-slug={slug}
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer whitespace-nowrap"
               >
                 <span>Launch Free Editor</span>
@@ -156,6 +158,9 @@ export default function BlogCallToActionBanner({
                 <Link
                   key={idx}
                   href={`${homeUrl}?prompt=${encodeURIComponent(preset.prompt)}`}
+                  data-umami-event="blog_floating_preset_click"
+                  data-umami-event-slug={slug}
+                  data-umami-event-preset={preset.label}
                   className="px-2 py-1.5 rounded-lg border border-slate-800 bg-slate-950/60 hover:border-indigo-500/50 hover:bg-slate-800/80 text-[11px] text-slate-300 hover:text-white transition-all truncate block text-left font-medium"
                   title={preset.prompt}
                 >
@@ -169,6 +174,8 @@ export default function BlogCallToActionBanner({
           <div className="pt-2 flex items-center gap-2">
             <Link
               href={homeUrl}
+              data-umami-event="blog_floating_cta_click"
+              data-umami-event-slug={slug}
               className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all text-center"
             >
               <BoltIcon className="w-3.5 h-3.5" />

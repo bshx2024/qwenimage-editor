@@ -19,6 +19,7 @@ import {
   ExclamationTriangleIcon,
   ShieldCheckIcon
 } from "@heroicons/react/24/outline";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
 export default function MinimaxH3BlogPostComponent({
   post,
@@ -656,6 +657,9 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
                 </table>
               </div>
             </div>
+
+            {/* In-Article Interactive Alternative & Instant Demo */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="full" />
 
             {/* Author Rotation Bio Card (Clean AST without h1-h4 tags) */}
             <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 flex flex-col sm:flex-row items-center sm:items-start gap-4 my-8">

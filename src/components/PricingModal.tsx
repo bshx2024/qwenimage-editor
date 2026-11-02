@@ -1,7 +1,8 @@
-import {Fragment, useRef, useState} from 'react'
+import {Fragment, useRef, useState, useEffect} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import Pricing from "~/components/PricingComponent";
 import {useCommonContext} from "~/context/common-context";
+import {trackUmamiEvent} from "~/libs/analytics";
 
 export default function PricingModal({
   locale = 'en',
@@ -15,6 +16,12 @@ export default function PricingModal({
 
   const cancelButtonRef = useRef(null)
   const {showPricingModal, setShowPricingModal} = useCommonContext();
+
+  useEffect(() => {
+    if (showPricingModal) {
+      trackUmamiEvent('pricing_modal_open', { page, locale });
+    }
+  }, [showPricingModal, page, locale]);
 
   return (
     <Transition.Root show={showPricingModal} as={Fragment}>

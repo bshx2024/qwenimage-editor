@@ -30,6 +30,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { getGuestTrialsRemaining, recordGuestTrialUse, GUEST_TRIAL_LIMIT } from "~/libs/guestTrial";
 import { exportImageWithTier, exportComparisonCard } from "~/libs/imageExport";
+import { trackUmamiEvent } from "~/libs/analytics";
 
 export default function PageComponent({
   locale = 'en',
@@ -405,6 +406,13 @@ export default function PageComponent({
     e.preventDefault();
     if (!textStr && activeTab === 'generate') return;
 
+    trackUmamiEvent('generate_submit_click', {
+      tab: activeTab,
+      is_guest: !userData?.user_id,
+      guest_remaining: getGuestTrialsRemaining(),
+      model: selectedModel,
+    });
+
     // Require login to generate or edit images only if guest trial is exhausted
     if (!userData && getGuestTrialsRemaining() <= 0) {
       setShowLoginModal(true);
@@ -484,6 +492,10 @@ export default function PageComponent({
         if (!userData) {
           recordGuestTrialUse();
           setGuestTrialsRemaining(0);
+          trackUmamiEvent('guest_trial_used', {
+            tab: activeTab,
+            model: selectedModel,
+          });
         }
         setUid(result.uid);
         setIntervalResultInfo(3000);
@@ -953,11 +965,13 @@ export default function PageComponent({
                       Welcome ChatGPT Explorer! Your AI Photo Canvas is Ready
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">
-                      Alibaba Qwen&apos;s multimodal conversational model is online. Inpaint clothing, modify portraits, or swap backgrounds with natural language.
+                      Alibaba Qwen&apos;s multimodal conversational model is online. Inpaint clothing, modify portraits, or swap backgrounds with natural language. <strong className="text-emerald-300">1 Free instant trial ready — zero sign-in required!</strong>
                     </p>
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       <button
                         type="button"
+                        data-umami-event="chatgpt_banner_preset"
+                        data-umami-event-preset="fashion_swap"
                         onClick={() => {
                           setActiveTab('edit');
                           setSourceImage('/images/showcase_dress_before.jpg');
@@ -972,6 +986,8 @@ export default function PageComponent({
                       </button>
                       <button
                         type="button"
+                        data-umami-event="chatgpt_banner_preset"
+                        data-umami-event-preset="bespoke_suit"
                         onClick={() => {
                           setActiveTab('edit');
                           setSourceImage('/images/showcase_man_suit_before.jpg');
@@ -987,11 +1003,43 @@ export default function PageComponent({
                     </div>
                   </div>
 
-                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
-                    {!userData?.user_id ? (
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
+                    {!userData?.user_id && guestTrialsRemaining > 0 ? (
+                      <div className="flex items-center sm:flex-col gap-2">
+                        <button
+                          type="button"
+                          data-umami-event="chatgpt_banner_cta"
+                          data-umami-event-action="guest_try"
+                          onClick={() => {
+                            if (!sourceImage && !textStr) {
+                              setActiveTab('edit');
+                              setSourceImage('/images/showcase_dress_before.jpg');
+                              setCurrentResultImage('/images/showcase_dress_after.jpg');
+                              setTextStr('Swap clothes to elegant emerald green silk gala evening dress, high slit');
+                            }
+                            scrollToSubmitAndHighlight();
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 transition-all cursor-pointer whitespace-nowrap"
+                        >
+                          <BoltIcon className="w-4 h-4" />
+                          <span>Try 1st Generation Free (No Login)</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginModal(true)}
+                          className="text-[11px] text-slate-400 hover:text-white transition-colors"
+                          data-umami-event="signin_button_click"
+                          data-umami-event-position="chatgpt_banner_sub"
+                        >
+                          Or Sign In (2 Daily Credits)
+                        </button>
+                      </div>
+                    ) : !userData?.user_id ? (
                       <button
                         type="button"
                         onClick={() => setShowLoginModal(true)}
+                        data-umami-event="signin_button_click"
+                        data-umami-event-position="chatgpt_banner_exhausted"
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-emerald-500/25 transition-all cursor-pointer whitespace-nowrap"
                       >
                         <BoltIcon className="w-4 h-4" />
@@ -1001,6 +1049,8 @@ export default function PageComponent({
                       <button
                         type="button"
                         onClick={scrollToSubmitAndHighlight}
+                        data-umami-event="chatgpt_banner_cta"
+                        data-umami-event-action="member_start"
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all cursor-pointer whitespace-nowrap"
                       >
                         <BoltIcon className="w-4 h-4" />
@@ -2027,16 +2077,41 @@ export default function PageComponent({
                       </div>
                     </div>
 
-                    {/* Guest Sign-in Prompt */}
-                    {!userData && (
-                      <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl border bg-slate-900/80 border-indigo-500/30 text-slate-200 text-xs">
-                        <div className="flex items-center gap-1.5 font-medium">
-                          <SparklesIcon className="w-4 h-4 text-indigo-400 shrink-0" />
-                          <span>Sign in with Google to create &amp; edit images with official Qwen models</span>
+                    {/* Guest Sign-in & Trial Prompt */}
+                    {!userData && guestTrialsRemaining > 0 && (
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border bg-gradient-to-r from-emerald-950/60 via-slate-900/90 to-indigo-950/60 border-emerald-500/40 text-slate-200 text-xs shadow-md">
+                        <div className="flex items-center gap-2 font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px] uppercase tracking-wider border border-emerald-500/30 shrink-0 animate-pulse">
+                            <SparklesIcon className="w-3 h-3 text-emerald-400" />
+                            1 Free Trial Active
+                          </span>
+                          <span className="text-slate-200">
+                            No login needed for your 1st generation! Type a prompt or select a preset above to test.
+                          </span>
                         </div>
                         <button
                           type="button"
                           onClick={() => setShowLoginModal(true)}
+                          data-umami-event="signin_button_click"
+                          data-umami-event-position="guest_active_bar"
+                          className="px-2.5 py-1 rounded-lg border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-medium text-[11px] transition-colors cursor-pointer shrink-0 self-end sm:self-center"
+                        >
+                          Or Sign In (2 Daily Credits)
+                        </button>
+                      </div>
+                    )}
+
+                    {!userData && guestTrialsRemaining <= 0 && (
+                      <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl border bg-slate-900/80 border-indigo-500/30 text-slate-200 text-xs">
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <SparklesIcon className="w-4 h-4 text-indigo-400 shrink-0" />
+                          <span>Guest trial used. Sign in with Google to get 2 daily credits and save generation history</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginModal(true)}
+                          data-umami-event="signin_button_click"
+                          data-umami-event-position="guest_exhausted_bar"
                           className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] shrink-0 ml-2 shadow-sm transition-colors cursor-pointer"
                         >
                           Sign In

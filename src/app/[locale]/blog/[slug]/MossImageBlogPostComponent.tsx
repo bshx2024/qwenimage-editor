@@ -23,6 +23,7 @@ import {
   DocumentDuplicateIcon,
   PaintBrushIcon
 } from "@heroicons/react/24/outline";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
 export default function MossImageBlogPostComponent({
   post,
@@ -772,6 +773,9 @@ layout = MossLayoutControl.create_region(
                 </tbody>
               </table>
             </div>
+
+            {/* In-Article Interactive Alternative & Instant Demo */}
+            <BlogInlineCtaCard locale={locale} contextTitle={post.title} variant="full" />
           </section>
 
           {/* SECTION 6: FAQ Section with Structured FAQ Schema */}

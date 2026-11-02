@@ -5,6 +5,7 @@ import { oneTimePriceList, subscriptionPriceList, priceList, PriceItem } from "~
 import { getStripe } from '~/libs/stripeClient';
 import { CheckIcon, SparklesIcon, BoltIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { trackUmamiEvent } from '~/libs/analytics';
 
 export default function Pricing({
   redirectUrl,
@@ -22,6 +23,13 @@ export default function Pricing({
   } = useCommonContext();
 
   const handleCheckout = async (price: PriceItem) => {
+    trackUmamiEvent('pricing_checkout_click', {
+      plan_id: price.id,
+      plan_name: price.name,
+      amount: price.unit_amount ? price.unit_amount / 100 : 0,
+      is_logged_in: !!(userData && userData.user_id),
+    });
+
     setPriceIdLoading(price.id);
     if (!userData || !userData.user_id) {
       setShowLoginModal(true);
@@ -246,6 +254,9 @@ export default function Pricing({
                   type="button"
                   disabled={priceIdLoading === plan.id}
                   onClick={() => handleCheckout(plan)}
+                  data-umami-event="pricing_plan_click"
+                  data-umami-event-plan={plan.id}
+                  data-umami-event-price={priceFormatted}
                   className={`w-full py-3.5 px-6 rounded-2xl text-xs font-extrabold transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 ${
                     isPopular
                       ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white shadow-indigo-500/30 ring-2 ring-indigo-400/40'
