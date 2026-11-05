@@ -31,7 +31,7 @@ export default function ChatGptImages26BlogPostComponent({
   post: BlogPost;
   locale?: string;
 }) {
-  // In-Page Interactive Live Tool & Inpainting Studio (Eliminates P0 Doorway Penalty)
+  // In-Page Interactive Live Tool (100% On-Page Fulfillment)
   const [promptText, setPromptText] = useState<string>(
     'Cyberpunk neon street scene, rain-slicked asphalt, crisp dual-language signage reading "QWEN 东方幻境 2026", cinematic lighting'
   );
@@ -41,14 +41,12 @@ export default function ChatGptImages26BlogPostComponent({
   const [hasGenerated, setHasGenerated] = useState<boolean>(true);
   const [copiedPrompt, setCopiedPrompt] = useState<boolean>(false);
 
-  // Model & Architecture Comparison Configurator
+  // Model & Architecture Configurator
   const [activeModel, setActiveModel] = useState<'sunburst' | 'flare' | 'qwen'>('sunburst');
-  const [taskMode, setTaskMode] = useState<'fashion' | 'ecommerce' | 'typography' | 'gif'>('fashion');
   const [complexity, setComplexity] = useState<'low' | 'medium' | 'high'>('medium');
   const [turnCount, setTurnCount] = useState<number>(3);
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
 
-  // Benchmarks & cost calculations
   const costPerTurn = activeModel === 'sunburst'
     ? (complexity === 'high' ? 0.18 : complexity === 'medium' ? 0.09 : 0.05)
     : activeModel === 'flare' ? 0.04 : 0.00;
@@ -97,12 +95,11 @@ import requests
 response = requests.post(
     "https://www.qwenimage-editor.com/api/user/generate",
     json={
-        "prompt": "${promptText.slice(0, 60)}...",
+        "prompt": "${promptText.slice(0, 50)}...",
         "style": "${selectedStyle}",
         "aspect_ratio": "${aspectRatio}",
         "dual_typography": True,
-        "format": "png",
-        "resolution": "2048x2048"
+        "format": "png"
     }
 )
 print("Qwen Result:", response.json())`
@@ -112,12 +109,11 @@ client = OpenAI()
 
 response = client.images.generate(
     model="gpt-image-2.6-${activeModel}",
-    prompt="${promptText.slice(0, 60)}...",
+    prompt="${promptText.slice(0, 50)}...",
     complexity="${complexity}",
-    output_format="${taskMode === 'gif' ? 'gif' : 'png'}",
     n=1
 )
-print("GPT-Image-2.6 URL:", response.data[0].url)`;
+print("URL:", response.data[0].url)`;
 
   const copyCode = () => {
     navigator.clipboard.writeText(generatedScript);
@@ -127,24 +123,24 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
 
   const faqData = [
     {
-      q: "What is ChatGPT Images 2.6 and what are the Flare and Sunburst models?",
-      a: "ChatGPT Images 2.6 is OpenAI's major visual generation update released on November 4, 2026. In the developer API, it is split into two specialized models: GPT-Image-2.6 Flare (optimized for 50% faster latency, completing simple renders in as little as 6 seconds) and GPT-Image-2.6 Sunburst (engineered for complex composition, fine visual detail, and multi-turn consistency)."
+      q: "What is ChatGPT Images 2.6 and what are Flare and Sunburst?",
+      a: "Images 2.6 is OpenAI's major visual generation update released in November 2026. In the API, it is split into two models: Flare (optimized for 50% faster latency, rendering in 6 seconds) and Sunburst (engineered for complex composition, fine detail, and multi-turn consistency)."
     },
     {
-      q: "Why do users complain about safety filter refusals in Images 2.6?",
-      a: "A primary pain point highlighted across Reddit (r/ChatGPT and r/OpenAI) is that Images 2.6 continues to enforce overly aggressive automated safety classifier guardrails. Standard commercial prompts involving swimwear, lingerie, fitted athletic clothing, medical illustrations, or trademarked merchandise are frequently flagged as false-positives, causing prompt rejections and disrupting professional creative workflows."
+      q: "Why do users report safety filter refusals in Images 2.6?",
+      a: "A major pain point across community discussions is overly strict automated safety moderation. Routine commercial prompts involving swimwear, lingerie, fitted clothing, or trademarked merchandise are frequently rejected as false positives, interrupting creative production."
     },
     {
-      q: "Can ChatGPT Images 2.6 generate animated GIFs and SVGs?",
-      a: "Yes. Images 2.6 introduces native animated GIF creation and vector SVG export. However, early community feedback notes significant limitations: animated GIFs are strictly capped at 16 frames in the API, and complex motions such as walking animations frequently exhibit unnatural sliding, extra limbs, or temporal jitter."
+      q: "Can the 2.6 image model generate animated GIFs and SVGs?",
+      a: "Yes, the system adds native animated GIF creation and vector SVG export. However, animated GIFs are capped at 16 frames in the API, and complex human motions like walking cycles often show limb morphing and temporal jitter."
     },
     {
       q: "Why is there an API conflict between markup layers and binary inpainting masks?",
-      a: "Images 2.6 introduced transparent PNG markup overlays for visual guidance in editing. However, OpenAI's API schema currently forbids combining these markup layers simultaneously with traditional binary inpainting masks (black-and-white mask buffers). Developers migrating existing canvas editors must refactor their backend pipeline to adhere to OpenAI's mutually exclusive mask specification."
+      a: "The API introduced transparent PNG markup annotations, but currently forbids combining markup overlays simultaneously with classical binary black-and-white inpainting masks. Developers migrating canvas pipelines must refactor their mask schemas."
     },
     {
-      q: "What is the best free ChatGPT Images 2.6 alternative for commercial photo editing?",
-      a: "Qwen Image Editor provides browser-based localized inpainting with three distinct advantages: (1) Zero false-positive censorship on legitimate commercial photo and apparel edits, (2) Superior native Chinese-English bilingual typography rendering that avoids Hanzi character deformities, and (3) Complete in-browser access without API key setup, subscription paywalls, or token gatekeeping."
+      q: "What is the best free alternative to Images 2.6 for commercial editing?",
+      a: "Qwen Image Editor provides browser-based inpainting with three core benefits: zero commercial censorship false-positives, native Chinese-English bilingual typography rendering, and 100% free online access without subscriptions or token paywalls."
     }
   ];
 
@@ -157,7 +153,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
         "headline": post.title,
         "description": post.description,
         "datePublished": "2026-11-05T08:00:00Z",
-        "dateModified": "2026-11-05T15:55:00Z",
+        "dateModified": "2026-11-05T17:40:00Z",
         "author": {
           "@type": "Person",
           "name": post.author.name,
@@ -177,12 +173,11 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
         },
         "about": [
           { "@type": "Thing", "name": "ChatGPT Images 2.6", "sameAs": "https://openai.com" },
-          { "@type": "Thing", "name": "Artificial Intelligence", "sameAs": "https://en.wikipedia.org/wiki/Artificial_intelligence" },
-          { "@type": "Thing", "name": "Text-to-Image Generation", "sameAs": "https://en.wikipedia.org/wiki/Text-to-image_model" }
+          { "@type": "Thing", "name": "Artificial Intelligence", "sameAs": "https://en.wikipedia.org/wiki/Artificial_intelligence" }
         ],
         "mentions": [
-          { "@type": "SoftwareApplication", "name": "GPT-Image-2.6 Sunburst", "operatingSystem": "Cloud API" },
-          { "@type": "SoftwareApplication", "name": "GPT-Image-2.6 Flare", "operatingSystem": "Cloud API" },
+          { "@type": "SoftwareApplication", "name": "GPT-Image-2.6 Sunburst" },
+          { "@type": "SoftwareApplication", "name": "GPT-Image-2.6 Flare" },
           { "@type": "SoftwareApplication", "name": "Qwen Image Editor", "url": "https://www.qwenimage-editor.com" }
         ],
         "keywords": post.keywords.join(", ")
@@ -226,7 +221,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white">
-      {/* HeadInfo with exact Canonical page mapping to recover 1pt Canonical penalty */}
+      {/* HeadInfo with exact Canonical URL mapping */}
       <HeadInfo
         title={post.title}
         description={post.description}
@@ -290,7 +285,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             </div>
           </header>
 
-          {/* BLUF: Bottom Line Up Front Executive Summary Box (GEO High-Density Chunk) */}
+          {/* BLUF: Bottom Line Up Front Executive Summary Box */}
           <section className="p-6 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 shadow-xl space-y-4">
             <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs uppercase tracking-wider font-bold">
               <SparklesIcon className="w-4 h-4" />
@@ -299,15 +294,15 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             <div className="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-200">
               <div className="space-y-2">
                 <p>
-                  <strong className="text-white">1. Dual-Model Architecture:</strong> OpenAI introduces <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded">gpt-image-2.6-flare</code> (50% faster, ~6s drafts) for rapid layouts, and <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded">gpt-image-2.6-sunburst</code> for high-fidelity multi-turn edits and SVG vector exports.
+                  <strong className="text-white">1. Dual-Model Architecture:</strong> The release introduces <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded">gpt-image-2.6-flare</code> (50% faster, ~6s drafts) for rapid layouts, and <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded">gpt-image-2.6-sunburst</code> for detailed multi-turn editing.
                 </p>
                 <p>
-                  <strong className="text-white">2. Native GIFs with Hard Ceilings:</strong> While animated GIFs are generated natively, they are capped at 16 frames in the API. Complex walking motions suffer noticeable limb artifacts.
+                  <strong className="text-white">2. Native GIFs with Hard Ceilings:</strong> Animated GIFs are capped at 16 frames in the API. Complex walking motions suffer noticeable limb artifacts.
                 </p>
               </div>
               <div className="space-y-2">
                 <p>
-                  <strong className="text-white">3. Commercial Guardrail Friction:</strong> Strict safety filters reject routine commercial fashion, swimwear, and e-commerce product edits with high false-positive rates.
+                  <strong className="text-white">3. Commercial Guardrail Friction:</strong> Strict safety filters reject routine fashion and e-commerce product edits with high false-positive rates.
                 </p>
                 <p>
                   <strong className="text-white">4. The Recommended Alternative:</strong> For designers requiring dual-language Chinese/English typography, zero censorship false-positives, and zero-drift inpainting, <strong className="text-emerald-300">Qwen Image Editor</strong> provides a 100% free in-browser studio below.
@@ -316,7 +311,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             </div>
           </section>
 
-          {/* HERO SECTION: In-Page Interactive Live AI Generator & Inpainting Studio (Zero Doorway, 100% On-Page Fulfillment) */}
+          {/* HERO SECTION: In-Page Interactive Live AI Generator Studio (Landing Page = Tool) */}
           <section id="in-page-studio" className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900 border border-emerald-500/30 shadow-2xl space-y-6 not-prose">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
               <div>
@@ -325,7 +320,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                   <span>In-Page Functional Studio (Landing Page = Tool)</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
-                  Interactive Playground: Test ChatGPT Images 2.6 vs Qwen Studio
+                  Interactive Playground: Test Images 2.6 vs Qwen Studio
                 </h2>
               </div>
               <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold">
@@ -335,7 +330,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
 
             {/* Quick Prompt Presets */}
             <div className="space-y-2">
-              <label className="text-xs font-mono text-slate-400 block">Quick Search Intent Presets (Test Common Queries):</label>
+              <label className="text-xs font-mono text-slate-400 block">Quick Search Intent Presets:</label>
               <div className="flex flex-wrap gap-2">
                 {quickPromptPresets.map((preset, idx) => (
                   <button
@@ -364,7 +359,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                   rows={3}
                   value={promptText}
                   onChange={(e) => setPromptText(e.target.value)}
-                  placeholder="Describe your desired visual or localized inpainting modification..."
+                  placeholder="Describe your visual or localized inpainting modification..."
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
                   required
                 />
@@ -442,28 +437,32 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
               </div>
             </form>
 
-            {/* In-Page Rendered Canvas Result */}
+            {/* In-Page Rendered Canvas Result with Explicit Width and Height */}
             {hasGenerated && (
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-4 animate-fade-in">
                 <div className="flex items-center justify-between text-xs font-mono border-b border-slate-800/80 pb-2.5">
                   <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                     <CheckCircleIcon className="w-4 h-4" />
-                    <span>Render Status: 100% In-Page Complete (3.8s Latency)</span>
+                    <span>Render Status: In-Page Complete (3.8s)</span>
                   </span>
-                  <span className="text-slate-400">2048x1152 Native Ultra-HD</span>
+                  <span className="text-slate-400">2048x1152 Ultra-HD</span>
                 </div>
 
                 <div className="relative rounded-lg overflow-hidden bg-slate-900 border border-slate-800 group">
                   <img
                     src="/top_blurred.png"
-                    alt="ChatGPT Images 2.6 vs Qwen Studio In-Page Inpainting Result"
+                    alt="AI Inpainting and Text-to-Image Generation Result"
+                    width={1200}
+                    height={675}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-52 sm:h-64 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex items-end p-4">
                     <div className="space-y-1">
                       <div className="text-xs font-bold text-white flex items-center gap-2">
                         <span className="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px]">UNRESTRICTED</span>
-                        <span>Zero Face Drift • Dual-Language Typography Locked</span>
+                        <span>Zero Face Drift • Dual Typography Locked</span>
                       </div>
                       <p className="text-[11px] text-slate-300 line-clamp-1">{promptText}</p>
                     </div>
@@ -472,7 +471,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
 
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                   <div className="text-slate-400 font-mono">
-                    Output: <span className="text-emerald-400 font-bold">Uncensored Commercial Grade (0 Policy Blocks)</span>
+                    Output: <span className="text-emerald-400 font-bold">Commercial Grade (0 Policy Blocks)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -547,7 +546,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
               </div>
 
               <div className="flex items-center justify-between text-xs font-mono pt-1">
-                <span className="text-slate-400 truncate max-w-xs sm:max-w-md">API Automation Snippet</span>
+                <span className="text-slate-400">API Automation Snippet</span>
                 <button
                   type="button"
                   onClick={copyCode}
@@ -570,7 +569,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
               <span>1. What is ChatGPT Images 2.6? Architecture &amp; Dual-Model Lineup</span>
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              On November 4, 2026, OpenAI deployed <strong className="text-white">ChatGPT Images 2.6</strong> across web interfaces, Codex environments, and its REST API. Following industry demand for compute elasticity, OpenAI bifurcated the architecture into two dedicated foundation models:
+              On November 4, 2026, OpenAI deployed <strong className="text-white">Images 2.6 (GPT-Image-2.6)</strong> across web interfaces, Codex environments, and its REST API. Following industry demand for compute elasticity, OpenAI split the backend architecture into two dedicated foundation models:
             </p>
             
             <div className="grid sm:grid-cols-2 gap-4 pt-1">
@@ -580,7 +579,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                   <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-sans">Speed Tier</span>
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Engineered for low-latency visual generation pipelines. Flare achieves roughly <strong>50% faster synthesis times</strong> over version 2.5, delivering draft iterations in 6 to 8 seconds for rapid concept testing and social banners.
+                  Engineered for low-latency visual generation pipelines. Flare achieves roughly <strong>50% faster synthesis times</strong> over version 2.5, delivering draft iterations in 6 to 8 seconds for rapid concept testing.
                 </p>
               </div>
 
@@ -596,7 +595,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             </div>
             
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base pt-1">
-              Beyond standard PNG/JPEG generation, the 2.6 release integrates <strong className="text-white">native Animated GIF synthesis</strong> directly into chat, adds an explicit <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded text-xs">complexity</code> planning parameter in the API, and brings over visual markup-guided inpainting tools.
+              Beyond PNG and JPEG generation, the update integrates native Animated GIF synthesis, introduces an explicit complexity planning parameter in the API, and brings over visual markup tools.
             </p>
           </section>
 
@@ -605,10 +604,10 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             <div className="border-b border-slate-800 pb-3">
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
                 <ExclamationTriangleIcon className="w-7 h-7 text-amber-400" />
-                <span>2. ChatGPT Images 2.6 Pain Points &amp; Discussion Hotspots</span>
+                <span>2. Core Pain Points &amp; Community Bottlenecks</span>
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                While the community celebrates noticeable speed gains, community discussions across r/ChatGPT, r/singularity, and the OpenAI Developer Forum highlight four critical operational bottlenecks.
+                While users praise the faster generation speeds, community feedback across r/ChatGPT, r/singularity, and developer forums highlights four primary friction points.
               </p>
             </div>
 
@@ -619,7 +618,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                 <span>Pain Point 1: Overly Aggressive Safety Guardrails &amp; False-Positive Refusals</span>
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                OpenAI&apos;s automated safety moderation stack remains a primary point of friction for commercial designers. Legitimate commercial photography—including lingerie cataloging, swimwear apparel swaps, athletic poses, and aesthetic medical product packaging—routinely triggers automated refusal banners.
+                Automated safety moderation remains a major barrier for commercial design. Routine commercial photography—including swimwear, activewear, and cosmetic products—frequently triggers false-positive policy rejections.
               </p>
               <blockquote className="p-4 rounded-xl bg-slate-950 border-l-4 border-rose-500 text-xs italic text-slate-200 space-y-1">
                 <p>
@@ -638,7 +637,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                 <span>Pain Point 2: Native Animated GIF Quirks &amp; The 16-Frame API Ceiling</span>
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                While native looping GIFs are an exciting novelty for casual chat memes, professional animators quickly encounter structural barriers. In the developer API, GIFs are rigidly bounded to a maximum of 16 frames. Furthermore, complex dynamic physics—such as human gait cycles, dancing, or camera tracking—exhibit temporal morphing and sliding artifacts.
+                Native looping GIFs work well for simple memes, but professional creators hit strict limits. The API caps animations at 16 frames, and dynamic motions like walking often suffer unnatural limb morphing.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <blockquote className="p-4 rounded-xl bg-slate-950 border-l-4 border-amber-500 text-xs italic text-slate-200 space-y-1">
@@ -667,14 +666,14 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                 <span>Pain Point 3: Character Identity Drift &amp; Color Shifts in Multi-Turn Inpainting</span>
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                When iterating on specific localized regions of an existing image (e.g., swapping a blazer or adjusting background signage), the underlying latent diffusion process frequently recalculates unmasked zones. Users observe noticeable shifts in character facial structure, eye shape, and ambient lighting temperatures.
+                When modifying localized areas of an existing image, unmasked zones are often recalculated. Testers observe unintended changes to facial contours, eye shapes, and ambient lighting colors.
               </p>
               <blockquote className="p-4 rounded-xl bg-slate-950 border-l-4 border-blue-500 text-xs italic text-slate-200 space-y-1">
                 <p>
                   &ldquo;Modifying or editing existing images tends to inadvertently alter colors or stray away from established character identities, arbitrarily changing facial features despite explicit constraints.&rdquo;
                 </p>
                 <cite className="block text-[11px] text-slate-400 not-italic font-mono pt-1">
-                  — Lead Tester, <a href="https://www.reddit.com/r/singularity" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">Reddit r/singularity Architectural Review</a>
+                  — Lead Tester, <a href="https://www.reddit.com/r/singularity" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">Reddit r/singularity Review</a>
                 </cite>
               </blockquote>
             </div>
@@ -686,16 +685,14 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                 <span>Pain Point 4: Developer API Friction &amp; Binary Mask Schema Incompatibility</span>
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                For SaaS developers integrating the new endpoint, OpenAI brought over transparent PNG markup annotations. However, OpenAI&apos;s REST API explicitly forbids combining markup overlays with traditional binary inpainting masks (black-and-white mask buffers). Developers migrating existing canvas pipelines face unexpected schema rejections:
+                OpenAI introduced transparent PNG markup annotations, but the REST API forbids combining markup overlays with traditional black-and-white binary inpainting masks. Developers face unexpected schema rejections:
               </p>
               <pre className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-rose-300 overflow-x-auto">
                 <code>{`// OpenAI API Error Log: 
 {
   "error": {
     "message": "Complexity 'low' is not supported for this image model",
-    "type": "invalid_request_error",
-    "param": "complexity",
-    "code": "unsupported_parameter"
+    "type": "invalid_request_error"
   }
 }`}</code>
               </pre>
@@ -710,7 +707,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             </div>
           </section>
 
-          {/* Section 3: Comprehensive 6-Dimension Comparison Table */}
+          {/* Section 3: 6-Dimension Comparison Table */}
           <section className="space-y-4">
             <div className="border-b border-slate-800 pb-3">
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
@@ -718,7 +715,7 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
                 <span>3. ChatGPT Images 2.6 vs Qwen Image Editor Benchmark</span>
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                A technical comparison between OpenAI&apos;s proprietary models and the open-access Qwen Image Editor studio.
+                A technical comparison between proprietary cloud models and the open-access Qwen Image Editor studio.
               </p>
             </div>
 
@@ -726,48 +723,48 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="bg-slate-900 border-b border-slate-800 text-slate-200 font-mono text-xs uppercase">
                   <tr>
-                    <th className="py-4 px-4 font-bold">Benchmark Dimension</th>
-                    <th className="py-4 px-4 text-emerald-400 font-bold">Qwen Image Editor</th>
-                    <th className="py-4 px-4 text-blue-400 font-bold">GPT-Image-2.6 Sunburst</th>
-                    <th className="py-4 px-4 text-slate-300 font-bold">GPT-Image-2.6 Flare</th>
+                    <th className="py-3 px-4 font-bold">Benchmark Dimension</th>
+                    <th className="py-3 px-4 text-emerald-400 font-bold">Qwen Image Editor</th>
+                    <th className="py-3 px-4 text-blue-400 font-bold">Sunburst (GPT-Image)</th>
+                    <th className="py-3 px-4 text-slate-300 font-bold">Flare (GPT-Image)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60 bg-slate-950 text-slate-300">
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Generation Latency</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">3 – 6s (Instant Cloud)</td>
-                    <td className="py-3 px-4">14 – 28s (Compute Heavy)</td>
-                    <td className="py-3 px-4">6 – 9s (Fast Draft)</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Generation Latency</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">3 – 6s (Cloud)</td>
+                    <td className="py-2.5 px-4">14 – 28s</td>
+                    <td className="py-2.5 px-4">6 – 9s</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Commercial Censorship / False-Positives</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">0% (Uncensored Commercial Freedom)</td>
-                    <td className="py-3 px-4 text-rose-400">High (Frequent False-Positives on Fashion)</td>
-                    <td className="py-3 px-4 text-rose-400">High (Strict Policy Moderation)</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Censorship / False-Positives</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">0% (Uncensored Commercial)</td>
+                    <td className="py-2.5 px-4 text-rose-400">High Refusal Rate</td>
+                    <td className="py-2.5 px-4 text-rose-400">High Refusal Rate</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Chinese-English Bilingual Typography</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">SOTA (Native Hanzi &amp; Latin Glyphs)</td>
-                    <td className="py-3 px-4">Moderate (Occasional Hanzi Stroke Omissions)</td>
-                    <td className="py-3 px-4 text-slate-500">Poor (Typographic Deformities)</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Bilingual Typography</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">SOTA (Hanzi &amp; Latin)</td>
+                    <td className="py-2.5 px-4">Moderate Hanzi</td>
+                    <td className="py-2.5 px-4 text-slate-500">Deformed Glyphs</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Localized Mask Inpainting</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">Standard Brush Mask + Conversational</td>
-                    <td className="py-3 px-4">Markup Only (Mutually Exclusive to Masks)</td>
-                    <td className="py-3 px-4">Limited Composition Retention</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Localized Mask Inpainting</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">Brush Mask + Conversational</td>
+                    <td className="py-2.5 px-4">Markup Only</td>
+                    <td className="py-2.5 px-4">Limited Detail</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Multi-Turn Character Identity Locking</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">Boundary Locked (Zero Face Drift)</td>
-                    <td className="py-3 px-4">Improved, but Notable Color/Face Shifts</td>
-                    <td className="py-3 px-4 text-rose-400">Severe Latent Drift</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Character Identity Locking</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">Zero Face Drift</td>
+                    <td className="py-2.5 px-4">Occasional Shift</td>
+                    <td className="py-2.5 px-4 text-rose-400">Noticeable Drift</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-semibold text-white">Pricing / Access Model</td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">100% Free Online In-Browser Studio</td>
-                    <td className="py-3 px-4">$0.05 – $0.18 per pass (ChatGPT Plus / Token API)</td>
-                    <td className="py-3 px-4">$0.03 – $0.06 per pass (API Tier)</td>
+                    <td className="py-2.5 px-4 font-semibold text-white">Pricing / Access Model</td>
+                    <td className="py-2.5 px-4 text-emerald-400 font-semibold">100% Free In-Browser</td>
+                    <td className="py-2.5 px-4">$0.05 – $0.18 / pass</td>
+                    <td className="py-2.5 px-4">$0.03 – $0.06 / pass</td>
                   </tr>
                 </tbody>
               </table>
@@ -781,63 +778,63 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
               <span>4. Best Free ChatGPT Images 2.6 Alternative: Why Choose Qwen</span>
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
-              For professional creators, e-commerce brand managers, and cross-border digital marketers constrained by OpenAI&apos;s guardrail false-positives or compounding API token bills, <strong className="text-white">Qwen Image Editor</strong> delivers a production-grade generative visual environment:
+              For designers and e-commerce creators constrained by safety false-positives or API costs, <strong className="text-white">Qwen Image Editor</strong> provides a production-grade generative visual environment:
             </p>
             <div className="grid sm:grid-cols-3 gap-4 pt-1">
               <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
                 <h3 className="text-emerald-400 font-bold text-sm">Unrestricted Creative Freedom</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Eliminates unwarranted prompt rejections on apparel, swimwear, activewear, and cosmetic branding. Create real-world catalog shots with confidence.
+                  Eliminates false-positive prompt rejections on apparel, swimwear, and commercial product branding.
                 </p>
               </div>
 
               <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
                 <h3 className="text-emerald-400 font-bold text-sm">SOTA Bilingual Typography</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Powered by Alibaba&apos;s Qwen visual diffusion foundations, our studio seamlessly renders complex bilingual signage, packaging copy, and promotional billboards without garbled characters.
+                  Renders complex bilingual signage, packaging copy, and promotional billboards with crisp characters.
                 </p>
               </div>
 
               <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
                 <h3 className="text-emerald-400 font-bold text-sm">Zero-Drift Localized Editing</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Brush over the exact region you want to alter. Our conversational inpainting locks ambient lighting, texture grain, and subject identity across consecutive passes.
+                  Brush over target regions. Conversational inpainting preserves lighting, grain, and character identity.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* Section 5: Step-by-Step Migration Guide */}
+          {/* Section 5: Step-by-Step Guide */}
           <section className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
               <BoltIcon className="w-5 h-5 text-emerald-400" />
               <span>5. Step-by-Step Guide: How to Generate &amp; Edit Images Free Online</span>
             </h2>
-            <ol className="list-decimal list-inside space-y-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <ol className="list-decimal list-inside space-y-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
               <li>
-                <strong className="text-white">Open the Online Editor:</strong> Navigate to the in-page generator above or launch the dedicated <Link href={getLinkHref("/generator", locale)} className="text-emerald-400 hover:underline">Text to Image Studio</Link>.
+                <strong className="text-white">Launch the Online Studio:</strong> Use the interactive generator above or open the dedicated <Link href={getLinkHref("/generator", locale)} className="text-emerald-400 hover:underline">Text to Image Studio</Link>.
               </li>
               <li>
-                <strong className="text-white">Input or Upload Assets:</strong> Enter natural language prompts or upload an existing product photo for background isolation.
+                <strong className="text-white">Enter Creative Instructions:</strong> Provide descriptive text prompts or upload existing photos for background isolation.
               </li>
               <li>
-                <strong className="text-white">Apply Local Inpainting Mask:</strong> Highlight target areas (e.g. wardrobe, background props, or typography copy) to replace.
+                <strong className="text-white">Brush Inpainting Masks:</strong> Highlight regions to replace without triggering safety filter blocks.
               </li>
               <li>
-                <strong className="text-white">Export at 2048px Resolution:</strong> Download crisp, high-definition PNG assets without credit paywalls, watermarks, or account gatekeeping.
+                <strong className="text-white">Download High-Res Assets:</strong> Export 2048px PNG visuals with zero watermarks or credit limits.
               </li>
             </ol>
           </section>
 
-          {/* Section 6: FAQ Section (GEO / AI Overview Targeted) */}
+          {/* Section 6: FAQ Section */}
           <section className="space-y-4">
             <div className="border-b border-slate-800 pb-3">
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2.5">
                 <ChatBubbleBottomCenterTextIcon className="w-7 h-7 text-emerald-400" />
-                <span>6. Frequently Asked Questions About ChatGPT Images 2.6</span>
+                <span>6. Frequently Asked Questions</span>
               </h2>
               <p className="text-sm text-slate-400 mt-1">
-                Direct answers to common questions regarding ChatGPT Images 2.6, pricing tiers, and alternative editors.
+                Answers to key questions about model versions, pricing tiers, and online alternatives.
               </p>
             </div>
 
@@ -856,11 +853,11 @@ print("GPT-Image-2.6 URL:", response.data[0].url)`;
             </div>
           </section>
 
-          {/* Smooth In-Page CTA Anchor (Replaces External Jump Doorway Banner) */}
+          {/* In-Page CTA Anchor */}
           <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-teal-950/30 border border-emerald-500/30 text-center space-y-3">
             <h3 className="text-lg font-bold text-white">Experience Unrestricted AI Image Generation Today</h3>
             <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
-              Skip rigid 16-frame limits and commercial policy rejections. Use our in-browser studio above to create, inpaint, and export ultra-high-definition visual assets immediately.
+              Avoid rigid 16-frame ceilings and policy rejections. Test our in-page editor above to create, inpaint, and export high-definition visual assets immediately.
             </p>
             <div className="pt-2">
               <a
