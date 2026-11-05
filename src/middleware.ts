@@ -7,10 +7,12 @@ const handleI18n = createMiddleware(routing);
 export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  // Let robots.txt, sitemaps, and static media pass through without i18n redirect
+  // Let robots.txt, sitemaps, llms.txt, and static media pass through without i18n redirect
   let response;
   if (
     pathname === "/robots.txt" ||
+    pathname === "/llms.txt" ||
+    pathname === "/llms-full.txt" ||
     pathname.includes("sitemap") ||
     pathname.startsWith("/videos/") ||
     pathname.startsWith("/images/") ||

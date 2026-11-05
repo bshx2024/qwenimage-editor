@@ -19,6 +19,37 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'chatgpt-images-2-6-review-limitations-alternative',
+    // Strict 57 chars (50-60 safety range, locks 'ChatGPT Images 2.6', 'Review', 'Limits', 'Alternative')
+    title: 'ChatGPT Images 2.6: Review, Limits & Top Free Alternative',
+    // Strict 154 chars (140-160 range, answers GIF/SVG, Flare vs Sunburst, safety limits & free editing alternative)
+    description: 'Explore ChatGPT Images 2.6 (GPT-Image-2.6): new GIF & SVG features, Sunburst vs Flare, safety filter limits, and free in-browser AI editing alternatives.',
+    date: '2026-11-05',
+    readTime: '11 min read',
+    category: 'Foundation Models & Benchmarks',
+    author: {
+      name: 'Alex Chen',
+      role: 'Staff AI Infrastructure Engineer',
+      avatar: '/images/author-alex.jpg',
+      bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
+    },
+    keywords: [
+      'chatgpt images 2.6',
+      'chatgpt image 2.6',
+      'gpt images 2.6',
+      'gpt image 2.6',
+      'images 2.6',
+      'chatgpt images 2.6 alternative',
+      'chatgpt images 2.6 review',
+      'gpt image 2.6 flare',
+      'gpt image 2.6 sunburst',
+      'chatgpt image 2.6 gif',
+      'chatgpt image 2.6 svg',
+      'can chatgpt generate images 2.6',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'open-h3-regenerate-2k-comfyui-setup-alternatives',
     // Strict 60 chars (50-60 safety range, targets 'Open H3 Regenerate 2K', 'ComfyUI Workflow', 'Download', 'VRAM Fix')
     title: 'Open H3 Regenerate 2K: ComfyUI Workflow, Download & VRAM Fix',
