@@ -7,10 +7,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { getLinkHref } from "~/configs/buildLink";
 import { BlogPost } from "~/content/blogData";
-import { 
-  CalendarIcon, 
-  ClockIcon, 
-  SparklesIcon, 
+import {
+  CalendarIcon,
+  ClockIcon,
+  SparklesIcon,
   InformationCircleIcon,
   ExclamationTriangleIcon,
   ArrowRightIcon,
@@ -19,7 +19,8 @@ import {
   DocumentDuplicateIcon,
   ChevronDownIcon,
   Squares2X2Icon,
-  CpuChipIcon
+  CpuChipIcon,
+  ArrowTopRightOnSquareIcon
 } from "@heroicons/react/24/outline";
 import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 
@@ -70,9 +71,9 @@ export default function ZImageTurboBlogPostComponent({
     }
   };
 
-  const generatedPrompt = `${subjectPrompt}, 35mm point-and-shoot camera aesthetic, fine fabric seam details, natural skin texture with subtle pores, volumetric studio lighting, authentic color depth, high legibility, photorealistic 4k resolution`;
+  const generatedPrompt = `${subjectPrompt}, 35mm film aesthetic, fine fabric seam details, natural skin texture with subtle pores, volumetric lighting, authentic color depth, 4k resolution`;
 
-  const generatedComfyUiWorkflowSnippet = `# Z-Image Turbo ComfyUI Workflow Configuration (Python API / Custom Nodes)
+  const generatedComfyUiWorkflowSnippet = `# ComfyUI Setup Script (Python API / Custom Nodes)
 # Pipeline: Alibaba Tongyi-MAI 6B S3-DiT Distilled (8 Steps)
 
 import torch
@@ -88,7 +89,7 @@ model = ZImageLoader.load_checkpoint(
 # 2. Attach Required VAE (Critical: Prevents FP16 NaN Black Screen)
 vae = ZImageVaeLoader.load_vae("flux_compatible_vae.safetensors", dtype=torch.bfloat16)
 
-# 3. Configure ${workflowMode === 'img2img' ? 'Z-Image Turbo Image to-Image' : workflowMode === 'reference' ? 'Z-Image Turbo Reference Image' : 'Z-Image Turbo Text-to-Image'} Sampler
+# 3. Configure ${workflowMode === 'img2img' ? 'Image to-Image' : workflowMode === 'reference' ? 'Reference Image Guidance' : 'Text-to-Image'} Sampler
 # Notice: guidance_scale MUST be 0.0 for Turbo; negative prompts are ignored by design.
 samples = ZImageSampler.sample(
     model=model,
@@ -116,27 +117,27 @@ samples = ZImageSampler.sample(
   const faqData = [
     {
       q: "Why do negative prompts not work in Z-Image Turbo?",
-      a: "In a Z-Image Turbo ComfyUI workflow, the 8-step engine clamps guidance_scale to 0.0. Because CFG is inactive, the diffusion backbone cannot compute gradients against negative prompt latents. Guide outputs using affirmative photographic details."
+      a: "In an 8-step distilled workflow, the engine clamps guidance_scale to 0.0. Because CFG is disabled, the diffusion backbone cannot compute gradients against negative prompt latents. Steer outputs using positive photographic details."
     },
     {
       q: "How do I fix pure black image (NaN) outputs in ComfyUI?",
-      a: "Black outputs in a Z-Image Turbo ComfyUI workflow occur when loading in FP16. Force launch ComfyUI with '--bf16' or specify dtype=torch.bfloat16 for both the checkpoint and the VAE decoder to prevent NaN latents."
+      a: "Black outputs occur when loading the S3-DiT checkpoint in FP16. Force launch ComfyUI with '--bf16' or specify dtype=torch.bfloat16 for both the checkpoint and the VAE decoder to prevent numeric overflow."
     },
     {
       q: "How does Z-Image Turbo handle image-to-image (Img2Img) workflows?",
-      a: "In a Z-Image Turbo image to image workflow, set denoise strictly between 0.18 and 0.35. Setting denoise above 0.38 causes the 8-step distilled trajectory to overwrite the original subject identity."
+      a: "In an image-to-image workflow, set denoise strictly between 0.18 and 0.35. Setting denoise above 0.38 causes the 8-step trajectory to overwrite subject identity."
     },
     {
       q: "Can I run Z-Image Turbo on 8GB VRAM consumer GPUs?",
-      a: "Yes. In this Z-Image Turbo ComfyUI workflow guide, run the official MrFakeName GGUF Q4_K_M checkpoint from Hugging Face. Peak memory drops to 7.6GB VRAM, allowing smooth generation on RTX 3060 or 4060 GPUs."
+      a: "Yes. Run the official MrFakeName GGUF Q4_K_M checkpoint from Hugging Face. Peak memory drops to 7.6GB VRAM on RTX 3060 or 4060 cards."
     },
     {
       q: "What is the difference between Z-Image Base and Z-Image Turbo?",
-      a: "Z-Image Base is an undistilled 28-to-50 step model with full CFG and negative prompt support. Z-Image Turbo is an 8-step distilled engine designed for maximum throughput and out-of-the-box photographic polish."
+      a: "Z-Image Base is the undistilled 6B foundation model requiring 28 to 50 steps; it supports full CFG guidance, negative prompts, and provides wider compositional variety. Z-Image Turbo is a distilled 8-step engine built for maximum throughput and out-of-the-box photographic polish."
     },
     {
       q: "Can I test Z-Image Turbo online without downloading 15GB weights?",
-      a: "Yes. Creators without high-VRAM GPUs can test Z-Image Turbo online directly through serverless web studios, executing 8-step inference in under 2 seconds with free guest trials."
+      a: "Yes. Creators who do not have a 16GB VRAM GPU can test Z-Image Turbo online directly through serverless web studios, executing 8-step inference in under 2 seconds directly in the browser with free guest trials."
     }
   ];
 
@@ -331,7 +332,7 @@ samples = ZImageSampler.sample(
         {/* Article Body */}
         <article className="py-12">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-10 text-slate-300 text-sm sm:text-base leading-relaxed">
-            
+
             {/* BLUF Summary Card (Featured Snippet Magnet for AI Search Engines) */}
             <div className="p-5 sm:p-6 rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/30 via-slate-900/60 to-slate-950 space-y-2.5 text-xs sm:text-sm font-mono text-slate-200 shadow-xl">
               <div className="flex items-center gap-2 text-indigo-400 font-bold text-sm tracking-wide">
@@ -339,10 +340,10 @@ samples = ZImageSampler.sample(
                 <span>Executive Summary &amp; Key Findings (BLUF)</span>
               </div>
               <p className="leading-relaxed">
-                <strong>Z-Image Turbo</strong> is an open-source 6-billion-parameter text-to-image foundation model developed by Alibaba Tongyi-MAI, built on a Scalable Single-Stream Diffusion Transformer (S3-DiT) architecture. Through progressive adversarial distillation, Z-Image Turbo achieves photorealistic generation in only <strong>8 inference steps</strong>, running in approximately <strong>1.8s on RTX 4090 GPUs</strong> and under 0.8s on cloud clusters.
+                <strong>Z-Image Turbo</strong> is an open-source 6-billion-parameter text-to-image foundation model developed by Alibaba Tongyi-MAI, built on a Scalable Single-Stream Diffusion Transformer (S3-DiT) architecture. Through progressive adversarial distillation, the model achieves photorealistic generation in only <strong>8 inference steps</strong>, running in approximately <strong>1.8s on RTX 4090 GPUs</strong> and under 0.8s on cloud clusters.
               </p>
               <p className="leading-relaxed text-slate-300">
-                In every <strong>Z-Image Turbo ComfyUI workflow</strong>, Classifier-Free Guidance (CFG) is clamped to <strong>0.0</strong>, meaning negative prompts are inactive. To execute a <strong>Z-Image Turbo image to-image</strong> or reference workflow without facial drift, configure denoise strictly between <strong>0.18 and 0.35</strong> and enforce <code>torch.bfloat16</code> precision to prevent NaN black screens.
+                In every <strong>Z-Image Turbo ComfyUI workflow</strong>, Classifier-Free Guidance (CFG) is clamped to <strong>0.0</strong>, meaning negative prompts are inactive. To execute a <strong>Z-Image Turbo image to image workflow</strong> without facial drift, configure denoise strictly between <strong>0.18 and 0.35</strong> and enforce <code>torch.bfloat16</code> precision to prevent NaN black screens.
               </p>
             </div>
 
@@ -351,10 +352,10 @@ samples = ZImageSampler.sample(
               <div className="space-y-1">
                 <div className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                   <CommandLineIcon className="w-5 h-5 text-indigo-400" />
-                  <span>Interactive Z-Image Turbo ComfyUI Workflow Configurator</span>
+                  <span>Interactive ComfyUI Workflow &amp; Denoise Configurator</span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  Select your intended workflow mode, local hardware tier, and denoise strength below to generate calibrated Z-Image Turbo ComfyUI code and anti-glaze prompt formats:
+                  Select your intended workflow mode, local hardware tier, and denoise strength below to generate calibrated Python scripts and affirmative prompt formats:
                 </p>
               </div>
 
@@ -367,9 +368,9 @@ samples = ZImageSampler.sample(
                     onChange={(e: any) => setWorkflowMode(e.target.value)}
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-slate-200 focus:outline-none focus:border-indigo-500"
                   >
-                    <option value="img2img">Z-Image Turbo Image to-Image (0.18-0.35)</option>
-                    <option value="reference">Z-Image Turbo Reference Image Workflow</option>
-                    <option value="t2i">Z-Image Turbo Text-to-Image (8-Step)</option>
+                    <option value="img2img">Image-to-Image (0.18-0.35 Denoise)</option>
+                    <option value="reference">Reference Image &amp; Style Transfer</option>
+                    <option value="t2i">Text-to-Image (8-Step Fast Mode)</option>
                   </select>
                 </div>
 
@@ -421,7 +422,7 @@ samples = ZImageSampler.sample(
                 <div className="flex items-center justify-between text-xs text-slate-400">
                   <span className="font-semibold text-slate-300 flex items-center gap-1.5">
                     <CodeBracketIcon className="w-4 h-4 text-indigo-400" />
-                    Generated Z-Image Turbo ComfyUI Workflow Script:
+                    Generated ComfyUI Node Script:
                   </span>
                   <button
                     type="button"
@@ -441,7 +442,7 @@ samples = ZImageSampler.sample(
               <div className="space-y-2 pt-1 border-t border-slate-800/80">
                 <div className="flex items-center justify-between text-xs text-slate-400">
                   <span className="font-semibold text-slate-300">
-                    Z-Image Turbo Prompting Template (Replaces Negative Prompts):
+                    Affirmative Prompt Template (Replaces Negative Prompts):
                   </span>
                   <button
                     type="button"
@@ -464,10 +465,7 @@ samples = ZImageSampler.sample(
                 1. Architecture &amp; Specs: Z-Image Turbo S3-DiT 8-Step Distillation
               </h2>
               <p>
-                The breakthrough behind Alibaba&apos;s <strong>Z-Image Turbo</strong> model is its <strong>Scalable Single-Stream Diffusion Transformer (S3-DiT)</strong> architecture. Unlike dual-stream models that maintain separate transformer backbones for text conditioning and latent image patches, S3-DiT concatenates token sequences into a single unified stream. Text tokens and spatial image patches attend directly to one another across all 6.15 billion parameters.
-              </p>
-              <p>
-                Through progressive adversarial distillation, the <strong>Z-Image Turbo</strong> engine compresses a typical 50-step diffusion solver into just <strong>8 function evaluations (NFEs)</strong>. This enables high-fidelity photorealism while maintaining bilingual English and Chinese text rendering.
+                Alibaba&apos;s <strong>Z-Image Turbo</strong> builds on a <strong>Scalable Single-Stream Diffusion Transformer (S3-DiT)</strong> architecture. Unlike standard two-stream networks, S3-DiT concatenates text conditioning and latent image tokens into a unified attention stream across all 6.15 billion parameters (<a href="https://github.com/Tongyi-MAI/Z-Image" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline inline-flex items-center gap-1">Tongyi-MAI GitHub<ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" /></a> • <a href="https://huggingface.co/Tongyi-MAI/Z-Image-Turbo" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline inline-flex items-center gap-1">Hugging Face<ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" /></a>). Adversarial distillation enables photorealistic output in just <strong>8 steps (NFEs)</strong> with bilingual typography.
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-900/60 border border-slate-800 text-xs">
@@ -493,29 +491,29 @@ samples = ZImageSampler.sample(
             {/* Section 2: Complete ComfyUI Workflows */}
             <section className="space-y-4">
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                2. Z-Image Turbo ComfyUI Workflow: Image-to-Image &amp; Reference Setup
+                2. ComfyUI Workflow: Image-to-Image &amp; Reference Setup
               </h2>
               <p>
-                This <strong>Z-Image Turbo ComfyUI workflow guide</strong> outlines step-by-step node connections for <strong>image-to-image (Img2Img)</strong> and <strong>reference image workflow</strong> tasks. Following our <strong>Z-Image Turbo ComfyUI workflow guide</strong> prevents identity drift and memory crashes.
+                This <strong>Z-Image Turbo ComfyUI workflow guide</strong> details node configurations for <strong>image-to-image (Img2Img)</strong> and reference workflows, eliminating identity drift and VRAM crashes.
               </p>
 
               <h3 className="text-lg sm:text-xl font-bold text-white">
-                A. Z-Image Turbo Image to-Image Denoise Sweet Spot (0.18–0.35)
+                A. Denoise Sweet Spot (0.18–0.35)
               </h3>
               <p>
-                In any <strong>Z-Image Turbo image to image workflow</strong>, setting denoise to 0.50 leaves only 4 active steps, destroying subject likeness. A calibrated <strong>Z-Image Turbo image to image workflow</strong> requires the denoise parameter to stay strictly between 0.18 and 0.35:
+                In image-to-image workflows, setting denoise above 0.38 causes the 8-step schedule to overwrite subject geometry. Keep denoise strictly within these calibrated boundaries:
               </p>
               <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-300">
-                <li><strong>Subtle Lighting &amp; Color Grading:</strong> Denoise at <strong>0.18 - 0.22</strong> in your <strong>Z-Image Turbo image to image workflow</strong>. Preserves facial contours and product geometry.</li>
-                <li><strong>Outfit &amp; Material Replacement:</strong> Denoise at <strong>0.25 - 0.32</strong> in your <strong>Z-Image Turbo image to image workflow</strong>. Swaps garments and background elements smoothly.</li>
-                <li><strong>Creative Re-Imagining:</strong> Denoise at <strong>0.35 - 0.38</strong>. Permissible only when significant anatomical shifts are desired.</li>
+                <li><strong>Subtle Lighting &amp; Color Grading:</strong> Denoise at <strong>0.18 - 0.22</strong> preserves facial likeness and contours. For catalog synthesis, pair this with our <Link href={getLinkHref(locale, 'product-photo-editor')} className="text-indigo-400 hover:underline">AI Product Photo Editor</Link>.</li>
+                <li><strong>Outfit &amp; Material Replacement:</strong> Denoise at <strong>0.25 - 0.32</strong> swaps garments and background textures smoothly while maintaining body posture.</li>
+                <li><strong>Creative Re-Imagining:</strong> Denoise at <strong>0.35 - 0.38</strong> allows moderate anatomical adjustments.</li>
               </ul>
 
               <h3 className="text-lg sm:text-xl font-bold text-white">
-                B. Z-Image Turbo Reference Image Workflow &amp; Inpainting
+                B. Reference Image Conditioning &amp; Inpainting
               </h3>
               <p>
-                For localized edits, connect a masked source latent into the <strong>Z-Image Turbo ComfyUI workflow</strong>. Thanks to native bilingual comprehension, descriptive prompts like <em>&quot;Replace background with a neon-lit cyberpunk street, keep the subject untouched&quot;</em> execute without color bleed or visible seam artifacts.
+                For localized edits, connect a masked source latent into the node graph. Bilingual understanding ensures prompts like <em>&quot;Replace background with a neon-lit cyberpunk street, keep the subject untouched&quot;</em> execute without color bleed or edge seams.
               </p>
             </section>
 
@@ -525,7 +523,7 @@ samples = ZImageSampler.sample(
                 3. Benchmark: Z-Image Turbo vs Flux 2 Klein, Krea 2 &amp; Base
               </h2>
               <p>
-                We tested <strong>Z-Image Turbo</strong> against its primary competitors on identical RTX 4090 hardware to compare speed, memory footprint, and prompt adherence:
+                We benchmarked the model on RTX 4090 hardware across latency, VRAM, and prompt fidelity. See our <Link href={getLinkHref(locale, 'vs-flux')} className="text-indigo-400 hover:underline">Flux.1 DiT benchmark analysis</Link> for wider comparisons:
               </p>
 
               <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/40">
@@ -625,21 +623,21 @@ samples = ZImageSampler.sample(
                 4. Z-Image Turbo Prompting Guide: Eliminating the Digital Glaze
               </h2>
               <p>
-                In <strong>Z-Image Turbo prompting</strong>, standard negative prompt lists fail entirely. Because Turbo clamps <code>guidance_scale = 0.0</code> to achieve 8-step speed, the model skips unconditional forward passes.
+                In <strong>Z-Image Turbo prompting</strong>, standard negative tags fail because CFG is clamped to <code>0.0</code> for 8-step speed, skipping unconditional passes.
               </p>
 
               <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-amber-200 text-xs sm:text-sm space-y-1.5">
                 <div className="font-bold flex items-center gap-1.5 text-amber-400">
                   <ExclamationTriangleIcon className="w-4 h-4" />
-                  <span>Why Negative Prompts Fail in Z-Image Turbo Workflows:</span>
+                  <span>Why Negative Prompts Fail in Distilled S3-DiT Workflows:</span>
                 </div>
                 <p>
-                  With CFG set to 0.0, the diffusion backbone cannot calculate latent gradients against negative prompts. If your output contains unwanted artifacts, you must steer the model using affirmative photographic phrasing.
+                  With CFG at 0.0, the backbone cannot compute gradients against negative prompts. Unwanted attributes must be steered using positive natural-language phrasing.
                 </p>
               </div>
 
               <p>
-                Distilled models converge on smooth, artificial faces when prompts are brief. Inject photorealistic realism by specifying real camera equipment, lens lengths, and skin pore details:
+                Prevent plastic skin by specifying concrete camera optics and skin textures:
               </p>
               <div className="space-y-3 text-xs sm:text-sm">
                 <div className="p-3 rounded-xl bg-slate-900 border border-red-500/30">
@@ -647,7 +645,7 @@ samples = ZImageSampler.sample(
                   <code className="text-slate-300 font-mono">1girl, beautiful portrait, masterpiece, best quality, cinematic lighting, 8k</code>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
-                  <span className="text-emerald-400 font-bold block mb-1">✅ High-Fidelity Z-Image Turbo Prompting Template:</span>
+                  <span className="text-emerald-400 font-bold block mb-1">✅ High-Fidelity Photographic Prompting Template:</span>
                   <code className="text-emerald-300 font-mono">Editorial street portrait of a woman in an emerald green wool overcoat, shot with a 35mm point-and-shoot camera, natural skin texture with subtle pores, fine fabric seam details, overcast diffused daylight, Kodak Portra color tones, authentic film grain</code>
                 </div>
               </div>
@@ -656,11 +654,8 @@ samples = ZImageSampler.sample(
             {/* Section 5: Troubleshooting ComfyUI */}
             <section className="space-y-4">
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                5. Z-Image Turbo ComfyUI Troubleshooting: VAE Black Screen &amp; GGUF
+                5. Troubleshooting ComfyUI: VAE Black Screen &amp; GGUF
               </h2>
-              <p>
-                When setting up a <strong>Z-Image Turbo ComfyUI workflow</strong>, creators commonly encounter two technical roadblocks:
-              </p>
 
               <div className="space-y-2">
                 <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
@@ -668,7 +663,7 @@ samples = ZImageSampler.sample(
                   Fixing Black Screen Outputs Caused by FP16 NaN Latents
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300">
-                  In <code>torch.float16</code>, S3-DiT attention layers exceed numeric half-precision limits, producing NaN latents that decode as solid black images. Force launch ComfyUI with bfloat16:
+                  In <code>torch.float16</code>, S3-DiT attention triggers numeric overflow, decoding as pure black frames. Launch ComfyUI with bfloat16:
                 </p>
                 <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300">
                   <code>python main.py --bf16-unet --bf16-vae --preview-method auto</code>
@@ -681,7 +676,7 @@ samples = ZImageSampler.sample(
                   Running on 8GB GPUs via MrFakeName GGUF
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300">
-                  On 8GB VRAM cards (RTX 3060, 4060), uncompressed 14.8GB BF16 weights cause CUDA OOM errors. Use the official <strong>MrFakeName GGUF Q4_K_M</strong> quantization from Hugging Face: peak memory drops to <strong>7.6GB VRAM</strong> with under 1% visual degradation.
+                  On 8GB VRAM cards (RTX 3060, 4060), uncompressed 14.8GB BF16 weights cause CUDA OOM errors. Download the official <a href="https://huggingface.co/mrfakename/Z-Image-Turbo-GGUF" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline inline-flex items-center gap-1">MrFakeName GGUF Q4_K_M release<ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" /></a>: peak VRAM drops to <strong>7.6GB</strong> with minimal fidelity loss.
                 </p>
               </div>
             </section>
@@ -692,7 +687,7 @@ samples = ZImageSampler.sample(
                 6. Test Z-Image Turbo Online: Fast Web Studio Without GPU Limits
               </h2>
               <p>
-                While deploying a local <strong>Z-Image Turbo ComfyUI workflow</strong> provides modular flexibility, hardware barriers and dependency installations create friction.
+                Local ComfyUI deployment requires dedicated VRAM and dependency configuration.
               </p>
               <p>
                 To eliminate GPU requirements, our <Link href={getLinkHref(locale, '')} className="text-indigo-400 hover:underline font-semibold">Z-Image Turbo Online Web Studio</Link> provides instant serverless access. Creators can run 8-step image synthesis, instruction inpainting, and high-resolution exports directly in the browser with free guest trials.
@@ -706,7 +701,7 @@ samples = ZImageSampler.sample(
                   7. Z-Image Turbo Frequently Asked Questions (FAQ)
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Key technical solutions for running Z-Image Turbo ComfyUI workflows and prompt engineering:
+                  Key technical solutions for running workflows:
                 </p>
               </div>
 
@@ -720,9 +715,8 @@ samples = ZImageSampler.sample(
                     >
                       <span>{item.q}</span>
                       <ChevronDownIcon
-                        className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${
-                          faqOpen[idx] ? 'rotate-180 text-indigo-400' : ''
-                        }`}
+                        className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${faqOpen[idx] ? 'rotate-180 text-indigo-400' : ''
+                          }`}
                       />
                     </button>
                     {faqOpen[idx] && (
@@ -754,10 +748,10 @@ samples = ZImageSampler.sample(
                 >
                   <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold">
                     <CommandLineIcon className="w-4 h-4" />
-                    <span>Z-Image Turbo ComfyUI Workflow Guide</span>
+                    <span>ComfyUI Workflow Setup Guide</span>
                   </div>
                   <p className="text-xs text-slate-300">
-                    Access our interactive Z-Image Turbo ComfyUI workflow guide for calibrated Img2Img scripts and VAE configs.
+                    Access our interactive setup guide for calibrated Img2Img scripts and VAE configs.
                   </p>
                 </a>
 
@@ -767,10 +761,10 @@ samples = ZImageSampler.sample(
                 >
                   <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
                     <SparklesIcon className="w-4 h-4" />
-                    <span>Test Z-Image Turbo Online Web Studio</span>
+                    <span>Z-Image Turbo Online Web Studio</span>
                   </div>
                   <p className="text-xs text-slate-300">
-                    Test Z-Image Turbo online directly in your browser with zero local GPU setup and instant guest trials.
+                    Test fast diffusion models online with zero local GPU setup and free trials.
                   </p>
                 </Link>
 
@@ -780,10 +774,10 @@ samples = ZImageSampler.sample(
                 >
                   <div className="flex items-center gap-2 text-purple-400 text-xs font-bold">
                     <CpuChipIcon className="w-4 h-4" />
-                    <span>Z-Image Turbo vs Flux 2 Klein Benchmark</span>
+                    <span>Z-Image Turbo vs Flux 2 Klein</span>
                   </div>
                   <p className="text-xs text-slate-300">
-                    Compare Z-Image Turbo vs Flux 2 Klein latency benchmarks, VRAM footprints, and typography metrics.
+                    Compare latency, VRAM footprint, and bilingual typography benchmarks.
                   </p>
                 </a>
 
