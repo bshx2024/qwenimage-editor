@@ -44,7 +44,7 @@
   },
   "AuthText": {
     "loginText": "登录",
-    "loginModalDesc": "请继续登录",
+    "loginModalDesc": "登录 Google 即可免费激活今日 AI 创作额度，保存您的生成作品并下载高清无损大图（完全免费，无需信用卡）。",
     "loginModalButtonText": "使用 Google 登录",
     "logoutModalDesc": "您想要登出吗？",
     "confirmButtonText": "确认",

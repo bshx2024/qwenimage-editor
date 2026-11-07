@@ -45,7 +45,7 @@
   },
   "AuthText": {
     "loginText": "Sign In",
-    "loginModalDesc": "Sign in to save your editing history and access high-resolution exports.",
+    "loginModalDesc": "Sign in with Google to claim your free daily creation credits, save your generated artwork, and export high-resolution assets (100% Free, no credit card required).",
     "loginModalButtonText": "Continue with Google",
     "logoutModalDesc": "Are you sure you want to sign out?",
     "confirmButtonText": "Sign Out",

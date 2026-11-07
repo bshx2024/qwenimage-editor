@@ -762,6 +762,34 @@ python main.py --preview-method auto ${gpuHardware === '16gb' ? '--lowvram --dis
 
           </div>
         </article>
+
+        {/* Floating Quick Action Sticky CTA */}
+        <aside aria-label="Quick launch toolbar" className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-lg">
+          <div className="p-3 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-indigo-500/40 shadow-2xl shadow-indigo-950/60 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="p-1.5 rounded-xl bg-indigo-500/20 text-indigo-400 shrink-0">
+                <SparklesIcon className="w-4 h-4" />
+              </span>
+              <div className="truncate text-xs">
+                <span className="font-bold text-white block truncate">
+                  {locale?.startsWith('zh') ? '预处理 MiniMax H3 资产？' : 'Prepare MiniMax H3 2048px Assets?'}
+                </span>
+                <span className="text-[11px] text-slate-400 block truncate">
+                  {locale?.startsWith('zh') ? '云端一键消除背景与服饰修改 • 免显卡' : 'Cloud Inpaint & Clean Frames • Zero GPU'}
+                </span>
+              </div>
+            </div>
+            <Link
+              href={getLinkHref(locale, '')}
+              data-umami-event="sticky_cta_click"
+              data-umami-event-page="minimax-h3-blog"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:opacity-95 text-white text-xs font-bold shrink-0 shadow-lg shadow-indigo-500/30 transition-transform active:scale-95"
+            >
+              <span>{locale?.startsWith('zh') ? '免费体验' : 'Try Free'}</span>
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </aside>
       </main>
 
       <Footer locale={locale} page="blog" />

@@ -50,3 +50,4 @@ Allow: /
 # Canonical Sitemap Declaration
 Sitemap: https://www.qwenimage-editor.com/sitemap.xml
 LLMs-Txt: https://www.qwenimage-editor.com/llms.txt
+LLMs-Full-Txt: https://www.qwenimage-editor.com/llms-full.txt

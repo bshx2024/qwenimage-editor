@@ -19,6 +19,41 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'z-image-turbo-guide-comfyui-workflows-prompting-online',
+    // Strict 58 chars (50-60 safety range, locks 'Z-Image Turbo Guide', 'ComfyUI Workflows', 'Prompting', 'Online')
+    title: 'Z-Image Turbo Guide: ComfyUI Workflows, Prompting & Online',
+    // Strict 157 chars (140-160 range, answers workflows, VAE black screens, negative tags, and free online test)
+    description: 'Master Z-Image Turbo: ComfyUI image-to-image and reference workflows, fix VAE black screens, write proper prompts without negative tags, and test free online.',
+    date: '2026-11-07',
+    readTime: '12 min read',
+    category: 'Open Source AI & Visual Workflows',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Lead Visual AI & Generative Media Specialist',
+      avatar: '/images/author-elena.jpg',
+      bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual inpainting workflows.',
+    },
+    keywords: [
+      'z image turbo',
+      'z-image turbo',
+      'z image turbo image to image workflow',
+      'z image turbo reference image workflow',
+      'z image turbo image edit workflow',
+      'z image turbo comfyui',
+      'z image turbo prompting',
+      'z image turbo vs flux 2 klein',
+      'z image turbo vs krea 2',
+      'z image turbo vs z image base',
+      'z-image turbo online',
+      'z image turbo vae',
+      'z image turbo gguf',
+      'z image turbo mr fake name',
+      'z image turbo loras',
+      'z image turbo download',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'chatgpt-images-2-6-review-limitations-alternative',
     // Strict 57 chars (50-60 safety range, locks 'ChatGPT Images 2.6', 'Review', 'Limits', 'Alternative')
     title: 'ChatGPT Images 2.6: Review, Limits & Top Free Alternative',

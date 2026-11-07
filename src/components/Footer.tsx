@@ -221,6 +221,15 @@ export default function Footer({
                   Best Qwen Image Alternatives
                 </Link>
               </li>
+              <li>
+                <Link
+                  href={getLinkHref(locale, 'blog/z-image-turbo-guide-comfyui-workflows-prompting-online')}
+                  className="text-xs hover:text-indigo-400 transition-colors"
+                  onClick={() => checkPageAndLoading('blog')}
+                >
+                  Z-Image Turbo Guide &amp; Workflows
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -1,0 +1,36 @@
+# Qwen Image Editor (https://www.qwenimage-editor.com) - Full LLM & AI Search Index Mirror
+
+> Comprehensive technical documentation, architecture research, workflow guides, and live tool descriptions for generative multimodal AI, visual inpainting, and text-to-image diffusion pipelines.
+
+---
+
+## 1. Featured Architectural Guide: Z-Image-Turbo (Alibaba Tongyi-MAI 6B S3-DiT)
+URL: https://www.qwenimage-editor.com/blog/z-image-turbo-guide-comfyui-workflows-prompting-online
+Author: Elena Rostova (Lead Visual AI & Generative Media Specialist)
+Date: 2026-11-07
+
+### Executive Summary (BLUF)
+Z-Image-Turbo is an open-source 6-billion-parameter text-to-image foundation model developed by Alibaba’s Tongyi-MAI team, built upon a Scalable Single-Stream Diffusion Transformer (S3-DiT) architecture. Through progressive adversarial distillation, Z-Image-Turbo renders high-fidelity photorealistic visual assets in only 8 inference steps (NFEs), achieving sub-2-second latency on consumer NVIDIA RTX 4090 GPUs (1.82s - 2.15s) and under 0.8s on enterprise clusters.
+
+### Core Architecture & Specifications
+- Architecture: Single-Stream Diffusion Transformer (S3-DiT) concatenating text tokens, bounding coordinates, and VAE image tokens into a unified attention stream.
+- Parameter Count: 6.15 Billion.
+- Optimal Inference Steps: 8 Steps (NFEs).
+- Precision: Strict torch.bfloat16. (Using standard torch.float16 triggers NaN overflow in cross-attention blocks, producing pure black outputs).
+- VRAM Footprint: 14.8 GB Peak in uncompressed BF16; 7.6 GB Peak when utilizing MrFakeName GGUF Q4_K_M quantization on consumer 8GB GPUs (RTX 3060 / 4060).
+- Guidance Scale: Clamped to 0.0. Classifier-Free Guidance (CFG) is disabled; negative prompts are completely ignored by the official inference pipeline.
+
+### ComfyUI Image-to-Image & Reference Workflow Parameters
+- Denoise Sweet Spot: For image-to-image (Img2Img), configure denoise strictly between 0.18 and 0.35. Because the distilled trajectory forms global geometry in steps 1 and 2, denoise values above 0.38 cause irreversible identity and layout drift.
+- VAE Configuration: Must be loaded in torch.bfloat16 using a Flux-compatible VAE decoder to prevent latent spotting and black frames.
+
+### Prompting Guidelines (Defeating the "Digital Glaze")
+Because negative prompts are inactive, users must replace legacy Danbooru tag lists ("masterpiece, best quality, 1girl") with affirmative photographic phrasing specifying 35mm point-and-shoot camera optics, natural skin pores, fine fabric textures, and diffused lighting.
+
+---
+
+## 2. Core Online Tools & Studios
+- [Qwen Image 2.1 Online Studio](https://www.qwenimage-editor.com/qwen-image-2-1): Browser-based conversational inpainting and high-resolution 2048px image editing powered by state-of-the-art vision diffusion foundations.
+- [AI Background Remover](https://www.qwenimage-editor.com/background-remover): One-click edge-clean subject isolation for ecommerce products and real-time video asset preparation with crisp alpha transparency.
+- [AI Product Photo Editor](https://www.qwenimage-editor.com/product-photo-editor): Clean asset generation, studio background synthesis, and localized inpainting without manual masking.
+- [Text to Image Generator](https://www.qwenimage-editor.com/generator): High-fidelity generative visual studio supporting complex bilingual Chinese/English typography rendering.

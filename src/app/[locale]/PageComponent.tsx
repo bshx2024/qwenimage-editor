@@ -439,8 +439,11 @@ export default function PageComponent({
         aspectRatio,
       };
 
-      if (activeTab === 'edit' && sourceImage) {
-        let finalImageUrl = sourceImage;
+      if (activeTab === 'edit') {
+        let finalImageUrl = sourceImage || '/images/showcase_dress_before.jpg';
+        if (!sourceImage) {
+          setSourceImage(finalImageUrl);
+        }
         // If still a client-side blob URL, convert to Base64 data URL for API consumption
         if (finalImageUrl.startsWith('blob:')) {
           try {
@@ -491,10 +494,11 @@ export default function PageComponent({
       if (result.uid) {
         if (!userData) {
           recordGuestTrialUse();
-          setGuestTrialsRemaining(0);
+          setGuestTrialsRemaining(getGuestTrialsRemaining());
           trackUmamiEvent('guest_trial_used', {
             tab: activeTab,
             model: selectedModel,
+            remaining: getGuestTrialsRemaining(),
           });
         }
         setUid(result.uid);
@@ -1809,8 +1813,8 @@ export default function PageComponent({
                                   <span>
                                     {!userData
                                       ? (guestTrialsRemaining > 0
-                                          ? (locale?.startsWith('zh') ? '免登录立即体验 (免费 1 次)' : 'Try Free Once (No Login)')
-                                          : (locale?.startsWith('zh') ? '登录激活今日额度 (1/1)' : 'Sign In to Use Quota (1/1)'))
+                                          ? (locale?.startsWith('zh') ? `免登录立即体验 (免费 ${guestTrialsRemaining} 次)` : `Try Free Once (${guestTrialsRemaining} Left)`)
+                                          : (locale?.startsWith('zh') ? '登录激活今日额度 (1/1)' : 'Sign In with Google (1 Free Credit)'))
                                       : activeTab === 'edit'
                                       ? ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生成 (消耗 1 额度)' : 'Apply Edit (1 Credit)') : (locale?.startsWith('zh') ? '立即生成 (额度不足)' : 'Apply Edit'))
                                       : ((userData.available_times ?? 0) > 0 ? (locale?.startsWith('zh') ? '立即生图 (消耗 1 额度)' : 'Generate (1 Credit)') : (locale?.startsWith('zh') ? '立即生图 (额度不足)' : 'Generate'))}

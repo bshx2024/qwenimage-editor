@@ -5,6 +5,7 @@ import Footer from "~/components/Footer";
 import Link from "next/link";
 import { useState } from "react";
 import { getLinkHref } from "~/configs/buildLink";
+import BlogInlineCtaCard from "~/components/BlogInlineCtaCard";
 import {
   SparklesIcon,
   ChevronDownIcon,
@@ -529,6 +530,9 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
                 Nano Banana is strictly limited to text-to-image synthesis without native inpainting backbones. Attempting to modify a single object requires regenerating the entire canvas from scratch, resulting in severe character drift and wasted creative iterations.
               </p>
             </article>
+
+            {/* High Converting Live Interactive Sandbox Bridge */}
+            <BlogInlineCtaCard locale={locale} contextTitle="Qwen Image 2.1 vs Nano Banana" variant="full" />
           </div>
         </section>
 
@@ -682,6 +686,34 @@ export default function VsNanoBananaComponent({ locale = 'en' }: { locale?: stri
             </div>
           </div>
         </section>
+
+        {/* Floating Quick Action Sticky CTA */}
+        <aside aria-label="Quick launch toolbar" className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-lg">
+          <div className="p-3 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-purple-500/40 shadow-2xl shadow-purple-950/60 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="p-1.5 rounded-xl bg-purple-500/20 text-purple-400 shrink-0">
+                <SparklesIcon className="w-4 h-4" />
+              </span>
+              <div className="truncate text-xs">
+                <span className="font-bold text-white block truncate">
+                  {locale?.startsWith('zh') ? '在线体验 Qwen Image 2.1' : 'Test Qwen Image 2.1 Live'}
+                </span>
+                <span className="text-[11px] text-slate-400 block truncate">
+                  {locale?.startsWith('zh') ? '免本地显卡配置 • 免费即刻试用' : 'Zero GPU Setup • 2 Free Trials'}
+                </span>
+              </div>
+            </div>
+            <Link
+              href={getLinkHref(locale, '')}
+              data-umami-event="sticky_cta_click"
+              data-umami-event-page="vs-nano-banana"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:opacity-95 text-white text-xs font-bold shrink-0 shadow-lg shadow-purple-500/30 transition-transform active:scale-95"
+            >
+              <span>{locale?.startsWith('zh') ? '立即试用' : 'Try Live'}</span>
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </aside>
       </main>
 
       <Footer locale={locale} page="vs-nano-banana" />

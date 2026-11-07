@@ -84,9 +84,9 @@ export async function POST(req: Request) {
       const guestUsedCountStr = await getSetting(`guest_trial_${cleanIp}`).catch(() => "0");
       const guestUsedCount = Number(guestUsedCountStr || 0);
 
-      if (guestUsedCount >= 1) {
+      if (guestUsedCount >= 2) {
         return Response.json({
-          msg: "You have used your 1 free guest trial. Please sign in with Google to get daily free credits & unlock HD exports!",
+          msg: "You have used your 2 free guest trials. Please sign in with Google to get daily free credits & unlock HD exports!",
           status: 601,
           guestLimitReached: true,
         });
