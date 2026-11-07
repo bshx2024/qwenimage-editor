@@ -15,16 +15,30 @@ interface BlogInlineCtaCardProps {
   locale?: string;
   contextTitle?: string;
   variant?: 'compact' | 'full';
+  customTitle?: string;
+  customDescription?: string;
+  customBadge?: string;
+  customButtonText?: string;
+  customPresets?: Array<{
+    label: string;
+    prompt: string;
+    tag: string;
+  }>;
 }
 
 export default function BlogInlineCtaCard({
   locale = 'en',
   contextTitle = '',
   variant = 'full',
+  customTitle,
+  customDescription,
+  customBadge,
+  customButtonText,
+  customPresets,
 }: BlogInlineCtaCardProps) {
   const homeUrl = `/${locale}`;
 
-  const presets = [
+  const defaultPresets = [
     {
       label: '👗 Fashion & Clothes Try-On',
       prompt: 'Swap clothes to elegant emerald green silk gala evening dress, high slit',
@@ -47,10 +61,12 @@ export default function BlogInlineCtaCard({
     },
   ];
 
+  const presets = customPresets && customPresets.length > 0 ? customPresets : defaultPresets;
+
   if (variant === 'compact') {
     return (
       <aside
-        aria-label="Try Qwen Image Editor inline"
+        aria-label="Try visual AI editor inline"
         className="my-8 relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-slate-950 via-indigo-950/40 to-slate-950 p-5 shadow-xl shadow-indigo-950/20"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -62,10 +78,10 @@ export default function BlogInlineCtaCard({
               <span className="text-xs text-slate-400">Cloud Web Edition</span>
             </div>
             <h4 className="text-base font-bold text-white tracking-tight">
-              Prefer testing Qwen Visual AI online without local VRAM limits?
+              {customTitle || 'Prefer testing Visual AI online without local VRAM limits?'}
             </h4>
             <p className="text-xs text-slate-300">
-              Try inpainting, fashion swapping &amp; prompt editing in your browser with 2 free instant trials.
+              {customDescription || 'Try inpainting, fashion swapping & prompt editing in your browser with 2 free instant trials.'}
             </p>
           </div>
 
@@ -85,7 +101,7 @@ export default function BlogInlineCtaCard({
 
   return (
     <aside
-      aria-label="Try Qwen Image Editor interactive sandbox"
+      aria-label="Try interactive diffusion sandbox"
       className="my-10 relative overflow-hidden rounded-3xl border border-indigo-500/40 bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950/70 p-6 sm:p-8 shadow-2xl shadow-indigo-950/40 backdrop-blur-xl"
     >
       {/* Background radial highlight */}
@@ -107,12 +123,10 @@ export default function BlogInlineCtaCard({
           </div>
 
           <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            Skip Local Environment Setup — Test Qwen Visual AI Live
+            {customTitle || 'Skip Local Environment Setup — Test Visual AI Live'}
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Don&apos;t want to struggle with HuggingFace weights, multi-GPU quantization, or CUDA OOM errors?
-            You can test Alibaba Qwen&apos;s latest visual-language inpainting and fashion replacement directly
-            in our cloud-accelerated web studio with zero setup.
+            {customDescription || "Don't want to struggle with HuggingFace weights, multi-GPU quantization, or CUDA OOM errors? Test fast diffusion and neural inpainting directly in our cloud-accelerated web studio with zero setup."}
           </p>
         </div>
 
@@ -175,7 +189,7 @@ export default function BlogInlineCtaCard({
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-indigo-500/25 transition-all text-center"
           >
             <BoltIcon className="w-4 h-4" />
-            <span>Open Qwen Image Editor (Free)</span>
+            <span>{customButtonText || 'Open Web Studio (Free)'}</span>
             <ArrowRightIcon className="w-4 h-4" />
           </Link>
         </div>
