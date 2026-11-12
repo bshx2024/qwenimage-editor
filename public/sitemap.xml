@@ -56,6 +56,14 @@
         <priority>0.9</priority>
     </url>
 
+    <!-- Blog Article: Seedream 5.5 vs Qwen Image: 100-Round Inpainting & Layer Edit Arena -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/seedream-5-5-vs-qwen-image-multi-turn-edit-benchmark</loc>
+        <lastmod>2026-11-12</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
     <!-- Blog Article: GPT Image 2.6 Sunburst vs Qwen Image: Inpainting Benchmark & Consistency -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog/gpt-image-2-6-sunburst-vs-qwen-image-benchmark</loc>

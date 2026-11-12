@@ -15,6 +15,7 @@ import OpenH3RegenerateBlogPostComponent from './OpenH3RegenerateBlogPostCompone
 import ChatGptImages26BlogPostComponent from './ChatGptImages26BlogPostComponent';
 import ZImageTurboBlogPostComponent from './ZImageTurboBlogPostComponent';
 import GptImageSunburstBlogPostComponent from './GptImageSunburstBlogPostComponent';
+import SeedreamBlogPostComponent from './SeedreamBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -38,7 +39,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'gpt-image-2-6-sunburst-vs-qwen-image-benchmark') {
+  if (slug === 'seedream-5-5-vs-qwen-image-multi-turn-edit-benchmark') {
+    postComponent = <SeedreamBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'gpt-image-2-6-sunburst-vs-qwen-image-benchmark') {
     postComponent = <GptImageSunburstBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'z-image-turbo-guide-comfyui-workflows-prompting-online') {
     postComponent = <ZImageTurboBlogPostComponent post={post} locale={locale} />;

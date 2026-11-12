@@ -19,6 +19,34 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'seedream-5-5-vs-qwen-image-multi-turn-edit-benchmark',
+    // Strict 60 chars (50-60 safety range, locks 'Seedream 5.5 vs Qwen Image', '100-Round Edit Arena')
+    title: 'Seedream 5.5 vs Qwen Image: 100-Round Edit Arena | QwenImage',
+    // Strict 154 chars (140-160 range, covers inpainting stability, transparent PNG, pricing & free trial)
+    description: 'Compare ByteDance Seedream 5.5 with Qwen Image. Benchmark 100-round inpainting stability, transparent PNG layers, pricing, and test 5 free credits online.',
+    date: '2026-11-12',
+    readTime: '13 min read',
+    category: 'Vision AI & Benchmarks',
+    author: {
+      name: 'Marcus Vance',
+      role: 'Lead Visual AI Researcher & Inpainting Systems Architect',
+      avatar: '/images/author-marcus.webp',
+      bio: 'Specialist in diffusion multi-pass editing, layer decomposition, and generative inpainting pipelines. Testing next-generation visual models at scale.',
+    },
+    keywords: [
+      'seedream 5.5',
+      'seedream 5.5 vs qwen image',
+      'try seedream 5.5',
+      'seedream 5.5 image editor',
+      'seedream 5.5 inpainting',
+      'byte dance seedream 5.5',
+      'seedream v5 pro',
+      'seedream 5.5 transparent png',
+      'qwen image editor',
+      'ai inpainting benchmark',
+    ],
+  },
+  {
     slug: 'gpt-image-2-6-sunburst-vs-qwen-image-benchmark',
     // Strict 60 chars (50-60 safety range, locks 'GPT Image 2.6 Sunburst', 'Qwen', 'Edit Arena Guide')
     title: 'GPT Image 2.6 Sunburst vs Qwen: Edit Arena Guide | QwenImage',
