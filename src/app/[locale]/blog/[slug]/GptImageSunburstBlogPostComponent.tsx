@@ -45,24 +45,24 @@ export default function GptImageSunburstBlogPostComponent({
     inpainting: {
       title: "Generative Object Inpainting & Seam Blending",
       prompt: "masterpiece, 8k resolution, raw photography, hyper-detailed architectural restoration, pristine clean surfaces, natural global illumination",
-      beforeImg: "/images/showcase_photo_before.jpg",
-      afterImg: "/images/showcase_photo_after.jpg",
+      beforeImg: "/images/showcase_photo_before.webp",
+      afterImg: "/images/showcase_photo_after.webp",
       beforeLabel: "❌ Obstructed Subject & Distorted Edges",
       afterLabel: "✅ Seamless Contextual Reconstruction"
     },
     typography: {
       title: "Bilingual English & Chinese Typography Alignment",
       prompt: "Editorial advertising poster, bold crisp lettering reading 'QWEN 东方幻境 2026', flawless kerning, natural shadows, 4k",
-      beforeImg: "/images/showcase_typography_before.jpg",
-      afterImg: "/images/showcase_typography_after.jpg",
+      beforeImg: "/images/showcase_typography_before.webp",
+      afterImg: "/images/showcase_typography_after.webp",
       beforeLabel: "❌ Muddled Glyphs & Missing Characters",
       afterLabel: "✅ Flawless Dual-Language Typography"
     },
     outpainting: {
       title: "Wide-Ratio Canvas Uncrop & Ambient Lighting",
       prompt: "Cinematic wide angle, expanded 16:9 horizon, coherent volumetric atmospheric mist, realistic environment continuation",
-      beforeImg: "/images/showcase_cafe_before.jpg",
-      afterImg: "/images/showcase_cyberpunk_after.jpg",
+      beforeImg: "/images/showcase_cafe_before.webp",
+      afterImg: "/images/showcase_cyberpunk_after.webp",
       beforeLabel: "❌ Constrained 1:1 Aspect Ratio",
       afterLabel: "✅ Coherent 16:9 Canvas Expansion"
     }
@@ -190,21 +190,21 @@ print("Sunburst Result URL:", response.data[0].url)`;
             "position": 1,
             "name": "Upload Canvas & Delineate Alpha Mask",
             "text": "Upload the target image and apply a precision brush mask over unwanted artifacts with a 16px soft boundary buffer.",
-            "image": "https://www.qwenimage-editor.com/images/showcase_photo_before.jpg"
+            "image": "https://www.qwenimage-editor.com/images/showcase_photo_before.webp"
           },
           {
             "@type": "HowToStep",
             "position": 2,
             "name": "Configure Context-Aware Affirmative Prompts",
             "text": "Describe the desired background fill context rather than negative commands to guide contextual diffusion textures.",
-            "image": "https://www.qwenimage-editor.com/images/showcase_photo_after.jpg"
+            "image": "https://www.qwenimage-editor.com/images/showcase_photo_after.webp"
           },
           {
             "@type": "HowToStep",
             "position": 3,
             "name": "Execute Two-Pass Iterative Refinement & Lossless Export",
             "text": "Run primary inpainting at 0.74 denoise followed by a micro-touchup pass at 0.35 denoise, then export 4K lossless WebP.",
-            "image": "https://www.qwenimage-editor.com/images/showcase_text_after.jpg"
+            "image": "https://www.qwenimage-editor.com/images/showcase_text_after.webp"
           }
         ]
       },
@@ -271,6 +271,8 @@ print("Sunburst Result URL:", response.data[0].url)`;
                 <img
                   src={post.author.avatar}
                   alt={post.author.name}
+                  width="28"
+                  height="28"
                   className="w-7 h-7 rounded-full object-cover border border-slate-700"
                 />
                 <span className="text-slate-200">{post.author.name}</span>
@@ -384,6 +386,8 @@ print("Sunburst Result URL:", response.data[0].url)`;
                   <img
                     src={currentTask.beforeImg}
                     alt={currentTask.beforeLabel}
+                    width="600"
+                    height="600"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -395,6 +399,8 @@ print("Sunburst Result URL:", response.data[0].url)`;
                   <img
                     src={currentTask.afterImg}
                     alt={currentTask.afterLabel}
+                    width="600"
+                    height="600"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -571,7 +577,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
               <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
                 <div className="text-xs font-semibold text-rose-400 mb-2">❌ Before: Obstructed Subject with Compression Artifacts</div>
                 <img
-                  src="/images/showcase_text_before.jpg"
+                  src="/images/showcase_text_before.webp"
                   alt="Source photo with watermarked graphic needing inpainting"
                   className="rounded-lg w-full h-auto object-cover border border-slate-800"
                   loading="lazy"
@@ -582,7 +588,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
               <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
                 <div className="text-xs font-semibold text-emerald-400 mb-2">✅ After: Clean Generative Texture Inpainting (Qwen-Image)</div>
                 <img
-                  src="/images/showcase_text_after.jpg"
+                  src="/images/showcase_text_after.webp"
                   alt="Pristine inpainting output using QwenImage generative diffusion"
                   className="rounded-lg w-full h-auto object-cover border border-slate-800"
                   loading="lazy"
@@ -697,6 +703,8 @@ Mask_Padding_Pixels: 32`}</code>
             <img
               src={post.author.avatar}
               alt={post.author.name}
+              width="64"
+              height="64"
               className="w-16 h-16 rounded-full object-cover border-2 border-indigo-500/40 shrink-0"
             />
             <div className="space-y-1 text-center sm:text-left">

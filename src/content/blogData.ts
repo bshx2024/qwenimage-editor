@@ -30,7 +30,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Principal AI Vision & Creative Workflow Engineer',
-      avatar: '/images/author-elena.jpg',
+      avatar: '/images/author-elena.webp',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, visual inpainting benchmarks, and enterprise creative pipeline automation.',
     },
     keywords: [
@@ -55,7 +55,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Lead Visual AI & Generative Media Specialist',
-      avatar: '/images/author-elena.jpg',
+      avatar: '/images/author-elena.webp',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual inpainting workflows.',
     },
     keywords: [
@@ -90,7 +90,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alex Chen',
       role: 'Staff AI Infrastructure Engineer',
-      avatar: '/images/author-alex.jpg',
+      avatar: '/images/author-alex.webp',
       bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
     },
     keywords: [
@@ -121,7 +121,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Marcus Vance',
       role: 'Staff Generative Video Researcher & Systems Lead',
-      avatar: '/images/author-marcus.jpg',
+      avatar: '/images/author-marcus.webp',
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, temporal character consistency, and neural rendering workflows.',
     },
     keywords: [
@@ -149,7 +149,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Lead Visual AI & Generative Media Specialist',
-      avatar: '/images/author-elena.jpg',
+      avatar: '/images/author-elena.webp',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual inpainting workflows.',
     },
     keywords: [
@@ -180,7 +180,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Sarah Lin',
       role: 'Staff Multimodal AI & Foundation Model Systems Architect',
-      avatar: '/images/author-sarah.jpg',
+      avatar: '/images/author-sarah.webp',
       bio: 'Former frontier foundation model systems researcher specializing in speculative decoding, distributed MoE architectures, and cross-modal vision alignment pipelines across enterprise GPU clusters.',
     },
     keywords: [
@@ -210,7 +210,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Qwen Editorial & Systems Team',
       role: 'Platform Engineering & Open-Source Security Review',
-      avatar: '/images/author-alex.jpg',
+      avatar: '/images/author-alex.webp',
       bio: 'Technical evaluation authored collaboratively by the Qwen Image Editor engineering staff, conducting reproducible code audits, network socket inspections, and diffusion model comparisons.',
     },
     keywords: [
@@ -241,7 +241,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Marcus Vance',
       role: 'Staff Generative Video Researcher & Systems Lead',
-      avatar: '/images/author-marcus.jpg',
+      avatar: '/images/author-marcus.webp',
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, temporal character consistency, and vintage visual asset workflows.',
     },
     keywords: [
@@ -269,7 +269,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alex Chen',
       role: 'Staff AI Infrastructure Engineer',
-      avatar: '/images/author-alex.jpg',
+      avatar: '/images/author-alex.webp',
       bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
     },
     keywords: [
@@ -296,7 +296,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Lead Visual AI & Generative Media Specialist',
-      avatar: '/images/author-elena.jpg',
+      avatar: '/images/author-elena.webp',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, neural typography, and visual style transfer workflows.',
     },
     keywords: [
@@ -323,7 +323,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Elena Rostova',
       role: 'Lead Visual AI & Generative Media Specialist',
-      avatar: '/images/author-elena.jpg',
+      avatar: '/images/author-elena.webp',
       bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, Vid2Vid consistency, and neural rendering workflows.',
     },
     keywords: [
@@ -348,7 +348,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alex Chen',
       role: 'Staff AI Infrastructure Engineer',
-      avatar: '/images/author-alex.jpg',
+      avatar: '/images/author-alex.webp',
       bio: 'Former distributed computing researcher specializing in sparse MoE inference, model quantization, and multimodal diffusion acceleration across heterogeneous GPU clusters.',
     },
     keywords: [
@@ -383,7 +383,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Marcus Vance',
       role: 'Staff Generative Video Researcher & Systems Lead',
-      avatar: '/images/author-marcus.jpg',
+      avatar: '/images/author-marcus.webp',
       bio: 'Former neural rendering pipeline architect and diffusion researcher specializing in video latent architectures, memory-efficient attention kernels, and asset prep workflows.',
     },
     keywords: [
@@ -411,7 +411,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Dr. Sarah Lin',
       role: 'Staff Multimodal Streaming & Spatial Video Architect',
-      avatar: '/images/author-sarah.jpg',
+      avatar: '/images/author-sarah.webp',
       bio: 'Former neural video pipeline architect and real-time streaming researcher specializing in frame-aligned diffusion transformers, low-latency S2-Avatar synthesis, and asset prep pipelines.',
     },
     keywords: [
