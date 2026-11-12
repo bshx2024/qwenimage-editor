@@ -173,6 +173,9 @@ print("Sunburst Result URL:", response.data[0].url)`;
         "keywords": [
           "gpt image 2.6 sunburst",
           "gpt image 2.6",
+          "gpt image 2.6 api",
+          "gpt image 2.6 flare vs sunburst",
+          "gpt image 2.6 pricing",
           "qwen-image 2.1",
           "image edit arena",
           "ai image editing benchmark",
