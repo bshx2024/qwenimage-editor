@@ -320,7 +320,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
                   <span>Interactive Inpainting &amp; Telemetry Simulator</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
-                  Image Edit Arena Simulator: Benchmark Test Console
+                  GPT Image 2.6 Sunburst vs Qwen: Interactive Benchmark Console
                 </h2>
               </div>
               <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-semibold">
@@ -502,7 +502,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
           {/* SECTION 2: BENCHMARK METRICS */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Image Edit Arena Benchmark: Head-to-Head Telemetry
+              Image Edit Arena: GPT Image 2.6 Sunburst vs Qwen Telemetry
             </h2>
             <p className="text-sm text-slate-300">
               In community evaluations on LMSYS Image Edit Arena and HuggingFace, developers submitted over 14,000 pairwise editing prompts to benchmark inpainting boundary cohesion, typographic fidelity, and latency:
@@ -567,7 +567,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
           {/* SECTION 3: MULTI-TURN INPAINTING SHOWCASE */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Multi-Turn Inpainting and Visual Consistency Showcase
+              Multi-Turn Inpainting: GPT Image 2.6 Sunburst Consistency Showcase
             </h2>
             <p className="text-sm text-slate-300">
               To assess fidelity under real-world conditions, we evaluated both models on a practical creative challenge: removing an unwanted object while reconstructing underlying background textures and rendering accurate typographic elements.
@@ -628,7 +628,7 @@ Mask_Padding_Pixels: 32`}</code>
           {/* SECTION 4: FRICTION POINTS */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              The Friction Points: Pricing Overhead, Rate Limits, and Markup Drift
+              GPT Image 2.6 Sunburst Production Bottlenecks: Pricing &amp; Rate Limits
             </h2>
             <div className="prose prose-invert max-w-none text-slate-300 space-y-4">
               <p>
@@ -655,7 +655,7 @@ Mask_Padding_Pixels: 32`}</code>
           {/* SECTION 5: STEP-BY-STEP WORKFLOW */}
           <section className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Practical Workflow: Step-by-Step Image Editing in Production
+              GPT Image 2.6 Sunburst Inpainting Workflow: Step-by-Step Guide
             </h2>
             <div className="prose prose-invert max-w-none text-slate-300 space-y-3">
               <ol className="list-decimal list-inside space-y-3">
