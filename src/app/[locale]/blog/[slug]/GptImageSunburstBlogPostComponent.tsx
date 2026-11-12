@@ -91,7 +91,7 @@ response = requests.post(
     }
 )
 print("Qwen Inpainting Result:", response.json())`
-    : `# OpenAI GPT-Image-2.6 Sunburst Inpainting Payload
+    : `# OpenAI GPT Image 2.6 Sunburst Inpainting Payload
 from openai import OpenAI
 client = OpenAI()
 
@@ -130,7 +130,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
       a: "In empirical testing on poster layouts and storefront signage, Qwen-Image demonstrates higher glyph accuracy for bilingual English and Chinese typography. GPT Image 2.6 Sunburst performs exceptionally well on standard Latin text but occasionally introduces character substitutions during multi-line rendering."
     },
     {
-      q: "What is the operational difference between GPT-Image-2.6 Sunburst and Flare?",
+      q: "What is the operational difference between GPT Image 2.6 Sunburst and Flare?",
       a: "Sunburst is built for multi-turn editing consistency, structural fidelity, and visual markup comprehension at a higher computational footprint. Flare is an accelerated draft model optimized for sub-second image generation where rapid ideation outweighs micro-level inpainting precision."
     },
     {
@@ -295,7 +295,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
               <span>⚡ Executive Summary &amp; Direct Benchmark Findings</span>
             </div>
             <ul className="text-sm text-slate-300 space-y-2 list-disc list-inside">
-              <li><strong>Leaderboard Position:</strong> In the November 2026 Image Edit Arena evaluation, <strong>GPT-Image-2.6 Sunburst</strong> scored high marks for multi-turn composition stability and visual markup parsing.</li>
+              <li><strong>Leaderboard Position:</strong> In the November 2026 Image Edit Arena evaluation, <strong>GPT Image 2.6 Sunburst</strong> scored high marks for multi-turn composition stability and visual markup parsing.</li>
               <li><strong>Open Alternative Champion:</strong> <strong>Qwen-Image 2.1</strong> delivered 2.1x faster inference latency (2.3s vs 4.8s) and superior bilingual typography fidelity at less than one-fifth of the computational cost.</li>
               <li><strong>Production Arbitrage:</strong> While OpenAI&apos;s API charges $0.08 per high-res output, creators can access generative editing with 5 free starter credits on QwenImage Editor without credit cards.</li>
             </ul>
@@ -357,7 +357,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
                   className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-slate-200 focus:outline-none focus:border-indigo-500"
                 >
                   <option value="qwen">Qwen-Image 2.1 (Fast / $0.015)</option>
-                  <option value="sunburst">GPT-Image-2.6 Sunburst ($0.080)</option>
+                  <option value="sunburst">GPT Image 2.6 Sunburst ($0.080)</option>
                 </select>
               </div>
 
