@@ -270,14 +270,14 @@ print("Sunburst Result URL:", response.data[0].url)`;
             <ul className="text-sm text-slate-300 space-y-2 list-disc list-inside">
               <li><strong>Leaderboard Position:</strong> In the November 2026 Image Edit Arena blind evaluation, <strong>GPT-Image-2.6 Sunburst</strong> claimed top rankings for multi-turn composition stability and natural language markup parsing.</li>
               <li><strong>Open Alternative Champion:</strong> <strong>Qwen-Image 2.1</strong> delivered 2.1x faster inference latency (2.3s vs 4.8s) and superior bilingual typography fidelity at less than one-fifth of the per-image computational cost.</li>
-              <li><strong>Production Arbitrage:</strong> While OpenAI's API tier charges up to $0.08 per high-res output, creators can access on-demand generative editing with 5 free trial credits on QwenImage Editor with zero upfront credit card requirement.</li>
+              <li><strong>Production Arbitrage:</strong> While OpenAI&apos;s API tier charges up to $0.08 per high-res output, creators can access on-demand generative editing with 5 free trial credits on QwenImage Editor with zero upfront credit card requirement.</li>
             </ul>
           </div>
 
           {/* INTRO PROSE */}
           <div className="prose prose-invert max-w-none text-slate-300 space-y-4">
             <p>
-              Released on November 4, 2026, <strong>GPT Image 2.6 Sunburst</strong> introduced a specialized paradigm to OpenAI's generative visual suite. While previous iterations prioritized single-pass synthetic image synthesis, this dedicated branch was engineered specifically for surgical image editing, fine-grained canvas restructuring, and iterative multi-turn composition. Meanwhile, the open-weight release of Alibaba's Qwen-Image series has sparked intense debate across creative production studios: does proprietary precision justify premium API token costs, or can optimized architectures deliver equivalent commercial output without the restrictive paywalls?
+              Released on November 4, 2026, <strong>GPT Image 2.6 Sunburst</strong> introduced a specialized paradigm to OpenAI&apos;s generative visual suite. While previous iterations prioritized single-pass synthetic image synthesis, this dedicated branch was engineered specifically for surgical image editing, fine-grained canvas restructuring, and iterative multi-turn composition. Meanwhile, the open-weight release of Alibaba&apos;s Qwen-Image series has sparked intense debate across creative production studios: does proprietary precision justify premium API token costs, or can optimized architectures deliver equivalent commercial output without the restrictive paywalls?
             </p>
             <p>
               This technical benchmark breaks down the architectural characteristics, blind human evaluation results on the Image Edit Arena, precision masking behaviors, and financial trade-offs between Sunburst and Qwen-Image in enterprise workflows.
@@ -430,17 +430,17 @@ print("Sunburst Result URL:", response.data[0].url)`;
             </h2>
             <div className="prose prose-invert max-w-none text-slate-300 space-y-4">
               <p>
-                The Images 2.6 update bifurcated OpenAI's multimodal generation pipeline into two dedicated execution models: Flare and Sunburst. While GPT-Image-2.6 Flare optimizes for sub-second draft throughput, <strong>GPT Image 2.6 Sunburst</strong> serves as the high-precision foundation model engineered for iterative canvas transformation.
+                The Images 2.6 update bifurcated OpenAI&apos;s multimodal generation pipeline into two dedicated execution models: Flare and Sunburst. While GPT-Image-2.6 Flare optimizes for sub-second draft throughput, <strong>GPT Image 2.6 Sunburst</strong> serves as the high-precision foundation model engineered for iterative canvas transformation.
               </p>
               
               <h3 className="text-xl font-semibold text-white mt-6">1. Visual Markup Comprehension and Coordinate Anchoring</h3>
               <p>
-                A standout capability of the Sunburst architecture is native visual markup understanding. Rather than relying entirely on textual bounding box coordinates, Sunburst parses visual annotations drawn directly onto the source canvas. When a designer circles an artifact in red or illustrates a directional arrow indicating light movement, the model's spatial attention heads process these visual glyphs alongside the natural language instruction. This minimizes coordinate drift during localized modifications.
+                A standout capability of the Sunburst architecture is native visual markup understanding. Rather than relying entirely on textual bounding box coordinates, Sunburst parses visual annotations drawn directly onto the source canvas. When a designer circles an artifact in red or illustrates a directional arrow indicating light movement, the model&apos;s spatial attention heads process these visual glyphs alongside the natural language instruction. This minimizes coordinate drift during localized modifications.
               </p>
 
               <h3 className="text-xl font-semibold text-white mt-6">2. Multi-Turn Subject Identity Preservation</h3>
               <p>
-                Early diffusion models suffered from severe context erosion: modifying a character's wardrobe frequently altered their facial bone structure or ambient background geometry. The 2.6 release mitigates this through a dual-encoder latent memory buffer that locks unchanged semantic regions while selectively regenerating unmasked patches.
+                Early diffusion models suffered from severe context erosion: modifying a character&apos;s wardrobe frequently altered their facial bone structure or ambient background geometry. The 2.6 release mitigates this through a dual-encoder latent memory buffer that locks unchanged semantic regions while selectively regenerating unmasked patches.
               </p>
 
               <h3 className="text-xl font-semibold text-white mt-6">3. Integrated Vector and Animated Output Modes</h3>
@@ -611,7 +611,7 @@ Mask_Padding_Pixels: 32`}</code>
                   <strong>Canvas Upload and Alpha Mask Delineation</strong>: Import the original image into the workspace. Using a precision brush with soft boundary falloff, paint over unwanted elements. Ensure a 16-to-32 pixel boundary buffer to allow the generative engine to blend contextual textures naturally.
                 </li>
                 <li>
-                  <strong>Context-Aware Prompt Construction</strong>: Describe the expected background scene rather than the object being eliminated. Instructing the engine to draw an "unobstructed wooden tabletop with soft morning light" yields substantially cleaner results than commanding it to "delete the coffee mug".
+                  <strong>Context-Aware Prompt Construction</strong>: Describe the expected background scene rather than the object being eliminated. Instructing the engine to draw an &quot;unobstructed wooden tabletop with soft morning light&quot; yields substantially cleaner results than commanding it to &quot;delete the coffee mug&quot;.
                 </li>
                 <li>
                   <strong>Multi-Turn Refinement and 4K Lossless Export</strong>: Execute initial generation with moderate denoising (0.70–0.75). If subtle seam lines appear, execute a secondary micro-inpaint pass at 0.35 denoising before exporting in lossless PNG or WebP format.
