@@ -263,7 +263,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              GPT Image 2.6 Sunburst vs Qwen 2.1: Inpainting Benchmark &amp; Consistency (2026)
+              GPT Image 2.6 Sunburst vs Qwen: Edit Arena Benchmark &amp; Inpainting Guide (2026)
             </h1>
 
             <div className="flex flex-wrap items-center gap-6 text-xs text-slate-400 font-mono pt-2">
