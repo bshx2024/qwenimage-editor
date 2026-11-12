@@ -19,6 +19,31 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'gpt-image-2-6-sunburst-vs-qwen-image-benchmark',
+    // Strict 60 chars (50-60 safety range, locks 'GPT Image 2.6 Sunburst', 'Qwen', 'Edit Arena Guide')
+    title: 'GPT Image 2.6 Sunburst vs Qwen: Edit Arena Guide | QwenImage',
+    // Strict 159 chars (140-160 range, covers inpainting, pricing, Arena benchmark & free credits)
+    description: 'Benchmark GPT Image 2.6 Sunburst vs Qwen Image in the Image Edit Arena. Compare inpainting consistency, pricing, markup understanding, and test 5 free credits.',
+    date: '2026-11-12',
+    readTime: '12 min read',
+    category: 'Vision AI & Benchmarks',
+    author: {
+      name: 'Elena Rostova',
+      role: 'Principal AI Vision & Creative Workflow Engineer',
+      avatar: '/images/author-elena.jpg',
+      bio: 'Former VFX technical director and generative media researcher specializing in multimodal diffusion pipelines, visual inpainting benchmarks, and enterprise creative pipeline automation.',
+    },
+    keywords: [
+      'gpt image 2.6 sunburst',
+      'gpt image 2.6',
+      'qwen image',
+      'image edit arena',
+      'ai inpainting',
+      'gpt image sunburst',
+      'gpt image inpainting',
+    ],
+  },
+  {
     slug: 'z-image-turbo-guide-comfyui-workflows-prompting-online',
     // Strict 58 chars (50-60 safety range, locks 'Z-Image Turbo Guide', 'ComfyUI Workflows', 'Prompting', 'Online')
     title: 'Z-Image Turbo Guide: ComfyUI Workflows, Prompting & Online',

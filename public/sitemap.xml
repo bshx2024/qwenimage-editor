@@ -51,7 +51,15 @@
     <!-- Blog Hub -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog</loc>
-        <lastmod>2026-11-07</lastmod>
+        <lastmod>2026-11-12</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Article: GPT Image 2.6 Sunburst vs Qwen Image: Inpainting Benchmark & Consistency -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/gpt-image-2-6-sunburst-vs-qwen-image-benchmark</loc>
+        <lastmod>2026-11-12</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>

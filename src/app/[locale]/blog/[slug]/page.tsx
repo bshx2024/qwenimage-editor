@@ -14,6 +14,7 @@ import MossImageBlogPostComponent from './MossImageBlogPostComponent';
 import OpenH3RegenerateBlogPostComponent from './OpenH3RegenerateBlogPostComponent';
 import ChatGptImages26BlogPostComponent from './ChatGptImages26BlogPostComponent';
 import ZImageTurboBlogPostComponent from './ZImageTurboBlogPostComponent';
+import GptImageSunburstBlogPostComponent from './GptImageSunburstBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -37,7 +38,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'z-image-turbo-guide-comfyui-workflows-prompting-online') {
+  if (slug === 'gpt-image-2-6-sunburst-vs-qwen-image-benchmark') {
+    postComponent = <GptImageSunburstBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'z-image-turbo-guide-comfyui-workflows-prompting-online') {
     postComponent = <ZImageTurboBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'chatgpt-images-2-6-review-limitations-alternative') {
     postComponent = <ChatGptImages26BlogPostComponent post={post} locale={locale} />;
