@@ -307,7 +307,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
               Released on November 4, 2026, <strong>GPT Image 2.6 Sunburst</strong> introduced a specialized paradigm to OpenAI&apos;s visual suite. While previous iterations prioritized single-pass synthetic image synthesis, this dedicated branch was engineered specifically for surgical image editing, fine-grained canvas restructuring, and iterative multi-turn composition. Meanwhile, the open-weight release of Alibaba&apos;s Qwen-Image series has sparked intense debate: does proprietary precision justify premium API token costs, or can optimized architectures deliver equivalent commercial output without paywalls?
             </p>
             <p>
-              This technical benchmark breaks down the architectural characteristics, blind human evaluation results on the Image Edit Arena, precision masking behaviors, and financial trade-offs between Sunburst and Qwen-Image in enterprise workflows.
+              This technical benchmark breaks down the architectural characteristics, blind human evaluation results on the Image Edit Arena, precision masking behaviors, and financial trade-offs between GPT Image 2.6 Sunburst and Qwen in enterprise workflows.
             </p>
           </div>
 
@@ -505,7 +505,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
               Image Edit Arena: GPT Image 2.6 Sunburst vs Qwen Telemetry
             </h2>
             <p className="text-sm text-slate-300">
-              In community evaluations on LMSYS Image Edit Arena and HuggingFace, developers submitted over 14,000 pairwise editing prompts to benchmark inpainting boundary cohesion, typographic fidelity, and latency:
+              In community evaluations on LMSYS Image Edit Arena and HuggingFace, developers submitted over 14,000 pairwise editing prompts to benchmark GPT Image 2.6 Sunburst inpainting boundary cohesion, typographic fidelity, and latency:
             </p>
 
             <div className="overflow-x-auto my-6">
@@ -529,7 +529,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
                     <td className="p-3.5 font-bold text-white border-r border-slate-800">Bilingual Typography Accuracy</td>
                     <td className="p-3.5 border-r border-slate-800">91.2% (Latin Alphabet)</td>
                     <td className="p-3.5 font-bold text-emerald-300 border-r border-slate-800">97.8% (Bilingual EN/ZH)</td>
-                    <td className="p-3.5 text-slate-400">Qwen-Image leads in rendering accurate glyphs and storefront logos.</td>
+                    <td className="p-3.5 text-slate-400">Qwen 2.1 leads in rendering accurate glyphs and storefront logos.</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3.5 font-bold text-white border-r border-slate-800">Average Inpainting Latency</td>
@@ -547,7 +547,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
                     <td className="p-3.5 font-bold text-white border-r border-slate-800">API Cost Per Output</td>
                     <td className="p-3.5 font-bold text-rose-300 border-r border-slate-800">$0.080 / Image</td>
                     <td className="p-3.5 font-bold text-emerald-300 border-r border-slate-800">$0.015 / Image</td>
-                    <td className="p-3.5 text-slate-400">Qwen-Image delivers an 81.2% computational cost reduction.</td>
+                    <td className="p-3.5 text-slate-400">The open model delivers an 81.2% computational cost reduction.</td>
                   </tr>
                   <tr className="hover:bg-slate-900/40">
                     <td className="p-3.5 font-bold text-white border-r border-slate-800">Free Starter Exploration</td>
@@ -560,7 +560,7 @@ print("Sunburst Result URL:", response.data[0].url)`;
             </div>
 
             <p className="text-sm text-slate-300">
-              While Sunburst displays superior reasoning on multi-element relocations, Qwen-Image demonstrates unmatched character glyph precision. For graphic design pipelines requiring accurate poster copy, typography, and rapid thumbnail creation, Qwen-Image provides equal or superior aesthetic fidelity at lower hardware cost.
+              While Sunburst displays superior reasoning on multi-element relocations, Qwen 2.1 demonstrates unmatched character glyph precision. For graphic design pipelines requiring accurate poster copy, typography, and rapid thumbnail creation, Qwen-Image provides equal or superior aesthetic fidelity at lower hardware cost.
             </p>
           </section>
 
@@ -637,7 +637,7 @@ Mask_Padding_Pixels: 32`}</code>
 
               <h3 className="text-xl font-semibold text-white mt-6">1. Punitive API Billing and Margin Erosion</h3>
               <p>
-                At $0.08 per generation and up to $0.16 for revisions, invoking proprietary cloud endpoints across high-volume catalogs quickly erodes margins. In contrast, routing routine inpainting workloads to optimized models like Qwen-Image cuts token overhead by more than 80%.
+                At $0.08 per generation and up to $0.16 for revisions, invoking proprietary cloud endpoints across high-volume catalogs quickly erodes margins. In contrast, routing routine inpainting workloads to optimized models like Qwen 2.1 cuts token overhead by more than 80%.
               </p>
 
               <h3 className="text-xl font-semibold text-white mt-6">2. Concurrency Bottlenecks and HTTP 429 Failures</h3>
