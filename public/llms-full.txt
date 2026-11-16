@@ -34,4 +34,15 @@ Because negative prompts are inactive, users must replace legacy Danbooru tag li
 - [AI Background Remover](https://www.qwenimage-editor.com/background-remover): One-click edge-clean subject isolation for ecommerce products and real-time video asset preparation with crisp alpha transparency.
 - [AI Product Photo Editor](https://www.qwenimage-editor.com/product-photo-editor): Clean asset generation, studio background synthesis, and localized inpainting without manual masking.
 - [Text to Image Generator](https://www.qwenimage-editor.com/generator): High-fidelity generative visual studio supporting complex bilingual Chinese/English typography rendering.
+- [Edit Text in Image Online Studio](https://www.qwenimage-editor.com/edit-text-in-image): Free browser-based AI text inpainting tool to modify, replace, and fix misspelled lettering in company images and logos without watermarks or full-image re-generation.
+
+---
+
+## 3. Brand & Typography Guide: Company Image from Text
+URL: https://www.qwenimage-editor.com/blog/company-image-from-text-free-ai-logo-generator
+Author: Dr. Sarah Lin (Staff Multimodal AI & Creative Typography Systems Architect)
+Date: 2026-11-16
+
+### Executive Summary (BLUF)
+A comprehensive guide and interactive studio for generating corporate images, wordmarks, and brand logos from natural language text prompts. Explains diffusion glyph tokenization bottlenecks, provides zero-watermark free generation workflows, and showcases in-image text inpainting to fix misspelled lettering without re-rolling the entire image.
 

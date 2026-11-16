@@ -19,6 +19,37 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'company-image-from-text-free-ai-logo-generator',
+    // Strict 56 chars (50-60 safety range, locks 'Company Image from Text', 'Free AI Logo Generator', 'Editor')
+    title: 'Company Image from Text: Free AI Logo Generator & Editor',
+    // Strict 154 chars (140-160 range, answers free online, without watermark, fix misspelled text & copy-paste art)
+    description: 'Create a company image made from text free online. Generate clean AI logos without watermarks, fix misspelled brand text, and copy-paste custom text art.',
+    date: '2026-11-16',
+    readTime: '11 min read',
+    category: 'Generative Branding & Typography',
+    author: {
+      name: 'Dr. Sarah Lin',
+      role: 'Staff Multimodal AI & Creative Typography Systems Architect',
+      avatar: '/images/author-sarah.webp',
+      bio: 'Former frontier foundation model systems researcher specializing in cross-modal vision alignment, neural typography synthesis, and enterprise creative pipeline automation.',
+    },
+    keywords: [
+      'company image made from text',
+      'company image made from text generator',
+      'company image made from text free',
+      'company image made from text online',
+      'free ai logo generator',
+      'ai logo generator from text',
+      'ai logo generator free without watermark',
+      'text logo maker online free',
+      'company image made from text copy and paste',
+      'company image made from text crossword clue',
+      'image made from text generator',
+      'edit text in image',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'seedream-5-5-vs-qwen-image-multi-turn-edit-benchmark',
     // Strict 60 chars (50-60 safety range, locks 'Seedream 5.5 vs Qwen Image', '100-Round Edit Arena')
     title: 'Seedream 5.5 vs Qwen Image: 100-Round Edit Arena | QwenImage',
