@@ -1,5 +1,6 @@
 import { getWaffoClientAsync } from '~/libs/waffo';
 import { ScanSemanticMode } from '@waffo/pancake-ts';
+import { scanImageWithSeeApi, SeeApiModerationResult } from '~/libs/seeapi';
 
 export interface PromptScanResult {
   safe: boolean;
@@ -8,6 +9,42 @@ export interface PromptScanResult {
   matchedCategories?: string[];
   requestId?: string;
   message?: string;
+}
+
+export interface ImageSafetyScanResult {
+  safe: boolean;
+  action: 'allow' | 'block' | 'skipped';
+  flagged: boolean;
+  categories: string[];
+  message?: string;
+  taskId?: string;
+}
+
+/**
+ * Audit an image URL for NSFW and illegal content via SeeAPI
+ */
+export async function scanImageSafety(
+  imageUrl: string,
+  rawLocale: string = 'en'
+): Promise<ImageSafetyScanResult> {
+  const result = await scanImageWithSeeApi(imageUrl);
+
+  let userFriendlyMessage = result.message || '';
+  if (result.flagged) {
+    const isZh = (rawLocale || '').toLowerCase().startsWith('zh');
+    userFriendlyMessage = isZh
+      ? `检测到上传的图片包含违规或不适宜内容 (${result.categories.join(', ') || 'NSFW'})，已被系统拦截。`
+      : `The image contains prohibited or NSFW content (${result.categories.join(', ') || 'NSFW'}) and was blocked.`;
+  }
+
+  return {
+    safe: result.safe,
+    action: result.action,
+    flagged: result.flagged,
+    categories: result.categories,
+    message: userFriendlyMessage,
+    taskId: result.taskId,
+  };
 }
 
 /**

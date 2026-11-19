@@ -10,7 +10,7 @@ import { checkSensitiveInputText, inspectSensitiveInputText } from "~/servers/ch
 import { getAISettings, getSetting, setSetting } from "~/servers/keyValue";
 import { submitBailianTask, processBailianTaskInBackground } from "~/libs/bailian";
 import { submitKieTask } from "~/libs/kieai";
-import { scanPromptSafety } from "~/servers/contentSafety";
+import { scanPromptSafety, scanImageSafety } from "~/servers/contentSafety";
 
 export async function POST(req: Request) {
   try {
@@ -137,6 +137,20 @@ export async function POST(req: Request) {
         reasonCode: safetyCheck.reasonCode,
         requestId: safetyCheck.requestId
       });
+    }
+
+    // SeeAPI Image NSFW Content Screening (for image edit / reference image tasks)
+    if (imageUrl && (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'))) {
+      const imageSafety = await scanImageSafety(imageUrl, json.locale || 'en');
+      if (!imageSafety.safe) {
+        return Response.json({
+          msg: imageSafety.message || "The input/reference image contains NSFW or prohibited content and cannot be processed.",
+          status: 400,
+          safetyBlock: true,
+          categories: imageSafety.categories,
+          taskId: imageSafety.taskId,
+        });
+      }
     }
 
     const uid = uuidv4();

@@ -265,33 +265,30 @@ export default function CompanyImageFromTextBlogPostComponent({
             <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs font-medium self-start sm:self-auto">
               <button
                 onClick={() => setActiveTab('generate')}
-                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
-                  activeTab === 'generate'
+                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'generate'
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <PaintBrushIcon className="w-3.5 h-3.5" />
                 Generate Logo
               </button>
               <button
                 onClick={() => setActiveTab('fix')}
-                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
-                  activeTab === 'fix'
+                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'fix'
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <ArrowsRightLeftIcon className="w-3.5 h-3.5" />
                 Fix AI Typos
               </button>
               <button
                 onClick={() => setActiveTab('prompts')}
-                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
-                  activeTab === 'prompts'
+                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'prompts'
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <DocumentDuplicateIcon className="w-3.5 h-3.5" />
                 Prompt Presets
@@ -327,11 +324,10 @@ export default function CompanyImageFromTextBlogPostComponent({
                       <button
                         key={key}
                         onClick={() => setSelectedStyle(key)}
-                        className={`p-2.5 rounded-xl border text-left transition-all ${
-                          selectedStyle === key
+                        className={`p-2.5 rounded-xl border text-left transition-all ${selectedStyle === key
                             ? 'bg-indigo-500/10 border-indigo-500 text-white shadow-sm'
                             : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                        }`}
+                          }`}
                       >
                         <div className="text-xs font-semibold">{stylePresets[key].name}</div>
                         <div className="text-[10px] text-indigo-400 mt-0.5">{stylePresets[key].tag}</div>
@@ -390,17 +386,15 @@ export default function CompanyImageFromTextBlogPostComponent({
                 <div className="flex rounded-lg bg-slate-900 p-1 border border-slate-800">
                   <button
                     onClick={() => setShowFixedImage(false)}
-                    className={`px-3 py-1 rounded text-xs font-medium transition-all ${
-                      !showFixedImage ? 'bg-rose-500 text-white font-bold' : 'text-slate-400 hover:text-white'
-                    }`}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-all ${!showFixedImage ? 'bg-rose-500 text-white font-bold' : 'text-slate-400 hover:text-white'
+                      }`}
                   >
                     Original AI Typo (❌ QWWN)
                   </button>
                   <button
                     onClick={() => setShowFixedImage(true)}
-                    className={`px-3 py-1 rounded text-xs font-medium transition-all ${
-                      showFixedImage ? 'bg-emerald-600 text-white font-bold' : 'text-slate-400 hover:text-white'
-                    }`}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-all ${showFixedImage ? 'bg-emerald-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                      }`}
                   >
                     Repaired Inpaint (✅ QWEN)
                   </button>
@@ -733,9 +727,8 @@ export default function CompanyImageFromTextBlogPostComponent({
                 >
                   <span>{faq.q}</span>
                   <ChevronDownIcon
-                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0 ${
-                      faqOpen[idx] ? 'rotate-180 text-indigo-400' : ''
-                    }`}
+                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0 ${faqOpen[idx] ? 'rotate-180 text-indigo-400' : ''
+                      }`}
                   />
                 </button>
                 {faqOpen[idx] && (

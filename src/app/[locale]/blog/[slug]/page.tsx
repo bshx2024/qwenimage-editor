@@ -17,6 +17,7 @@ import ZImageTurboBlogPostComponent from './ZImageTurboBlogPostComponent';
 import GptImageSunburstBlogPostComponent from './GptImageSunburstBlogPostComponent';
 import SeedreamBlogPostComponent from './SeedreamBlogPostComponent';
 import CompanyImageFromTextBlogPostComponent from './CompanyImageFromTextBlogPostComponent';
+import GtaMemeTemplateBlogPostComponent from './GtaMemeTemplateBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -40,7 +41,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'company-image-from-text-free-ai-logo-generator') {
+  if (slug === 'gta-5-vs-gta-6-meme-template') {
+    postComponent = <GtaMemeTemplateBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'company-image-from-text-free-ai-logo-generator') {
     postComponent = <CompanyImageFromTextBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'seedream-5-5-vs-qwen-image-multi-turn-edit-benchmark') {
     postComponent = <SeedreamBlogPostComponent post={post} locale={locale} />;

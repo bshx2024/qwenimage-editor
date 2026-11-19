@@ -3,6 +3,7 @@ import { verifyAdmin } from '~/libs/adminAuth';
 import { getAISettings, saveAISettings, getPaymentSettings, savePaymentSettings } from '~/servers/keyValue';
 import { testBailianKey } from '~/libs/bailian';
 import { testKieKey } from '~/libs/kieai';
+import { testSeeApiKey } from '~/libs/seeapi';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,7 +54,14 @@ export async function POST(request: Request) {
       return NextResponse.json(testResult);
     }
 
-    // 3. Save AI Settings
+    // 3. Test SeeAPI (Image NSFW Content Moderation)
+    if (action === 'test_seeapi') {
+      const apiKey = body.apiKey;
+      const testResult = await testSeeApiKey(apiKey);
+      return NextResponse.json(testResult);
+    }
+
+    // 4. Save AI Settings
     if (action === 'save') {
       await saveAISettings({
         provider: body.provider,
@@ -63,6 +71,7 @@ export async function POST(request: Request) {
         bailianBaseUrl: body.bailianBaseUrl,
         bailianModel: body.bailianModel,
         replicateToken: body.replicateToken,
+        seeApiKey: body.seeApiKey,
       });
 
       return NextResponse.json({

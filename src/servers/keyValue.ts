@@ -103,10 +103,11 @@ export interface AISettings {
   bailianBaseUrl: string;
   bailianModel: string;
   replicateToken: string;
+  seeApiKey?: string;
 }
 
 export async function getAISettings(): Promise<AISettings> {
-  const [provider, kieApiKey, kieBaseUrl, bailianApiKey, bailianBaseUrl, bailianModel, replicateToken] = await Promise.all([
+  const [provider, kieApiKey, kieBaseUrl, bailianApiKey, bailianBaseUrl, bailianModel, replicateToken, seeApiKey] = await Promise.all([
     getSetting('AI_PROVIDER', 'AI_PROVIDER'),
     getSetting('KIE_API_KEY', 'KIE_API_KEY'),
     getSetting('KIE_BASE_URL', 'KIE_BASE_URL'),
@@ -114,6 +115,7 @@ export async function getAISettings(): Promise<AISettings> {
     getSetting('BAILIAN_BASE_URL', 'BAILIAN_BASE_URL'),
     getSetting('BAILIAN_MODEL', 'BAILIAN_MODEL'),
     getSetting('REPLICATE_API_TOKEN', 'REPLICATE_API_TOKEN'),
+    getSetting('SEEAPI_API_KEY', 'SEEAPI_API_KEY'),
   ]);
 
   const defaultProvider = (process.env.AI_PROVIDER as any) || 'kie';
@@ -127,6 +129,7 @@ export async function getAISettings(): Promise<AISettings> {
     bailianBaseUrl: bailianBaseUrl || 'https://dashscope.aliyuncs.com',
     bailianModel: bailianModel || 'qwen-image-2.1-1k',
     replicateToken: replicateToken || process.env.REPLICATE_API_TOKEN || '',
+    seeApiKey: seeApiKey || process.env.SEEAPI_API_KEY || '',
   };
 }
 
@@ -151,6 +154,9 @@ export async function saveAISettings(settings: Partial<AISettings>): Promise<voi
   }
   if (settings.replicateToken !== undefined) {
     await setSetting('REPLICATE_API_TOKEN', settings.replicateToken);
+  }
+  if (settings.seeApiKey !== undefined) {
+    await setSetting('SEEAPI_API_KEY', settings.seeApiKey);
   }
 }
 

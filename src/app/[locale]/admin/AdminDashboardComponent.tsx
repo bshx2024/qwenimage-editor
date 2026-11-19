@@ -148,6 +148,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     bailianBaseUrl: string;
     bailianModel: string;
     replicateToken: string;
+    seeApiKey?: string;
   }>({
     provider: 'kie',
     kieApiKey: '',
@@ -156,6 +157,7 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
     bailianBaseUrl: 'https://dashscope.aliyuncs.com',
     bailianModel: 'wanx2.1-t2i-turbo',
     replicateToken: '',
+    seeApiKey: '',
   });
   const [aiSettingsLoading, setAiSettingsLoading] = useState<boolean>(false);
   const [isSavingAI, setIsSavingAI] = useState<boolean>(false);
@@ -165,6 +167,9 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
   const [isTestingBailian, setIsTestingBailian] = useState<boolean>(false);
   const [bailianTestStatus, setBailianTestStatus] = useState<{ success: boolean; message: string } | null>(null);
   const [showApiKey, setShowApiKey] = useState<boolean>(false);
+  const [isTestingSeeApi, setIsTestingSeeApi] = useState<boolean>(false);
+  const [seeApiTestStatus, setSeeApiTestStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [showSeeApiKey, setShowSeeApiKey] = useState<boolean>(false);
 
   // Sensitive Words Data
   const [sensitiveWords, setSensitiveWords] = useState<any[]>([]);
@@ -757,6 +762,36 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
       setBailianTestStatus({ success: false, message: e?.message || 'Connection test failed' });
     } finally {
       setIsTestingBailian(false);
+    }
+  };
+
+  const handleTestSeeApi = async () => {
+    if (!aiSettings.seeApiKey?.trim()) {
+      showToast('Please enter a SeeAPI Key first to test.', 'error');
+      return;
+    }
+    setIsTestingSeeApi(true);
+    setSeeApiTestStatus(null);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'test_seeapi',
+          apiKey: aiSettings.seeApiKey,
+        }),
+      });
+      const data = await res.json();
+      setSeeApiTestStatus(data);
+      if (data.success) {
+        showToast('SeeAPI Key verified! NSFW Filter connection healthy.');
+      } else {
+        showToast(data.message || 'SeeAPI verification failed.', 'error');
+      }
+    } catch (e: any) {
+      setSeeApiTestStatus({ success: false, message: e?.message || 'Connection test failed' });
+    } finally {
+      setIsTestingSeeApi(false);
     }
   };
 
@@ -2661,6 +2696,79 @@ export default function AdminDashboardComponent({ locale = 'en' }: AdminDashboar
                       <p className="text-[11px] text-slate-400">
                         Used only when provider is set to &quot;Replicate API&quot; or as environment fallback.
                       </p>
+                    </div>
+                  </div>
+
+                  {/* SeeAPI NSFW Filter Card (Image Content Moderation) */}
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-md space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                        <ShieldCheckIcon className="w-4 h-4 text-emerald-400" />
+                        <span>SeeAPI NSFW Filter 2.0 (图片内容审核 / 涉黄拦截)</span>
+                      </h3>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                        Active Upload & Edit Guard
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Automatically screens user uploaded images and reference pictures via SeeAPI&apos;s <code className="text-emerald-300 font-mono">image-moderation</code> engine. Images containing pornography or explicit content are blocked instantly and purged from cloud storage.
+                    </p>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-semibold text-slate-300">
+                        SeeAPI API Key (Bearer Token)
+                      </label>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="relative flex-1">
+                          <input
+                            type={showSeeApiKey ? 'text' : 'password'}
+                            value={aiSettings.seeApiKey || ''}
+                            onChange={(e) =>
+                              setAiSettings((prev) => ({ ...prev, seeApiKey: e.target.value.trim() }))
+                            }
+                            placeholder="sk_seeapi_xxxxxxxxxxxxxxxxxxxx"
+                            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 font-mono tracking-wide"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSeeApiKey(!showSeeApiKey)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                          >
+                            {showSeeApiKey ? (
+                              <EyeSlashIcon className="w-4 h-4" />
+                            ) : (
+                              <EyeIcon className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleTestSeeApi}
+                          disabled={isTestingSeeApi || !aiSettings.seeApiKey}
+                          className="shrink-0 px-4 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          <ArrowPathIcon className={`w-3.5 h-3.5 ${isTestingSeeApi ? 'animate-spin' : ''}`} />
+                          <span>{isTestingSeeApi ? 'Testing...' : 'Test SeeAPI'}</span>
+                        </button>
+                      </div>
+
+                      {/* Connection Test Feedback Banner */}
+                      {seeApiTestStatus && (
+                        <div
+                          className={`mt-2 p-3 rounded-xl border text-xs flex items-center gap-2.5 ${
+                            seeApiTestStatus.success
+                              ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                              : 'bg-rose-950/30 border-rose-500/40 text-rose-300'
+                          }`}
+                        >
+                          {seeApiTestStatus.success ? (
+                            <CheckCircleIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                          ) : (
+                            <ExclamationTriangleIcon className="w-4 h-4 text-rose-400 shrink-0" />
+                          )}
+                          <span className="font-medium">{seeApiTestStatus.message}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 

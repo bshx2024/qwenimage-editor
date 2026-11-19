@@ -19,6 +19,38 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'gta-5-vs-gta-6-meme-template',
+    title: 'GTA 5 vs GTA 6 Meme Template: Free Blank HD Download & Generator',
+    description: 'Download free blank GTA 5 vs GTA 6 meme templates in HD without watermarks. Create 2013 vs 2026 Then & Now memes, customize with authentic fonts, or generate AI art.',
+    date: '2026-11-19',
+    readTime: '10 min read',
+    category: 'Gaming Culture & Visual Meme Studios',
+    author: {
+      name: 'Alex Chen',
+      role: 'Creative Technologist & Digital Media Architect',
+      avatar: '/images/author-alex.webp',
+      bio: 'Visual systems engineer and gaming culture analyst specializing in generative media pipelines, meme virality mechanics, and localized inpainting workflows.',
+    },
+    coverImage: '/images/templates/gta-5-vs-gta-6-blank-meme-template-hd-1920x1080.png',
+    keywords: [
+      'gta 5 vs gta 6 meme template',
+      'gta 5 vs gta 6 meme template free download',
+      'gta meme template',
+      'gta meme template free',
+      'gta meme template download',
+      'gta 5 vs gta 6 meme',
+      'we got before gta 6 meme template',
+      'gta wasted meme template',
+      'gta here we go again meme generator',
+      'gta 5 dog meme template',
+      'gta 6 trailer meme',
+      'blank gta meme template',
+      'gta meme generator no watermark',
+      'gta 5 vs gta 6',
+      'qwen image editor',
+    ],
+  },
+  {
     slug: 'company-image-from-text-free-ai-logo-generator',
     // Strict 56 chars (50-60 safety range, locks 'Company Image from Text', 'Free AI Logo Generator', 'Editor')
     title: 'Company Image from Text: Free AI Logo Generator & Editor',

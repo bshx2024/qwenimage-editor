@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <!-- Home / Main Editor -->
     <url>
         <loc>https://www.qwenimage-editor.com/</loc>
@@ -51,9 +51,27 @@
     <!-- Blog Hub -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog</loc>
-        <lastmod>2026-11-12</lastmod>
+        <lastmod>2026-11-19</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+    </url>
+
+    <!-- Blog Article: GTA 5 vs GTA 6 Meme Template: Free Blank HD Download & Generator -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/gta-5-vs-gta-6-meme-template</loc>
+        <lastmod>2026-11-19</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://www.qwenimage-editor.com/images/templates/gta-5-vs-gta-6-blank-meme-template-hd-1920x1080.png</image:loc>
+            <image:title>GTA 5 vs GTA 6 Blank Comparison Meme Template Free HD</image:title>
+            <image:caption>Free blank 2013 vs 2026 gaming comparison meme template without watermark</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.qwenimage-editor.com/images/templates/we-got-before-gta-6-meme-template-hd-1920x1080.png</image:loc>
+            <image:title>We Got X Before GTA 6 Meme Template HD</image:title>
+            <image:caption>Free breaking news blank meme template for We Got X Before GTA 6</image:caption>
+        </image:image>
     </url>
 
     <!-- Blog Article: Seedream 5.5 vs Qwen Image: 100-Round Inpainting & Layer Edit Arena -->

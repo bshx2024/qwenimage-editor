@@ -355,6 +355,7 @@ export default function PageComponent({
       }
     } catch (e: any) {
       console.error('Upload failed:', e);
+      setSourceImage('');
       setUploadError(
         locale?.startsWith('zh')
           ? `图片上传失败: ${e?.message || '请重试'}`

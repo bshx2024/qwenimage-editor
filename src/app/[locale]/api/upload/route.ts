@@ -3,6 +3,45 @@ import { R2, r2Bucket, storageURL } from "~/libs/R2";
 import { v4 as uuidv4 } from "uuid";
 import { getAISettings } from "~/servers/keyValue";
 import { uploadImageToKie } from "~/libs/kieai";
+import { scanImageSafety } from "~/servers/contentSafety";
+
+/**
+ * Helper to moderate image URL via SeeAPI and clean up from storage if flagged
+ */
+async function auditAndVerifyUrl(
+  publicUrl: string,
+  r2Key?: string
+): Promise<{ allowed: boolean; response?: NextResponse }> {
+  try {
+    const safety = await scanImageSafety(publicUrl);
+    if (!safety.safe) {
+      console.warn(`[ContentSafety] Upload blocked! Categories: ${safety.categories.join(', ')}, URL: ${publicUrl}`);
+
+      // Delete from R2 to prevent storing NSFW/prohibited content
+      if (r2Key && r2Bucket && process.env.R2_ACCOUNT_ID) {
+        await R2.deleteObject({ Bucket: r2Bucket, Key: r2Key }).promise().catch((delErr) => {
+          console.warn("[ContentSafety] Failed to delete blocked image from R2:", delErr);
+        });
+      }
+
+      return {
+        allowed: false,
+        response: NextResponse.json(
+          {
+            error: safety.message || "The uploaded image was flagged for violating content safety policies (NSFW / prohibited content).",
+            safetyBlock: true,
+            categories: safety.categories,
+          },
+          { status: 400 }
+        ),
+      };
+    }
+  } catch (auditErr) {
+    console.warn("[ContentSafety] Image moderation check error (fail-open):", auditErr);
+  }
+
+  return { allowed: true };
+}
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +70,13 @@ export async function POST(req: Request) {
             ContentType: mime,
           }).promise();
           const publicUrl = `${storageURL}/${key}`;
+
+          // Content Safety / NSFW Audit
+          const audit = await auditAndVerifyUrl(publicUrl, key);
+          if (!audit.allowed && audit.response) {
+            return audit.response;
+          }
+
           return NextResponse.json({ url: publicUrl });
         } catch (r2Err) {
           console.warn("R2 upload error, falling back:", r2Err);
@@ -45,6 +91,12 @@ export async function POST(req: Request) {
           const dataUrl = `data:${mime};base64,${base64}`;
           const kieUrl = await uploadImageToKie(dataUrl, aiSettings.kieApiKey);
           if (kieUrl && (kieUrl.startsWith("http://") || kieUrl.startsWith("https://"))) {
+            // Content Safety / NSFW Audit
+            const audit = await auditAndVerifyUrl(kieUrl);
+            if (!audit.allowed && audit.response) {
+              return audit.response;
+            }
+
             return NextResponse.json({ url: kieUrl });
           }
         }
@@ -78,7 +130,15 @@ export async function POST(req: Request) {
             Body: buffer,
             ContentType: "image/png",
           }).promise();
-          return NextResponse.json({ url: `${storageURL}/${key}` });
+          const publicUrl = `${storageURL}/${key}`;
+
+          // Content Safety / NSFW Audit
+          const audit = await auditAndVerifyUrl(publicUrl, key);
+          if (!audit.allowed && audit.response) {
+            return audit.response;
+          }
+
+          return NextResponse.json({ url: publicUrl });
         } catch (r2Err) {
           console.warn("R2 upload error:", r2Err);
         }
@@ -89,6 +149,12 @@ export async function POST(req: Request) {
         if (aiSettings?.kieApiKey) {
           const kieUrl = await uploadImageToKie(json.imageBase64, aiSettings.kieApiKey);
           if (kieUrl && (kieUrl.startsWith("http://") || kieUrl.startsWith("https://"))) {
+            // Content Safety / NSFW Audit
+            const audit = await auditAndVerifyUrl(kieUrl);
+            if (!audit.allowed && audit.response) {
+              return audit.response;
+            }
+
             return NextResponse.json({ url: kieUrl });
           }
         }
