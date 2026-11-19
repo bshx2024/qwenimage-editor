@@ -3,7 +3,7 @@ import HeadInfo from "~/components/HeadInfo";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { getLinkHref } from "~/configs/buildLink";
 import { BlogPost } from "~/content/blogData";
 import { useCommonContext } from "~/context/common-context";
@@ -22,7 +22,7 @@ import {
   BoltIcon,
   QuestionMarkCircleIcon,
   ChevronDownIcon,
-  EyeIcon
+  ArrowPathIcon
 } from "@heroicons/react/24/outline";
 
 export default function GtaMemeTemplateBlogPostComponent({
@@ -34,14 +34,15 @@ export default function GtaMemeTemplateBlogPostComponent({
 }) {
   const { userData, setShowLoginModal } = useCommonContext();
 
-  // Interactive Meme Studio States
+  // Mode Selection
   const [activeTab, setActiveTab] = useState<'then-now' | 'before-gta6' | 'wasted'>('then-now');
+  const [activePreset, setActivePreset] = useState<'aging' | 'consoles' | 'economy' | 'blank'>('aging');
   
   // Tab 1: Then & Now inputs
   const [leftHeader, setLeftHeader] = useState('GTA 5 (2013)');
-  const [leftSubtext, setLeftSubtext] = useState('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree childhood');
+  const [leftSubtext, setLeftSubtext] = useState('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree youth & zero bills');
   const [rightHeader, setRightHeader] = useState('GTA 6 (2026)');
-  const [rightSubtext, setRightSubtext] = useState('Checking PTO days at work\nMortgage & lower back pain\n13 years later: We survived');
+  const [rightSubtext, setRightSubtext] = useState('Checking PTO days at work\nMonthly mortgage & lumbar pain\n13 years later: We survived');
   const [leftImage, setLeftImage] = useState<string | null>(null);
   const [rightImage, setRightImage] = useState<string | null>(null);
 
@@ -53,14 +54,18 @@ export default function GtaMemeTemplateBlogPostComponent({
   // Tab 3: Wasted inputs
   const [wastedTitle, setWastedTitle] = useState('WASTED');
   const [wastedSubtitle, setWastedSubtitle] = useState('WAITING 13 YEARS FOR THE PC PORT');
-  const [wastedImage, setWastedImage] = useState<string | null>(null);
 
   // Download & Modal states
   const [showConversionModal, setShowConversionModal] = useState(false);
   const [lastDownloadedType, setLastDownloadedType] = useState<'blank' | 'custom'>('blank');
   const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null);
 
-  // FAQ Accordion State (Image 2 & 3 from Google PAA)
+  // File Input References
+  const leftFileInputRef = useRef<HTMLInputElement | null>(null);
+  const rightFileInputRef = useRef<HTMLInputElement | null>(null);
+  const beforeFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // FAQ Accordion State (Google PAA 1:1)
   const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({
     0: true,
     1: true,
@@ -75,7 +80,63 @@ export default function GtaMemeTemplateBlogPostComponent({
   // Canvas Reference for Live Rendering
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Render canvas whenever inputs change
+  // 1-Click Preset Switcher
+  const handleSelectPreset = (preset: 'aging' | 'consoles' | 'economy' | 'blank') => {
+    setActivePreset(preset);
+    setActiveTab('then-now');
+
+    if (preset === 'aging') {
+      setLeftHeader('GTA 5 (2013)');
+      setLeftSubtext('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree youth & zero bills');
+      setRightHeader('GTA 6 (2026)');
+      setRightSubtext('Checking PTO days at work\nMonthly mortgage & lumbar pain\n13 years later: We survived');
+      setLeftImage(null);
+      setRightImage(null);
+    } else if (preset === 'consoles') {
+      setLeftHeader('PS3 & Xbox 360 (2013)');
+      setLeftSubtext('720p dynamic resolution\nJet engine fan acoustics\n20-minute Los Santos clouds');
+      setRightHeader('PS5 Pro & 4K (2026)');
+      setRightSubtext('Ray-traced water & foliage\nInstant NVMe SSD loading\n3 generations of waiting');
+      setLeftImage(null);
+      setRightImage(null);
+    } else if (preset === 'economy') {
+      setLeftHeader('Life in 2013');
+      setLeftSubtext('$20 filled the gas tank\n$5 footlong Subway subs\nGame cost $59.99 flat');
+      setRightHeader('Life in 2026');
+      setRightSubtext('Checking receipt at grocery store\n$80-$100 standard game editions\nLiving on cold brew & hope');
+      setLeftImage(null);
+      setRightImage(null);
+    } else if (preset === 'blank') {
+      setLeftHeader('GTA 5 (2013)');
+      setLeftSubtext('[ Upload 2013 Photo or Type Custom Caption ]');
+      setRightHeader('GTA 6 (2026)');
+      setRightSubtext('[ Upload 2026 Photo or Type Custom Caption ]');
+      setLeftImage(null);
+      setRightImage(null);
+    }
+  };
+
+  // Safe Local File Upload Handler (FileReader -> DataURL prevents Tainted Canvas)
+  const handleUploadImage = (e: ChangeEvent<HTMLInputElement>, target: 'left' | 'right' | 'before') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (target === 'left') setLeftImage(dataUrl);
+      else if (target === 'right') setRightImage(dataUrl);
+      else if (target === 'before') setBeforeImage(dataUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Canvas Drawing Engine (Instant, Zero-Lag, Fully Client-Side)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -88,114 +149,290 @@ export default function GtaMemeTemplateBlogPostComponent({
     canvas.height = height;
 
     if (activeTab === 'then-now') {
-      // Background
-      ctx.fillStyle = '#0f172a';
+      // Dark Base Slate
+      ctx.fillStyle = '#090d16';
       ctx.fillRect(0, 0, width, height);
 
-      // Top banner
-      ctx.fillStyle = '#1e293b';
-      ctx.fillRect(0, 0, width, 90);
+      // Top Header Bar
+      const topGradient = ctx.createLinearGradient(0, 0, width, 0);
+      topGradient.addColorStop(0, '#13211b');
+      topGradient.addColorStop(0.5, '#1e293b');
+      topGradient.addColorStop(1, '#2c122b');
+      ctx.fillStyle = topGradient;
+      ctx.fillRect(0, 0, width, 88);
 
-      // Left Panel (GTA V - 2013)
-      ctx.fillStyle = '#18212f';
-      ctx.fillRect(30, 110, 590, 580);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, 88);
+      ctx.lineTo(width, 88);
+      ctx.stroke();
+
+      // Left Panel Outer Frame (GTA V - 2013: Los Santos Emerald Green)
+      const leftX = 30;
+      const leftY = 106;
+      const panelW = 590;
+      const panelH = 586;
+
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(leftX, leftY, panelW, panelH);
       ctx.lineWidth = 3;
       ctx.strokeStyle = '#22c55e';
-      ctx.strokeRect(30, 110, 590, 580);
+      ctx.strokeRect(leftX, leftY, panelW, panelH);
 
-      // Right Panel (GTA VI - 2026)
-      ctx.fillStyle = '#271832';
-      ctx.fillRect(660, 110, 590, 580);
+      // Right Panel Outer Frame (GTA VI - 2026: Vice City Neon Pink)
+      const rightX = 660;
+      const rightY = 106;
+
+      ctx.fillStyle = '#1c1124';
+      ctx.fillRect(rightX, rightY, panelW, panelH);
       ctx.strokeStyle = '#ec4899';
-      ctx.strokeRect(660, 110, 590, 580);
+      ctx.strokeRect(rightX, rightY, panelW, panelH);
 
-      // Headers
-      ctx.font = 'bold 36px Impact, sans-serif';
+      // Header Titles
+      ctx.font = 'bold 34px Impact, sans-serif';
       ctx.fillStyle = '#4ade80';
-      ctx.fillText(leftHeader, 40, 58);
+      ctx.fillText(leftHeader, 45, 56);
 
       ctx.fillStyle = '#f472b6';
-      ctx.fillText(rightHeader, 670, 58);
+      ctx.fillText(rightHeader, 675, 56);
 
-      // VS Badge
+      // Helper Draw Function for Panel Graphics
+      const renderLeftPanelContent = () => {
+        if (leftImage) {
+          const img = new Image();
+          img.src = leftImage;
+          img.onload = () => {
+            // Draw photo with cover scaling
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(leftX + 3, leftY + 3, panelW - 6, panelH - 6);
+            ctx.clip();
+            ctx.drawImage(img, leftX + 3, leftY + 3, panelW - 6, panelH - 6);
+            
+            // Bottom text gradient shadow for high contrast readability
+            const textBg = ctx.createLinearGradient(0, leftY + panelH - 180, 0, leftY + panelH);
+            textBg.addColorStop(0, 'rgba(0, 0, 0, 0)');
+            textBg.addColorStop(0.3, 'rgba(9, 13, 22, 0.75)');
+            textBg.addColorStop(1, 'rgba(9, 13, 22, 0.95)');
+            ctx.fillStyle = textBg;
+            ctx.fillRect(leftX + 3, leftY + panelH - 180, panelW - 6, 180);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Arial, sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.9)';
+            ctx.shadowBlur = 6;
+            const lines = leftSubtext.split('\n');
+            lines.forEach((line, i) => {
+              ctx.fillText(line, leftX + 25, leftY + panelH - 120 + i * 32);
+            });
+            ctx.restore();
+          };
+          if (img.complete) {
+            img.onload?.(new Event('load'));
+          }
+        } else {
+          // Rich Visual Base for 2013 Era (Sunset Los Santos Glow)
+          const leftBg = ctx.createLinearGradient(leftX, leftY, leftX + panelW, leftY + panelH);
+          leftBg.addColorStop(0, '#14281f');
+          leftBg.addColorStop(0.5, '#0f172a');
+          leftBg.addColorStop(1, '#1e1c14');
+          ctx.fillStyle = leftBg;
+          ctx.fillRect(leftX + 3, leftY + 3, panelW - 6, panelH - 6);
+
+          // CRT Screen Border Graphic
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.25)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(leftX + 24, leftY + 24, panelW - 48, 220);
+
+          // Era Badge
+          ctx.fillStyle = '#166534';
+          ctx.beginPath();
+          ctx.roundRect(leftX + 40, leftY + 45, 230, 34, [8]);
+          ctx.fill();
+          ctx.font = 'bold 13px Arial, sans-serif';
+          ctx.fillStyle = '#86efac';
+          ctx.fillText('🎮 2013 NOSTALGIA ERA', leftX + 55, leftY + 67);
+
+          // Center Icon / Silhouette Placeholder
+          ctx.font = 'bold 54px Impact, sans-serif';
+          ctx.fillStyle = 'rgba(74, 222, 128, 0.15)';
+          ctx.fillText('PS3 / XBOX 360', leftX + 40, leftY + 160);
+
+          // Subtext Lines
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = 'bold 22px Arial, sans-serif';
+          const lines = leftSubtext.split('\n');
+          lines.forEach((line, i) => {
+            ctx.fillText(line, leftX + 36, leftY + 320 + i * 44);
+          });
+
+          // Upload Hint Pill
+          ctx.fillStyle = 'rgba(74, 222, 128, 0.12)';
+          ctx.beginPath();
+          ctx.roundRect(leftX + 36, leftY + panelH - 70, 260, 36, [18]);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.35)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.font = 'bold 12px Arial, sans-serif';
+          ctx.fillStyle = '#4ade80';
+          ctx.fillText('📷 Drop Photo or Keep Text Demo', leftX + 50, leftY + panelH - 47);
+        }
+      };
+
+      const renderRightPanelContent = () => {
+        if (rightImage) {
+          const img = new Image();
+          img.src = rightImage;
+          img.onload = () => {
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(rightX + 3, rightY + 3, panelW - 6, panelH - 6);
+            ctx.clip();
+            ctx.drawImage(img, rightX + 3, rightY + 3, panelW - 6, panelH - 6);
+
+            // Bottom text gradient shadow
+            const textBg = ctx.createLinearGradient(0, rightY + panelH - 180, 0, rightY + panelH);
+            textBg.addColorStop(0, 'rgba(0, 0, 0, 0)');
+            textBg.addColorStop(0.3, 'rgba(15, 10, 25, 0.75)');
+            textBg.addColorStop(1, 'rgba(15, 10, 25, 0.95)');
+            ctx.fillStyle = textBg;
+            ctx.fillRect(rightX + 3, rightY + panelH - 180, panelW - 6, 180);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Arial, sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.9)';
+            ctx.shadowBlur = 6;
+            const lines = rightSubtext.split('\n');
+            lines.forEach((line, i) => {
+              ctx.fillText(line, rightX + 25, rightY + panelH - 120 + i * 32);
+            });
+            ctx.restore();
+          };
+          if (img.complete) {
+            img.onload?.(new Event('load'));
+          }
+        } else {
+          // Rich Visual Base for 2026 Era (Vice City Neon Pink / Cyan Glow)
+          const rightBg = ctx.createLinearGradient(rightX, rightY, rightX + panelW, rightY + panelH);
+          rightBg.addColorStop(0, '#31103f');
+          rightBg.addColorStop(0.5, '#160d24');
+          rightBg.addColorStop(1, '#0e1c2e');
+          ctx.fillStyle = rightBg;
+          ctx.fillRect(rightX + 3, rightY + 3, panelW - 6, panelH - 6);
+
+          // Neon Border Graphic
+          ctx.strokeStyle = 'rgba(236, 72, 153, 0.3)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(rightX + 24, rightY + 24, panelW - 48, 220);
+
+          // Era Badge
+          ctx.fillStyle = '#831843';
+          ctx.beginPath();
+          ctx.roundRect(rightX + 40, rightY + 45, 230, 34, [8]);
+          ctx.fill();
+          ctx.font = 'bold 13px Arial, sans-serif';
+          ctx.fillStyle = '#fbcfe8';
+          ctx.fillText('🌴 2026 NEXT-GEN ERA', rightX + 55, rightY + 67);
+
+          // Center Icon / Neon Text Placeholder
+          ctx.font = 'bold 54px Impact, sans-serif';
+          ctx.fillStyle = 'rgba(236, 72, 153, 0.16)';
+          ctx.fillText('VICE CITY / PS5', rightX + 40, rightY + 160);
+
+          // Subtext Lines
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = 'bold 22px Arial, sans-serif';
+          const lines = rightSubtext.split('\n');
+          lines.forEach((line, i) => {
+            ctx.fillText(line, rightX + 36, rightY + 320 + i * 44);
+          });
+
+          // Upload Hint Pill
+          ctx.fillStyle = 'rgba(236, 72, 153, 0.12)';
+          ctx.beginPath();
+          ctx.roundRect(rightX + 36, rightY + panelH - 70, 260, 36, [18]);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(236, 72, 153, 0.35)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.font = 'bold 12px Arial, sans-serif';
+          ctx.fillStyle = '#f472b6';
+          ctx.fillText('📷 Drop Photo or Keep Text Demo', rightX + 50, rightY + panelH - 47);
+        }
+      };
+
+      renderLeftPanelContent();
+      renderRightPanelContent();
+
+      // Center VS Badge
       ctx.beginPath();
-      ctx.arc(640, 400, 32, 0, Math.PI * 2);
+      ctx.arc(640, 400, 34, 0, Math.PI * 2);
       ctx.fillStyle = '#eab308';
       ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#0f172a';
+      ctx.stroke();
       ctx.font = 'bold 24px Impact, sans-serif';
       ctx.fillStyle = '#0f172a';
       ctx.textAlign = 'center';
       ctx.fillText('VS', 640, 408);
       ctx.textAlign = 'left';
 
-      // Draw custom images or text placeholders
-      if (leftImage) {
-        const img = new Image();
-        img.src = leftImage;
-        img.onload = () => {
-          ctx.drawImage(img, 35, 115, 580, 570);
-        };
-      } else {
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = 'bold 20px Arial, sans-serif';
-        const lines = leftSubtext.split('\n');
-        lines.forEach((line, i) => {
-          ctx.fillText(line, 60, 360 + i * 36);
-        });
-      }
-
-      if (rightImage) {
-        const img = new Image();
-        img.src = rightImage;
-        img.onload = () => {
-          ctx.drawImage(img, 665, 115, 580, 570);
-        };
-      } else {
-        ctx.fillStyle = '#cbd5e1';
-        ctx.font = 'bold 20px Arial, sans-serif';
-        const lines = rightSubtext.split('\n');
-        lines.forEach((line, i) => {
-          ctx.fillText(line, 690, 360 + i * 36);
-        });
-      }
-
     } else if (activeTab === 'before-gta6') {
-      // Breaking news banner
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, width, height);
 
+      // Breaking News Header
       ctx.fillStyle = '#dc2626';
-      ctx.fillRect(0, 0, width, 70);
+      ctx.fillRect(0, 0, width, 72);
 
       ctx.font = 'bold 30px Impact, sans-serif';
       ctx.fillStyle = '#ffffff';
       ctx.fillText(newsHeadline, 40, 48);
 
-      // Center container
+      // Center Frame
+      const centerX = 50;
+      const centerY = 96;
+      const centerW = 1180;
+      const centerH = 490;
+
       ctx.fillStyle = '#1e293b';
-      ctx.fillRect(50, 95, 1180, 490);
+      ctx.fillRect(centerX, centerY, centerW, centerH);
       ctx.strokeStyle = '#eab308';
       ctx.lineWidth = 4;
-      ctx.strokeRect(50, 95, 1180, 490);
+      ctx.strokeRect(centerX, centerY, centerW, centerH);
 
       if (beforeImage) {
         const img = new Image();
         img.src = beforeImage;
         img.onload = () => {
-          ctx.drawImage(img, 55, 100, 1170, 480);
+          ctx.drawImage(img, centerX + 4, centerY + 4, centerW - 8, centerH - 8);
         };
+        if (img.complete) {
+          img.onload?.(new Event('load'));
+        }
       } else {
+        const headlineBg = ctx.createLinearGradient(centerX, centerY, centerX + centerW, centerY + centerH);
+        headlineBg.addColorStop(0, '#1e293b');
+        headlineBg.addColorStop(1, '#0f172a');
+        ctx.fillStyle = headlineBg;
+        ctx.fillRect(centerX + 4, centerY + 4, centerW - 8, centerH - 8);
+
         ctx.fillStyle = '#94a3b8';
-        ctx.font = 'bold 24px Arial, sans-serif';
+        ctx.font = 'bold 28px Arial, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('[ UPLOAD OR INSERT HEADLINE PHOTO HERE ]', 640, 340);
-        ctx.fillText('Absurd real-world events that arrived before GTA 6', 640, 380);
+        ctx.fillText('📰 [ DROP OR UPLOAD REAL-WORLD EVENT PHOTO ]', 640, 320);
+        ctx.font = '18px Arial, sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText('Scientific breakthroughs, unexpected sequels, or historical milestones', 640, 365);
         ctx.textAlign = 'left';
       }
 
-      // Bottom Yellow bar
+      // Bottom Yellow Impact Bar
       ctx.fillStyle = '#eab308';
-      ctx.fillRect(50, 605, 1180, 90);
+      ctx.fillRect(centerX, 606, centerW, 88);
 
       ctx.font = 'bold 34px Impact, sans-serif';
       ctx.fillStyle = '#0f172a';
@@ -204,36 +441,32 @@ export default function GtaMemeTemplateBlogPostComponent({
       ctx.textAlign = 'left';
 
     } else if (activeTab === 'wasted') {
-      // Wasted theme
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, width, height);
 
-      // Vignette effect
-      const gradient = ctx.createRadialGradient(width / 2, height / 2, 100, width / 2, height / 2, 600);
-      gradient.addColorStop(0, 'rgba(40,40,40,0.8)');
-      gradient.addColorStop(1, 'rgba(0,0,0,0.95)');
+      const gradient = ctx.createRadialGradient(width / 2, height / 2, 80, width / 2, height / 2, 640);
+      gradient.addColorStop(0, 'rgba(40,40,40,0.85)');
+      gradient.addColorStop(1, 'rgba(0,0,0,0.98)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // Center red WASTED text
       ctx.font = 'bold 96px Impact, sans-serif';
       ctx.fillStyle = '#dc2626';
       ctx.textAlign = 'center';
       ctx.shadowColor = '#000000';
-      ctx.shadowBlur = 15;
+      ctx.shadowBlur = 20;
       ctx.fillText(wastedTitle, width / 2, 380);
 
-      // Subtitle
       ctx.font = 'bold 26px Arial, sans-serif';
       ctx.fillStyle = '#e2e8f0';
-      ctx.shadowBlur = 5;
+      ctx.shadowBlur = 6;
       ctx.fillText(wastedSubtitle, width / 2, 450);
       ctx.shadowBlur = 0;
       ctx.textAlign = 'left';
     }
-  }, [activeTab, leftHeader, leftSubtext, rightHeader, rightSubtext, leftImage, rightImage, newsHeadline, eventTopic, beforeImage, wastedTitle, wastedSubtitle, wastedImage]);
+  }, [activeTab, leftHeader, leftSubtext, rightHeader, rightSubtext, leftImage, rightImage, newsHeadline, eventTopic, beforeImage, wastedTitle, wastedSubtitle]);
 
-  // Download Blank HD Image
+  // Instant Blank Template Download (Clean 1080p, Zero Watermark)
   const handleDownloadBlank = () => {
     const filename = activeTab === 'before-gta6' 
       ? 'we-got-before-gta-6-meme-template-hd-1920x1080.png'
@@ -250,7 +483,7 @@ export default function GtaMemeTemplateBlogPostComponent({
     setShowConversionModal(true);
   };
 
-  // Download Canvas Rendered Custom Meme
+  // Instant Custom Canvas Export (High-Res PNG, Zero Watermark)
   const handleDownloadCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -258,7 +491,7 @@ export default function GtaMemeTemplateBlogPostComponent({
     const dataUrl = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = `custom-gta-meme-${activeTab}-${Date.now()}.png`;
+    link.download = `gta-meme-${activeTab}-${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -406,6 +639,7 @@ export default function GtaMemeTemplateBlogPostComponent({
 
         {/* CORE INTERACTIVE STUDIO: Live In-Page Meme Generator (Placed at Top of First Screen) */}
         <section className="mb-8 rounded-2xl bg-slate-900/90 border border-slate-800 p-4 sm:p-6 shadow-2xl relative">
+          {/* Top Bar with Modes & Preset Strips */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
@@ -413,7 +647,7 @@ export default function GtaMemeTemplateBlogPostComponent({
                 Live GTA Meme Generator & Blank Downloader
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                Type text to edit live or click <strong>Download Blank Template</strong> for clean raw assets.
+                Pick a viral preset, customize text, or upload your own photos.
               </p>
             </div>
 
@@ -452,8 +686,58 @@ export default function GtaMemeTemplateBlogPostComponent({
             </div>
           </div>
 
+          {/* TEMPLATE CAROUSEL / PRESET STRIP (Imgflip Style: Eliminates Blank Canvas Paralysis) */}
+          {activeTab === 'then-now' && (
+            <div className="mb-5 bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2 overflow-x-auto scrollbar-thin">
+              <span className="text-[11px] font-bold uppercase text-slate-400 pl-1 shrink-0 flex items-center gap-1">
+                <SparklesIcon className="w-3.5 h-3.5 text-pink-400" />
+                Popular Demos:
+              </span>
+              <button
+                onClick={() => handleSelectPreset('aging')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
+                  activePreset === 'aging'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                }`}
+              >
+                <span>👴 Gamer Aging (2013 vs 2026)</span>
+              </button>
+              <button
+                onClick={() => handleSelectPreset('consoles')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
+                  activePreset === 'consoles'
+                    ? 'bg-pink-500/20 text-pink-300 border border-pink-500/40'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                }`}
+              >
+                <span>🎮 PS3 vs PS5 Pro Leap</span>
+              </button>
+              <button
+                onClick={() => handleSelectPreset('economy')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
+                  activePreset === 'economy'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                }`}
+              >
+                <span>💸 Economy & Inflation</span>
+              </button>
+              <button
+                onClick={() => handleSelectPreset('blank')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
+                  activePreset === 'blank'
+                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                }`}
+              >
+                <span>🔲 Clean Blank Template</span>
+              </button>
+            </div>
+          )}
+
           {/* Canvas Preview Area */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-8 flex flex-col items-center">
               <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 relative shadow-inner flex items-center justify-center">
                 <canvas 
@@ -463,76 +747,172 @@ export default function GtaMemeTemplateBlogPostComponent({
               </div>
 
               {/* Action Buttons Under Canvas */}
-              <div className="flex flex-wrap items-center justify-center gap-4 mt-6 w-full">
+              <div className="flex flex-wrap items-center justify-center gap-4 mt-5 w-full">
                 <button
                   onClick={handleDownloadBlank}
-                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm flex items-center gap-2 border border-slate-700 hover:border-slate-600 transition-all shadow-md"
+                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 border border-slate-700 hover:border-slate-600 transition-all shadow-md"
                 >
-                  <ArrowDownTrayIcon className="w-5 h-5 text-emerald-400" />
+                  <ArrowDownTrayIcon className="w-4 h-4 text-emerald-400" />
                   <span>Download Blank Template (1080p)</span>
                 </button>
 
                 <button
                   onClick={handleDownloadCanvas}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-pink-500 hover:from-emerald-400 hover:to-pink-400 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-pink-500/20 transition-all hover:scale-105"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-pink-500 hover:from-emerald-400 hover:to-pink-400 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-pink-500/20 transition-all hover:scale-105"
                 >
-                  <ArrowDownTrayIcon className="w-5 h-5" />
+                  <ArrowDownTrayIcon className="w-4 h-4" />
                   <span>Export Custom Meme (No Watermark)</span>
                 </button>
               </div>
             </div>
 
             {/* Editor Controls Panel */}
-            <div className="lg:col-span-4 bg-slate-950/80 rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <BoltIcon className="w-4 h-4 text-emerald-400" />
-                Customize Captions
-              </h3>
+            <div className="lg:col-span-4 bg-slate-950/80 rounded-2xl p-4 sm:p-5 border border-slate-800 flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                  <BoltIcon className="w-4 h-4 text-emerald-400" />
+                  Editor Controls
+                </h3>
+                <span className="text-[11px] text-slate-500">Live Preview</span>
+              </div>
 
               {activeTab === 'then-now' && (
                 <>
-                  <div>
-                    <label className="block text-xs font-semibold text-emerald-400 mb-1">Left Header (2013 Era)</label>
+                  {/* Left Column Controls */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-emerald-400">Left: 2013 Era (GTA 5)</span>
+                      {leftImage ? (
+                        <button
+                          onClick={() => setLeftImage(null)}
+                          className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
+                        >
+                          <XMarkIcon className="w-3.5 h-3.5" />
+                          Remove Photo
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => leftFileInputRef.current?.click()}
+                          className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
+                        >
+                          <PhotoIcon className="w-3.5 h-3.5" />
+                          Upload Photo
+                        </button>
+                      )}
+                    </div>
+
                     <input
-                      type="text"
-                      value={leftHeader}
-                      onChange={(e) => setLeftHeader(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-400 outline-none"
+                      ref={leftFileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleUploadImage(e, 'left')}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">Left Description (Multiline)</label>
-                    <textarea
-                      rows={3}
-                      value={leftSubtext}
-                      onChange={(e) => setLeftSubtext(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:ring-1 focus:ring-emerald-400 outline-none"
-                    />
+
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">Top Label</label>
+                      <input
+                        type="text"
+                        value={leftHeader}
+                        onChange={(e) => setLeftHeader(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-emerald-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">Captions (Multiline)</label>
+                      <textarea
+                        rows={2}
+                        value={leftSubtext}
+                        onChange={(e) => setLeftSubtext(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-300 text-xs focus:ring-1 focus:ring-emerald-400 outline-none"
+                      />
+                    </div>
                   </div>
 
-                  <div className="border-t border-slate-800 pt-3">
-                    <label className="block text-xs font-semibold text-pink-400 mb-1">Right Header (2026 Era)</label>
+                  {/* Right Column Controls */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-pink-400">Right: 2026 Era (GTA 6)</span>
+                      {rightImage ? (
+                        <button
+                          onClick={() => setRightImage(null)}
+                          className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
+                        >
+                          <XMarkIcon className="w-3.5 h-3.5" />
+                          Remove Photo
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => rightFileInputRef.current?.click()}
+                          className="text-[11px] text-pink-400 hover:text-pink-300 flex items-center gap-1 font-semibold"
+                        >
+                          <PhotoIcon className="w-3.5 h-3.5" />
+                          Upload Photo
+                        </button>
+                      )}
+                    </div>
+
                     <input
-                      type="text"
-                      value={rightHeader}
-                      onChange={(e) => setRightHeader(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-pink-400 outline-none"
+                      ref={rightFileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleUploadImage(e, 'right')}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">Right Description (Multiline)</label>
-                    <textarea
-                      rows={3}
-                      value={rightSubtext}
-                      onChange={(e) => setRightSubtext(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:ring-1 focus:ring-pink-400 outline-none"
-                    />
+
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">Top Label</label>
+                      <input
+                        type="text"
+                        value={rightHeader}
+                        onChange={(e) => setRightHeader(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-pink-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">Captions (Multiline)</label>
+                      <textarea
+                        rows={2}
+                        value={rightSubtext}
+                        onChange={(e) => setRightSubtext(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-300 text-xs focus:ring-1 focus:ring-pink-400 outline-none"
+                      />
+                    </div>
                   </div>
                 </>
               )}
 
               {activeTab === 'before-gta6' && (
-                <>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-amber-400">Headline Photo</span>
+                    {beforeImage ? (
+                      <button
+                        onClick={() => setBeforeImage(null)}
+                        className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
+                      >
+                        <XMarkIcon className="w-3.5 h-3.5" />
+                        Remove Photo
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => beforeFileInputRef.current?.click()}
+                        className="text-[11px] text-amber-400 hover:text-amber-300 flex items-center gap-1 font-semibold"
+                      >
+                        <PhotoIcon className="w-3.5 h-3.5" />
+                        Upload News Photo
+                      </button>
+                    )}
+                  </div>
+
+                  <input
+                    ref={beforeFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleUploadImage(e, 'before')}
+                  />
+
                   <div>
                     <label className="block text-xs font-semibold text-red-400 mb-1">Top Breaking News Header</label>
                     <input
@@ -555,11 +935,11 @@ export default function GtaMemeTemplateBlogPostComponent({
                   <p className="text-[11px] text-slate-500 leading-normal">
                     Tip: Enter any shocking event, tech milestone, or viral pop-culture moment to auto-fit the yellow headline box.
                   </p>
-                </>
+                </div>
               )}
 
               {activeTab === 'wasted' && (
-                <>
+                <div className="space-y-3">
                   <div>
                     <label className="block text-xs font-semibold text-red-500 mb-1">Primary Splash Text</label>
                     <input
@@ -578,11 +958,11 @@ export default function GtaMemeTemplateBlogPostComponent({
                       className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-red-500 outline-none"
                     />
                   </div>
-                </>
+                </div>
               )}
 
               {/* Cross-Sell Card Inside Generator */}
-              <div className="mt-2 p-3.5 rounded-xl bg-pink-950/30 border border-pink-800/40 text-xs">
+              <div className="p-3.5 rounded-xl bg-pink-950/30 border border-pink-800/40 text-xs">
                 <span className="font-bold text-pink-300 block mb-1">🎨 Want GTA 6 Official Art Style?</span>
                 <p className="text-slate-300 text-[11px] mb-2 leading-relaxed">
                   Turn your selfies, car pictures, or street photos into Rockstar comic illustrations with AI.
