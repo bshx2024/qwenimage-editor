@@ -43,8 +43,8 @@ export default function GtaMemeTemplateBlogPostComponent({
   const [leftSubtext, setLeftSubtext] = useState('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree youth & zero bills');
   const [rightHeader, setRightHeader] = useState('GTA 6 (2026)');
   const [rightSubtext, setRightSubtext] = useState('Checking PTO days at work\nMonthly mortgage & lumbar pain\n13 years later: We survived');
-  const [leftImage, setLeftImage] = useState<string | null>(null);
-  const [rightImage, setRightImage] = useState<string | null>(null);
+  const [leftImage, setLeftImage] = useState<string | null>('/images/templates/demo-2013-gamer.jpg');
+  const [rightImage, setRightImage] = useState<string | null>('/images/templates/demo-2026-gamer.jpg');
 
   // Tab 2: Before GTA 6 inputs
   const [newsHeadline, setNewsHeadline] = useState('BREAKING NEWS / UNBELIEVABLE EVENT');
@@ -90,8 +90,8 @@ export default function GtaMemeTemplateBlogPostComponent({
       setLeftSubtext('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree youth & zero bills');
       setRightHeader('GTA 6 (2026)');
       setRightSubtext('Checking PTO days at work\nMonthly mortgage & lumbar pain\n13 years later: We survived');
-      setLeftImage(null);
-      setRightImage(null);
+      setLeftImage('/images/templates/demo-2013-gamer.jpg');
+      setRightImage('/images/templates/demo-2026-gamer.jpg');
     } else if (preset === 'consoles') {
       setLeftHeader('PS3 & Xbox 360 (2013)');
       setLeftSubtext('720p dynamic resolution\nJet engine fan acoustics\n20-minute Los Santos clouds');
@@ -197,10 +197,30 @@ export default function GtaMemeTemplateBlogPostComponent({
       ctx.fillStyle = '#f472b6';
       ctx.fillText(rightHeader, 675, 56);
 
+      // Helper Draw Function for Center VS Badge (ensures it is always on top)
+      const drawVsBadge = () => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(640, 400, 34, 0, Math.PI * 2);
+        ctx.fillStyle = '#eab308';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#0f172a';
+        ctx.stroke();
+        ctx.font = 'bold 24px Impact, sans-serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.textAlign = 'center';
+        ctx.fillText('VS', 640, 408);
+        ctx.restore();
+      };
+
       // Helper Draw Function for Panel Graphics
       const renderLeftPanelContent = () => {
         if (leftImage) {
           const img = new Image();
+          img.crossOrigin = 'anonymous';
           img.src = leftImage;
           img.onload = () => {
             // Draw photo with cover scaling
@@ -208,25 +228,40 @@ export default function GtaMemeTemplateBlogPostComponent({
             ctx.beginPath();
             ctx.rect(leftX + 3, leftY + 3, panelW - 6, panelH - 6);
             ctx.clip();
-            ctx.drawImage(img, leftX + 3, leftY + 3, panelW - 6, panelH - 6);
+
+            const targetW = panelW - 6;
+            const targetH = panelH - 6;
+            const imgRatio = img.width / img.height;
+            const targetRatio = targetW / targetH;
+            let sx = 0, sy = 0, sw = img.width, sh = img.height;
+            if (imgRatio > targetRatio) {
+              sw = img.height * targetRatio;
+              sx = (img.width - sw) / 2;
+            } else {
+              sh = img.width / targetRatio;
+              sy = (img.height - sh) / 2;
+            }
+            ctx.drawImage(img, sx, sy, sw, sh, leftX + 3, leftY + 3, targetW, targetH);
             
             // Bottom text gradient shadow for high contrast readability
             const textBg = ctx.createLinearGradient(0, leftY + panelH - 180, 0, leftY + panelH);
             textBg.addColorStop(0, 'rgba(0, 0, 0, 0)');
-            textBg.addColorStop(0.3, 'rgba(9, 13, 22, 0.75)');
-            textBg.addColorStop(1, 'rgba(9, 13, 22, 0.95)');
+            textBg.addColorStop(0.3, 'rgba(9, 13, 22, 0.85)');
+            textBg.addColorStop(1, 'rgba(9, 13, 22, 0.98)');
             ctx.fillStyle = textBg;
             ctx.fillRect(leftX + 3, leftY + panelH - 180, panelW - 6, 180);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 20px Arial, sans-serif';
-            ctx.shadowColor = 'rgba(0,0,0,0.9)';
-            ctx.shadowBlur = 6;
+            ctx.font = 'bold 21px Arial, sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 8;
             const lines = leftSubtext.split('\n');
             lines.forEach((line, i) => {
               ctx.fillText(line, leftX + 25, leftY + panelH - 120 + i * 32);
             });
             ctx.restore();
+
+            drawVsBadge();
           };
           if (img.complete) {
             img.onload?.(new Event('load'));
@@ -284,31 +319,47 @@ export default function GtaMemeTemplateBlogPostComponent({
       const renderRightPanelContent = () => {
         if (rightImage) {
           const img = new Image();
+          img.crossOrigin = 'anonymous';
           img.src = rightImage;
           img.onload = () => {
             ctx.save();
             ctx.beginPath();
             ctx.rect(rightX + 3, rightY + 3, panelW - 6, panelH - 6);
             ctx.clip();
-            ctx.drawImage(img, rightX + 3, rightY + 3, panelW - 6, panelH - 6);
+
+            const targetW = panelW - 6;
+            const targetH = panelH - 6;
+            const imgRatio = img.width / img.height;
+            const targetRatio = targetW / targetH;
+            let sx = 0, sy = 0, sw = img.width, sh = img.height;
+            if (imgRatio > targetRatio) {
+              sw = img.height * targetRatio;
+              sx = (img.width - sw) / 2;
+            } else {
+              sh = img.width / targetRatio;
+              sy = (img.height - sh) / 2;
+            }
+            ctx.drawImage(img, sx, sy, sw, sh, rightX + 3, rightY + 3, targetW, targetH);
 
             // Bottom text gradient shadow
             const textBg = ctx.createLinearGradient(0, rightY + panelH - 180, 0, rightY + panelH);
             textBg.addColorStop(0, 'rgba(0, 0, 0, 0)');
-            textBg.addColorStop(0.3, 'rgba(15, 10, 25, 0.75)');
-            textBg.addColorStop(1, 'rgba(15, 10, 25, 0.95)');
+            textBg.addColorStop(0.3, 'rgba(15, 10, 25, 0.85)');
+            textBg.addColorStop(1, 'rgba(15, 10, 25, 0.98)');
             ctx.fillStyle = textBg;
             ctx.fillRect(rightX + 3, rightY + panelH - 180, panelW - 6, 180);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 20px Arial, sans-serif';
-            ctx.shadowColor = 'rgba(0,0,0,0.9)';
-            ctx.shadowBlur = 6;
+            ctx.font = 'bold 21px Arial, sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.95)';
+            ctx.shadowBlur = 8;
             const lines = rightSubtext.split('\n');
             lines.forEach((line, i) => {
               ctx.fillText(line, rightX + 25, rightY + panelH - 120 + i * 32);
             });
             ctx.restore();
+
+            drawVsBadge();
           };
           if (img.complete) {
             img.onload?.(new Event('load'));
@@ -365,20 +416,7 @@ export default function GtaMemeTemplateBlogPostComponent({
 
       renderLeftPanelContent();
       renderRightPanelContent();
-
-      // Center VS Badge
-      ctx.beginPath();
-      ctx.arc(640, 400, 34, 0, Math.PI * 2);
-      ctx.fillStyle = '#eab308';
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = '#0f172a';
-      ctx.stroke();
-      ctx.font = 'bold 24px Impact, sans-serif';
-      ctx.fillStyle = '#0f172a';
-      ctx.textAlign = 'center';
-      ctx.fillText('VS', 640, 408);
-      ctx.textAlign = 'left';
+      drawVsBadge();
 
     } else if (activeTab === 'before-gta6') {
       ctx.fillStyle = '#0f172a';
@@ -782,23 +820,34 @@ export default function GtaMemeTemplateBlogPostComponent({
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-emerald-400">Left: 2013 Era (GTA 5)</span>
-                      {leftImage ? (
-                        <button
-                          onClick={() => setLeftImage(null)}
-                          className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
-                        >
-                          <XMarkIcon className="w-3.5 h-3.5" />
-                          Remove Photo
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => leftFileInputRef.current?.click()}
-                          className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
-                        >
-                          <PhotoIcon className="w-3.5 h-3.5" />
-                          Upload Photo
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {leftImage ? (
+                          <>
+                            <button
+                              onClick={() => leftFileInputRef.current?.click()}
+                              className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
+                            >
+                              <PhotoIcon className="w-3.5 h-3.5" />
+                              Change
+                            </button>
+                            <button
+                              onClick={() => setLeftImage(null)}
+                              className="text-[11px] text-slate-400 hover:text-red-400 flex items-center gap-1"
+                            >
+                              <XMarkIcon className="w-3.5 h-3.5" />
+                              Clear
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => leftFileInputRef.current?.click()}
+                            className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
+                          >
+                            <PhotoIcon className="w-3.5 h-3.5" />
+                            Upload Photo
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     <input
@@ -833,23 +882,34 @@ export default function GtaMemeTemplateBlogPostComponent({
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-pink-400">Right: 2026 Era (GTA 6)</span>
-                      {rightImage ? (
-                        <button
-                          onClick={() => setRightImage(null)}
-                          className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
-                        >
-                          <XMarkIcon className="w-3.5 h-3.5" />
-                          Remove Photo
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => rightFileInputRef.current?.click()}
-                          className="text-[11px] text-pink-400 hover:text-pink-300 flex items-center gap-1 font-semibold"
-                        >
-                          <PhotoIcon className="w-3.5 h-3.5" />
-                          Upload Photo
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {rightImage ? (
+                          <>
+                            <button
+                              onClick={() => rightFileInputRef.current?.click()}
+                              className="text-[11px] text-pink-400 hover:text-pink-300 flex items-center gap-1 font-semibold"
+                            >
+                              <PhotoIcon className="w-3.5 h-3.5" />
+                              Change
+                            </button>
+                            <button
+                              onClick={() => setRightImage(null)}
+                              className="text-[11px] text-slate-400 hover:text-red-400 flex items-center gap-1"
+                            >
+                              <XMarkIcon className="w-3.5 h-3.5" />
+                              Clear
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => rightFileInputRef.current?.click()}
+                            className="text-[11px] text-pink-400 hover:text-pink-300 flex items-center gap-1 font-semibold"
+                          >
+                            <PhotoIcon className="w-3.5 h-3.5" />
+                            Upload Photo
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     <input
