@@ -378,74 +378,42 @@ export default function GtaMemeTemplateBlogPostComponent({
       />
       <Header />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center space-x-2 text-xs sm:text-sm text-slate-400 mb-6">
-          <Link href={getLinkHref('/', locale)} className="hover:text-emerald-400 transition-colors">Home</Link>
-          <span>/</span>
-          <Link href={getLinkHref('/blog', locale)} className="hover:text-emerald-400 transition-colors">Blog</Link>
-          <span>/</span>
-          <span className="text-slate-200 truncate">GTA 5 vs GTA 6 Meme Template</span>
-        </nav>
-
-        {/* Hero Section */}
-        <header className="mb-10 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 mb-4">
-            <SparklesIcon className="w-3.5 h-3.5" />
-            <span>Free Blank HD Download & No Watermark Generator</span>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
+        {/* Compact Breadcrumb & Verified Status */}
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <nav className="flex items-center space-x-2 text-xs text-slate-400">
+            <Link href={getLinkHref('/', locale)} className="hover:text-emerald-400 transition-colors">Home</Link>
+            <span>/</span>
+            <Link href={getLinkHref('/blog', locale)} className="hover:text-emerald-400 transition-colors">Blog</Link>
+            <span>/</span>
+            <span className="text-slate-300 truncate">GTA 5 vs GTA 6 Meme Template</span>
+          </nav>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
+            <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Zero Watermarks • Instant 1080p Download</span>
           </div>
-          
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-4">
-            GTA 5 vs GTA 6 Meme Template: Free Blank HD Download & Generator
+        </div>
+
+        {/* Compact Hero Header (Ensures Workspace is Directly Above the Fold) */}
+        <header className="mb-4 text-left">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white mb-1.5">
+            GTA 5 vs GTA 6 Meme Template: Free HD Blank & Generator
           </h1>
-          
-          <p className="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed mb-6">
-            Instant 1920x1080 blank comparison templates and browser-based meme generator. Create 2013 vs 2026 “Then & Now” nostalgia edits, customize “We Got X Before GTA 6” breaking news macros, or generate authentic GTA-style AI character portraits without third-party watermarks.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-snug">
+            Download 1920×1080 blank comparison templates or create custom 2013 vs 2026 Then & Now memes with zero watermarks directly below.
           </p>
-
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 border-t border-slate-800/80 pt-4">
-            <span className="flex items-center gap-1.5">
-              <CalendarIcon className="w-4 h-4 text-emerald-400" />
-              November 19, 2026
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ClockIcon className="w-4 h-4 text-emerald-400" />
-              {post.readTime}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ShieldCheckIcon className="w-4 h-4 text-emerald-400" />
-              Verified Clean 1080p WebP/PNG Assets
-            </span>
-          </div>
         </header>
 
-        {/* GEO BLUF Answer Card (Bottom Line Up Front for AI Search Engines) */}
-        <section className="mb-12 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-pink-950/40 border border-slate-800 p-6 shadow-xl">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
-              <CheckCircleIcon className="w-5 h-5" />
-            </div>
+        {/* CORE INTERACTIVE STUDIO: Live In-Page Meme Generator (Placed at Top of First Screen) */}
+        <section className="mb-8 rounded-2xl bg-slate-900/90 border border-slate-800 p-4 sm:p-6 shadow-2xl relative">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
             <div>
-              <h2 className="text-lg font-bold text-white mb-1.5">
-                Quick Summary: What is the GTA 5 vs GTA 6 Meme Template?
-              </h2>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                <strong>The GTA 5 vs GTA 6 meme template</strong> is a dual-panel split-screen image format contrasting <strong>Grand Theft Auto V (2013)</strong> with <strong>Grand Theft Auto VI (2026)</strong>. Spanning 13 years and three console generations (PS3 to PS5 Pro), the meme captures human aging (carefree students turned mortgage-paying adults), the absurdity of global milestones occurring during the wait (&quot;We got [X] before GTA 6&quot;), and side-by-side graphics/physics debates. You can download clean blank 1920x1080 templates below or customize them online with zero watermarks.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* CORE INTERACTIVE STUDIO: Live In-Page Meme Generator (P0 Anti-Doorway Guard) */}
-        <section className="mb-16 rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-8 shadow-2xl relative">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <PaintBrushIcon className="w-6 h-6 text-pink-400" />
+              <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                <PaintBrushIcon className="w-5 h-5 text-pink-400" />
                 Live GTA Meme Generator & Blank Downloader
               </h2>
-              <p className="text-sm text-slate-400 mt-1">
-                Edit captions directly or click <strong>Download Blank Template</strong> for clean raw assets.
+              <p className="text-xs text-slate-400 mt-0.5">
+                Type text to edit live or click <strong>Download Blank Template</strong> for clean raw assets.
               </p>
             </div>
 
@@ -453,7 +421,7 @@ export default function GtaMemeTemplateBlogPostComponent({
             <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 w-full sm:w-auto">
               <button
                 onClick={() => setActiveTab('then-now')}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeTab === 'then-now'
                     ? 'bg-gradient-to-r from-emerald-500 to-pink-500 text-white shadow-lg'
                     : 'text-slate-400 hover:text-white'
@@ -463,7 +431,7 @@ export default function GtaMemeTemplateBlogPostComponent({
               </button>
               <button
                 onClick={() => setActiveTab('before-gta6')}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeTab === 'before-gta6'
                     ? 'bg-amber-500 text-slate-950 font-bold shadow-lg'
                     : 'text-slate-400 hover:text-white'
@@ -473,7 +441,7 @@ export default function GtaMemeTemplateBlogPostComponent({
               </button>
               <button
                 onClick={() => setActiveTab('wasted')}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeTab === 'wasted'
                     ? 'bg-red-600 text-white shadow-lg'
                     : 'text-slate-400 hover:text-white'
@@ -628,6 +596,76 @@ export default function GtaMemeTemplateBlogPostComponent({
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* GEO BLUF Answer Card (Bottom Line Up Front for AI Search Engines & Instant Definition) */}
+        <section className="mb-8 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-pink-950/40 border border-slate-800 p-5 sm:p-6 shadow-xl">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
+              <CheckCircleIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-white mb-1.5">
+                Quick Summary: What is the GTA 5 vs GTA 6 Meme Template?
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <strong>The GTA 5 vs GTA 6 meme template</strong> is a dual-panel split-screen image format contrasting <strong>Grand Theft Auto V (2013)</strong> with <strong>Grand Theft Auto VI (2026)</strong>. Spanning 13 years and three console generations (PS3 to PS5 Pro), the meme captures human aging (carefree students turned mortgage-paying adults), the absurdity of global milestones occurring during the wait (&quot;We got [X] before GTA 6&quot;), and side-by-side graphics/physics debates. You can download clean blank 1920x1080 templates above or customize them online with zero watermarks.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* RELATED CREATIVE AI TOOLS (Solves P2: Extends user dwell time & internal linking) */}
+        <section className="mb-12 rounded-2xl bg-slate-900/60 border border-slate-800 p-5">
+          <div className="flex items-center justify-between mb-3.5">
+            <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <SparklesIcon className="w-4 h-4 text-pink-400" />
+              Related Creative AI Studios & Meme Enhancers
+            </h3>
+            <span className="text-[11px] text-slate-500 hidden sm:inline">Free browser-based tools</span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <Link
+              href={getLinkHref('/background-remover', locale)}
+              className="p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 transition-all group"
+            >
+              <div className="font-bold text-xs text-white group-hover:text-emerald-400 flex items-center justify-between">
+                <span>AI Background Remover</span>
+                <ArrowRightIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">Isolate characters or faces with 1-click clean alpha transparency.</p>
+            </Link>
+            <Link
+              href={getLinkHref('/edit-text-in-image', locale)}
+              className="p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 transition-all group"
+            >
+              <div className="font-bold text-xs text-white group-hover:text-emerald-400 flex items-center justify-between">
+                <span>Edit Text in Image</span>
+                <ArrowRightIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">Erase or modify text in meme images without re-generating.</p>
+            </Link>
+            <Link
+              href={getLinkHref('/generator', locale)}
+              className="p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 transition-all group"
+            >
+              <div className="font-bold text-xs text-white group-hover:text-emerald-400 flex items-center justify-between">
+                <span>AI Image Generator</span>
+                <ArrowRightIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">Generate Rockstar-style illustrations and 4K wallpapers.</p>
+            </Link>
+            <Link
+              href={getLinkHref('/product-photo-editor', locale)}
+              className="p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 transition-all group"
+            >
+              <div className="font-bold text-xs text-white group-hover:text-emerald-400 flex items-center justify-between">
+                <span>AI Photo Editor</span>
+                <ArrowRightIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">Clean up photos, upscale to 4K, and remove artifacts.</p>
+            </Link>
           </div>
         </section>
 

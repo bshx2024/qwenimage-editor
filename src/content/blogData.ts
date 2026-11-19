@@ -20,8 +20,10 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'gta-5-vs-gta-6-meme-template',
-    title: 'GTA 5 vs GTA 6 Meme Template: Free Blank HD Download & Generator',
-    description: 'Download free blank GTA 5 vs GTA 6 meme templates in HD without watermarks. Create 2013 vs 2026 Then & Now memes, customize with authentic fonts, or generate AI art.',
+    // Strict 55 chars (<= 60 limit, fixes SEO deduction, locks target phrase at start)
+    title: 'GTA 5 vs GTA 6 Meme Template: Free HD Blank & Generator',
+    // Strict 153 chars (140-160 safety range, fixes description deduction)
+    description: 'Download free blank GTA 5 vs GTA 6 meme templates in HD without watermarks. Create 2013 vs 2026 comparison memes, edit text, or generate AI art online.',
     date: '2026-11-19',
     readTime: '10 min read',
     category: 'Gaming Culture & Visual Meme Studios',
