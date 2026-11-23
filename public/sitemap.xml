@@ -56,6 +56,19 @@
         <priority>0.9</priority>
     </url>
 
+    <!-- Blog Article: Qwen-Image-2.1 Turbo: ComfyUI Workflow, GGUF/INT8 & Requirements Guide -->
+    <url>
+        <loc>https://www.qwenimage-editor.com/blog/qwen-image-2-1-turbo-comfyui-workflow-gguf-guide</loc>
+        <lastmod>2026-11-24</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://www.qwenimage-editor.com/images/blog/qwen-image-2-1-turbo-comfyui-guide.png</image:loc>
+            <image:title>Qwen-Image-2.1 Turbo ComfyUI Workflow and GGUF INT8 Benchmark Guide</image:title>
+            <image:caption>Technical architecture and memory optimization guide for Alibaba Qwen-Image-2.1-Turbo</image:caption>
+        </image:image>
+    </url>
+
     <!-- Blog Article: GTA 5 vs GTA 6 Meme Template: Free HD Blank & Generator -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog/gta-5-vs-gta-6-meme-template</loc>

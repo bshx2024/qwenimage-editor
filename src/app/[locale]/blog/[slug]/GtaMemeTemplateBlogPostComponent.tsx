@@ -7,9 +7,9 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { getLinkHref } from "~/configs/buildLink";
 import { BlogPost } from "~/content/blogData";
 import { useCommonContext } from "~/context/common-context";
-import { 
-  CalendarIcon, 
-  ClockIcon, 
+import {
+  CalendarIcon,
+  ClockIcon,
   CheckCircleIcon,
   SparklesIcon,
   ArrowRightIcon,
@@ -37,7 +37,7 @@ export default function GtaMemeTemplateBlogPostComponent({
   // Mode Selection
   const [activeTab, setActiveTab] = useState<'then-now' | 'before-gta6' | 'wasted'>('then-now');
   const [activePreset, setActivePreset] = useState<'aging' | 'consoles' | 'economy' | 'blank'>('aging');
-  
+
   // Tab 1: Then & Now inputs
   const [leftHeader, setLeftHeader] = useState('GTA 5 (2013)');
   const [leftSubtext, setLeftSubtext] = useState('School homework skipped\nPlaying on Xbox 360 / PS3\nCarefree youth & zero bills');
@@ -242,7 +242,7 @@ export default function GtaMemeTemplateBlogPostComponent({
               sy = (img.height - sh) / 2;
             }
             ctx.drawImage(img, sx, sy, sw, sh, leftX + 3, leftY + 3, targetW, targetH);
-            
+
             // Bottom text gradient shadow for high contrast readability
             const textBg = ctx.createLinearGradient(0, leftY + panelH - 180, 0, leftY + panelH);
             textBg.addColorStop(0, 'rgba(0, 0, 0, 0)');
@@ -506,10 +506,10 @@ export default function GtaMemeTemplateBlogPostComponent({
 
   // Instant Blank Template Download (Clean 1080p, Zero Watermark)
   const handleDownloadBlank = () => {
-    const filename = activeTab === 'before-gta6' 
+    const filename = activeTab === 'before-gta6'
       ? 'we-got-before-gta-6-meme-template-hd-1920x1080.png'
       : 'gta-5-vs-gta-6-blank-meme-template-hd-1920x1080.png';
-    
+
     const link = document.createElement('a');
     link.href = `/images/templates/${filename}`;
     link.download = filename;
@@ -693,31 +693,28 @@ export default function GtaMemeTemplateBlogPostComponent({
             <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 w-full sm:w-auto">
               <button
                 onClick={() => setActiveTab('then-now')}
-                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === 'then-now'
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeTab === 'then-now'
                     ? 'bg-gradient-to-r from-emerald-500 to-pink-500 text-white shadow-lg'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 2013 vs 2026 Split
               </button>
               <button
                 onClick={() => setActiveTab('before-gta6')}
-                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === 'before-gta6'
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeTab === 'before-gta6'
                     ? 'bg-amber-500 text-slate-950 font-bold shadow-lg'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 We Got X Before GTA 6
               </button>
               <button
                 onClick={() => setActiveTab('wasted')}
-                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === 'wasted'
+                className={`flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeTab === 'wasted'
                     ? 'bg-red-600 text-white shadow-lg'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 Wasted Screen
               </button>
@@ -733,41 +730,37 @@ export default function GtaMemeTemplateBlogPostComponent({
               </span>
               <button
                 onClick={() => handleSelectPreset('aging')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
-                  activePreset === 'aging'
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${activePreset === 'aging'
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                     : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                }`}
+                  }`}
               >
                 <span>👴 Gamer Aging (2013 vs 2026)</span>
               </button>
               <button
                 onClick={() => handleSelectPreset('consoles')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
-                  activePreset === 'consoles'
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${activePreset === 'consoles'
                     ? 'bg-pink-500/20 text-pink-300 border border-pink-500/40'
                     : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                }`}
+                  }`}
               >
                 <span>🎮 PS3 vs PS5 Pro Leap</span>
               </button>
               <button
                 onClick={() => handleSelectPreset('economy')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
-                  activePreset === 'economy'
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${activePreset === 'economy'
                     ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                     : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                }`}
+                  }`}
               >
                 <span>💸 Economy & Inflation</span>
               </button>
               <button
                 onClick={() => handleSelectPreset('blank')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${
-                  activePreset === 'blank'
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1.5 ${activePreset === 'blank'
                     ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
                     : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                }`}
+                  }`}
               >
                 <span>🔲 Clean Blank Template</span>
               </button>
@@ -778,8 +771,8 @@ export default function GtaMemeTemplateBlogPostComponent({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-8 flex flex-col items-center">
               <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 relative shadow-inner flex items-center justify-center">
-                <canvas 
-                  ref={canvasRef} 
+                <canvas
+                  ref={canvasRef}
                   className="w-full h-full object-contain"
                 />
               </div>

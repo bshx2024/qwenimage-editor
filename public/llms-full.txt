@@ -4,7 +4,35 @@
 
 ---
 
-## 1. Featured Architectural Guide: Z-Image-Turbo (Alibaba Tongyi-MAI 6B S3-DiT)
+## 1. Architectural Benchmark Guide: Qwen-Image-2.1-Turbo (Alibaba Tongyi Lab 7B DiT)
+URL: https://www.qwenimage-editor.com/blog/qwen-image-2-1-turbo-comfyui-workflow-gguf-guide
+Author: Dr. Sarah Lin (Staff Multimodal AI & Creative Typography Systems Architect)
+Date: 2026-11-24
+
+### Executive Summary (BLUF)
+Qwen-Image-2.1-Turbo is an accelerated open-weights 7B visual foundation model by Alibaba Tongyi Lab, engineered for unified 2K text-to-image generation, native transparency (RGBA) exports, and multi-reference image editing in exactly 8 denoising steps. Utilizing guidance distillation, it cuts inference latency by ~75% compared to the 40-step base model while preserving superior bilingual Chinese/English typography and identity consistency across up to 10 reference inputs.
+
+### Core Architectural Specifications & Hardware Thresholds
+- Architecture: 7B Single-Stream Diffusion Transformer (DiT) with 32 single-stream DiT layers and mixed-granularity attention caching.
+- Text Encoder: qwen3vl multimodal vision-language model.
+- Steps: Strictly 8 steps.
+- Guidance Scale (CFG): Must be clamped strictly to 1.0. Applying external CFG (> 1.0) multiplies distilled velocity vectors, causing severe luminance burnout and chromatic clipping.
+- Scheduler: linear_quadratic sigma scheduling is mandatory; standard Euler Simple schedules produce checkerboard artifacts due to uniform step distribution.
+- VRAM Footprint:
+  - Full Uncompressed BF16: 21.4 GB Peak (requires RTX 3090/4090 24GB).
+  - CPU-Offloaded Text Encoder BF16: 15.2 GB Peak (runs on 16GB VRAM GPUs).
+  - GGUF INT8 Quantization: 11.6 GB Peak (runs on RTX 3060 12GB).
+  - GGUF Q4_K_M Budget Quantization: 7.8 GB Peak (runs on RTX 4060 8GB).
+  - Qwen Image Editor Cloud Studio: 0 GB Local VRAM (instant in-browser execution with zero installation).
+
+### Critical Troubleshooting Guidelines
+- Fixing Stretched Necks: Ensure latent dimensions are divisible by 16 (e.g., 2048x1152 for 16:9, 1152x2048 for 9:16). In edit workflows, match output dimensions strictly to the reference image aspect ratio.
+- Eliminating Plastic Skin: Because CFG=1 disables negative prompts, guide realistic human features using affirmative photographic terminology (e.g., "natural skin pores, fine vellus hair, imperfect epidermal texture, 35mm candid lens").
+- Commercial Rights: While model weights fall under the qwen-research license, output images are owned by users. Commercial use can be safely accessed through Qwen Image Editor cloud implementations.
+
+---
+
+## 2. Featured Architectural Guide: Z-Image-Turbo (Alibaba Tongyi-MAI 6B S3-DiT)
 URL: https://www.qwenimage-editor.com/blog/z-image-turbo-guide-comfyui-workflows-prompting-online
 Author: Elena Rostova (Lead Visual AI & Generative Media Specialist)
 Date: 2026-11-07

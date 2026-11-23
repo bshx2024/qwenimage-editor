@@ -18,6 +18,7 @@ import GptImageSunburstBlogPostComponent from './GptImageSunburstBlogPostCompone
 import SeedreamBlogPostComponent from './SeedreamBlogPostComponent';
 import CompanyImageFromTextBlogPostComponent from './CompanyImageFromTextBlogPostComponent';
 import GtaMemeTemplateBlogPostComponent from './GtaMemeTemplateBlogPostComponent';
+import QwenImage21TurboBlogPostComponent from './QwenImage21TurboBlogPostComponent';
 import BlogCallToActionBanner from '~/components/BlogCallToActionBanner';
 
 export const revalidate = 3600;
@@ -41,7 +42,9 @@ export default async function BlogPostPage({
   }
 
   let postComponent;
-  if (slug === 'gta-5-vs-gta-6-meme-template') {
+  if (slug === 'qwen-image-2-1-turbo-comfyui-workflow-gguf-guide') {
+    postComponent = <QwenImage21TurboBlogPostComponent post={post} locale={locale} />;
+  } else if (slug === 'gta-5-vs-gta-6-meme-template') {
     postComponent = <GtaMemeTemplateBlogPostComponent post={post} locale={locale} />;
   } else if (slug === 'company-image-from-text-free-ai-logo-generator') {
     postComponent = <CompanyImageFromTextBlogPostComponent post={post} locale={locale} />;
