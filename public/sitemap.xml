@@ -56,7 +56,7 @@
         <priority>0.9</priority>
     </url>
 
-    <!-- Blog Article: Qwen-Image-2.1 Turbo: ComfyUI Workflow, GGUF/INT8 & Requirements Guide -->
+    <!-- Blog Article: Qwen Image 2.1 Turbo: ComfyUI Workflow & Requirements Guide -->
     <url>
         <loc>https://www.qwenimage-editor.com/blog/qwen-image-2-1-turbo-comfyui-workflow-gguf-guide</loc>
         <lastmod>2026-11-24</lastmod>
@@ -64,8 +64,8 @@
         <priority>0.9</priority>
         <image:image>
             <image:loc>https://www.qwenimage-editor.com/images/blog/qwen-image-2-1-turbo-comfyui-guide.png</image:loc>
-            <image:title>Qwen-Image-2.1 Turbo ComfyUI Workflow and GGUF INT8 Benchmark Guide</image:title>
-            <image:caption>Technical architecture and memory optimization guide for Alibaba Qwen-Image-2.1-Turbo</image:caption>
+            <image:title>Qwen Image 2.1 Turbo ComfyUI Workflow and Requirements Guide</image:title>
+            <image:caption>Technical architecture and memory optimization guide for Alibaba Qwen Image 2.1 Turbo</image:caption>
         </image:image>
     </url>
 

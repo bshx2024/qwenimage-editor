@@ -20,12 +20,12 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'qwen-image-2-1-turbo-comfyui-workflow-gguf-guide',
-    // Strict 57 chars (<= 60 limit, locks 'Qwen-Image-2.1 Turbo', 'ComfyUI Workflow', 'GGUF/INT8', 'Requirements')
-    title: 'Qwen-Image-2.1 Turbo: ComfyUI Workflow, GGUF/INT8 & Requirements Guide',
-    // Strict 155 chars (140-160 range, answers download, INT8/GGUF, ComfyUI 8-step CFG, requirements, online alternative)
-    description: 'Download Qwen-Image-2.1 Turbo weights, GGUF/INT8 quants & ComfyUI workflows. Learn 8-step CFG settings, VRAM requirements, or run online free with zero setup.',
+    // Strict 58 chars (<= 60 limit, locks 'Qwen Image 2.1 Turbo' at position 0, ComfyUI Workflow, Requirements)
+    title: 'Qwen Image 2.1 Turbo: ComfyUI Workflow & Requirements Guide',
+    // Strict 153 chars (140-160 range, answers ComfyUI 8-step, VRAM requirements, GGUF, CFG 1.0, online tool)
+    description: 'Run Qwen Image 2.1 Turbo in ComfyUI with 8-step workflows. Learn hardware VRAM requirements, GGUF quants, CFG 1.0 setup, or test free online with zero setup.',
     date: '2026-11-24',
-    readTime: '12 min read',
+    readTime: '10 min read',
     category: 'Diffusion Architecture & Accelerated Workflows',
     author: {
       name: 'Dr. Sarah Lin',
@@ -37,19 +37,19 @@ export const BLOG_POSTS: BlogPost[] = [
     keywords: [
       'qwen image 2.1 turbo',
       'qwen image 2.1 turbo comfyui',
+      'qwen image 2.1 turbo workflow',
+      'qwen image 2.1 turbo requirements',
       'qwen image 2.1 turbo lora',
       'qwen image 2.1 turbo gguf',
-      'qwen image 2.1 turbo workflow',
       'qwen image 2.1 turbo int8',
+      'qwen image 2.1 turbo download',
       'qwen image 2.1 turbo huggingface',
       'qwen image 2.1 turbo reddit',
       'qwen image 2.1 turbo comfyui workflow',
       'qwen image 2.1 turbo bf16.safetensors',
-      'qwen image 2.1 turbo download',
-      'qwen image 2.1 turbo requirements',
       'qwen image editor',
       'qwen 2.1 turbo online',
-      'qwen-image-2.1 turbo linear_quadratic',
+      'qwen image 2.1 turbo linear quadratic',
     ],
   },
   {
