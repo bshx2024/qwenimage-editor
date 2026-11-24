@@ -33,7 +33,6 @@ export default function QwenImage21TurboBlogPostComponent({
   post: BlogPost;
   locale?: string;
 }) {
-  // Interactive Live VRAM & Hardware Configurator
   const [hardwareTier, setHardwareTier] = useState<'8gb' | '16gb' | '24gb' | 'cloud'>('16gb');
   const [workflowMode, setWorkflowMode] = useState<'t2i' | 'edit' | 'rgba'>('t2i');
   const [aspectRatio, setAspectRatio] = useState<'1:1' | '16:9' | '9:16' | '3:4'>('16:9');
@@ -54,7 +53,6 @@ export default function QwenImage21TurboBlogPostComponent({
       quant: 'GGUF Q4_K_M / INT8 Quantized Checkpoint',
       vram: '7.8 GB Peak VRAM',
       recommendedGpu: 'RTX 3060 12GB / RTX 4060 8GB / Apple M2 16GB',
-      precision: 'torch.bfloat16 (qwen3vl CPU offloaded)',
       steps: 8,
       cfg: 1.0,
       scheduler: 'linear_quadratic',
@@ -65,7 +63,6 @@ export default function QwenImage21TurboBlogPostComponent({
       quant: 'Native BF16 Checkpoint + KV-Cache',
       vram: '15.2 GB Peak VRAM',
       recommendedGpu: 'RTX 4070 Ti Super 16GB / RTX 4080 / Apple M3 Max',
-      precision: 'Native torch.bfloat16 uncompressed DiT',
       steps: 8,
       cfg: 1.0,
       scheduler: 'linear_quadratic (Official Sigmas)',
@@ -76,7 +73,6 @@ export default function QwenImage21TurboBlogPostComponent({
       quant: 'Full Uncompressed BF16 + Native WanVAE',
       vram: '21.4 GB Peak VRAM',
       recommendedGpu: 'RTX 3090 / RTX 4090 / NVIDIA A10G',
-      precision: 'Full float32 text encoding + BF16 32 DiT layers',
       steps: 8,
       cfg: 1.0,
       scheduler: 'linear_quadratic',
@@ -87,7 +83,6 @@ export default function QwenImage21TurboBlogPostComponent({
       quant: 'Enterprise Distributed A100/H800 Cluster',
       vram: '0 GB Local VRAM (Browser-based)',
       recommendedGpu: 'Any Laptop, MacBook, Chromebook, or Mobile',
-      precision: 'Official DashScope Engine',
       steps: 8,
       cfg: 1.0,
       scheduler: 'Custom Multi-GPU Denoising',
@@ -118,14 +113,10 @@ export default function QwenImage21TurboBlogPostComponent({
     }
   ];
 
-  const generatedComfyUiSnippet = `# Qwen Image 2.1 Turbo Diffusers & ComfyUI Automation Pipeline
-# Model: Qwen Image 2.1 Turbo (7B Single-Stream DiT - 8-Step Distilled)
-# Hardware Target: ${hardwareProfiles[hardwareTier].title}
-
+  const generatedComfyUiSnippet = `# Diffusers & ComfyUI Automation Pipeline
 import torch
 from diffusers import DiffusionPipeline
 
-# Load Qwen Image 2.1 Turbo pipeline
 pipe = DiffusionPipeline.from_pretrained(
     "Qwen/Qwen-Image-2.1-Turbo",
     torch_dtype=torch.bfloat16,
@@ -134,11 +125,9 @@ pipe = DiffusionPipeline.from_pretrained(
 
 ${hardwareTier === '8gb' ? 'pipe.enable_model_cpu_offload()\npipe.enable_vae_slicing()' : 'pipe.to("cuda")'}
 
-# Strict Qwen Image 2.1 Turbo settings: guidance_scale MUST be 1.0
 prompt = "${selectedPromptPreset}"
 output = pipe(
     prompt=prompt,
-    negative_prompt=None,  # Inactive when guidance_scale=1.0
     num_inference_steps=${hardwareProfiles[hardwareTier].steps},
     guidance_scale=${hardwareProfiles[hardwareTier].cfg},
     height=${aspectRatio === '16:9' ? 1152 : aspectRatio === '9:16' ? 2048 : aspectRatio === '3:4' ? 1536 : 1024},
@@ -146,7 +135,7 @@ output = pipe(
     scheduler_type="${hardwareProfiles[hardwareTier].scheduler}"
 )
 
-output.images[0].save("qwen_image_2_1_turbo_render.png")`;
+output.images[0].save("turbo_render.png")`;
 
   const copyScript = () => {
     navigator.clipboard.writeText(generatedComfyUiSnippet);
@@ -163,18 +152,18 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
   const faqData = [
     {
       q: "Why does Qwen Image 2.1 Turbo burn out when CFG is set above 1.0?",
-      a: "Qwen Image 2.1 Turbo is an 8-step distilled foundation model. Base diffusion models require CFG 3.0 to 4.5 to adhere to text instructions, but distilled turbo checkpoints embed guidance directly into their velocity predictions. Applying external guidance scale above 1.0 multiplies these vectors, causing extreme color clipping and washed-out highlights. Keep guidance_scale strictly at 1.0."
+      a: "This architecture utilizes guidance distillation where velocity vectors already incorporate prompt alignment. Applying external guidance scale above 1.0 multiplies these vectors, causing numerical clipping and washed-out highlights. Keep guidance_scale strictly at 1.0."
     },
     {
-      q: "Can I run Qwen Image 2.1 Turbo on an 8GB or 12GB consumer GPU?",
-      a: "Yes. While uncompressed BF16 weights require ~15GB–20GB VRAM, GGUF quants (Q8_0 and Q4_K_M) reduce VRAM requirements to 7.8GB. By using CPU offloading for the qwen3vl text encoder, you can comfortably run Qwen Image 2.1 Turbo locally on an RTX 3060 (12GB) or RTX 4060 (8GB)."
+      q: "Can I run the accelerated 8-step model on an 8GB or 12GB consumer GPU?",
+      a: "Yes. While uncompressed BF16 weights require ~15GB–20GB VRAM, GGUF quants (Q8_0 and Q4_K_M) reduce memory requirements to 7.8GB. By using CPU offloading for the qwen3vl text encoder, you can run the pipeline locally on an RTX 3060 (12GB) or RTX 4060 (8GB)."
     },
     {
-      q: "Why is the linear_quadratic scheduler mandatory for Qwen Image 2.1 Turbo?",
-      a: "In an 8-step generation budget, uniform schedulers like Euler Simple leave residual noise in high-frequency latents, creating checkerboard patterns. The linear_quadratic scheduler allocates denser sampling steps near the end of the trajectory, allowing Qwen Image 2.1 Turbo to resolve crisp typography, skin pores, and transparent RGBA layers."
+      q: "Why is the linear_quadratic scheduler mandatory for 8-step sampling?",
+      a: "In an 8-step generation budget, uniform schedulers like Euler Simple leave residual noise in high-frequency latents, creating checkerboard patterns. The linear_quadratic scheduler allocates denser sampling steps near the end of the trajectory to resolve clean typography and transparent RGBA layers."
     },
     {
-      q: "Are images generated by Qwen Image 2.1 Turbo free for commercial use?",
+      q: "Are generated outputs free for commercial client use?",
       a: "Under the Qwen Research License, model weights are restricted to evaluation. However, the Qwen team confirmed that users retain full ownership of generated outputs. To ensure complete legal compliance for commercial client work, users can leverage authorized cloud services like Qwen Image Editor."
     }
   ];
@@ -234,11 +223,11 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               "@type": "HowTo",
               "@id": `https://www.qwenimage-editor.com/blog/${post.slug}#howto`,
               "name": "How to Run Qwen Image 2.1 Turbo in ComfyUI",
-              "description": "Step-by-step instructions to configure Qwen Image 2.1 Turbo in ComfyUI using 8 steps, CFG 1.0, and linear_quadratic scheduler.",
+              "description": "Step-by-step instructions to configure the model in ComfyUI using 8 steps, CFG 1.0, and linear_quadratic scheduler.",
               "step": [
                 {
                   "@type": "HowToStep",
-                  "name": "Step 1: Download Qwen Image 2.1 Turbo Weights or GGUF",
+                  "name": "Step 1: Download Weights or GGUF Quants",
                   "text": "Place qwen_image_2_1_turbo_bf16.safetensors into models/checkpoints, or load GGUF quantized models for 8GB VRAM."
                 },
                 {
@@ -353,13 +342,13 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
             <p>
               <strong>Qwen Image 2.1 Turbo</strong> is an accelerated open-weights 7B visual foundation model by Alibaba Tongyi Lab, 
               delivering 2K native text-to-image and multi-reference image editing in <strong>exactly 8 denoising steps</strong>. 
-              Compared to the 40-step base model, Qwen Image 2.1 Turbo cuts inference time by ~75% while maintaining sharp bilingual typography and transparent RGBA layer generation.
+              Compared to the 40-step base model, this accelerated checkpoint cuts inference latency by ~75% while maintaining sharp bilingual typography and transparent RGBA layer generation.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
               <div className="bg-slate-950/80 border border-slate-800 rounded-lg p-3">
                 <span className="text-slate-400 block mb-1 font-mono">1. CFG Requirement</span>
                 <span className="text-cyan-300 font-bold text-sm">Lock CFG to 1.0</span>
-                <p className="text-slate-400 text-xs mt-1">In Qwen Image 2.1 Turbo, setting CFG above 1.0 causes immediate color burnout.</p>
+                <p className="text-slate-400 text-xs mt-1">Setting CFG above 1.0 triggers immediate color burnout and clipped highlights.</p>
               </div>
               <div className="bg-slate-950/80 border border-slate-800 rounded-lg p-3">
                 <span className="text-slate-400 block mb-1 font-mono">2. Scheduler Rule</span>
@@ -371,6 +360,17 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
                 <span className="text-cyan-300 font-bold text-sm">16GB (BF16) / 8GB (GGUF)</span>
                 <p className="text-slate-400 text-xs mt-1">Uncompressed weights require 16GB+ VRAM. Budget GPUs can use GGUF quants.</p>
               </div>
+            </div>
+
+            {/* Hub-and-Spoke Link to Core Foundation Landing Page */}
+            <div className="mt-4 pt-3 border-t border-cyan-900/40 text-xs text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span>Prefer zero-installation access to the uncompressed base foundation model?</span>
+              <Link
+                href={getLinkHref('/qwen-image-2-1', locale)}
+                className="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-2 shrink-0"
+              >
+                Visit Qwen Image 2.1 Online Studio →
+              </Link>
             </div>
           </div>
         </section>
@@ -449,7 +449,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 transition-colors text-xs"
               >
                 <DocumentDuplicateIcon className="w-3.5 h-3.5" />
-                <span>{copiedScript ? 'Copied to Clipboard!' : 'Copy Workflow Script'}</span>
+                <span>{copiedScript ? 'Copied!' : 'Copy Script'}</span>
               </button>
             </div>
             <pre className="text-slate-300 leading-relaxed font-mono whitespace-pre overflow-x-auto">
@@ -462,13 +462,13 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
             <div className="mt-4 p-4 rounded-xl bg-cyan-950/30 border border-cyan-800/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2 text-slate-300">
                 <BoltIcon className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Want to run Qwen Image 2.1 Turbo without local GPU installation or CUDA errors?</span>
+                <span>Want instant 2K generation without local GPU installation or CUDA errors?</span>
               </div>
               <Link
                 href={getLinkHref('/', locale)}
                 className="whitespace-nowrap px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all shadow-md shadow-cyan-500/20"
               >
-                Run Qwen Image 2.1 Turbo Online →
+                Run Cloud Generator Online →
               </Link>
             </div>
           )}
@@ -482,8 +482,8 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
             Qwen Image 2.1 Turbo Hardware Requirements &amp; Benchmark
           </h2>
           <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-            Running <strong>Qwen Image 2.1 Turbo</strong> locally requires understanding VRAM allocations. 
-            Below is an empirical benchmark tracking peak memory usage, precision, and latency for Qwen Image 2.1 Turbo:
+            Running local diffusion transformer pipelines requires calculating memory ceilings. 
+            Below is an empirical benchmark tracking peak memory usage, precision, and latency:
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
@@ -548,7 +548,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
         </section>
 
         {/* ========================================================================= */}
-        {/* TROUBLESHOOTING: THE 5 CRITICAL PITFALLS IN QWEN IMAGE 2.1 TURBO */}
+        {/* TROUBLESHOOTING: THE 5 CRITICAL PITFALLS */}
         {/* ========================================================================= */}
         <section className="mb-14 space-y-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">
@@ -562,20 +562,20 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               <h3 className="text-base sm:text-lg">1. Why CFG &gt; 1.0 Destroys Qwen Image 2.1 Turbo Quality</h3>
             </div>
             <p className="text-slate-300 text-sm leading-relaxed mb-3">
-              A common hurdle with <strong>Qwen Image 2.1 Turbo</strong> is blown-out contrast or white noise. 
-              This happens when leaving Classifier-Free Guidance at base model settings (like 3.0 or 4.5).
+              A common hurdle with distilled diffusion is blown-out contrast or white noise, 
+              which occurs when leaving Classifier-Free Guidance at base model values (such as 3.0 or 4.5).
             </p>
             <div className="bg-slate-950/90 border-l-4 border-rose-500 p-4 rounded text-xs text-slate-300 space-y-2">
               <p>
-                <strong>The Cause:</strong> Qwen Image 2.1 Turbo is trained with guidance distillation. 
-                The 7B core has internalized prompt steering. When external CFG is applied, it computes:
+                <strong>The Cause:</strong> The distilled checkpoint has internalized prompt steering during training. 
+                Applying external CFG computes duplicate guidance vectors:
               </p>
               <code className="block bg-slate-900 p-2 rounded text-cyan-300 font-mono">
                 Latent_step = Latent_uncond + CFG * (Latent_cond - Latent_uncond)
               </code>
               <p>
-                Multiplying this delta by 3.5 causes numerical clipping, blowing out highlights. 
-                <strong>In Qwen Image 2.1 Turbo, always keep CFG at exactly 1.0.</strong>
+                Multiplying this delta by 3.5 causes numerical clipping, blowing out dynamic range. 
+                <strong>Always keep CFG at exactly 1.0 for this 8-step model.</strong>
               </p>
             </div>
           </div>
@@ -587,13 +587,13 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               <h3 className="text-base sm:text-lg">2. Qwen Image 2.1 Turbo Schedulers: Why linear_quadratic Succeeds</h3>
             </div>
             <p className="text-slate-300 text-sm leading-relaxed mb-3">
-              When sampling <strong>Qwen Image 2.1 Turbo</strong> in 8 steps, standard schedulers like <code className="text-cyan-300 font-mono">euler simple</code> distribute timesteps too uniformly, 
-              leaving residual noise in fine textures.
+              Standard schedulers like <code className="text-cyan-300 font-mono">euler simple</code> distribute timesteps too uniformly, 
+              leaving residual noise in fine textures across an 8-step budget.
             </p>
             <div className="bg-slate-950/90 border border-slate-800 p-4 rounded text-xs text-slate-300 space-y-2">
               <p>
                 <strong>The Solution:</strong> Use the official <code className="text-cyan-300 font-mono">linear_quadratic</code> scheduler. 
-                This clusters sampling density toward low-noise sigma ranges, ensuring Qwen Image 2.1 Turbo renders sharp typography and clean skin tones.
+                This clusters sampling density toward low-noise sigma ranges, ensuring sharp typography and clean skin tones.
               </p>
             </div>
           </div>
@@ -605,20 +605,20 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               <h3 className="text-base sm:text-lg">3. Qwen Image 2.1 Turbo VAE: PixelHead vs Stock WanVAE</h3>
             </div>
             <p className="text-slate-300 text-sm leading-relaxed mb-3">
-              The <strong>PixelHead</strong> decoder slashes VAE decoding time for Qwen Image 2.1 Turbo down to 5.55ms (a 67x speedup). 
+              The <strong>PixelHead</strong> decoder slashes VAE decoding time down to 5.55ms (a 67x speedup). 
               However, community testing reveals trade-offs:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg">
                 <span className="font-bold text-cyan-300 block mb-1">When to Use PixelHead:</span>
                 <p className="text-slate-400">
-                  Ideal for real-time prompt iteration in Qwen Image 2.1 Turbo on budget GPUs with limited memory.
+                  Ideal for rapid prompt prototyping on consumer cards with limited VRAM.
                 </p>
               </div>
               <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg">
                 <span className="font-bold text-amber-300 block mb-1">When to Use Stock WanVAE:</span>
                 <p className="text-slate-400">
-                  Essential for final 2K outputs and typography where PixelHead softens high-frequency details.
+                  Essential for production 2K outputs and typography where PixelHead softens high-frequency micro-details.
                 </p>
               </div>
             </div>
@@ -631,9 +631,9 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               <h3 className="text-base sm:text-lg">4. Fixing Qwen Image 2.1 Turbo Stretched Necks in Tall Aspect Ratios</h3>
             </div>
             <p className="text-slate-300 text-sm leading-relaxed">
-              When rendering tall portrait wallpapers in <strong>Qwen Image 2.1 Turbo</strong>, elongated necks can occur if dimensions are not divisible by 16. 
-              Always use native dimensions like <code className="text-cyan-300 font-mono">1152x2048</code> or <code className="text-cyan-300 font-mono">2048x1152</code>. 
-              In image editing workflows with Qwen Image 2.1 Turbo, match latent aspect ratios strictly to the reference input.
+              When rendering tall portrait wallpapers, elongated necks can occur if dimensions are not divisible by 16. 
+              Always use native resolutions such as <code className="text-cyan-300 font-mono">1152x2048</code> or <code className="text-cyan-300 font-mono">2048x1152</code>. 
+              In image editing workflows, match latent aspect ratios strictly to the reference input.
             </p>
           </div>
 
@@ -644,7 +644,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               <h3 className="text-base sm:text-lg">5. Eliminating Plastic Skin in Qwen Image 2.1 Turbo Generations</h3>
             </div>
             <p className="text-slate-300 text-sm leading-relaxed mb-3">
-              Because CFG=1 disables negative prompts in <strong>Qwen Image 2.1 Turbo</strong>, steer portrait realism using positive photographic descriptions:
+              Because CFG=1 disables negative prompts, steer portrait realism using positive photographic descriptions:
             </p>
             <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg font-mono text-xs text-cyan-300">
               &quot;natural skin pores, fine vellus hair, imperfect epidermal texture, 35mm candid lens, subtle film grain, soft directional daylight&quot;
@@ -661,7 +661,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
             contextTitle="Qwen Image 2.1 Turbo Cloud Studio"
             customBadge="Instant Zero-VRAM Generation"
             customTitle="Want 2K Qwen Image 2.1 Turbo Without ComfyUI Setup?"
-            customDescription="Experience uncompressed 8-step Qwen Image 2.1 Turbo in your browser. Generate native transparent RGBA PNGs, render crisp typography, and edit photos with zero GPU configuration."
+            customDescription="Experience uncompressed 8-step cloud generation in your browser. Generate native transparent RGBA PNGs, render crisp typography, and edit photos with zero GPU configuration."
             customButtonText="Try Qwen Image 2.1 Turbo Free Online"
           />
         </div>
@@ -678,7 +678,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
             Test Recommended Prompt Presets for Qwen Image 2.1 Turbo
           </h2>
           <p className="text-slate-300 text-sm mb-6">
-            Click any production preset to load prompt syntax optimized for <strong>Qwen Image 2.1 Turbo</strong>:
+            Click any production preset to load prompt syntax optimized for 8-step diffusion:
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
@@ -708,7 +708,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
 
           <div className="bg-slate-950 rounded-xl border border-slate-800 p-4 mb-4">
             <div className="flex items-center justify-between mb-2 text-xs text-slate-400">
-              <span>Active Prompt String for Qwen Image 2.1 Turbo</span>
+              <span>Active Prompt String</span>
               <button
                 onClick={() => copyPromptText(selectedPromptPreset)}
                 className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
@@ -740,7 +740,7 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
               href={getLinkHref('/', locale)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all"
             >
-              <span>Run Qwen Image 2.1 Turbo in Cloud Studio</span>
+              <span>Run in Cloud Studio</span>
               <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
@@ -790,20 +790,19 @@ output.images[0].save("qwen_image_2_1_turbo_render.png")`;
           </h3>
           <p className="text-slate-300 text-sm max-w-2xl mx-auto leading-relaxed">
             Zero installation, zero CUDA errors, and zero license ambiguity. 
-            Enjoy lightning-fast 8-step cloud rendering with <strong>Qwen Image 2.1 Turbo</strong>, 
-            native transparent background exports, and professional multi-reference editing.
+            Enjoy lightning-fast 8-step cloud rendering with native transparent background exports and conversational editing.
           </p>
           <div className="pt-2">
             <Link
               href={getLinkHref('/', locale)}
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-base shadow-lg shadow-cyan-400/25 transition-all transform hover:-translate-y-0.5"
             >
-              <span>Launch Qwen Image 2.1 Turbo Studio Free</span>
+              <span>Launch Studio Free</span>
               <ArrowTopRightOnSquareIcon className="w-5 h-5" />
             </Link>
           </div>
           <p className="text-[11px] text-slate-500">
-            Powered by official enterprise cloud APIs. No credit card required to start generating.
+            Powered by enterprise cloud APIs. No credit card required.
           </p>
         </footer>
       </main>

@@ -214,7 +214,7 @@ export default function Qwen21Component({ locale = 'en' }: { locale?: string }) 
     },
     {
       q: 'How does Qwen Image 2.1 differ from local ComfyUI and GGUF workflows?',
-      a: 'Local ComfyUI and GGUF deployments require downloading 20GB+ checkpoint weights, configuring Python environments, and running a dedicated 24GB VRAM GPU (like NVIDIA RTX 3090/4090). This online platform executes serverless cloud inference in ~8 to 15 seconds across any Mac, Windows PC, or mobile device with zero hardware overhead.',
+      a: 'Local ComfyUI and GGUF deployments require downloading 20GB+ checkpoint weights, configuring Python environments, and running a dedicated 24GB VRAM GPU (like NVIDIA RTX 3090/4090). This online platform executes serverless cloud inference in ~8 to 15 seconds across any device with zero hardware overhead. If you want to configure accelerated 8-step workflows locally, see our Qwen Image 2.1 Turbo ComfyUI & GGUF Guide at /blog/qwen-image-2-1-turbo-comfyui-workflow-gguf-guide.',
     },
     {
       q: 'Is Qwen Image 2.1 any good compared to Midjourney v6.1 and Flux.1 Dev?',
